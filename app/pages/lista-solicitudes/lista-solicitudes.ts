@@ -23,6 +23,6 @@ export class ListaSolicitudesPage {
   abrirDetalles(event, unaSolicitud) {
     this.nav.push(DetallesSolicitudPage, {
       unaSolicitud: unaSolicitud
-    });
+    }, { animate: true, direction: 'forward' });
   }
 }
