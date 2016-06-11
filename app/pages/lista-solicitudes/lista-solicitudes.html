@@ -1,0 +1,20 @@
+<ion-navbar *navbar>
+  <ion-title>Donemos</ion-title>
+  <button  menuToggle="right" end>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+  <ion-buttons end>
+    <button><ion-icon name="add"></ion-icon></button>
+  </ion-buttons>
+</ion-navbar>
+
+<ion-content>
+  <ion-card *ngFor="let solicitud of solicitudes" (click)="abrirDetalles($event, solicitud)">
+    <ion-card-header>
+      {{solicitud.titulo}}
+    </ion-card-header>
+    <ion-card-content>
+      {{solicitud.detalle}}
+    </ion-card-content>
+  </ion-card>
+</ion-content>

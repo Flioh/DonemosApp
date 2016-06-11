@@ -1,0 +1,23 @@
+<ion-navbar *navbar>
+  <ion-title>Donemos</ion-title>
+
+  <button  menuToggle="right" end>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+
+  <ion-buttons end>
+    <button><ion-icon name="add"></ion-icon></button>
+  </ion-buttons>
+
+</ion-navbar>
+
+<ion-content>
+  <ion-card *ngIf="solicitudSeleccionada">
+    <ion-card-header>
+      {{solicitudSeleccionada.titulo}}
+    </ion-card-header>
+    <ion-card-content>
+      {{solicitudSeleccionada.detalle}}
+    </ion-card-content>
+  </ion-card>
+</ion-content>
