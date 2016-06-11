@@ -3,7 +3,7 @@ import {NavController} from 'ionic-angular';
 import {DetallesSolicitudPage} from '../detalles-solicitud/detalles-solicitud';
 
 @Component({
-  templateUrl: 'build/pages/lista-solicitudes/lista-solicitudes.html'
+  templateUrl: 'build/pages/lista-solicitudes/lista-solicitudes.html',
 })
 export class ListaSolicitudesPage {
 

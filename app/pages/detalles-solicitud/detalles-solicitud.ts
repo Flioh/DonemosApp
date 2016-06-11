@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 
 @Component({
-	templateUrl: 'build/pages/detalles-solicitud/detalles-solicitud.html'
+	templateUrl: 'build/pages/detalles-solicitud/detalles-solicitud.html',
 })
 export class DetallesSolicitudPage {
 

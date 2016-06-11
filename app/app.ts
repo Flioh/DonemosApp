@@ -1,11 +1,20 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, ViewChild, provide, PLATFORM_DIRECTIVES} from '@angular/core';
 import {ionicBootstrap, App, Platform, MenuController, Nav} from 'ionic-angular';
 import {StatusBar} from 'ionic-native';
+
+/* Directivas personalizadas */
+import {CustomNavbar} from './components/navbar/navbar';
+
+/* Paginas de la app */
 import {ListaSolicitudesPage} from './pages/lista-solicitudes/lista-solicitudes';
+import {NuevaSolicitudPage} from './pages/nueva-solicitud/nueva-solicitud';
+
+/* Models */
 import {MenuItemModel} from './providers/menuitem-model/menuitem-model';
 
 @Component({
   templateUrl: 'build/app.html',
+  directives: [CustomNavbar]
 })
 class DonemosApp {
   @ViewChild(Nav) nav: Nav;
@@ -41,7 +50,7 @@ class DonemosApp {
   }
 
   cargarOpcionesMenuPrincipal(): void {
-    this.paginasMenu.push(new MenuItemModel('add', 'Nueva solicitud', ListaSolicitudesPage));
+    this.paginasMenu.push(new MenuItemModel('add', 'Nueva solicitud', NuevaSolicitudPage));
     this.paginasMenu.push(new MenuItemModel('list-box', 'Lista de solicitudes', ListaSolicitudesPage));
     this.paginasMenu.push(new MenuItemModel('checkbox', 'Requisitos para donar', ListaSolicitudesPage));
     this.paginasMenu.push(new MenuItemModel('person', 'Configurar perfil', ListaSolicitudesPage));
@@ -51,10 +60,8 @@ class DonemosApp {
   }
 }
 
-// Pass the main app component as the first argument
-// Pass any providers for your app in the second argument
-// Set any config for your app as the third argument:
-// http://ionicframework.com/docs/v2/api/config/Config/
-ionicBootstrap(DonemosApp, [], {
+// Solo las directivas por defecto tienen alcance global, por lo que agregamos nuestras directivas al conjunto
+// de directivas globales de angular para que esten disponibles en toda la aplicacion.
+ionicBootstrap(DonemosApp, [provide(PLATFORM_DIRECTIVES, { useValue: CustomNavbar, multi: true })], {
   //statusbarPadding: true
 });
