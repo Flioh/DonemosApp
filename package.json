@@ -24,7 +24,16 @@
     "ionic-gulp-html-copy": "^1.0.0",
     "ionic-gulp-sass-build": "^1.0.0",
     "ionic-gulp-scripts-copy": "^2.0.0",
-    "run-sequence": "1.1.5"
+    "jasmine-core": "^2.4.1",
+	"karma": "^0.13.22",
+	"karma-chrome-launcher": "^1.0.1",
+	"karma-jasmine": "^1.0.2",
+	"run-sequence": "1.1.5",
+	"karma-browserify": "5.0.5",
+	"browserify": "13.0.0",
+	"browserify-istanbul": "2.0.0",
+	"tsify": "0.16.0",
+	"isparta": "4.0.0"
   },
   "name": "donemos",
   "description": "Donemos: An Ionic project",
@@ -43,5 +52,8 @@
       "version": "",
       "locator": "android"
     }
-  ]
+  ],
+  "scripts": {
+		"test": "karma start karma.conf.js"
+	}
 }
