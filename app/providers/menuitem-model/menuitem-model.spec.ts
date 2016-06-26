@@ -27,7 +27,7 @@ describe('MenuItem Model', () => {
 		expect(menuItemModel.getIconoIos()).toBeDefined();
 	}));
 
-	it('El metodo getIconoIosOutline() debe contener ios-', inject([MenuItemModel], (menuItemModel: MenuItemModelMock) => {
+	it('El metodo getIconoIos() debe contener ios-', inject([MenuItemModel], (menuItemModel: MenuItemModelMock) => {
 		expect(menuItemModel.getIconoIos()).toMatch(/ios-icono/);
 	}));
 
@@ -35,7 +35,7 @@ describe('MenuItem Model', () => {
 		expect(menuItemModel.getIconoAndroid()).toBeDefined();
 	}));
 
-	it('El metodo getIconoIosOutline() debe contener md-', inject([MenuItemModel], (menuItemModel: MenuItemModelMock) => {
+	it('El metodo getIconoAndroid() debe contener md-', inject([MenuItemModel], (menuItemModel: MenuItemModelMock) => {
 		expect(menuItemModel.getIconoAndroid()).toMatch(/md-icono/);
 	}));
 

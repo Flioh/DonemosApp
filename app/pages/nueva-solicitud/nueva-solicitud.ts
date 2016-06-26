@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {NavController} from 'ionic-angular';
-import {FORM_DIRECTIVES, FormBuilder, ControlGroup, Validators, AbstractControl } from '@angular/common';
+import {FORM_DIRECTIVES, FormBuilder, ControlGroup, Control, Validators, AbstractControl } from '@angular/common';
 
 /* Models */
 import {NuevaSolicitudModel} from '../../providers/nueva-solicitud-model/nueva-solicitud-model';
@@ -12,22 +12,21 @@ import {NuevaSolicitudModel} from '../../providers/nueva-solicitud-model/nueva-s
 export class NuevaSolicitudPage {
 
 	private ocultarIconoNuevaSolicitud: boolean = true;
-	private nuevaSolicitud: NuevaSolicitudModel;
-	private nuevaSolicitudForm: ControlGroup;
+	nuevaSolicitud: NuevaSolicitudModel;
+	
+	nuevaSolicitudForm: ControlGroup;
 
-	lugar: AbstractControl;
-	provincia: AbstractControl;
-	localidad: AbstractControl;
+	// Campos del formulario
+	private lugar: Control;
+
 
 	constructor(private nav: NavController, private formBuilder : FormBuilder) {
-		this.nuevaSolicitud = new NuevaSolicitudModel();
-		this.nuevaSolicitudForm = this.formBuilder.group({
-			'lugar' : ['', Validators.required],
-			'provincia' : ['', Validators.required]
-		});
+		
+		this.lugar = new Control('', Validators.required);
 
-		this.lugar = this.nuevaSolicitudForm.controls['lugar'];  
-		this.provincia = this.nuevaSolicitudForm.controls['provincia'];  
+		this.nuevaSolicitudForm = formBuilder.group({
+			lugar: this.lugar
+		});
 	}
 
 	ionViewLoaded() {

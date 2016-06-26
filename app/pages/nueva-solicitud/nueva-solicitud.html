@@ -6,55 +6,24 @@
 
 	<form [ngFormModel]="nuevaSolicitudForm" (change)="guardarCambios()">
 		
-		<!-- Provincia -->
-		<ion-item [class.error]="!provincia.valid && provincia.touched">
-			<ion-label floating>Provincia</ion-label>
-			<ion-select>
-		    	<ion-option value="1" checked="true">Provincia 1</ion-option>
-		    	<ion-option value="2">Provincia 2</ion-option>
-		    	<ion-option value="3">Provincia 3</ion-option>
-		    	<ion-option value="4">Provincia 4</ion-option>
-		    	<ion-option value="5">Provincia 5</ion-option>
-		    	<ion-option value="6">Provincia 6</ion-option>
-		    	<ion-option value="7">Provincia 7</ion-option>
-		    	<ion-option value="8">Provincia 8</ion-option>
-		    	<ion-option value="9">Provincia 9</ion-option>
-		    	<ion-option value="10">Provincia 10</ion-option>
-		    	<ion-option value="11">Provincia 11</ion-option>
-		    	<ion-option value="12">Provincia 12</ion-option>
-		    	<ion-option value="13">Provincia 13</ion-option>
-		    	<ion-option value="14">Provincia 14</ion-option>
-		    	<ion-option value="15">Provincia 15</ion-option>
-		    	<ion-option value="16">Provincia 16</ion-option>
-		    	<ion-option value="17">Provincia 17</ion-option>
-		    	<ion-option value="18">Provincia 18</ion-option>
-		    	<ion-option value="19">Provincia 19</ion-option>
-		    	<ion-option value="20">Provincia 20</ion-option>
-		    	<ion-option value="21">Provincia 21</ion-option>
-		    	<ion-option value="22">Provincia 22</ion-option>
-		    	<ion-option value="23">Provincia 23</ion-option>
-	  		</ion-select>
-		</ion-item>
-		<ion-item *ngIf="!provincia.valid && provincia.touched">
-			<span class="mensaje-error">Ingrese la provincia por favor.</span>
-		</ion-item>
-
-		<!-- Lugar -->
-		<ion-item [class.error]="!lugar.valid && lugar.touched">
+		<!-- Lugar  <ion-item [class.error]="!lugar.valid && lugar.touched"> -->
+		<ion-item>
 			<ion-label floating>Lugar</ion-label>
-			<ion-input [ngFormControl]="lugar" type="text"></ion-input>
-		</ion-item>
-		<ion-item *ngIf="!lugar.valid && lugar.touched">
+			<ion-input ngControl="lugar" type="text"></ion-input>
+		</ion-item>		
+
+		<ion-item *ngIf="lugar.touched && !lugar.valid && lugar.errors.required">
 			<span class="mensaje-error">Ingrese el lugar por favor.</span>
 		</ion-item>
 
-
-	 	<p>{{provincia.value}}</p>
-
-
 	</form>
 
+	<button class="submit" primary>Crear Solicitud</button>
+
 	</ion-list>
+
+	
+
 </ion-content>
 
 

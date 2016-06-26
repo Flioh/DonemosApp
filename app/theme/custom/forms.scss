@@ -1,0 +1,34 @@
+span.mensaje-error {
+	color: #7f7f7f;
+    font-size: 1.3rem;
+}
+
+button.submit {
+    width: 100%;
+	margin-top: 30px;
+}
+
+body.ios form {
+	p {
+	    font-size: 0.8em;
+	    color: #d2d2d2;
+	}
+
+	ion-label {
+	    margin-left: 10px;
+	}
+
+	ion-input, ion-select, ion-textarea {
+	    background-color: #f2f2f2;
+	    padding: 5px 10px;
+	}
+
+	ion-input.ng-touched.ng-invalid {
+        background-color: rgba(234, 97, 83, 0.20)
+	}
+
+	ion-input.ng-touched.ng-valid {
+        background-color: rgba(19, 189, 19, 0.20)
+	}
+	
+}

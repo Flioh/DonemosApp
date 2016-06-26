@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ErrorPage} from '../../pages/error/error';
+import 'rxjs/Rx';
 
 @Injectable()
 export class MenuItemModel {
