@@ -1,5 +1,8 @@
 import {Component, ViewChild, provide, PLATFORM_DIRECTIVES} from '@angular/core';
 import {ionicBootstrap, App, Platform, MenuController, Nav} from 'ionic-angular';
+
+import {ConnectivityService} from './providers/connectivity-service/connectivity-service';
+
 import {StatusBar} from 'ionic-native';
 
 /* Directivas personalizadas */
@@ -22,7 +25,7 @@ class DonemosApp {
   rootPage: any = ListaSolicitudesPage;
   paginasMenu: Array<MenuItemModel>;
 
-  constructor(private platform: Platform, private menu: MenuController) {
+  constructor(private platform: Platform, private menu: MenuController, private connectivityService : ConnectivityService) {
     this.initializeApp();
 
     this.paginasMenu = [];
@@ -62,6 +65,6 @@ class DonemosApp {
 
 // Solo las directivas por defecto tienen alcance global, por lo que agregamos nuestras directivas al conjunto
 // de directivas globales de angular para que esten disponibles en toda la aplicacion.
-ionicBootstrap(DonemosApp, [provide(PLATFORM_DIRECTIVES, { useValue: CustomNavbar, multi: true })], {
+ionicBootstrap(DonemosApp, [ConnectivityService, provide(PLATFORM_DIRECTIVES, { useValue: CustomNavbar, multi: true })], {
   //statusbarPadding: true
 });
