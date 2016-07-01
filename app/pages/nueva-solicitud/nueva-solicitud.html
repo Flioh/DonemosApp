@@ -5,20 +5,33 @@
 	<ion-list no-lines>
 
 	<form [ngFormModel]="nuevaSolicitudForm" (change)="guardarCambios()">
-		
-		<!-- Lugar  <ion-item [class.error]="!lugar.valid && lugar.touched"> -->
-		<ion-item>
-			<ion-label floating>Lugar</ion-label>
-			<ion-input ngControl="lugar" type="text"></ion-input>
-		</ion-item>		
 
-		<ion-item *ngIf="lugar.touched && !lugar.valid && lugar.errors.required">
-			<span class="mensaje-error">Ingrese el lugar por favor.</span>
+		<!-- Institucion  -->
+		<ion-item>
+			<ion-label floating>Institucion</ion-label>
+			<ion-input id="autocomplete" [(ngModel)]="institucionValue" ngControl="institucion" type="text"></ion-input>
+		</ion-item>
+		<ion-item *ngIf="ctrlInstitucion.touched && !ctrlInstitucion.valid && ctrlInstitucion.errors.required">
+			<span class="mensaje-error">Ingrese el nombre de la institución.</span>
+		</ion-item>
+
+		<!-- Dirección  -->
+		<ion-item>
+			<ion-label floating>Direccion</ion-label>
+			<ion-input [(ngModel)]="direccionValue" ngControl="direccion" type="text"></ion-input>
+		</ion-item>
+		<ion-item *ngIf="ctrlDireccion.touched && !ctrlDireccion.valid && ctrlDireccion.errors.required">
+			<span class="mensaje-error">Ingrese la dirección.</span>
 		</ion-item>
 
 	</form>
 
-	<button class="submit" primary>Crear Solicitud</button>
+	<h3>Value:</h3>
+	<pre>{{cgValue}}</pre>
+	<h3>Validity:</h3>
+	<pre>{{nuevaSolicitudForm.valid}}</pre>
+
+	<button class="submit" (click)="guardarCambios()" primary>Crear Solicitud</button>
 
 	</ion-list>
 
