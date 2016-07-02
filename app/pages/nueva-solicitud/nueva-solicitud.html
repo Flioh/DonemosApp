@@ -1,5 +1,5 @@
 <!-- Custom navbar -->
-<navbar [ocultarIconoNuevaSolicitud]="ocultarIcono()"></navbar>
+<navbar [ocultarIconoNuevaSolicitud]="ocultarIcono()" [titulo]="setTitulo()"></navbar>
 
 <ion-content padding class="nueva-solicitud">
 	<ion-list no-lines>
@@ -11,25 +11,50 @@
 			<ion-label floating>Institucion</ion-label>
 			<ion-input id="autocomplete" [(ngModel)]="institucionValue" ngControl="institucion" type="text"></ion-input>
 		</ion-item>
-		<ion-item *ngIf="ctrlInstitucion.touched && !ctrlInstitucion.valid && ctrlInstitucion.errors.required">
-			<span class="mensaje-error">Ingrese el nombre de la institución.</span>
-		</ion-item>
+		<span *ngIf="ctrlInstitucion.touched && !ctrlInstitucion.valid && ctrlInstitucion.errors.required" class="mensaje-error">
+			Ingrese el nombre de la institución.
+		</span>
 
 		<!-- Dirección  -->
 		<ion-item>
 			<ion-label floating>Direccion</ion-label>
 			<ion-input [(ngModel)]="direccionValue" ngControl="direccion" type="text"></ion-input>
 		</ion-item>
-		<ion-item *ngIf="ctrlDireccion.touched && !ctrlDireccion.valid && ctrlDireccion.errors.required">
-			<span class="mensaje-error">Ingrese la dirección.</span>
+		<span *ngIf="ctrlDireccion.touched && !ctrlDireccion.valid && ctrlDireccion.errors.required" class="mensaje-error">
+			Ingrese la dirección.
+		</span>
+
+		<!-- Provincia  -->
+		<ion-item>
+			<ion-label floating>Provincia</ion-label>
+			<ion-select [(ngModel)]="provinciaValue" ngControl="provincia" okText="Aceptar" cancelText="Cancelar" (ionChange)="inicializarCiudadesDeLaProvincia()">
+		    	<ion-option *ngFor="let provincia of listaProvincias" value={{provincia.key}}>{{provincia.value}}</ion-option>
+			</ion-select>
+		</ion-item>
+		<span *ngIf="ctrlProvincia.touched && !ctrlProvincia.valid && ctrlProvincia.errors.required" class="mensaje-error">
+			Ingrese la provincia.
+		</span>
+
+		<!-- Ciudad  -->
+		<ion-item>
+			<ion-label floating>Ciudad</ion-label>
+			<ion-select [(ngModel)]="ciudadValue" ngControl="ciudad" okText="Aceptar" cancelText="Cancelar">
+		    	<ion-option *ngFor="let ciudad of listaCiudades" value={{ciudad.key}}>{{ciudad.value}}</ion-option>
+			</ion-select>
+		</ion-item>
+		<span *ngIf="ctrlCiudad.touched && !ctrlCiudad.valid && ctrlCiudad.errors.required" class="mensaje-error">
+			Ingrese la ciudad.
+		</span>
+
+		<ion-item>
+			<h3>Value:</h3>
+			<pre>{{contenidoDelFormulario}}</pre>
+			<pre>Validity: {{nuevaSolicitudForm.valid}}</pre>
 		</ion-item>
 
 	</form>
 
-	<h3>Value:</h3>
-	<pre>{{cgValue}}</pre>
-	<h3>Validity:</h3>
-	<pre>{{nuevaSolicitudForm.valid}}</pre>
+
 
 	<button class="submit" (click)="guardarCambios()" primary>Crear Solicitud</button>
 

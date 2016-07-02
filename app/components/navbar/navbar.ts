@@ -5,11 +5,12 @@ import {NuevaSolicitudPage} from '../../pages/nueva-solicitud/nueva-solicitud';
 @Component({
     selector: 'navbar',
     templateUrl: 'build/components/navbar/navbar.html',
-    inputs: ['ocultarIconoNuevaSolicitud']
+    inputs: ['ocultarIconoNuevaSolicitud', 'titulo']
 })
 export class CustomNavbar {
 
 	public ocultarIconoNuevaSolicitud: string;
+	public titulo: string;
 
     constructor(private nav: NavController) {
     }
