@@ -2,65 +2,99 @@
 <navbar [ocultarIconoNuevaSolicitud]="ocultarIcono()" [titulo]="setTitulo()"></navbar>
 
 <ion-content padding class="nueva-solicitud">
-	<ion-list no-lines>
+	<ion-list [no-lines]="esAndroid">
+		<form [ngFormModel]="nuevaSolicitudForm">
 
-	<form [ngFormModel]="nuevaSolicitudForm" (change)="guardarCambios()">
+			<!-- Institucion  -->
+			<ion-item [class.submitted]="submitted" [class.invalid]="!ctrlInstitucion.valid">
+				<ion-label floating>Institucion</ion-label>
+				<ion-input id="autocomplete" [(ngModel)]="institucionValue" ngControl="institucion" type="text"></ion-input>
+			</ion-item>
+			<span *ngIf="submitted && !ctrlInstitucion.valid" class="mensaje-error">
+				Ingrese el nombre de la institución.
+			</span>
 
-		<!-- Institucion  -->
-		<ion-item>
-			<ion-label floating>Institucion</ion-label>
-			<ion-input id="autocomplete" [(ngModel)]="institucionValue" ngControl="institucion" type="text"></ion-input>
-		</ion-item>
-		<span *ngIf="ctrlInstitucion.touched && !ctrlInstitucion.valid && ctrlInstitucion.errors.required" class="mensaje-error">
-			Ingrese el nombre de la institución.
-		</span>
+			<!-- Dirección  -->
+			<ion-item [class.submitted]="submitted" [class.invalid]="!ctrlDireccion.valid">
+				<ion-label floating>Direccion</ion-label>
+				<ion-input [(ngModel)]="direccionValue" ngControl="direccion" type="text"></ion-input>
+			</ion-item>
+			<span *ngIf="submitted && !ctrlDireccion.valid" class="mensaje-error">
+				Ingrese la dirección.
+			</span>
 
-		<!-- Dirección  -->
-		<ion-item>
-			<ion-label floating>Direccion</ion-label>
-			<ion-input [(ngModel)]="direccionValue" ngControl="direccion" type="text"></ion-input>
-		</ion-item>
-		<span *ngIf="ctrlDireccion.touched && !ctrlDireccion.valid && ctrlDireccion.errors.required" class="mensaje-error">
-			Ingrese la dirección.
-		</span>
+			<!-- Provincia  -->
+			<ion-item [class.submitted]="submitted" [class.invalid]="!provinciaValue">
+				<ion-label floating>Provincia</ion-label>
+				<ion-select [(ngModel)]="provinciaValue" ngControl="provincia" okText="Aceptar" cancelText="Cancelar" (ionChange)="inicializarCiudadesDeLaProvincia()">
+			    	<ion-option *ngFor="let provincia of listaProvincias" value={{provincia.key}}>{{provincia.value}}</ion-option>
+				</ion-select>
+			</ion-item>
+			<span *ngIf="submitted && !provinciaValue" class="mensaje-error">
+				Seleccione una provincia.
+			</span>
 
-		<!-- Provincia  -->
-		<ion-item>
-			<ion-label floating>Provincia</ion-label>
-			<ion-select [(ngModel)]="provinciaValue" ngControl="provincia" okText="Aceptar" cancelText="Cancelar" (ionChange)="inicializarCiudadesDeLaProvincia()">
-		    	<ion-option *ngFor="let provincia of listaProvincias" value={{provincia.key}}>{{provincia.value}}</ion-option>
-			</ion-select>
-		</ion-item>
-		<span *ngIf="ctrlProvincia.touched && !ctrlProvincia.valid && ctrlProvincia.errors.required" class="mensaje-error">
-			Ingrese la provincia.
-		</span>
+			<!-- Ciudad  -->
+			<ion-item [class.submitted]="submitted" [class.invalid]="!ciudadValue">
+				<ion-label floating>Ciudad</ion-label>
+				<ion-select [(ngModel)]="ciudadValue" ngControl="ciudad" okText="Aceptar" cancelText="Cancelar">
+			    	<ion-option *ngFor="let ciudad of listaCiudades" value={{ciudad.key}}>{{ciudad.value}}</ion-option>
+				</ion-select>
+			</ion-item>
+			<span *ngIf="submitted && !ciudadValue" class="mensaje-error">
+				Seleccione una ciudad.
+			</span>
 
-		<!-- Ciudad  -->
-		<ion-item>
-			<ion-label floating>Ciudad</ion-label>
-			<ion-select [(ngModel)]="ciudadValue" ngControl="ciudad" okText="Aceptar" cancelText="Cancelar">
-		    	<ion-option *ngFor="let ciudad of listaCiudades" value={{ciudad.key}}>{{ciudad.value}}</ion-option>
-			</ion-select>
-		</ion-item>
-		<span *ngIf="ctrlCiudad.touched && !ctrlCiudad.valid && ctrlCiudad.errors.required" class="mensaje-error">
-			Ingrese la ciudad.
-		</span>
+			<!-- Hora desde -->
+			<ion-item [class.submitted]="submitted" [class.invalid]="!ctrlHoraDesde.valid">
+			  <ion-label>Desde las</ion-label>
+			  <ion-datetime displayFormat="HH:mm" [(ngModel)]="horaDesdeValue" ngControl="horaDesde">
+			  </ion-datetime>
+			</ion-item>
+			<span *ngIf="submitted && !ctrlHoraDesde.valid" class="mensaje-error">
+				Ingrese la hora de inicio.
+			</span>
 
-		<ion-item>
-			<h3>Value:</h3>
-			<pre>{{contenidoDelFormulario}}</pre>
-			<pre>Validity: {{nuevaSolicitudForm.valid}}</pre>
-		</ion-item>
+			<!-- Hora hasta -->
+			<ion-item [class.submitted]="submitted" [class.invalid]="!ctrlHoraHasta.valid">
+			  <ion-label>Hasta las</ion-label>
+			  <ion-datetime displayFormat="HH:mm" [(ngModel)]="horaHastaValue" ngControl="horaHasta">
+			  </ion-datetime>
+			</ion-item>
+			<span *ngIf="submitted && !ctrlHoraHasta.valid" class="mensaje-error">
+				Ingrese la hora de fin.
+			</span>
 
-	</form>
+			<!-- Grupo -->
+			<ion-item class="half-size" [class.submitted]="submitted" [class.invalid]="!grupoValue">
+				<ion-label floating>Grupo</ion-label>
+				<ion-select [(ngModel)]="grupoValue" ngControl="grupo" okText="Aceptar" cancelText="Cancelar">
+			    	<ion-option *ngFor="let grupo of listaGruposSanguineos" value={{grupo.key}}>{{grupo.value}}</ion-option>
+				</ion-select>
+			</ion-item>
 
+			<!-- Factor -->
+			<ion-item class="half-size" [class.submitted]="submitted" [class.invalid]="!factorValue">
+				<ion-label floating>Factor</ion-label>
+				<ion-select [(ngModel)]="factorValue" ngControl="factor" okText="Aceptar" cancelText="Cancelar">
+			    	<ion-option *ngFor="let factor of listaFactoresSanguineos" value={{factor.key}}>{{factor.value}}</ion-option>
+				</ion-select>
+			</ion-item>
+			<span *ngIf="submitted && (!grupoValue || !factorValue)" class="mensaje-error">
+				Seleccione un grupo y un factor.
+			</span>
 
+			<ion-item>
+				<h3>Value:</h3>
+				<pre>{{contenidoDelFormulario}}</pre>
+				<pre>Validity: {{nuevaSolicitudForm.valid}}</pre>
+			</ion-item>
 
-	<button class="submit" (click)="guardarCambios()" primary>Crear Solicitud</button>
+		</form>
+
+		<button class="submit" (click)="guardarCambios()" primary>Crear Solicitud</button>
 
 	</ion-list>
-
-	
 
 </ion-content>
 

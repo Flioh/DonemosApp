@@ -1,13 +1,13 @@
-import {Component, NgZone} from '@angular/core';
-import {NavController, Loading } from 'ionic-angular';
-import {FORM_DIRECTIVES, FormBuilder, ControlGroup, Control, Validators, AbstractControl } from '@angular/common';
+import { Component, NgZone } from '@angular/core';
+import { Platform, NavController, Loading } from 'ionic-angular';
+import { FORM_DIRECTIVES, FormBuilder, ControlGroup, Control, Validators, AbstractControl } from '@angular/common';
 
 /* Servicios utilizados */
-import {AutocompleteService} from '../../providers/autocomplete-service/autocomplete-service';
-import {ConnectivityService} from '../../providers/connectivity-service/connectivity-service';
+import { AutocompleteService } from '../../providers/autocomplete-service/autocomplete-service';
+import { ConnectivityService } from '../../providers/connectivity-service/connectivity-service';
 
 /* Modelos utilizados */
-import {NuevaSolicitudModel} from '../../providers/nueva-solicitud-model/nueva-solicitud-model';
+import { NuevaSolicitudModel } from '../../providers/nueva-solicitud-model/nueva-solicitud-model';
 
 @Component({
   templateUrl: 'build/pages/nueva-solicitud/nueva-solicitud.html',
@@ -16,17 +16,24 @@ import {NuevaSolicitudModel} from '../../providers/nueva-solicitud-model/nueva-s
 })
 export class NuevaSolicitudPage {
 
+	// Variables usadas para modificar estilos, componentes visibles, etc...
 	private ocultarIconoNuevaSolicitud: boolean = true;
+	private esAndroid: boolean;
 
 	//Listas usadas en la pagina
 	private listaProvincias: any = [];
 	private listaCiudades: any = [];
+	private listaGruposSanguineos: any = [];
+	private listaFactoresSanguineos: any = [];
 
 	private nuevaSolicitud: NuevaSolicitudModel;
 	private nuevaSolicitudForm: ControlGroup;
 
 	// Informacion de Google maps
 	private apiKey: any;
+
+	private loading: any;
+	private submitted: boolean = false;
 
 	// Campos del formulario
 	private ctrlInstitucion: Control;
@@ -36,33 +43,56 @@ export class NuevaSolicitudPage {
 	private direccionValue: string = '';
 
 	private ctrlProvincia: Control;	
-	private provinciaValue: number = 0;	
+	private provinciaValue: number;	
 
 	private ctrlCiudad: Control;
-	private ciudadValue: number = 0;	
+	private ciudadValue: number;	
 
-	private loading: any;
+	private ctrlHoraDesde: Control;
+	private horaDesdeValue: string;
+	
+	private ctrlHoraHasta: Control;
+	private horaHastaValue: string;
 
-	constructor(private nav: NavController, 
+	private ctrlFactor: Control;
+	private factorValue: number;
+
+	private ctrlGrupo: Control;
+	private grupoValue: number;
+
+	constructor(private platform: Platform,
+				private nav: NavController, 
 				private formBuilder : FormBuilder, 
 				private ngZone : NgZone,
 				private connectivityService : ConnectivityService,
 				private autocompleteService : AutocompleteService) {
 		
+		this.esAndroid = this.platform.is('android') ? true : false;
+
 		this.inicializarProvincias();
+		this.inicializarGruposSanguineos();
+		this.inicializarFactoresSanguineos();
 
 		// Inicializa los controles y sus validaciones
 		this.ctrlInstitucion = new Control(this.institucionValue, Validators.required);
 		this.ctrlDireccion = new Control(this.direccionValue, Validators.required);
 		this.ctrlCiudad = new Control(this.ciudadValue, Validators.required);
 		this.ctrlProvincia = new Control(this.provinciaValue, Validators.required);
+		this.ctrlHoraDesde = new Control(this.horaDesdeValue, Validators.required);
+		this.ctrlHoraHasta= new Control(this.horaHastaValue, Validators.required);
+		this.ctrlFactor = new Control(this.factorValue, Validators.required);
+		this.ctrlGrupo = new Control(this.grupoValue, Validators.required);
 
 		// Inicializa el formulario
 		this.nuevaSolicitudForm = formBuilder.group({
 			institucion: this.ctrlInstitucion,
 			direccion: this.ctrlDireccion,
 			ciudad: this.ctrlCiudad,
-			provincia: this.ctrlProvincia
+			provincia: this.ctrlProvincia,
+			horaDesde: this.ctrlHoraDesde,
+			horaHasta: this.ctrlHoraHasta,
+			factor: this.ctrlFactor,
+			grupo: this.ctrlGrupo 
 		});
 
 		// Nos suscribimos al autocomplete para que nos envie la informacion de la direccion cuando este lista
@@ -145,6 +175,22 @@ export class NuevaSolicitudPage {
 		return 'Nueva solicitud';
 	}
 
+	private inicializarGruposSanguineos(): void {
+		this.listaGruposSanguineos.push({key : '1', value: '0'});
+		this.listaGruposSanguineos.push({key : '2', value: 'A'});
+		this.listaGruposSanguineos.push({key : '3', value: 'AB'});
+		this.listaGruposSanguineos.push({key : '4', value: 'B'});
+
+		// this.grupoValue = this.listaGruposSanguineos[0].key;
+	}
+
+	private inicializarFactoresSanguineos(): void {
+		this.listaFactoresSanguineos.push({key : '1', value: 'Rh+'});
+		this.listaFactoresSanguineos.push({key : '2', value: 'Rh-'});
+
+		// this.factorValue = this.listaFactoresSanguineos[0].key;
+	}
+
 	// Método que obtiene el listado de provincias del servidor
 	private inicializarProvincias(): void {
 		this.listaProvincias.push({key : '1', value: 'Buenos Aires'});
@@ -171,6 +217,10 @@ export class NuevaSolicitudPage {
 		this.listaProvincias.push({key : '22', value: 'Santiago del Estero'});
 		this.listaProvincias.push({key : '23', value: 'Tierra del Fuego'});
 		this.listaProvincias.push({key : '24', value: 'Tucumán'});
+
+		// this.provinciaValue = this.listaProvincias[0].key;
+
+		// this.inicializarCiudadesDeLaProvincia();
 	}
 
 	// Método que obtiene el listado de ciudades de una provincia
@@ -213,7 +263,7 @@ export class NuevaSolicitudPage {
 
 	// Método que crea la nueva solicitud con la información ingresada en el formulario
 	public guardarCambios(): void {
-
+		this.submitted = true;
 	}
 
 	// Método usado para debug, muestra el contenido del form en tiempo real

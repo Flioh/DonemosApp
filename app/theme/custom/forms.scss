@@ -10,10 +10,23 @@ button.submit {
 	margin-top: 30px;
 }
 
+.item-datetime ion-label {
+    color: #7f7f7f;
+}
+
+.half-size {
+	max-width: 49%;
+	display: inline-block;
+}
+
 body.ios form {
 	p {
 	    font-size: 0.8em;
 	    color: #d2d2d2;
+	}
+
+	.item-inner {
+	    border-bottom: none;
 	}
 
 	ion-label {
@@ -30,12 +43,81 @@ body.ios form {
 		padding: 8px 10px;
 	}
 
-	ion-input.ng-touched.ng-invalid {
+	/* Fix para el componente datetime */
+	.item-datetime .input-wrapper {
+		background-color: #f2f2f2;
+    	margin-top: 25px;
+	}
+
+	.submitted.invalid ion-input,
+	.submitted.invalid ion-select,
+	.submitted.invalid.item-datetime .input-wrapper {
         background-color: rgba(245, 61, 61, 0.25)
 	}
 
-	ion-input.ng-touched.ng-valid {
+	.submitted:not(.invalid) ion-input,
+	.submitted:not(.invalid) ion-select,
+	.submitted.item-datetime:not(.invalid) .input-wrapper {
         background-color: rgba(50, 219, 100, 0.25)
 	}
-	
+}
+
+body.md form {
+
+	.item-input.ng-invalid.ng-touched::after,
+	.item-input.ng-valid.ng-touched::after {
+	    border-bottom-color: transparent;
+	}
+
+	ion-item.submitted.invalid .item-inner {
+        border-bottom: 2px solid #f53d3d;
+	}
+
+	ion-item.submitted:not(.invalid) .item-inner {
+    	border-bottom: 2px solid #32db64;
+	}
+
+	ion-item.submitted.input-has-focus .item-inner,
+	ion-item:not(.submitted).input-has-focus .item-inner {
+		border-bottom: 2px solid #387ef5 !important;
+	}
+
+}
+
+body.wp form {
+
+	ion-item:not(.input-has-focus) ion-input.ng-invalid.ng-touched .text-input,
+	ion-item:not(.input-has-focus) ion-input.ng-valid.ng-touched .text-input {
+	    border: 2px solid rgba(0, 0, 0, 0.5);
+	}
+
+
+
+	.submitted.invalid .text-input,
+	.submitted.invalid ion-select,
+	.item-datetime.submitted.invalid ion-label {
+        border: 2px solid rgba(245, 61, 61, 0.5) !important
+	}
+
+	.submitted:not(.invalid) .text-input, 
+	.submitted:not(.invalid) ion-select {
+         border: 2px solid rgba(50, 219, 100, 0.5) !important
+	}
+
+	/* Fix para el componente datetime */
+	.item-datetime ion-label {
+    	border: 2px solid rgba(0, 0, 0, 0.5);
+	}
+	.item-datetime.submitted:not(.invalid) ion-datetime {
+         border: 2px solid rgba(50, 219, 100, 0.5);
+         margin-right: 8px;
+	}
+	.item-datetime.submitted:not(.invalid) ion-label {
+		border: 0px;
+	}
+
+	ion-item.submitted.input-has-focus .text-input,
+	ion-item:not(.submitted).input-has-focus .text-input {
+		border-color: #387ef5 !important;
+	}
 }
