@@ -3,7 +3,7 @@ import { NavController } from 'ionic-angular';
 import { DetallesSolicitudPage } from '../detalles-solicitud/detalles-solicitud';
 import { DataService } from '../../providers/data-service/data-service';
 
-import { SolicitudItem } from '../../components/solicitud-item/solicitud-item';
+import { SolicitudItem } from '../../directives/solicitud-item/solicitud-item';
 
 import { NuevaSolicitudModel } from '../../providers/nueva-solicitud-model/nueva-solicitud-model';
 

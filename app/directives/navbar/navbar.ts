@@ -4,7 +4,7 @@ import {NuevaSolicitudPage} from '../../pages/nueva-solicitud/nueva-solicitud';
 
 @Component({
     selector: 'navbar',
-    templateUrl: 'build/components/navbar/navbar.html',
+    templateUrl: 'build/directives/navbar/navbar.html',
     inputs: ['ocultarIconoNuevaSolicitud', 'titulo']
 })
 export class CustomNavbar {

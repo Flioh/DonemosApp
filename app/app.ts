@@ -7,7 +7,7 @@ import { ConnectivityService } from './providers/connectivity-service/connectivi
 import { DataService } from './providers/data-service/data-service';
 
 /* Directivas personalizadas */
-import {CustomNavbar} from './components/navbar/navbar';
+import {CustomNavbar} from './directives/navbar/navbar';
 
 /* Paginas de la app */
 import {ListaSolicitudesPage} from './pages/lista-solicitudes/lista-solicitudes';

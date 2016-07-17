@@ -24,5 +24,58 @@ export class NuevaSolicitudModel {
     // Si recibimos un objeto, copiamos sus propiedades
     for (var prop in obj) this[prop] = obj[prop];
   }
+
+  public getSolicitudID(): number {
+    return this.solicitudID;
+  }
+
+  public getUsuarioID(): number {
+    return this.usuarioID;
+  }
+
+  public getFechaCreacion(): Date {
+    return this.fechaCreacion;
+  }
+
+  public getEstaVigente(): boolean {
+    return this.estaVigente;
+  }
+
+  public getProvinciaID(): number {
+    return this.provinciaID;
+  }
+
+  public getLocalidadID(): number {
+    return this.localidadID;
+  }
+
+  public getGrupoSanguineoID(): number {
+    return this.grupoSanguineoID;
+  }
+
+  public getFactorSanguineoID(): number {
+    return this.factorSanguineoID;
+  }
+
+  public getCantidadDadores(): number {
+    return this.cantidadDadores;
+  }
+
+  public getLugar(): string {
+    return this.lugar;
+  }
+
+  public getDireccion(): string {
+    return this.direccion;
+  }
+
+  public getHorario(): string {
+    return this.horario;
+  }
+
+  public getDatosAdicionales(): string {
+    return this.datosAdicionales;
+  }
+
 }
 
