@@ -18,7 +18,6 @@ export class NuevaSolicitudPage {
 
 	// Variables usadas para modificar estilos, componentes visibles, etc...
 	private ocultarIconoNuevaSolicitud: boolean = true;
-	private esAndroid: boolean;
 
 	//Listas usadas en la pagina
 	private listaProvincias: any = [];
@@ -60,6 +59,12 @@ export class NuevaSolicitudPage {
 	private ctrlGrupo: Control;
 	private grupoValue: number;
 
+	private ctrlCantidad: Control;
+	private cantidadValue: number;	
+
+	private ctrlDatosAdicionales: Control;
+	private datosAdicionalesValue: string;
+
 	constructor(private platform: Platform,
 				private nav: NavController, 
 				private formBuilder : FormBuilder, 
@@ -67,8 +72,6 @@ export class NuevaSolicitudPage {
 				private connectivityService : ConnectivityService,
 				private autocompleteService : AutocompleteService) {
 		
-		this.esAndroid = this.platform.is('android') ? true : false;
-
 		this.inicializarProvincias();
 		this.inicializarGruposSanguineos();
 		this.inicializarFactoresSanguineos();
@@ -82,6 +85,8 @@ export class NuevaSolicitudPage {
 		this.ctrlHoraHasta= new Control(this.horaHastaValue, Validators.required);
 		this.ctrlFactor = new Control(this.factorValue, Validators.required);
 		this.ctrlGrupo = new Control(this.grupoValue, Validators.required);
+		this.ctrlCantidad = new Control(this.cantidadValue);
+		this.ctrlDatosAdicionales = new Control(this.datosAdicionalesValue);
 
 		// Inicializa el formulario
 		this.nuevaSolicitudForm = formBuilder.group({
@@ -92,7 +97,9 @@ export class NuevaSolicitudPage {
 			horaDesde: this.ctrlHoraDesde,
 			horaHasta: this.ctrlHoraHasta,
 			factor: this.ctrlFactor,
-			grupo: this.ctrlGrupo 
+			grupo: this.ctrlGrupo,
+			cantidad: this.ctrlCantidad,
+			datosAdicionales : this.ctrlDatosAdicionales
 		});
 
 		// Nos suscribimos al autocomplete para que nos envie la informacion de la direccion cuando este lista

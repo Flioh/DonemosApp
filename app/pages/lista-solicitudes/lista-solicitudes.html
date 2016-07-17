@@ -2,12 +2,9 @@
 <navbar></navbar>
 
 <ion-content>
-  <ion-card *ngFor="let solicitud of solicitudes" (click)="abrirDetalles($event, solicitud)">
-    <ion-card-header>
-      {{solicitud.titulo}}
-    </ion-card-header>
-    <ion-card-content>
-      {{solicitud.detalle}}
-    </ion-card-content>
-  </ion-card>
+	<!-- Creamos una lista de solicitudes usando el componente solicitud-item -->
+	<solicitud-item *ngFor="let solicitud of solicitudes" 
+					[solicitud]="solicitud" 
+					(seleccionarSolicitud)="abrirDetalles($event)">
+	</solicitud-item>
 </ion-content>

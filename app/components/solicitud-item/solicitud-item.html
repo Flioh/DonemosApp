@@ -1,0 +1,43 @@
+<ion-card>
+
+	<ion-item>
+		<ion-avatar class="card-icon" item-left>
+			<ion-icon class="big" name="water"></ion-icon>
+		</ion-avatar>
+		<h2>Se necesitan <strong>{{solicitud.cantidadDadores}} dadores</strong> de tipo</h2>
+		<h2>A+, A-, 0+, 0-</h2>
+	</ion-item>
+
+	<button class="top-middle" fab fab-right>
+		<ion-icon red name="pin"></ion-icon>
+	</button>
+
+	<ion-card-content class="detalle-solicitud">
+		<ion-row>
+			<ion-col>
+				<ion-icon name="pin"></ion-icon>
+				Santo Tome, Santa Fe
+			</ion-col>			
+		</ion-row>
+		<ion-row>
+			<ion-col width-60>
+				<ion-icon name="home"></ion-icon>
+				Sanatorio Garay
+			</ion-col>
+			<ion-col width-40>
+				<ion-icon name="time"></ion-icon>
+				08:00 - 16:00
+			</ion-col>
+		</ion-row>	
+		<ion-row>
+			<ion-col width-60>
+				<ion-note>
+					Hoy
+				</ion-note>
+			</ion-col>
+			<ion-col width-40 (click)="verDetalles()">
+				VER MÁS >
+			</ion-col>
+		</ion-row>
+	</ion-card-content>
+</ion-card>

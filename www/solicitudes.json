@@ -1,0 +1,47 @@
+[
+	{ 
+		"solicitudID" : 1,
+		"usuarioID": 1,
+		"fechaCreacion": "12/03/2016",
+		"estaVigente" : true,
+		"provinciaID" : 1,
+		"localidadID" : 2,
+		"grupoSanguineoID" : 1,
+		"factorSanguineoID" : 2,
+		"cantidadDadores" : 5,
+		"lugar" : "Sanatorio Mayo",
+		"direccion" : "Rivadavia 2345",
+		"horario" : "De 08:00 a 16:00",
+		"datosAdicionales" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+	},
+	{ 
+		"solicitudID" : 1,
+		"usuarioID": 1,
+		"fechaCreacion": "12/03/2016",
+		"estaVigente" : true,
+		"provinciaID" : 1,
+		"localidadID" : 2,
+		"grupoSanguineoID" : 1,
+		"factorSanguineoID" : 2,
+		"cantidadDadores" : 5,
+		"lugar" : "Sanatorio Mayo",
+		"direccion" : "Rivadavia 2345",
+		"horario" : "De 08:00 a 16:00",
+		"datosAdicionales" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+	},
+	{ 
+		"solicitudID" : 1,
+		"usuarioID": 1,
+		"fechaCreacion": "12/03/2016",
+		"estaVigente" : true,
+		"provinciaID" : 1,
+		"localidadID" : 2,
+		"grupoSanguineoID" : 1,
+		"factorSanguineoID" : 2,
+		"cantidadDadores" : 5,
+		"lugar" : "Sanatorio Mayo",
+		"direccion" : "Rivadavia 2345",
+		"horario" : "De 08:00 a 16:00",
+		"datosAdicionales" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+	}
+]

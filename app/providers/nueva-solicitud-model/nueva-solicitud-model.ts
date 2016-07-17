@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 
-
 @Injectable()
 export class NuevaSolicitudModel {
 
@@ -14,16 +13,16 @@ export class NuevaSolicitudModel {
   private factorSanguineoID: number;
   private cantidadDadores: number;
   private lugar: string;
+  private direccion: string;
   private horario: string;
   private datosAdicionales: string;
 
-  constructor() {
+  constructor(obj) {
     this.fechaCreacion = new Date();
     this.estaVigente = true;
+
+    // Si recibimos un objeto, copiamos sus propiedades
+    for (var prop in obj) this[prop] = obj[prop];
   }
-
-  
-
-
 }
 

@@ -2,13 +2,13 @@
 <navbar [ocultarIconoNuevaSolicitud]="ocultarIcono()" [titulo]="setTitulo()"></navbar>
 
 <ion-content padding class="nueva-solicitud">
-	<ion-list [no-lines]="esAndroid">
+	<ion-list>
 		<form [ngFormModel]="nuevaSolicitudForm">
 
 			<!-- Institucion  -->
 			<ion-item [class.submitted]="submitted" [class.invalid]="!ctrlInstitucion.valid">
-				<ion-label floating>Institucion</ion-label>
-				<ion-input id="autocomplete" [(ngModel)]="institucionValue" ngControl="institucion" type="text"></ion-input>
+				<ion-label stacked>Institucion</ion-label>
+				<ion-input id="autocomplete" [(ngModel)]="institucionValue" ngControl="institucion" type="text" placeholder="Ejemplo: Hospital Cullen"></ion-input>
 			</ion-item>
 			<span *ngIf="submitted && !ctrlInstitucion.valid" class="mensaje-error">
 				Ingrese el nombre de la institución.
@@ -84,6 +84,18 @@
 				Seleccione un grupo y un factor.
 			</span>
 
+			<!-- Cantidad  -->
+			<ion-item [class.submitted]="submitted" [class.invalid]="!ctrlCantidad.valid">
+				<ion-label floating>Cantidad</ion-label>
+				<ion-input [(ngModel)]="cantidadValue" ngControl="cantidad" type="number"></ion-input>
+			</ion-item>
+
+			<!-- Datos adicionales  -->
+			<ion-item [class.submitted]="submitted" [class.invalid]="!ctrlDatosAdicionales.valid">
+				<ion-label floating>Datos adicionales</ion-label>
+				<ion-textarea [(ngModel)]="datosAdicionalesValue" ngControl="datosAdicionales"></ion-textarea>
+			</ion-item>
+
 			<ion-item>
 				<h3>Value:</h3>
 				<pre>{{contenidoDelFormulario}}</pre>
@@ -92,7 +104,7 @@
 
 		</form>
 
-		<button class="submit" (click)="guardarCambios()" primary>Crear Solicitud</button>
+		<button class="submit" (click)="guardarCambios()" red>Crear Solicitud</button>
 
 	</ion-list>
 

@@ -19,6 +19,10 @@ button.submit {
 	display: inline-block;
 }
 
+textarea {
+	min-height: 120px;
+}
+
 body.ios form {
 	p {
 	    font-size: 0.8em;
@@ -51,12 +55,14 @@ body.ios form {
 
 	.submitted.invalid ion-input,
 	.submitted.invalid ion-select,
+	.submitted.invalid ion-textarea,
 	.submitted.invalid.item-datetime .input-wrapper {
         background-color: rgba(245, 61, 61, 0.25)
 	}
 
 	.submitted:not(.invalid) ion-input,
 	.submitted:not(.invalid) ion-select,
+	.submitted:not(.invalid) ion-textarea,
 	.submitted.item-datetime:not(.invalid) .input-wrapper {
         background-color: rgba(50, 219, 100, 0.25)
 	}
