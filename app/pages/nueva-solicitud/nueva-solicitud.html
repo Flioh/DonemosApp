@@ -18,9 +18,9 @@
 			<!-- Institucion  -->
 			<ion-item>
 				<ion-label stacked>Institucion</ion-label>
-				<ion-input id="autocomplete" [(ngModel)]="nuevaSolicitud.lugar" name="lugar" #lugar="ngModel" required type="text" placeholder="Ejemplo: Hospital Cullen"></ion-input>
+				<ion-input id="autocomplete" [(ngModel)]="nuevaSolicitud.institucion" name="institucion" #institucion="ngModel" required type="text" placeholder="Ejemplo: Hospital Cullen"></ion-input>
 			</ion-item>
-			<span [hidden]="lugar.valid || lugar.untouched" class="mensaje-error">
+			<span [hidden]="institucion.valid || institucion.untouched" class="mensaje-error">
 				Ingrese el nombre de la institución.
 			</span>
 

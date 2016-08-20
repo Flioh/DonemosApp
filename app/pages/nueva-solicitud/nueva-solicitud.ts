@@ -8,32 +8,26 @@ import { AutocompleteService } from '../../providers/autocomplete-service/autoco
 import { ConnectivityService } from '../../providers/connectivity-service/connectivity-service';
 import { GrupoSanguineoHelper, FactorSanguineoHelper } from '../../providers/helper-service/helper-service';
 
-
 /* Modelos utilizados */
 import { NuevaSolicitudModel } from '../../providers/nueva-solicitud-model/nueva-solicitud-model';
 
 @Component({
-  templateUrl: 'build/pages/nueva-solicitud/nueva-solicitud.html',
-  directives: [FORM_DIRECTIVES],
-  providers: [AutocompleteService]
+  templateUrl: 	'build/pages/nueva-solicitud/nueva-solicitud.html',
+  directives: 	[FORM_DIRECTIVES],
+  providers: 	[AutocompleteService]
 })
 export class NuevaSolicitudPage {
 
-	//Listas usadas en la pagina
+	// Listados usados en la pagina
 	private listaProvincias: any = [];
 	private listaCiudades: any = [];
 	private listaGruposSanguineos: any = [];
 	private listaFactoresSanguineos: any = [];
 
+	// Modelo a utilizar en el formulario
 	private nuevaSolicitud: NuevaSolicitudModel;
-	
-	/*private nuevaSolicitudForm: ControlGroup;*/
-
-	// Informacion de Google maps
-	private apiKey: any;
 
 	private submitted: boolean = false;
-
 
 	constructor(private platform: Platform,
 				private navCtrl: NavController, 
@@ -43,6 +37,7 @@ export class NuevaSolicitudPage {
 				private autocompleteService : AutocompleteService,
 				private loadingCtrl : LoadingController) {
 		
+		// Inicializamos el modelo
 		this.nuevaSolicitud = new NuevaSolicitudModel();
 
 		// Inicializa los listados de la pagina
@@ -50,44 +45,42 @@ export class NuevaSolicitudPage {
 		this.inicializarGruposSanguineos();
 		this.inicializarFactoresSanguineos();
 
-		
-
 		// Nos suscribimos al autocomplete para que nos envie la informacion de la direccion cuando este lista
-		/*this.autocompleteService.autocomplete.subscribe((informacionDelLugar) => {
+		this.autocompleteService.autocomplete.subscribe((informacionDelLugar) => {
 			this.ngZone.run(() => {
 				// Ejecutamos este metodo dentro de ngZone para que angular sepa que 
-				// tiene que actualizar la vista cuando esto finalice
+				// tiene que actualizar la vista cuando finalice
 				this.setearDireccion(informacionDelLugar);
 			});
-		});*/
+		});
 	}
 
 	// Método que recibe la dirección del autocomplete y la ingresa en el formulario
 	private setearDireccion(informacionSobreDireccion: any) {
-		/*this.actualizarValor('institucion', informacionSobreDireccion.getName());
-		this.actualizarValor('direccion', informacionSobreDireccion.getAdressLine1());
+		// Setea la institucion
+		this.nuevaSolicitud.setInstitucion(informacionSobreDireccion.getName());
+		
+		// Setea la direccion de la institucion
+		this.nuevaSolicitud.setDireccion(informacionSobreDireccion.getAdressLine1());
 
-		this.actualizarProvincia(informacionSobreDireccion.getProvince(), informacionSobreDireccion.getCity());*/
-	}
-
-	// Método genérico para actualizar tanto el valor de un campo del formulario como su Control
-	private actualizarValor(nombreCampo, valor): void {
-		/*this[nombreCampo + 'Value'] = valor;
-		this['ctrl' + nombreCampo.charAt(0).toUpperCase() + nombreCampo.substr(1).toLowerCase()].updateValueAndValidity(valor);
-		*/
+		// Setea la provincia y la ciudad de la institucion
+		this.actualizarProvinciaYCiudad(informacionSobreDireccion.getProvince(), informacionSobreDireccion.getCity());
 	}
 
 	// Método que dado el nombre de una provincia, la setea como seleccionada en el formulario y actualiza el listado de ciudades
-	private actualizarProvincia(nombreProvincia: string, nombreCiudad: string) {
-		/*for(let i=0; i< this.listaProvincias.length; i++) {
-			if(this.listaProvincias[i].value.toLowerCase() === nombreProvincia.toLowerCase()) {
-				// Seleccionamos esta provincia
-				this.provinciaValue = this.listaProvincias[i].key;
+	private actualizarProvinciaYCiudad(nombreProvincia: string, nombreCiudad: string) {
+		for(let i=0; i< this.listaProvincias.length; i++) {
 
+			// Buscamos la provincia por el nombre
+			if(this.listaProvincias[i].nombre.toLowerCase() === nombreProvincia.toLowerCase()) {
+				
+				// Seleccionamos esta provincia
+				this.nuevaSolicitud.setProvinciaID(this.listaProvincias[i].id);
+
+				// Inicializamos las ciudades de la provincia seleccionada
 				this.inicializarCiudadesDeLaProvincia().then(exito => {
 
 					if(!exito) {
-						// Mostrar error
 						// TODO: procesar error
 						debugger;
 					} else {
@@ -96,24 +89,30 @@ export class NuevaSolicitudPage {
 				});
 
 			}
-		}*/
+		}
 	}
 
 	// Método que dado el nombre de una ciudad, la setea como seleccionada en el formulario
 	private actualizarCiudad(nombreCiudad: string) {
-		/*let indice = 1; 
+		let indiceCiudad = -1; 
 		for(let i=0; i<this.listaCiudades.length; i++) {
-			if(this.listaCiudades[i].value.toLowerCase() === nombreCiudad.toLowerCase()) {
-				indice = this.listaCiudades[i].key;
+			// Buscamos la ciudad por su nombre
+			if(this.listaCiudades[i].nombre.toLowerCase() === nombreCiudad.toLowerCase()) {
+				indiceCiudad = i;
 			}
 		}
-		this.ciudadValue = indice;
-		*/
+
+		// Seleccionamos la ciudad pasada como parametro o la primera en su defecto
+		indiceCiudad = indiceCiudad > -1 ? indiceCiudad : 0;
+
+		// Setea la ciudad en base a su ID
+		this.nuevaSolicitud.setLocalidadID(this.listaCiudades[indiceCiudad].id);
 	}
 
 	// Método que se ejecuta antes de que el usuario ingrese a la página
 	ionViewDidEnter() {
-	  	// Antes de ingresar, verificar si hay información no guardada
+	  	// TODO: Antes de ingresar, verificar si hay información no guardada
+	  	// -----------------------------------------------------------------
 
 	  	// Obtiene el input dentro del elemento ion-input
 	  	let autocompleteInput = document.getElementById('autocomplete').childNodes[0].nextElementSibling;
@@ -123,9 +122,11 @@ export class NuevaSolicitudPage {
 
 	// Método que se ejecuta antes de que el usuario salga de la página
 	ionViewWillLeave() {
-	  // Antes de salir de la pantalla, guardar cualquier cambio que no se haya guardado;
+	  // TODO: Antes de salir de la pantalla, guardar cualquier cambio que no se haya guardado
+	  // --------------------------------------------------------------------------------------
 	}
 
+	// Metodo que inicializa el listado de grupos sanguineos
 	private inicializarGruposSanguineos(): void {
 		// Obtenemos el listado del helper
 		this.listaGruposSanguineos = GrupoSanguineoHelper.getGruposSanguineos();
@@ -135,6 +136,7 @@ export class NuevaSolicitudPage {
 		this.nuevaSolicitud.setGrupoSanguineoID(this.listaGruposSanguineos[0].id);
 	}
 
+	// Metodo que inicializa el listado de factores sanguineos
 	private inicializarFactoresSanguineos(): void {
 		// Obtenemos el listado del helper
 		this.listaFactoresSanguineos = FactorSanguineoHelper.getFactoresSanguineos();
@@ -144,7 +146,7 @@ export class NuevaSolicitudPage {
 		this.nuevaSolicitud.setFactorSanguineoID(this.listaFactoresSanguineos[0].id);
 	}
 
-	// Método que obtiene el listado de provincias del servidor
+	// Método que inicializa el listado de provincias
 	private inicializarProvincias(): void {
 
 		// TODO: reemplazar por llamada al servicio
@@ -182,7 +184,7 @@ export class NuevaSolicitudPage {
 		this.inicializarCiudadesDeLaProvincia();
 	}
 
-	// Método que obtiene el listado de ciudades de una provincia
+	// Método que inicializa el listado de ciudades de una provincia
 	public inicializarCiudadesDeLaProvincia() {
 		
 		let loadingPopup = this.loadingCtrl.create({
