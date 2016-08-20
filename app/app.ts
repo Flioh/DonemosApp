@@ -7,7 +7,7 @@ import { disableDeprecatedForms, provideForms } from '@angular/forms';
 
 /* Servicios */
 import { ConnectivityService } from './providers/connectivity-service/connectivity-service';
-import { DataService } from './providers/data-service/data-service';
+import { RemoteDataService } from './providers/remote-data-service/remote-data-service';
 
 /* Paginas de la app */
 import {ListaSolicitudesPage} from './pages/lista-solicitudes/lista-solicitudes';
@@ -18,7 +18,7 @@ import {MenuItemModel} from './providers/menuitem-model/menuitem-model';
 
 @Component({
   templateUrl: 'build/app.html',
-  providers: [ConnectivityService, DataService]
+  providers: [ConnectivityService, RemoteDataService]
 })
 class DonemosApp {
   @ViewChild(Nav) nav: Nav;

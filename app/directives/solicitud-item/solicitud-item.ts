@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { NuevaSolicitudModel } from '../../providers/nueva-solicitud-model/nueva-solicitud-model';
-import { DonacionesHelper } from '../../providers/helper-service/helper-service';
+import { DonacionesHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
 import { FormatTiposSanguineos } from '../../pipes/format-tipos-sanguineos-pipe';
 
 @Component({

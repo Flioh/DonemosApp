@@ -23,9 +23,10 @@ export class NuevaSolicitudModel {
       // Si recibimos un objeto, copiamos sus propiedades
       for (var prop in obj) this[prop] = obj[prop];
     } else {
+      this.solicitudID = null;
+      this.usuarioID = null;
       this.estaVigente = true;
-      this.horaDesde = "08:00";
-      this.horaHasta = "18:00";
+      this.fechaCreacion = new Date();
     }
   }
 

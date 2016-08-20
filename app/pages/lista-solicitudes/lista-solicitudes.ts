@@ -4,7 +4,7 @@ import { NavController } from 'ionic-angular';
 import { DetallesSolicitudPage } from '../detalles-solicitud/detalles-solicitud';
 import { NuevaSolicitudPage } from '../nueva-solicitud/nueva-solicitud';
 
-import { DataService } from '../../providers/data-service/data-service';
+import { RemoteDataService } from '../../providers/remote-data-service/remote-data-service';
 
 import { SolicitudItem } from '../../directives/solicitud-item/solicitud-item';
 
@@ -18,7 +18,7 @@ export class ListaSolicitudesPage {
 
   solicitudes: Array<NuevaSolicitudModel>;
 
-  constructor(private nav: NavController, private dataService: DataService) {
+  constructor(private nav: NavController, private dataService: RemoteDataService) {
     this.solicitudes = [];
 
     this.dataService.obtenerSolicitudes().then((solicitudesObj) => { 

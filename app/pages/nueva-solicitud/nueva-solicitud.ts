@@ -6,15 +6,16 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 /* Servicios utilizados */
 import { AutocompleteService } from '../../providers/autocomplete-service/autocomplete-service';
 import { ConnectivityService } from '../../providers/connectivity-service/connectivity-service';
-import { GrupoSanguineoHelper, FactorSanguineoHelper } from '../../providers/helper-service/helper-service';
+import { RemoteDataService } from '../../providers/remote-data-service/remote-data-service';
+import { GrupoSanguineoHelper, FactorSanguineoHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
 
 /* Modelos utilizados */
 import { NuevaSolicitudModel } from '../../providers/nueva-solicitud-model/nueva-solicitud-model';
 
 @Component({
-  templateUrl: 	'build/pages/nueva-solicitud/nueva-solicitud.html',
-  directives: 	[FORM_DIRECTIVES],
-  providers: 	[AutocompleteService]
+	templateUrl: 'build/pages/nueva-solicitud/nueva-solicitud.html',
+	directives: [FORM_DIRECTIVES],
+	providers: [AutocompleteService]
 })
 export class NuevaSolicitudPage {
 
@@ -29,16 +30,18 @@ export class NuevaSolicitudPage {
 
 	private submitted: boolean = false;
 
-	constructor(private platform: Platform,
-				private navCtrl: NavController, 
-				private formBuilder : FormBuilder, 
-				private ngZone : NgZone,
-				private connectivityService : ConnectivityService,
-				private autocompleteService : AutocompleteService,
-				private loadingCtrl : LoadingController) {
+	constructor(private remoteDataService: RemoteDataService,
+		private platform: Platform,
+		private navCtrl: NavController, 
+		private formBuilder : FormBuilder, 
+		private ngZone : NgZone,
+		private connectivityService : ConnectivityService,
+		private autocompleteService : AutocompleteService,
+		private loadingCtrl : LoadingController) {
 		
-		// Inicializamos el modelo
+		// Creamos e inicializamos el modelo
 		this.nuevaSolicitud = new NuevaSolicitudModel();
+		this.inicializarSolicitud();
 
 		// Inicializa los listados de la pagina
 		this.inicializarProvincias();
@@ -54,6 +57,16 @@ export class NuevaSolicitudPage {
 			});
 		});
 	}
+
+	private inicializarSolicitud() {
+
+		// TODO: setar la propiedad usuarioID de la nueva solicitud
+		// --------------------------------------------------------
+		// this.nuevaSolicitud.setUsuarioID(usuarioID);
+
+		this.nuevaSolicitud.setHoraDesde('08:00');
+		this.nuevaSolicitud.setHoraHasta('20:00');
+	}	
 
 	// Método que recibe la dirección del autocomplete y la ingresa en el formulario
 	private setearDireccion(informacionSobreDireccion: any) {
@@ -80,12 +93,8 @@ export class NuevaSolicitudPage {
 				// Inicializamos las ciudades de la provincia seleccionada
 				this.inicializarCiudadesDeLaProvincia().then(exito => {
 
-					if(!exito) {
-						// TODO: procesar error
-						debugger;
-					} else {
-						this.actualizarCiudad(nombreCiudad);
-					}
+					// Seleccionamos la ciudad dentro del listado ahora actualizado
+					this.actualizarCiudad(nombreCiudad);
 				});
 
 			}
@@ -117,8 +126,8 @@ export class NuevaSolicitudPage {
 	  	// Obtiene el input dentro del elemento ion-input
 	  	let autocompleteInput = document.getElementById('autocomplete').childNodes[0].nextElementSibling;
 	  	// Inicializar el autocomplete
-		this.autocompleteService.initializeAutocomplete(autocompleteInput);
-	}
+	  	this.autocompleteService.initializeAutocomplete(autocompleteInput);
+	  }
 
 	// Método que se ejecuta antes de que el usuario salga de la página
 	ionViewWillLeave() {
@@ -149,80 +158,55 @@ export class NuevaSolicitudPage {
 	// Método que inicializa el listado de provincias
 	private inicializarProvincias(): void {
 
-		// TODO: reemplazar por llamada al servicio
-		// ----------------------------------------
-		this.listaProvincias.push({id : 1, nombre: 'Buenos Aires'});
-		this.listaProvincias.push({id : 2, nombre: 'Catamarca'});
-		this.listaProvincias.push({id : 3, nombre: 'Chaco'});
-		this.listaProvincias.push({id : 4, nombre: 'Chubut'});
-		this.listaProvincias.push({id : 5, nombre: 'Ciudad Autonoma de Bs. As.'});
-		this.listaProvincias.push({id : 6, nombre: 'Córdoba'});
-		this.listaProvincias.push({id : 7, nombre: 'Corrientes'});
-		this.listaProvincias.push({id : 8, nombre: 'Entre Ríos'});
-		this.listaProvincias.push({id : 9, nombre: 'Formosa'});
-		this.listaProvincias.push({id : 10, nombre: 'Jujuy'});
-		this.listaProvincias.push({id : 11, nombre: 'La Pampa'});
-		this.listaProvincias.push({id : 12, nombre: 'La Rioja'});
-		this.listaProvincias.push({id : 13, nombre: 'Mendoza'});
-		this.listaProvincias.push({id : 14, nombre: 'Misiones'});
-		this.listaProvincias.push({id : 15, nombre: 'Neuquén'});
-		this.listaProvincias.push({id : 16, nombre: 'Río Negro'});
-		this.listaProvincias.push({id : 17, nombre: 'Salta'});
-		this.listaProvincias.push({id : 18, nombre: 'San Juan'});
-		this.listaProvincias.push({id : 19, nombre: 'San Luis'});
-		this.listaProvincias.push({id : 20, nombre: 'Santa Cruz'});
-		this.listaProvincias.push({id : 21, nombre: 'Santa Fe'});
-		this.listaProvincias.push({id : 22, nombre: 'Santiago del Estero'});
-		this.listaProvincias.push({id : 23, nombre: 'Tierra del Fuego'});
-		this.listaProvincias.push({id : 24, nombre: 'Tucumán'});
+		// Obtenemos el listado de provincias del servidor
+		this.remoteDataService.getListaProvincias()
+		.then(result => {
+			if(result && result.length) {
+				
+				// Inicializamos el listado de provincias
+				this.listaProvincias = result;
 
-		// TODO: usar geolocalizacion para cargar por defecto la provincia del usuario
-		// ------------------------------------------------------------------------
-		this.nuevaSolicitud.setProvinciaID(this.listaProvincias[0].id);
+				// TODO: usar geolocalizacion para cargar por defecto la provincia del usuario
+				// ------------------------------------------------------------------------
+				this.nuevaSolicitud.setProvinciaID(this.listaProvincias[0].id);
 
-		// Carga las ciudades de la provincia seleccionada
-		this.inicializarCiudadesDeLaProvincia();
+				// Carga las ciudades de la provincia seleccionada
+				this.inicializarCiudadesDeLaProvincia();
+
+			} else {
+					// TODO: manejar errores en las llamadas al servidor
+					// -------------------------------------------------
+				}
+			});
 	}
 
 	// Método que inicializa el listado de ciudades de una provincia
-	public inicializarCiudadesDeLaProvincia() {
+	public inicializarCiudadesDeLaProvincia(): Promise<any> {
 		
 		let loadingPopup = this.loadingCtrl.create({
-		    content: 'Cargando ciudades'
+			content: 'Cargando ciudades'
 		});
 
 		// Muestra el mensaje de cargando ciudades
 		loadingPopup.present();
 
-		return new Promise(resolve => {
-			setTimeout(() => {
+		return this.remoteDataService.getListaCiudadesPorProvincia(this.nuevaSolicitud.getProvinciaID()).then(result => {
 
-				// TODO: reemplazar por llamada al servicio
-	      		let provinciaId = this.nuevaSolicitud.getProvinciaID();
-				this.listaCiudades = [];
+			if(result && result.length){
+				this.listaCiudades = result;
 
-				this.listaCiudades.push({id : 1, nombre: 'Prov ' + provinciaId + ' Ciudad 01'});
-				this.listaCiudades.push({id : 2, nombre: 'Prov ' + provinciaId + ' Ciudad 02'});
-				this.listaCiudades.push({id : 3, nombre: 'Prov ' + provinciaId + ' Ciudad 03'});
-				this.listaCiudades.push({id : 4, nombre: 'Prov ' + provinciaId + ' Ciudad 04'});
-				this.listaCiudades.push({id : 5, nombre: 'Prov ' + provinciaId + ' Ciudad 05'});
-				this.listaCiudades.push({id : 6, nombre: 'Prov ' + provinciaId + ' Ciudad 06'});
-				this.listaCiudades.push({id : 7, nombre: 'Prov ' + provinciaId + ' Ciudad 07'});
-				this.listaCiudades.push({id : 8, nombre: 'Prov ' + provinciaId + ' Ciudad 08'});
-				this.listaCiudades.push({id : 9, nombre: 'Prov ' + provinciaId + ' Ciudad 09'});
-				this.listaCiudades.push({id : 10, nombre: 'Prov ' + provinciaId + ' Ciudad 10'});
+					// TODO: usar geolocalizacion para cargar por defecto la provincia del usuario
+					// ------------------------------------------------------------------------
+					this.nuevaSolicitud.setLocalidadID(this.listaCiudades[0].id);
 
-				// TODO: usar geolocalizacion para cargar por defecto la provincia del usuario
-				// ------------------------------------------------------------------------
-				this.nuevaSolicitud.setLocalidadID(this.listaCiudades[0].id);
+					// Oculta el mensaje de espera
+					loadingPopup.dismiss();
 
-				// Oculta el mensaje de espera
-				loadingPopup.dismiss();
+			}
 
-				// Resuelve la promise
-			  	resolve(true);
-			}, 2000);
-	    });
+			// TODO: manejar errores en las llamadas al servidor
+			// -------------------------------------------------
+		});
 	}
 
 	// Método que crea la nueva solicitud con la información ingresada en el formulario
@@ -233,6 +217,6 @@ export class NuevaSolicitudPage {
 
 	// Método usado para debug, muestra el contenido del form en tiempo real
 	get contenidoDelFormulario(): string {
-    	return JSON.stringify(this.nuevaSolicitud, null, 2);
-  	}
+		return JSON.stringify(this.nuevaSolicitud, null, 2);
+	}
 }
