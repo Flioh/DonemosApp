@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, LoadingController } from 'ionic-angular';
 
 import { DetallesSolicitudPage } from '../detalles-solicitud/detalles-solicitud';
 import { NuevaSolicitudPage } from '../nueva-solicitud/nueva-solicitud';
@@ -18,13 +18,27 @@ export class ListaSolicitudesPage {
 
   solicitudes: Array<NuevaSolicitudModel>;
 
-  constructor(private nav: NavController, private dataService: RemoteDataService) {
+  constructor(private nav: NavController, 
+              private loadingCtrl: LoadingController, 
+              private dataService: RemoteDataService) {
+    
     this.solicitudes = [];
+
+    let loadingPopup = this.loadingCtrl.create({
+      content: 'Cargando solicitudes'
+    });
+
+    // Muestra el mensaje de cargando ciudades
+    loadingPopup.present();
 
     this.dataService.obtenerSolicitudes().then((solicitudesObj) => { 
       for(let i = 0; i < solicitudesObj.length; i++) {
         this.solicitudes.push(new NuevaSolicitudModel(solicitudesObj[i]));
       }
+
+      // Oculta el mensaje de espera
+      loadingPopup.dismiss();
+
     });    
   }
 

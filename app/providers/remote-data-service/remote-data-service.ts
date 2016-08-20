@@ -22,7 +22,11 @@ export class RemoteDataService {
       this.http.get('./solicitudes.json')
       .map(res => res.json())
       .subscribe(data => {
-        resolve(data);
+        
+        // Simulamos un retardo al buscar las solicitudes
+        setTimeout(() => {
+          resolve(data);
+        }, 1000);        
       });
     });
   }
