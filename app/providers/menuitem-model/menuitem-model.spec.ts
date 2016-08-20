@@ -1,12 +1,23 @@
 import {Injectable} from '@angular/core';
-import {beforeEachProviders, beforeEach, it, describe, expect, inject, injectAsync} from '@angular/core/testing';
+import {beforeEachProviders, beforeEach, it, describe, expect, inject} from '@angular/core/testing';
 import {MenuItemModel} from './menuitem-model';
-import {ErrorPage} from '../../pages/error/error';
 
+import {Component} from '@angular/core';
+import {NavController} from 'ionic-angular';
+
+// Mock del una pagina
+@Component({
+  templateUrl: 'build/pages/error/error.html',
+})
+export class MockPage {
+  constructor(public nav: NavController) {}
+}
+
+// Mock de la clase MenuItemModel
 @Injectable()
 export class MenuItemModelMock extends MenuItemModel {
 	constructor(){
-		super('icono', 'titulo', ErrorPage);
+		super('icono', 'titulo', MockPage);
 	}
 }
 
@@ -52,7 +63,7 @@ describe('MenuItem Model', () => {
 	}));
 
 	it('El metodo getComponente() debe devolver la pagina de error', inject([MenuItemModel], (menuItemModel: MenuItemModelMock) => {
-		expect(menuItemModel.getComponente()).toBeTruthy();
+		expect(typeof menuItemModel.getComponente()).toEqual(typeof MockPage);
 	
 	}));
 
