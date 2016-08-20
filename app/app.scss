@@ -1,12 +1,13 @@
 .social-title {
 	text-align: center;	
+
+	h4 {
+		margin-top: 0;
+	}
 }
 .social-links {
 	margin: 0px;
+	padding: 0 10px;
 	text-align: center;
 
-	ion-icon {
-	    font-size: 4em;
-    	width: 100%;
-	}
 }
