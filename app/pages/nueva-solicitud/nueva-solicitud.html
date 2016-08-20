@@ -1,110 +1,149 @@
-<!-- Custom navbar -->
-<navbar [ocultarIconoNuevaSolicitud]="ocultarIcono()" [titulo]="setTitulo()"></navbar>
+<ion-header>
+	<ion-navbar red>
+		<ion-title>Nueva Solicitud</ion-title>
+		<button menuToggle="right" end>
+			<ion-icon name="menu"></ion-icon>
+		</button>	
+	</ion-navbar>
+</ion-header>
+
+
 
 <ion-content padding class="nueva-solicitud">
 	<ion-list>
-		<form [ngFormModel]="nuevaSolicitudForm">
+		<form (ngSubmit)="guardarCambios()" #nuevaSolicitudForm="ngForm" >
+
+
 
 			<!-- Institucion  -->
-			<ion-item [class.submitted]="submitted" [class.invalid]="!ctrlInstitucion.valid">
+			<ion-item>
 				<ion-label stacked>Institucion</ion-label>
-				<ion-input id="autocomplete" [(ngModel)]="institucionValue" ngControl="institucion" type="text" placeholder="Ejemplo: Hospital Cullen"></ion-input>
+				<ion-input id="autocomplete" [(ngModel)]="nuevaSolicitud.lugar" name="lugar" #lugar="ngModel" required type="text" placeholder="Ejemplo: Hospital Cullen"></ion-input>
 			</ion-item>
-			<span *ngIf="submitted && !ctrlInstitucion.valid" class="mensaje-error">
+			<span [hidden]="lugar.valid || lugar.untouched" class="mensaje-error">
 				Ingrese el nombre de la institución.
 			</span>
 
+
+
 			<!-- Dirección  -->
-			<ion-item [class.submitted]="submitted" [class.invalid]="!ctrlDireccion.valid">
+			<ion-item>
 				<ion-label floating>Direccion</ion-label>
-				<ion-input [(ngModel)]="direccionValue" ngControl="direccion" type="text"></ion-input>
+				<ion-input [(ngModel)]="nuevaSolicitud.direccion" name="direccion" #direccion="ngModel" required type="text"></ion-input>
 			</ion-item>
-			<span *ngIf="submitted && !ctrlDireccion.valid" class="mensaje-error">
+			<span [hidden]="direccion.valid || direccion.untouched" class="mensaje-error">
 				Ingrese la dirección.
 			</span>
 
+
+
 			<!-- Provincia  -->
-			<ion-item [class.submitted]="submitted" [class.invalid]="!provinciaValue">
+			<ion-item>
 				<ion-label floating>Provincia</ion-label>
-				<ion-select [(ngModel)]="provinciaValue" ngControl="provincia" okText="Aceptar" cancelText="Cancelar" (ionChange)="inicializarCiudadesDeLaProvincia()">
-			    	<ion-option *ngFor="let provincia of listaProvincias" value={{provincia.key}}>{{provincia.value}}</ion-option>
+				<ion-select [(ngModel)]="nuevaSolicitud.provinciaID"  okText="Aceptar" cancelText="Cancelar" required name="provincia" #provincia="ngModel" (ionChange)="inicializarCiudadesDeLaProvincia()">
+					<ion-option *ngFor="let provincia of listaProvincias" value={{provincia.id}}>
+						{{provincia.nombre}}
+					</ion-option>
 				</ion-select>
 			</ion-item>
-			<span *ngIf="submitted && !provinciaValue" class="mensaje-error">
+			<span [hidden]="provincia.valid || provincia.untouched" class="mensaje-error">
 				Seleccione una provincia.
 			</span>
 
+
+
 			<!-- Ciudad  -->
-			<ion-item [class.submitted]="submitted" [class.invalid]="!ciudadValue">
+			<ion-item>
 				<ion-label floating>Ciudad</ion-label>
-				<ion-select [(ngModel)]="ciudadValue" ngControl="ciudad" okText="Aceptar" cancelText="Cancelar">
-			    	<ion-option *ngFor="let ciudad of listaCiudades" value={{ciudad.key}}>{{ciudad.value}}</ion-option>
+				<ion-select [(ngModel)]="nuevaSolicitud.localidadID" okText="Aceptar" cancelText="Cancelar" required name="ciudad" #ciudad="ngModel">
+					<ion-option *ngFor="let ciudad of listaCiudades" value={{ciudad.id}}>
+						{{ciudad.nombre}}
+					</ion-option>
 				</ion-select>
 			</ion-item>
-			<span *ngIf="submitted && !ciudadValue" class="mensaje-error">
+			<span [hidden]="ciudad.valid || ciudad.untouched" class="mensaje-error">
 				Seleccione una ciudad.
 			</span>
 
+
+
 			<!-- Hora desde -->
-			<ion-item [class.submitted]="submitted" [class.invalid]="!ctrlHoraDesde.valid">
-			  <ion-label>Desde las</ion-label>
-			  <ion-datetime displayFormat="HH:mm" [(ngModel)]="horaDesdeValue" ngControl="horaDesde">
-			  </ion-datetime>
+			<ion-item [class.ng-touched]="horaDesde.touched">
+				<ion-label>Desde las</ion-label>
+				<ion-datetime displayFormat="HH:mm" [(ngModel)]="nuevaSolicitud.horaDesde" required name="horaDesde" #horaDesde="ngModel" minuteValues="0,15,30,45" doneText="Aceptar" cancelText="Cancelar">
+				</ion-datetime>
 			</ion-item>
-			<span *ngIf="submitted && !ctrlHoraDesde.valid" class="mensaje-error">
+			<span [hidden]="horaDesde.valid || horaDesde.untouched" class="mensaje-error">
 				Ingrese la hora de inicio.
 			</span>
 
+
+
 			<!-- Hora hasta -->
-			<ion-item [class.submitted]="submitted" [class.invalid]="!ctrlHoraHasta.valid">
-			  <ion-label>Hasta las</ion-label>
-			  <ion-datetime displayFormat="HH:mm" [(ngModel)]="horaHastaValue" ngControl="horaHasta">
-			  </ion-datetime>
+			<ion-item [class.ng-touched]="horaHasta.touched">
+				<ion-label>Hasta las</ion-label>
+				<ion-datetime displayFormat="HH:mm" [(ngModel)]="nuevaSolicitud.horaHasta" required name="horaHasta" #horaHasta="ngModel" minuteValues="0,15,30,45" doneText="Aceptar" cancelText="Cancelar">
+				</ion-datetime>
 			</ion-item>
-			<span *ngIf="submitted && !ctrlHoraHasta.valid" class="mensaje-error">
+			<span [hidden]="horaHasta.valid || horaHasta.untouched" class="mensaje-error">
 				Ingrese la hora de fin.
 			</span>
 
-			<!-- Grupo -->
-			<ion-item class="half-size" [class.submitted]="submitted" [class.invalid]="!grupoValue">
+
+
+			<!-- Grupo sanguineo  -->
+			<ion-item class="half-size">
 				<ion-label floating>Grupo</ion-label>
-				<ion-select [(ngModel)]="grupoValue" ngControl="grupo" okText="Aceptar" cancelText="Cancelar">
-			    	<ion-option *ngFor="let grupo of listaGruposSanguineos" value={{grupo.key}}>{{grupo.value}}</ion-option>
+				<ion-select [(ngModel)]="nuevaSolicitud.grupoSanguineoID" okText="Aceptar" cancelText="Cancelar" required name="grupo" #grupo="ngModel">
+					<ion-option *ngFor="let grupo of listaGruposSanguineos" value={{grupo.id}}>
+						{{grupo.nombre}}
+					</ion-option>
 				</ion-select>
 			</ion-item>
 
-			<!-- Factor -->
-			<ion-item class="half-size" [class.submitted]="submitted" [class.invalid]="!factorValue">
+
+
+			<!-- Factor sanguineo  -->
+			<ion-item class="half-size">
 				<ion-label floating>Factor</ion-label>
-				<ion-select [(ngModel)]="factorValue" ngControl="factor" okText="Aceptar" cancelText="Cancelar">
-			    	<ion-option *ngFor="let factor of listaFactoresSanguineos" value={{factor.key}}>{{factor.value}}</ion-option>
+				<ion-select [(ngModel)]="nuevaSolicitud.factorSanguineoID" okText="Aceptar" cancelText="Cancelar" required name="factor" #factor="ngModel">
+					<ion-option *ngFor="let factor of listaFactoresSanguineos" value={{factor.id}}>
+						{{factor.nombre}}
+					</ion-option>
 				</ion-select>
 			</ion-item>
-			<span *ngIf="submitted && (!grupoValue || !factorValue)" class="mensaje-error">
-				Seleccione un grupo y un factor.
-			</span>
+
+
 
 			<!-- Cantidad  -->
-			<ion-item [class.submitted]="submitted" [class.invalid]="!ctrlCantidad.valid">
+			<ion-item>
 				<ion-label floating>Cantidad</ion-label>
-				<ion-input [(ngModel)]="cantidadValue" ngControl="cantidad" type="number"></ion-input>
+				<ion-input [(ngModel)]="nuevaSolicitud.cantidad" name="cantidad" type="number"></ion-input>
 			</ion-item>
 
+
+
 			<!-- Datos adicionales  -->
-			<ion-item [class.submitted]="submitted" [class.invalid]="!ctrlDatosAdicionales.valid">
+			<ion-item>
 				<ion-label floating>Datos adicionales</ion-label>
-				<ion-textarea [(ngModel)]="datosAdicionalesValue" ngControl="datosAdicionales"></ion-textarea>
+				<ion-textarea rows="6" [(ngModel)]="nuevaSolicitud.datosAdicionales" name="datosAdicionales"></ion-textarea>
 			</ion-item>
+
+
 
 			<ion-item>
 				<h3>Value:</h3>
 				<pre>{{contenidoDelFormulario}}</pre>
-				<pre>Validity: {{nuevaSolicitudForm.valid}}</pre>
+				<pre>Validity: {{nuevaSolicitudForm.form.valid}}</pre>
 			</ion-item>
 
-		</form>
 
-		<button class="submit" (click)="guardarCambios()" red>Crear Solicitud</button>
+
+			<button [disabled]="!nuevaSolicitudForm.form.valid" class="submit" red block>Crear Solicitud</button>
+
+
+
+		</form>
 
 	</ion-list>
 

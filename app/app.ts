@@ -2,12 +2,12 @@ import { Component, ViewChild, provide, PLATFORM_DIRECTIVES } from '@angular/cor
 import { ionicBootstrap, App, Platform, MenuController, Nav } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
 
+// New angular2 forms
+import { disableDeprecatedForms, provideForms } from '@angular/forms';
+
 /* Servicios */
 import { ConnectivityService } from './providers/connectivity-service/connectivity-service';
 import { DataService } from './providers/data-service/data-service';
-
-/* Directivas personalizadas */
-import {CustomNavbar} from './directives/navbar/navbar';
 
 /* Paginas de la app */
 import {ListaSolicitudesPage} from './pages/lista-solicitudes/lista-solicitudes';
@@ -18,8 +18,7 @@ import {MenuItemModel} from './providers/menuitem-model/menuitem-model';
 
 @Component({
   templateUrl: 'build/app.html',
-  providers: [ConnectivityService, DataService],
-  directives: [CustomNavbar]
+  providers: [ConnectivityService, DataService]
 })
 class DonemosApp {
   @ViewChild(Nav) nav: Nav;
@@ -76,8 +75,13 @@ class DonemosApp {
   }
 }
 
-// Solo las directivas por defecto tienen alcance global, por lo que agregamos nuestras directivas al conjunto
-// de directivas globales de angular para que esten disponibles en toda la aplicacion.
-ionicBootstrap(DonemosApp, [provide(PLATFORM_DIRECTIVES, { useValue: CustomNavbar, multi: true })], {
-  //statusbarPadding: true
-});
+ionicBootstrap(DonemosApp, 
+  [
+    disableDeprecatedForms(), // disable deprecated forms
+    provideForms() // enable new forms module]
+  ], 
+  { 
+    statusbarPadding: true 
+  });
+
+

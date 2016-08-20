@@ -14,17 +14,21 @@ export class NuevaSolicitudModel {
   private cantidadDadores: number;
   private lugar: string;
   private direccion: string;
-  private horario: string;
+  private horaDesde: string;
+  private horaHasta: string;
   private datosAdicionales: string;
 
-  constructor(obj) {
-    this.fechaCreacion = new Date();
-    this.estaVigente = true;
-
-    // Si recibimos un objeto, copiamos sus propiedades
-    for (var prop in obj) this[prop] = obj[prop];
+  constructor(obj?) {
+    if(obj) {
+      // Si recibimos un objeto, copiamos sus propiedades
+      for (var prop in obj) this[prop] = obj[prop];
+    } else {
+      this.horaDesde = "08:00";
+      this.horaHasta = "18:00";
+    }
   }
 
+  /* Getters */
   public getSolicitudID(): number {
     return this.solicitudID;
   }
@@ -69,12 +73,33 @@ export class NuevaSolicitudModel {
     return this.direccion;
   }
 
-  public getHorario(): string {
-    return this.horario;
+  public getHoraDesde(): string {
+    return this.horaDesde;
+  }
+
+  public getHoraHasta(): string {
+    return this.horaHasta;
   }
 
   public getDatosAdicionales(): string {
     return this.datosAdicionales;
+  }
+
+  /* Setters */
+  public setProvinciaID(id: number): void {
+    this.provinciaID = id;
+  }
+
+  public setLocalidadID(id: number): void {
+    this.localidadID = id;
+  }
+
+  public setGrupoSanguineoID(id: number): void {
+    this.grupoSanguineoID = id;
+  }
+
+  public setFactorSanguineoID(id: number): void {
+    this.factorSanguineoID = id;
   }
 
 }

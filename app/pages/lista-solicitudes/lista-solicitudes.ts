@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
+
 import { DetallesSolicitudPage } from '../detalles-solicitud/detalles-solicitud';
+import { NuevaSolicitudPage } from '../nueva-solicitud/nueva-solicitud';
+
 import { DataService } from '../../providers/data-service/data-service';
 
 import { SolicitudItem } from '../../directives/solicitud-item/solicitud-item';
@@ -30,5 +33,9 @@ export class ListaSolicitudesPage {
       // Obtenemos la solicitud del evento
       unaSolicitud: event.value
     }, { animate: true, direction: 'forward' });
+  }
+
+  nuevaSolicitud(): void {
+    this.nav.setRoot(NuevaSolicitudPage, {}, { animate: true, direction: 'forward' });
   }
 }

@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { NuevaSolicitudModel } from '../../providers/nueva-solicitud-model/nueva-solicitud-model';
-import { FactorSanguineo, GrupoSanguineo, Helpers } from '../../providers/helper-service/helper-service';
+import { DonacionesHelper } from '../../providers/helper-service/helper-service';
 import { FormatTiposSanguineos } from '../../pipes/format-tipos-sanguineos-pipe';
 
 @Component({
@@ -19,7 +19,7 @@ export class SolicitudItem {
     }
 
     public getTiposSanguineosBuscados():Array<string> {
-    	return Helpers.puedeRecibirDe(this.solicitud.getGrupoSanguineoID(), this.solicitud.getFactorSanguineoID());
+    	return DonacionesHelper.puedeRecibirDe(this.solicitud.getGrupoSanguineoID(), this.solicitud.getFactorSanguineoID());
     }
 
     public getDescripcionTipoSanguineo(){

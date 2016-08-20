@@ -3,6 +3,8 @@ import {Observable} from 'rxjs/Observable';
 
 import {ConnectivityService} from '../../providers/connectivity-service/connectivity-service';
 
+let google: any = window.google || {};
+
 @Injectable()
 export class AutocompleteService {
 
@@ -21,33 +23,13 @@ export class AutocompleteService {
 		this.autocomplete = Observable.create(observer => {
 			this.autocompleteObserver = observer;
 		});
-
-		// Load the Google Places library
-		if(this.connectivityService.isOnline()) {
-			this.loadGoogleMapsLibrary();
-		}
-	}
-
-	private loadGoogleMapsLibrary(): void {
-		if (typeof google == "undefined" || typeof google.maps == "undefined") {
-
-			let script = document.createElement("script");
-			script.id = "googleMaps";
-
-			if (this.apiKey) {
-				script.src = 'http://maps.googleapis.com/maps/api/js?key=' + this.apiKey + '&libraries=places';
-			} else {
-				script.src = 'http://maps.googleapis.com/maps/api/js?libraries=places';
-			}
-			document.body.appendChild(script);
-		}
 	}
 
 	public initializeAutocomplete(element): void {
 		// Create the autocomplete object, restricting the search to geographical location types.
 		this.autocompleteElement = new google.maps.places.Autocomplete(element);
 
-		window.processAddress = () => {
+		let processAddress = () => {
 			this.processAddressInformation();
 		}
 

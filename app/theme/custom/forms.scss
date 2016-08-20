@@ -1,35 +1,43 @@
+/* Variables a usar en las validaciones */
+
+$label-color: #999;
+$validation-text-color: #7f7f7f;
+
+$ios-field-bg 	: #f2f2f2;
+$ios-error 		: rgba(245, 61, 61, 0.25);
+$ios-valid 		: rgba(50, 219, 100, 0.25);
+$ios-text-color	: #d2d2d2;
+
+$android-focus 	: #387ef5;
+
+
+
+/* Estilos generales para iOs, Android y Windows Phone */
 span.mensaje-error {
-	color: #7f7f7f;
+	color: $validation-text-color;
     font-size: 1.3rem;
     padding: 10px 16px;
     display: block;
 }
 
 button.submit {
-    width: 100%;
 	margin-top: 30px;
 }
 
-.item-datetime ion-label {
-    color: #7f7f7f;
-}
-
-.half-size {
+ion-item.half-size {
 	max-width: 49%;
 	display: inline-block;
 }
 
-textarea {
-	min-height: 120px;
+/* Fix para mostrar correctamente la opcion seleccionada del popup que se usa en los elementod de tipo select */
+button[aria-checked="true"] {
+	background-color: #f32d2e;
 }
 
+/* Estilos para los forms en iOS*/
 body.ios form {
-	p {
-	    font-size: 0.8em;
-	    color: #d2d2d2;
-	}
 
-	.item-inner {
+	ion-item .item-inner {
 	    border-bottom: none;
 	}
 
@@ -37,93 +45,55 @@ body.ios form {
 	    margin-left: 10px;
 	}
 
-	ion-input, ion-textarea {
-	    background-color: #f2f2f2;
+	ion-input, 
+	ion-textarea,
+	ion-select,
+	ion-item.item-datetime .input-wrapper {
+		background-color: $ios-field-bg;
+	}
+
+	ion-input, 
+	ion-textarea {	    
 	    padding: 0px 10px;
 	} 
 
 	ion-select {
-		background-color: #f2f2f2;
 		padding: 8px 10px;
 	}
 
 	/* Fix para el componente datetime */
-	.item-datetime .input-wrapper {
-		background-color: #f2f2f2;
+	ion-item.item-datetime .input-wrapper {
     	margin-top: 25px;
 	}
 
-	.submitted.invalid ion-input,
-	.submitted.invalid ion-select,
-	.submitted.invalid ion-textarea,
-	.submitted.invalid.item-datetime .input-wrapper {
-        background-color: rgba(245, 61, 61, 0.25)
+	ion-item.ng-invalid.ng-touched ion-input,
+	ion-select.ng-invalid.ng-touched,
+	ion-item.ng-invalid.ng-touched ion-textarea
+	ion-item.ng-touched.item-datetime.input-has-value .input-wrapper {
+        background-color: $ios-error;
 	}
 
-	.submitted:not(.invalid) ion-input,
-	.submitted:not(.invalid) ion-select,
-	.submitted:not(.invalid) ion-textarea,
-	.submitted.item-datetime:not(.invalid) .input-wrapper {
-        background-color: rgba(50, 219, 100, 0.25)
+	ion-item.ng-touched.ng-valid ion-input,
+	ion-item ion-select.ng-touched.ng-valid,
+	ion-item.ng-touched.ng-valid ion-textarea,
+	ion-item.ng-touched.item-datetime.input-has-value .input-wrapper {
+        background-color: $ios-valid;
 	}
 }
 
+/* Estilos para los forms en Android */
 body.md form {
 
-	.item-input.ng-invalid.ng-touched::after,
-	.item-input.ng-valid.ng-touched::after {
-	    border-bottom-color: transparent;
+	/* Fix para bug en el label al poner el foco en el campo */
+	ion-label[floating],
+	ion-label[stacked] {
+		color: $label-color;
 	}
 
-	ion-item.submitted.invalid .item-inner {
-        border-bottom: 2px solid #f53d3d;
-	}
-
-	ion-item.submitted:not(.invalid) .item-inner {
-    	border-bottom: 2px solid #32db64;
-	}
-
+	/* Fix para mostrar la validacion en azul cuando el input tiene el cursor */
 	ion-item.submitted.input-has-focus .item-inner,
 	ion-item:not(.submitted).input-has-focus .item-inner {
-		border-bottom: 2px solid #387ef5 !important;
+		border-bottom: 2px solid $android-focus !important;
 	}
 
-}
-
-body.wp form {
-
-	ion-item:not(.input-has-focus) ion-input.ng-invalid.ng-touched .text-input,
-	ion-item:not(.input-has-focus) ion-input.ng-valid.ng-touched .text-input {
-	    border: 2px solid rgba(0, 0, 0, 0.5);
-	}
-
-
-
-	.submitted.invalid .text-input,
-	.submitted.invalid ion-select,
-	.item-datetime.submitted.invalid ion-label {
-        border: 2px solid rgba(245, 61, 61, 0.5) !important
-	}
-
-	.submitted:not(.invalid) .text-input, 
-	.submitted:not(.invalid) ion-select {
-         border: 2px solid rgba(50, 219, 100, 0.5) !important
-	}
-
-	/* Fix para el componente datetime */
-	.item-datetime ion-label {
-    	border: 2px solid rgba(0, 0, 0, 0.5);
-	}
-	.item-datetime.submitted:not(.invalid) ion-datetime {
-         border: 2px solid rgba(50, 219, 100, 0.5);
-         margin-right: 8px;
-	}
-	.item-datetime.submitted:not(.invalid) ion-label {
-		border: 0px;
-	}
-
-	ion-item.submitted.input-has-focus .text-input,
-	ion-item:not(.submitted).input-has-focus .text-input {
-		border-color: #387ef5 !important;
-	}
 }
