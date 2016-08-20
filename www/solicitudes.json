@@ -9,9 +9,10 @@
 		"grupoSanguineoID" : 2,
 		"factorSanguineoID" : 1,
 		"cantidadDadores" : 5,
-		"lugar" : "Sanatorio Mayo",
+		"institucion" : "Sanatorio Mayo",
 		"direccion" : "Rivadavia 2345",
-		"horario" : "De 08:00 a 16:00",
+		"horaDesde" : "08:00",
+		"horaHasta" : "18:00",
 		"datosAdicionales" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
 	},
 	{ 
@@ -24,9 +25,10 @@
 		"grupoSanguineoID" : 1,
 		"factorSanguineoID" : 1,
 		"cantidadDadores" : 3,
-		"lugar" : "Sanatorio Mayo",
+		"institucion" : "Sanatorio Mayo",
 		"direccion" : "Rivadavia 2345",
-		"horario" : "De 08:00 a 16:00",
+		"horaDesde" : "08:00",
+		"horaHasta" : "18:00",
 		"datosAdicionales" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
 	},
 	{ 
@@ -39,9 +41,10 @@
 		"grupoSanguineoID" : 0,
 		"factorSanguineoID" : 1,
 		"cantidadDadores" : 2,
-		"lugar" : "Sanatorio Mayo",
+		"institucion" : "Sanatorio Mayo",
 		"direccion" : "Rivadavia 2345",
-		"horario" : "De 08:00 a 16:00",
+		"horaDesde" : "08:00",
+		"horaHasta" : "18:00",
 		"datosAdicionales" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
 	}
 ]

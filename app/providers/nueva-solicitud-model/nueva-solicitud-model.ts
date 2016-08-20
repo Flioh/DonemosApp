@@ -88,60 +88,60 @@ export class NuevaSolicitudModel {
   }
 
   /* Setters */
-  public setSolicitudID(solicitudID: number): void {
-    this.solicitudID = solicitudID;
+  public setSolicitudID(solicitudID: number): number {
+    return this.solicitudID = solicitudID;
   }
 
-  public setUsuarioID(usuarioID: number): void {
-    this.usuarioID = usuarioID;
+  public setUsuarioID(usuarioID: number): number {
+    return this.usuarioID = usuarioID;
   }
 
-  public setFechaCreacion(unaFecha: Date): void {
-    this.fechaCreacion = unaFecha;
+  public setFechaCreacion(unaFecha: Date): Date {
+    return this.fechaCreacion = unaFecha;
   }
 
-  public setEstaVigente(vigente: boolean): void {
-    this.estaVigente = vigente;
+  public setEstaVigente(vigente: boolean): boolean {
+    return this.estaVigente = vigente;
   }
 
-  public setProvinciaID(provinciaID: number): void {
-    this.provinciaID = provinciaID;
+  public setProvinciaID(provinciaID: number): number {
+    return this.provinciaID = provinciaID;
   }
 
-  public setLocalidadID(localidadID: number): void {
-     this.localidadID = localidadID;
+  public setLocalidadID(localidadID: number): number {
+     return this.localidadID = localidadID;
   }
 
-  public setGrupoSanguineoID(grupoSanguineoID: number): void {
-    this.grupoSanguineoID = grupoSanguineoID;
+  public setGrupoSanguineoID(grupoSanguineoID: number): number {
+    return this.grupoSanguineoID = grupoSanguineoID;
   }
 
-  public setFactorSanguineoID(factorSanguineoID: number): void {
-    this.factorSanguineoID = factorSanguineoID;
+  public setFactorSanguineoID(factorSanguineoID: number): number {
+    return this.factorSanguineoID = factorSanguineoID;
   }
 
-  public setCantidadDadores(cantidad: number): void {
-    this.cantidadDadores = cantidad;
+  public setCantidadDadores(cantidad: number): number {
+    return this.cantidadDadores = cantidad;
   }
 
-  public setInstitucion(institucion: string): void {
-    this.institucion = institucion;
+  public setInstitucion(institucion: string): string {
+    return this.institucion = institucion;
   }
 
-  public setDireccion(direccion: string): void {
-    this.direccion = direccion;
+  public setDireccion(direccion: string): string {
+    return this.direccion = direccion;
   }
 
-  public setHoraDesde(horaDesde: string): void {
-    this.horaDesde = horaDesde;
+  public setHoraDesde(horaDesde: string): string {
+    return this.horaDesde = horaDesde;
   }
 
-  public setHoraHasta(horaHasta: string): void {
-    this.horaHasta = horaHasta;
+  public setHoraHasta(horaHasta: string): string {
+    return this.horaHasta = horaHasta;
   }
 
-  public setDatosAdicionales(datosAdicionales: string): void {
-    this.datosAdicionales = datosAdicionales;
+  public setDatosAdicionales(datosAdicionales: string): string {
+    return this.datosAdicionales = datosAdicionales;
   }
 
 }
