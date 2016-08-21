@@ -38,8 +38,8 @@ describe('NuevaSolicitud Model', () => {
 
 
 
-	// Los metodos get deben estar definidos
-	// -------------------------------------
+	// Tests para asegurar que los metodos get estan definidos
+	// -------------------------------------------------------
 	it('Debe tener un metodo getSolicitudID()', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
 		expect(menuItemModel.getSolicitudID).toBeDefined();
 	}));
@@ -98,7 +98,7 @@ describe('NuevaSolicitud Model', () => {
 
 
 
-	// Los metodos get deben devolver los valores correctamente
+	// Tests para asegurar que los metodos get deuelven valores correctamente
 	// --------------------------------------------------------
 	it('Debe tener un metodo getSolicitudID() que devuelva el ID de la solicitud correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {		
 		expect(menuItemModel.getSolicitudID()).toBe(1);
@@ -158,8 +158,8 @@ describe('NuevaSolicitud Model', () => {
 
 
 
-	// Los metodos set deben estar definidos
-	// -------------------------------------
+	// Tests para asegurar que los metodos set esta definidos
+	// ------------------------------------------------------
 	it('Debe tener un metodo setSolicitudID()', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
 		expect(menuItemModel.setSolicitudID).toBeDefined();
 	}));
@@ -218,8 +218,8 @@ describe('NuevaSolicitud Model', () => {
 
 
 
-	// Los metodos set deben setear los valores correctamente
-	// ------------------------------------------------------
+	// Tests para asegurar que los metodos set modifican los valores correctamente
+	// ---------------------------------------------------------------------------
 	it('Debe tener un metodo setSolicitudID() que devuelva el ID de la solicitud correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {		
 		expect(menuItemModel.setSolicitudID(2)).toBe(2);
 	}));

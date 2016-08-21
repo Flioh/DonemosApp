@@ -75,11 +75,10 @@ export class RemoteDataService {
             this.provinciaSeleccionadaID = provinciaID;
 
             this.http.get(this.apiEndPointLocalidades)
-              .map(res => res.json()
-                .filter(function(unaLocalidad) {
-                if(unaLocalidad.provincia == provinciaID)
-                  return true;
-                return false;
+              .map(res => res.json().filter(function(unaLocalidad) {
+                  if(unaLocalidad.provincia == provinciaID)
+                    return true;
+                  return false;
               }))
               .subscribe(listadoCiudades => {
                 this.listaCiudades = listadoCiudades;

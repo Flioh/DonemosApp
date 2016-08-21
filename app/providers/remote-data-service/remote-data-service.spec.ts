@@ -106,6 +106,9 @@ describe('RemoteData Service Model', () => {
 	}));
 
 
+
+	// Tests para asegurar que los metodos existen
+	// ------------------------------------------
 	it('Debe tener un metodo para obtener el listado de provincias',
 	  inject([RemoteDataService], (testService: RemoteDataService) => {
 	  	expect(testService.getListaProvincias).toBeDefined();
@@ -118,7 +121,6 @@ describe('RemoteData Service Model', () => {
 	  })
 	);
 
-
 	it('Debe tener un metodo para obtener el listado de solicitudes',
 	  inject([RemoteDataService], (testService: RemoteDataService) => {
 	  	expect(testService.getSolicitudes).toBeDefined();
@@ -126,6 +128,9 @@ describe('RemoteData Service Model', () => {
 	);
 
 
+
+	// Tests para asegurar que no devuelven un listado vacio
+	// -----------------------------------------------------
 	it('El metodo getSolicitudes() debe devolver un arreglo no vacio',
 	  async(inject([RemoteDataService], (testService: RemoteDataService) => {
 	    testService.getSolicitudes().subscribe((response) => {
@@ -135,6 +140,28 @@ describe('RemoteData Service Model', () => {
 	  })
 	));
 
+	it('El metodo getListaProvincias() debe devolver un arreglo no vacio',
+	  async(inject([RemoteDataService], (testService: RemoteDataService) => {
+	    testService.getListaProvincias().subscribe((response) => {
+	      expect(response.length).toBeGreaterThan(0);
+	    })
+
+	  })
+	));
+
+	it('El metodo getListaCiudadesPorProvincia() debe devolver un arreglo no vacio',
+	  async(inject([RemoteDataService], (testService: RemoteDataService) => {
+	    testService.getListaCiudadesPorProvincia(1).subscribe((response) => {
+	      expect(response.length).toBeGreaterThan(0);
+	    })
+
+	  })
+	));
+
+
+
+	// Tests para asegurar que el tipo de dato devuelvo coincide con el tipo de dato esperado
+	// --------------------------------------------------------------------------------------
 	it('El metodo getSolicitudes() debe devolver objetos del typo NuevaSolicitudModel',
 	  async(inject([RemoteDataService], (testService: RemoteDataService) => {
 	    testService.getSolicitudes().subscribe((response) => {
