@@ -23,10 +23,21 @@ export class NuevaSolicitudModel {
       // Si recibimos un objeto, copiamos sus propiedades
       for (var prop in obj) this[prop] = obj[prop];
     } else {
+      // Seteamos explicitamente todas las propiedades a null
       this.solicitudID = null;
       this.usuarioID = null;
       this.estaVigente = true;
       this.fechaCreacion = new Date();
+      this.provinciaID = null;
+      this.localidadID = null;
+      this.grupoSanguineoID = null;
+      this.factorSanguineoID = null;
+      this.cantidadDadores = null;
+      this.institucion = null;
+      this.direccion = null;
+      this.horaDesde = null;
+      this.horaHasta = null;
+      this.datosAdicionales = null;
     }
   }
 

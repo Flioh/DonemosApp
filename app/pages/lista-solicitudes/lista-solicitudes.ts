@@ -31,7 +31,7 @@ export class ListaSolicitudesPage {
     // Muestra el mensaje de cargando ciudades
     loadingPopup.present();
 
-    this.dataService.obtenerSolicitudes().then((solicitudesObj) => { 
+    this.dataService.getSolicitudes().subscribe((solicitudesObj) => { 
       for(let i = 0; i < solicitudesObj.length; i++) {
         this.solicitudes.push(new NuevaSolicitudModel(solicitudesObj[i]));
       }

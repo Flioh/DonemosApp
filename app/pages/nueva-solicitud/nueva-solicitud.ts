@@ -2,6 +2,7 @@ import { Component, NgZone } from '@angular/core';
 import { Platform, NavController, LoadingController } from 'ionic-angular';
 import {FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { Observable } from 'rxjs';
 
 /* Servicios utilizados */
 import { AutocompleteService } from '../../providers/autocomplete-service/autocomplete-service';
@@ -91,11 +92,7 @@ export class NuevaSolicitudPage {
 				this.nuevaSolicitud.setProvinciaID(this.listaProvincias[i].id);
 
 				// Inicializamos las ciudades de la provincia seleccionada
-				this.inicializarCiudadesDeLaProvincia().then(exito => {
-
-					// Seleccionamos la ciudad dentro del listado ahora actualizado
-					this.actualizarCiudad(nombreCiudad);
-				});
+				this.inicializarCiudadesDeLaProvincia(nombreCiudad);
 
 			}
 		}
@@ -159,8 +156,7 @@ export class NuevaSolicitudPage {
 	private inicializarProvincias(): void {
 
 		// Obtenemos el listado de provincias del servidor
-		this.remoteDataService.getListaProvincias()
-		.then(result => {
+		this.remoteDataService.getListaProvincias().subscribe(result => {
 			if(result && result.length) {
 				
 				// Inicializamos el listado de provincias
@@ -181,7 +177,7 @@ export class NuevaSolicitudPage {
 	}
 
 	// Método que inicializa el listado de ciudades de una provincia
-	public inicializarCiudadesDeLaProvincia(): Promise<any> {
+	public inicializarCiudadesDeLaProvincia(nombreCiudad?: string): void {
 		
 		let loadingPopup = this.loadingCtrl.create({
 			content: 'Cargando ciudades'
@@ -190,23 +186,26 @@ export class NuevaSolicitudPage {
 		// Muestra el mensaje de cargando ciudades
 		loadingPopup.present();
 
-		return this.remoteDataService.getListaCiudadesPorProvincia(this.nuevaSolicitud.getProvinciaID()).then(result => {
-
-			if(result && result.length){
-				this.listaCiudades = result;
-
-					// TODO: usar geolocalizacion para cargar por defecto la provincia del usuario
-					// ------------------------------------------------------------------------
-					this.nuevaSolicitud.setLocalidadID(this.listaCiudades[0].id);
+		this.remoteDataService.getListaCiudadesPorProvincia(this.nuevaSolicitud.getProvinciaID())
+			.subscribe(result => {
+				if(result && result.length){
+					this.listaCiudades = result;
+									
+					if(nombreCiudad) {
+						// Si recibimos el nombre de la ciudad (autocomplete), seleccionamos esa ciudad
+						this.actualizarCiudad(nombreCiudad);
+					} else {
+						// TODO: usar geolocalizacion para cargar por defecto la provincia del usuario
+						// ------------------------------------------------------------------------	
+						this.nuevaSolicitud.setLocalidadID(this.listaCiudades[0].id);	
+					}
 
 					// Oculta el mensaje de espera
 					loadingPopup.dismiss();
-
-			}
-
-			// TODO: manejar errores en las llamadas al servidor
-			// -------------------------------------------------
-		});
+				}
+				// TODO: manejar errores en las llamadas al servidor
+				// -------------------------------------------------			
+			});
 	}
 
 	// Método que crea la nueva solicitud con la información ingresada en el formulario
