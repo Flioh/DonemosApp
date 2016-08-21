@@ -26,25 +26,31 @@ export class AutocompleteService {
 	}
 
 	public initializeAutocomplete(element): void {
-		// Create the autocomplete object, restricting the search to geographical location types.
-		this.autocompleteElement = new google.maps.places.Autocomplete(element);
+
+		// Restringimos los resultados solo a establecimientos de Argentina
+		var options = {
+		  types: ['establishment'],
+		  componentRestrictions: {country: 'ar'}
+		};
+
+		// Creamos el objeto autocomplete
+		this.autocompleteElement = new google.maps.places.Autocomplete(element, options);
 
 		let processAddress = () => {
 			this.processAddressInformation();
 		}
 
-		// When the user selects an address from the dropdown,
-		// populate the address fields in the form.
+		// Cuando el usuario elija una opcion, usamos esa informacion para completar los campos del formulario
 		google.maps.event.addListener(this.autocompleteElement, 'place_changed', function() {
 			processAddress();
 		});
 	}
 
 	public processAddressInformation(): void {
-		// Get the place details from the autocomplete object.
+		// Obtenemos el lugar seleccionado
 		let place = this.autocompleteElement.getPlace();
 
-		// Clean previous information
+		// Inicializamos el objeto donde vamos a guardar la informacion
 		this.googleAddressInformation = {};
 
 		for (let i = 0; i < place.address_components.length; i++) {
@@ -60,7 +66,7 @@ export class AutocompleteService {
 			this.googleAddressInformation[addressType] = place.address_components[i][attributeToGet];
 		}
 
-		// Aditional properties
+		// Propiedades adicionales
 		this.googleAddressInformation['name'] = place['name'];
 		this.googleAddressInformation['place_id'] = place['place_id'];
 		this.googleAddressInformation['formatted_phone_number'] = place['formatted_phone_number'];
@@ -111,7 +117,7 @@ export class AutocompleteService {
 			}
 		}
 
-		// Send informtaion back to the parent directive
+		// Enviamos la informacion a los componentes que esten subscriptos
 		this.autocompleteObserver.next(result);
 	}
 }
