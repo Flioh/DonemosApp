@@ -1,5 +1,7 @@
-import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
+import { Injectable, Inject } from '@angular/core';
+import { Http } from '@angular/http';
+import { NuevaSolicitudModel } from '../nueva-solicitud-model/nueva-solicitud-model';
+import { MY_CONFIG_TOKEN, MY_CONFIG, ApplicationConfig } from '../../app-config.ts';
 import 'rxjs/add/operator/map';
 
 @Injectable()
@@ -10,19 +12,29 @@ export class RemoteDataService {
   private provinciaSeleccionadaID: number;
   private listaCiudades: Array<any>;
 
+  private apiEndPointProvincias: string;
+  private apiEndPointLocalidades: string;
+  private apiEndPointSolicitudes: string; 
 
-  constructor(public http: Http) {
+  constructor(public http: Http, @Inject(MY_CONFIG_TOKEN) config: ApplicationConfig) {
     this.listaProvincias = [];
     this.provinciaSeleccionadaID = null;
     this.listaCiudades = [];
+
+    // Seteamos las URLs de las APIs
+    this.apiEndPointLocalidades = config.apiEndPointLocalidades;
+    this.apiEndPointProvincias = config.apiEndPointProvincias;
+    this.apiEndPointSolicitudes = config.apiEndPointSolicitudes; 
   }
 
-  public obtenerSolicitudes(): any {
+  // Obtiene el listado de solicitudes
+  public obtenerSolicitudes(): Promise<Array<NuevaSolicitudModel>> {
+    
     return new Promise(resolve => {
-      this.http.get('./solicitudes.json')
+      this.http.get(this.apiEndPointSolicitudes)
       .map(res => res.json())
       .subscribe(data => {
-        
+
         // Simulamos un retardo al buscar las solicitudes
         setTimeout(() => {
           resolve(data);
@@ -31,71 +43,54 @@ export class RemoteDataService {
     });
   }
 
-
+  // Obtiene el listado de provincias
   public getListaProvincias(): Promise<Array<any>>{
-    return new Promise<Array<any>>(resolve => {
 
-      this.listaProvincias = [];
+      return new Promise(resolve => {
+        this.http.get(this.apiEndPointProvincias)
+        .map(res => res.json())
+        .subscribe(listadoProvincias => {
 
-      this.listaProvincias.push({id : 1, nombre: 'Buenos Aires'});
-      this.listaProvincias.push({id : 2, nombre: 'Catamarca'});
-      this.listaProvincias.push({id : 3, nombre: 'Chaco'});
-      this.listaProvincias.push({id : 4, nombre: 'Chubut'});
-      this.listaProvincias.push({id : 5, nombre: 'Ciudad Autonoma de Bs. As.'});
-      this.listaProvincias.push({id : 6, nombre: 'Córdoba'});
-      this.listaProvincias.push({id : 7, nombre: 'Corrientes'});
-      this.listaProvincias.push({id : 8, nombre: 'Entre Ríos'});
-      this.listaProvincias.push({id : 9, nombre: 'Formosa'});
-      this.listaProvincias.push({id : 10, nombre: 'Jujuy'});
-      this.listaProvincias.push({id : 11, nombre: 'La Pampa'});
-      this.listaProvincias.push({id : 12, nombre: 'La Rioja'});
-      this.listaProvincias.push({id : 13, nombre: 'Mendoza'});
-      this.listaProvincias.push({id : 14, nombre: 'Misiones'});
-      this.listaProvincias.push({id : 15, nombre: 'Neuquén'});
-      this.listaProvincias.push({id : 16, nombre: 'Río Negro'});
-      this.listaProvincias.push({id : 17, nombre: 'Salta'});
-      this.listaProvincias.push({id : 18, nombre: 'San Juan'});
-      this.listaProvincias.push({id : 19, nombre: 'San Luis'});
-      this.listaProvincias.push({id : 20, nombre: 'Santa Cruz'});
-      this.listaProvincias.push({id : 21, nombre: 'Santa Fe'});
-      this.listaProvincias.push({id : 22, nombre: 'Santiago del Estero'});
-      this.listaProvincias.push({id : 23, nombre: 'Tierra del Fuego'});
-      this.listaProvincias.push({id : 24, nombre: 'Tucumán'});
+          this.listaProvincias = listadoProvincias;
 
-        // Resuelve la promesa
-        resolve(this.listaProvincias);
+          // Simulamos un retardo al buscar las solicitudes
+          setTimeout(() => {
+            resolve(listadoProvincias);
+            }, 1000);        
+          });
       });
   }
 
+  // Obtiene el listado de ciudades de la provincia pasada como parametro
   public getListaCiudadesPorProvincia(provinciaID: number){
 
     return new Promise<Array<any>>(resolve => {
 
-      setTimeout(() => {
+        if(this.provinciaSeleccionadaID == provinciaID) {
+          // Ya tenemos cargadas las ciudades de esa provincia, por lo que no
+          // hacemos la llamada http al servidor
+          resolve(this.listaCiudades);        
+        } else {
+            this.listaCiudades = [];
+            // Guardamos el ID de la provincia para evitar volver a pedir las ciudades si ya tenemos ese listado cargado
+            this.provinciaSeleccionadaID = provinciaID;
 
-        // TODO: chequear si la provincia es la ya cargada, retornar el
-        //       array de ciudades sin buscarlas nuevamente del servidor
-        // -------------------------------------------------------------
+            this.http.get(this.apiEndPointLocalidades)
+              .map(res => res.json()
+                .filter(function(unaLocalidad) {
+                if(unaLocalidad.provincia == provinciaID)
+                  return true;
+                return false;
+              }))
+              .subscribe(listadoCiudades => {
+                this.listaCiudades = listadoCiudades;
+                // Simulamos un retardo al buscar las solicitudes
+                setTimeout(() => {
+                  resolve(listadoCiudades);
+                  }, 1000);        
+                });
 
-        this.listaCiudades = [];
-
-        this.provinciaSeleccionadaID = provinciaID;
-
-        this.listaCiudades.push({id : 1, nombre: 'Prov ' + provinciaID + ' Ciudad 01'});
-        this.listaCiudades.push({id : 2, nombre: 'Prov ' + provinciaID + ' Ciudad 02'});
-        this.listaCiudades.push({id : 3, nombre: 'Prov ' + provinciaID + ' Ciudad 03'});
-        this.listaCiudades.push({id : 4, nombre: 'Prov ' + provinciaID + ' Ciudad 04'});
-        this.listaCiudades.push({id : 5, nombre: 'Prov ' + provinciaID + ' Ciudad 05'});
-        this.listaCiudades.push({id : 6, nombre: 'Prov ' + provinciaID + ' Ciudad 06'});
-        this.listaCiudades.push({id : 7, nombre: 'Prov ' + provinciaID + ' Ciudad 07'});
-        this.listaCiudades.push({id : 8, nombre: 'Prov ' + provinciaID + ' Ciudad 08'});
-        this.listaCiudades.push({id : 9, nombre: 'Prov ' + provinciaID + ' Ciudad 09'});
-        this.listaCiudades.push({id : 10, nombre: 'Prov ' + provinciaID + ' Ciudad 10'});
-
-        // Resuelve la promesa
-        resolve(this.listaCiudades);
-
-      }, 1000);
+        }
     });
   }
 }

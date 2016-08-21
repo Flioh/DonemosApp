@@ -2,23 +2,26 @@ import { Component, ViewChild, provide, PLATFORM_DIRECTIVES } from '@angular/cor
 import { ionicBootstrap, App, Platform, MenuController, Nav } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
 
-// New angular2 forms
+// Nueva API de angular para forms
 import { disableDeprecatedForms, provideForms } from '@angular/forms';
 
 /* Servicios */
 import { ConnectivityService } from './providers/connectivity-service/connectivity-service';
 import { RemoteDataService } from './providers/remote-data-service/remote-data-service';
 
-/* Paginas de la app */
+// Configuracion de la app
+import { MY_CONFIG_TOKEN, MY_CONFIG, ApplicationConfig } from './app-config.ts';
+
+// Paginas
 import {ListaSolicitudesPage} from './pages/lista-solicitudes/lista-solicitudes';
 import {NuevaSolicitudPage} from './pages/nueva-solicitud/nueva-solicitud';
 
-/* Models */
+// Modelos
 import {MenuItemModel} from './providers/menuitem-model/menuitem-model';
 
 @Component({
   templateUrl: 'build/app.html',
-  providers: [ConnectivityService, RemoteDataService]
+  providers: [ConnectivityService, RemoteDataService, { provide: MY_CONFIG_TOKEN, useValue: MY_CONFIG }]
 })
 class DonemosApp {
   @ViewChild(Nav) nav: Nav;
