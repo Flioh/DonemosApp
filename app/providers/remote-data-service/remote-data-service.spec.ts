@@ -3,10 +3,7 @@ import { BaseRequestOptions, Response, ResponseOptions, Http } from '@angular/ht
 import { MockBackend, MockConnection } from '@angular/http/testing';
 import { beforeEachProviders, beforeEach, it, describe, expect, inject, async } from '@angular/core/testing';
 import { RemoteDataService } from './remote-data-service';
-
 import { NuevaSolicitudModel } from '../../providers/nueva-solicitud-model/nueva-solicitud-model';
-
-import { MY_CONFIG_TOKEN, MY_CONFIG, ApplicationConfig } from '../../app-config.ts';
 
 describe('RemoteData Service Model', () => {
 

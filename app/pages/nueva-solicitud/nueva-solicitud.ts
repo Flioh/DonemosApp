@@ -121,7 +121,7 @@ export class NuevaSolicitudPage {
 	  	// -----------------------------------------------------------------
 
 	  	// Obtiene el input dentro del elemento ion-input
-	  	let autocompleteInput = document.getElementById('autocomplete').childNodes[0].nextElementSibling;
+	  	let autocompleteInput = document.getElementById('autocomplete').childNodes[1];
 	  	// Inicializar el autocomplete
 	  	this.autocompleteService.initializeAutocomplete(autocompleteInput);
 	  }

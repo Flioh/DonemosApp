@@ -23,7 +23,7 @@ import {MenuItemModel} from './providers/menuitem-model/menuitem-model';
   templateUrl: 'build/app.html',
   providers: [ConnectivityService, RemoteDataService, { provide: MY_CONFIG_TOKEN, useValue: MY_CONFIG }]
 })
-class DonemosApp {
+export class DonemosApp {
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = ListaSolicitudesPage;

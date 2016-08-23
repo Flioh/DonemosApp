@@ -3,8 +3,6 @@ import {Observable} from 'rxjs/Observable';
 
 import {ConnectivityService} from '../../providers/connectivity-service/connectivity-service';
 
-let google: any = window.google || {};
-
 @Injectable()
 export class AutocompleteService {
 
