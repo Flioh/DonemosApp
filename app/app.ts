@@ -76,7 +76,10 @@ ionicBootstrap(DonemosApp,
     provideForms() // enable new forms module]
   ], 
   { 
-    statusbarPadding: true 
-  });
+    platforms: {
+      ios: {
+        statusbarPadding: true 
+      }
+  }});
 
 

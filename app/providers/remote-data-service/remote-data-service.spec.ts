@@ -102,8 +102,6 @@ describe('RemoteData Service Model', () => {
 		});
 	}));
 
-
-
 	// Tests para asegurar que los metodos existen
 	// ------------------------------------------
 	it('Debe tener un metodo para obtener el listado de provincias',
