@@ -73,11 +73,11 @@
     }
   ],
   "scripts": {
-    "build": "gulp --gulpfile test/gulpfile.ts --cwd ./ build-app",
-    "e2e": "gulp --gulpfile test/gulpfile.ts --cwd ./ build-e2e && protractor test/protractor.conf.js",
-    "karma": "gulp --gulpfile test/gulpfile.ts --cwd ./ karma-debug",
-    "postinstall": "ionic state restore && typings install && webdriver-manager update && cp test/karma-static/*.html node_modules/karma/static",
+    "build": "gulp --gulpfile test/gulpfile.ts --cwd ./ build-app",    
     "start": "ionic serve",
-    "test": "gulp --gulpfile test/gulpfile.ts --cwd ./ unit-test"
+    "postinstall": "ionic state restore && typings install && cp test/karma-static/*.html node_modules/karma/static",    
+    "test:coverage": "gulp --gulpfile test/gulpfile.ts --cwd ./ unit-test",
+    "test:e2e": "gulp --gulpfile test/gulpfile.ts --cwd ./ build-e2e && protractor test/protractor.conf.js",
+    "test:debug": "gulp --gulpfile test/gulpfile.ts --cwd ./ karma-debug"
   }
 }
