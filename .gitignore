@@ -8,3 +8,6 @@ plugins/
 *.swp
 .DS_Store
 Thumbs.db
+coverage
+karma_html
+hooks/
