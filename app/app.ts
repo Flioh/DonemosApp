@@ -55,16 +55,8 @@ export class DonemosApp {
     console.log(servicio);
   }
 
-  addConnectivityListeners(){
-    document.addEventListener('online', () => {
-      setTimeout(() => {
-        console.log('Conectado');
-      }, 2000);
-    }, false);
+  addConnectivityListeners() {
 
-    document.addEventListener('offline', () => {
-      console.log('Sin conexion');
-    }, false);
   }
 
   cargarOpcionesMenuPrincipal(): void {

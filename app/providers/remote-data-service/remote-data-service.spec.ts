@@ -159,7 +159,7 @@ describe('RemoteData Service Model', () => {
 
 	// Tests para asegurar que el tipo de dato devuelvo coincide con el tipo de dato esperado
 	// --------------------------------------------------------------------------------------
-	it('El metodo getSolicitudes() debe devolver objetos del typo NuevaSolicitudModel',
+	it('El metodo getSolicitudes() debe devolver objetos del tipo NuevaSolicitudModel',
 	  async(inject([RemoteDataService], (testService: RemoteDataService) => {
 	    testService.getSolicitudes().subscribe((response) => {
 	      let propiedadesSolicitudObtenida = JSON.stringify(Object.keys(response[0]).sort());

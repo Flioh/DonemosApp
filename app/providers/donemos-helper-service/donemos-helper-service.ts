@@ -140,7 +140,7 @@ export namespace DonacionesHelper {
       return [this.getDescripcion(GrupoSanguineo.Cero, FactorSanguineo.RhPositivo),
               this.getDescripcion(GrupoSanguineo.Cero, FactorSanguineo.RhNegativo)];
     } else if(grupo == GrupoSanguineo.Cero && factor == FactorSanguineo.RhNegativo) {
-      // Si es del tipo B+
+      // Si es del tipo 0-
       // Puede recibir de ['0-'];
       return [this.getDescripcion(GrupoSanguineo.Cero, FactorSanguineo.RhNegativo)];
     }  
