@@ -10,18 +10,39 @@ import { SolicitudItem } from '../../directives/solicitud-item/solicitud-item';
 
 import { NuevaSolicitudModel } from '../../providers/nueva-solicitud-model/nueva-solicitud-model';
 
+import { GrupoSanguineoHelper, FactorSanguineoHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
+
 @Component({
   templateUrl: 'build/pages/lista-solicitudes/lista-solicitudes.html',
   directives: [SolicitudItem]
 })
 export class ListaSolicitudesPage {
 
-  solicitudes: Array<NuevaSolicitudModel>;
+  private solicitudes: Array<NuevaSolicitudModel>;
+
+  /* Filtros de busqueda */
+  private provinciaID: number;
+  private ciudadID: number;
+  private grupoSanguineoID: number;
+  private factorSanguineoID: number;
+
+  private listaGruposSanguineos: Array<any>;
+  private listaFactoresSanguineos: Array<any>;
+  private listaProvincias: Array<any>;
+  private listaCiudades: Array<any>;
+
+  private listadosCargados: boolean;
+
+  private seccion: string =  'solicitudes';
 
   constructor(private nav: NavController, 
               private loadingCtrl: LoadingController, 
               private dataService: RemoteDataService) {
     
+    // Indica que las listas usadas en los filtros no estan cargadas aun
+    this.listadosCargados = false;
+
+    // Inicializa la lista de solicitudes
     this.solicitudes = [];
 
     let loadingPopup = this.loadingCtrl.create({
@@ -42,14 +63,62 @@ export class ListaSolicitudesPage {
     });    
   }
 
-  abrirDetalles(event) {
+  // Inicializa los listados de la pagina
+  public cargarListados() {
+
+    if(!this.listadosCargados) {
+
+      let loadingPopup = this.loadingCtrl.create({
+        content: 'Cargando listados'
+      });
+
+      loadingPopup.present();
+
+      // Inicializamos todos los listados
+      this.listaFactoresSanguineos = FactorSanguineoHelper.getFactoresSanguineos();
+      this.listaGruposSanguineos = GrupoSanguineoHelper.getGruposSanguineos();
+      this.dataService.getListaProvincias().subscribe(result => {
+        if(result && result.length) {
+          this.listaProvincias = result;
+          this.listadosCargados = true;
+          loadingPopup.dismiss();
+        } 
+      });
+    }
+  }
+
+  // Método que inicializa el listado de ciudades de una provincia
+  public inicializarCiudadesDeLaProvincia(nombreCiudad: string): void {
+    
+    let loadingPopup = this.loadingCtrl.create({
+      content: 'Cargando ciudades'
+    });
+
+    // Muestra el mensaje de cargando ciudades
+    loadingPopup.present();
+
+    this.dataService.getListaCiudadesPorProvincia(this.provinciaID)
+      .subscribe(result => {
+        if(result && result.length){
+          this.listaCiudades = result;
+
+          // Oculta el mensaje de espera
+          loadingPopup.dismiss();
+        }
+        // TODO: manejar errores en las llamadas al servidor
+        // -------------------------------------------------      
+      });
+  }
+
+  public abrirDetalles(event) {
     this.nav.push(DetallesSolicitudPage, {
       // Obtenemos la solicitud del evento
       unaSolicitud: event.value
     }, { animate: true, direction: 'forward' });
   }
 
-  nuevaSolicitud(): void {
-    this.nav.setRoot(NuevaSolicitudPage, {}, { animate: true, direction: 'forward' });
+  public nuevaSolicitud(): void {
+    this.nav.push(NuevaSolicitudPage, {}, { animate: true, direction: 'forward' });
   }
+
 }

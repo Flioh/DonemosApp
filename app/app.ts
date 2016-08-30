@@ -13,11 +13,11 @@ import { RemoteDataService } from './providers/remote-data-service/remote-data-s
 import { MY_CONFIG_TOKEN, MY_CONFIG, ApplicationConfig } from './app-config.ts';
 
 // Paginas
-import {ListaSolicitudesPage} from './pages/lista-solicitudes/lista-solicitudes';
-import {NuevaSolicitudPage} from './pages/nueva-solicitud/nueva-solicitud';
+import { ListaSolicitudesPage } from './pages/lista-solicitudes/lista-solicitudes';
+import { NuevaSolicitudPage } from './pages/nueva-solicitud/nueva-solicitud';
 
 // Modelos
-import {MenuItemModel} from './providers/menuitem-model/menuitem-model';
+import { MenuItemModel } from './providers/menuitem-model/menuitem-model';
 
 @Component({
   templateUrl: 'build/app.html',
@@ -45,10 +45,10 @@ export class DonemosApp {
 
   abrirPagina(pagina: MenuItemModel) {
     // close the menu when clicking a link from the menu
-    this.menu.close();
 
-    // navigate to the new page if it is not the current page
-    this.nav.setRoot(pagina.getComponente());
+      // navigate to the new page if it is not the current page
+      this.nav.push(pagina.getComponente()).then(() => {this.menu.close()});
+
   }
 
   login(servicio: string) {

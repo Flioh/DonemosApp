@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header no-shadow>
 	<ion-navbar red>
 		<ion-title>Donemos</ion-title>
 		<button menuToggle="right" end>
@@ -9,12 +9,89 @@
 			<button (click)="nuevaSolicitud()"><ion-icon name="add"></ion-icon></button>
 		</ion-buttons>
 	</ion-navbar>
+
+	<ion-toolbar>
+		<ion-segment red [(ngModel)]="seccion">
+			<ion-segment-button value="solicitudes">
+				Solicitudes
+			</ion-segment-button>
+			<ion-segment-button value="filtros" (ionSelect)="cargarListados()">
+				Filtros
+			</ion-segment-button>
+		</ion-segment>
+	</ion-toolbar>
+
 </ion-header>
 
 <ion-content>
-	<!-- Creamos una lista de solicitudes usando el componente solicitud-item -->
-	<solicitud-item *ngFor="let solicitud of solicitudes" 
-					[solicitud]="solicitud" 
-					(seleccionarSolicitud)="abrirDetalles($event)">
-	</solicitud-item>
+
+	<div [ngSwitch]="seccion">
+		<div *ngSwitchCase="'solicitudes'">
+			<!-- Creamos una lista de solicitudes usando el componente solicitud-item -->
+			<solicitud-item *ngFor="let solicitud of solicitudes" [solicitud]="solicitud" (seleccionarSolicitud)="abrirDetalles($event)"></solicitud-item>
+
+			<button red full>Ver mas solicitudes</button>
+		</div>
+			
+		<ion-list *ngSwitchCase="'filtros'">
+			<form (ngSubmit)="buscarSolicitudes()" #filtros="ngForm">
+
+
+
+				<!-- Provincia  -->
+				<ion-item>
+					<ion-label floating>Provincia</ion-label>
+					<ion-select [(ngModel)]="provinciaID" okText="Aceptar" cancelText="Cancelar" name="provincia" #provincia="ngModel" (ionChange)="inicializarCiudadesDeLaProvincia()">
+						<ion-option *ngFor="let provincia of listaProvincias" value={{provincia.id}}>
+							{{provincia.nombre}}
+						</ion-option>
+					</ion-select>
+				</ion-item>
+
+
+
+				<!-- Ciudad  -->
+				<ion-item>
+					<ion-label floating>Ciudad</ion-label>
+					<ion-select [(ngModel)]="ciudadID" okText="Aceptar" cancelText="Cancelar" name="ciudad" #ciudad="ngModel">
+						<ion-option *ngFor="let ciudad of listaCiudades" value={{ciudad.id}}>
+							{{ciudad.nombre}}
+						</ion-option>
+					</ion-select>
+				</ion-item>
+
+
+
+				<!-- Grupo sanguineo  -->
+				<ion-item class="half-size">
+					<ion-label floating>Grupo</ion-label>
+					<ion-select [(ngModel)]="grupoSanguineoID" okText="Aceptar" cancelText="Cancelar" name="grupo" #grupo="ngModel">
+						<ion-option *ngFor="let grupo of listaGruposSanguineos" value={{grupo.id}}>
+							{{grupo.nombre}}
+						</ion-option>
+					</ion-select>
+				</ion-item>
+
+
+
+				<!-- Factor sanguineo  -->
+				<ion-item class="half-size">
+					<ion-label floating>Factor</ion-label>
+					<ion-select [(ngModel)]="factorSanguineoID" okText="Aceptar" cancelText="Cancelar" name="factor" #factor="ngModel">
+						<ion-option *ngFor="let factor of listaFactoresSanguineos" value={{factor.id}}>
+							{{factor.nombre}}
+						</ion-option>
+					</ion-select>
+				</ion-item>
+
+
+
+				<button class="submit" red full>
+					Buscar Solicitudes
+				</button>
+
+			</form>
+		</ion-list>
+	</div>
+
 </ion-content>
