@@ -55,14 +55,14 @@ describe('TimeAgo Pipe', () => {
 
 
 	/* Tests de "Hace ... minutos" */
-	it('Debe retornar "Hace 1 minutos" si la fecha de la solicitud es de hace un minuto', () => {
+	it('Debe retornar "Hace 1 minuto" si la fecha de la solicitud es de hace un minuto', () => {
 		let date = new Date();
 
 		// Resta 1 minuto la fecha actual
 		date.setMinutes(date.getMinutes() - 1);
 
 		let resultado = timeAgoPipeMock.transform(date, []);
-		expect(resultado.toString().toLowerCase()).toBe('Hace 1 minutos'.toLowerCase());
+		expect(resultado.toString().toLowerCase()).toBe('Hace 1 minuto'.toLowerCase());
 	});
 
 	it('Debe retornar "Hace 59 minutos" si la fecha de la solicitud es de hace 59 minutos', () => {
@@ -79,14 +79,14 @@ describe('TimeAgo Pipe', () => {
 
 
 	/* Tests de "Hace ... horas" */
-	it('Debe retornar "Hace 1 horas" si la fecha de la solicitud es de hace una hora', () => {
+	it('Debe retornar "Hace 1 hora" si la fecha de la solicitud es de hace una hora', () => {
 		let date = new Date();
 
 		// Resta 1 hora la fecha actual
 		date.setHours(date.getHours() - 1);
 
 		let resultado = timeAgoPipeMock.transform(date, []);
-		expect(resultado.toString().toLowerCase()).toBe('Hace 1 horas'.toLowerCase());
+		expect(resultado.toString().toLowerCase()).toBe('Hace 1 hora'.toLowerCase());
 	});
 
 	it('Debe retornar "Hace 23 horas" si la fecha de la solicitud es de hace 23 horas', () => {
@@ -102,14 +102,14 @@ describe('TimeAgo Pipe', () => {
 
 
 	/* Tests de "Hace ... dias" */
-	it('Debe retornar "Hace 1 dias" si la fecha de la solicitud es de hace un dia', () => {
+	it('Debe retornar "Hace 1 dia" si la fecha de la solicitud es de hace un dia', () => {
 		let date = new Date();
 
 		// Resta 1 dia la fecha actual
 		date.setDate(date.getDate() - 1);
 
 		let resultado = timeAgoPipeMock.transform(date, []);
-		expect(resultado.toString().toLowerCase()).toBe('Hace 1 dias'.toLowerCase());
+		expect(resultado.toString().toLowerCase()).toBe('Hace 1 dia'.toLowerCase());
 	});
 
 	it('Debe retornar "Hace 6 dias" si la fecha de la solicitud es de hace 6 dias', () => {
@@ -125,14 +125,14 @@ describe('TimeAgo Pipe', () => {
 
 
 	/* Tests de "Hace ... semanas" */
-	it('Debe retornar "Hace 1 semanas" si la fecha de la solicitud es de hace 7 dias', () => {
+	it('Debe retornar "Hace 1 semana" si la fecha de la solicitud es de hace 7 dias', () => {
 		let date = new Date();
 
 		// Resta 7 dias la fecha actual
 		date.setDate(date.getDate() - 7);
 
 		let resultado = timeAgoPipeMock.transform(date, []);
-		expect(resultado.toString().toLowerCase()).toBe('Hace 1 semanas'.toLowerCase());
+		expect(resultado.toString().toLowerCase()).toBe('Hace 1 semana'.toLowerCase());
 	});
 
 	it('Debe retornar "Hace 3 semanas" si la fecha de la solicitud es de hace 21 dias', () => {
@@ -158,14 +158,14 @@ describe('TimeAgo Pipe', () => {
 
 
 	/* Tests de "Hace ... semanas" */
-	it('Debe retornar "Hace 1 meses" si la fecha de la solicitud es de hace un mes', () => {
+	it('Debe retornar "Hace 1 mes" si la fecha de la solicitud es de hace un mes', () => {
 		let date = new Date();
 
 		// Resta 1 mes a la fecha actual
 		date.setMonth(date.getMonth() - 1);
 
 		let resultado = timeAgoPipeMock.transform(date, []);
-		expect(resultado.toString().toLowerCase()).toBe('Hace 1 meses'.toLowerCase());
+		expect(resultado.toString().toLowerCase()).toBe('Hace 1 mes'.toLowerCase());
 	});
 
 	it('Debe retornar "Hace 5 meses" si la fecha de la solicitud es de hace 5 meses', () => {

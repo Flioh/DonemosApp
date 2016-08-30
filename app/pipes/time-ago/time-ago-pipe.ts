@@ -8,6 +8,10 @@ export class TimeAgoPipe {
 
   transform(value: Date, args: any[]) {
 
+    if(typeof value === 'string') {
+      value = new Date(value.toString());
+    }
+
     if(value instanceof Date) {
 
       let resultado: string;
@@ -20,22 +24,28 @@ export class TimeAgoPipe {
         resultado = `Ahora`;
       } else if(delta < 60) {
         // En el ultimo minuto -> segundos
-        resultado = `Hace ${ Math.floor(delta) } segundos`;
+        let segundos = Math.floor(delta);
+        resultado = `Hace ${ segundos } ${ segundos == 1 ? 'segundo' : 'segundos' }`;
       } else if(delta < 3600) {
         // En la ultima hora -> minutos
-        resultado = `Hace ${ Math.floor(delta / 60) } minutos`;
+        let minutos = Math.floor(delta / 60);
+        resultado = `Hace ${ minutos } ${ minutos == 1 ? 'minuto' : 'minutos' }`;
       } else if(delta < 86400) {
         // En el ultimo dia -> horas
-        resultado = `Hace ${ Math.floor(delta / 3600) } horas`;
+        let horas = Math.floor(delta / 3600);
+        resultado = `Hace ${ horas } ${ horas == 1 ? 'hora' : 'horas' }`;
       } else if(delta < 604800){
         // En la ultima semana -> dias
-        resultado = `Hace ${ Math.floor(delta / 86400) } dias`;
+        let dias = Math.floor(delta / 86400);
+        resultado = `Hace ${ dias } ${ dias == 1 ? 'dia' : 'dias' }`;
       } else if(delta < 2592000) {
         // En el ultimo mes -> semanas
-        resultado = `Hace ${ Math.floor(delta / 604800) } semanas`;
+        let semanas = Math.floor(delta / 604800);
+        resultado = `Hace ${ semanas } ${ semanas == 1 ? 'semana' : 'semanas' }`;
       } else {
         // Hace más de un mes
-        resultado = `Hace ${ Math.floor(delta / 2592000) } meses`;
+        let meses = Math.floor(delta / 2592000);
+        resultado = `Hace ${ meses } ${ meses == 1 ? 'mes' : 'meses' }`;
       }
 
       return resultado;

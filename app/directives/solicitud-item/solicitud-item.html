@@ -5,7 +5,7 @@
 			<ion-icon class="big" name="water"></ion-icon>
 		</ion-avatar>
 		<h2>Se necesitan <strong>{{solicitud.cantidadDadores}} dadores</strong> de tipo</h2>
-		<h2 [innerHTML]="getTiposSanguineosBuscados() | formatTiposSanguineos: getDescripcionTipoSanguineo()"></h2>
+		<h2 [innerHTML]="getTiposSanguineosBuscados() | tiposSanguineos: getDescripcionTipoSanguineo()"></h2>
 	</ion-item>
 
 	<button class="top-middle" fab fab-right>
@@ -32,7 +32,7 @@
 		<ion-row>
 			<ion-col width-60>
 				<ion-note>
-					Hoy
+					{{ solicitud.fechaCreacion | timeago }}
 				</ion-note>
 			</ion-col>
 			<ion-col tappable width-40 (click)="verDetalles()">

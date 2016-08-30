@@ -1,10 +1,10 @@
 import {Injectable, Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({
-  name: 'formatTiposSanguineos'
+  name: 'tiposSanguineos'
 })
 @Injectable()
-export class FormatTiposSanguineos implements PipeTransform {
+export class TiposSanguineosPipe implements PipeTransform {
 
   // Recibe la lista de descripciones, y la que debe resaltar
   transform(value: Array<string>, markedElement: string) {
