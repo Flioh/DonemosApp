@@ -46,5 +46,53 @@
 		"horaDesde" : "08:00",
 		"horaHasta" : "18:00",
 		"datosAdicionales" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+	},
+	{ 
+		"solicitudID" : 1,
+		"usuarioID": 1,
+		"fechaCreacion": "08/29/2016",
+		"estaVigente" : true,
+		"provinciaID" : 1,
+		"localidadID" : 2,
+		"grupoSanguineoID" : 2,
+		"factorSanguineoID" : 1,
+		"cantidadDadores" : 5,
+		"institucion" : "Sanatorio Mayo",
+		"direccion" : "Rivadavia 2345",
+		"horaDesde" : "08:00",
+		"horaHasta" : "18:00",
+		"datosAdicionales" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+	},
+	{ 
+		"solicitudID" : 1,
+		"usuarioID": 1,
+		"fechaCreacion": "08/14/2016",
+		"estaVigente" : true,
+		"provinciaID" : 1,
+		"localidadID" : 2,
+		"grupoSanguineoID" : 1,
+		"factorSanguineoID" : 1,
+		"cantidadDadores" : 3,
+		"institucion" : "Sanatorio Mayo",
+		"direccion" : "Rivadavia 2345",
+		"horaDesde" : "08:00",
+		"horaHasta" : "18:00",
+		"datosAdicionales" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+	},
+	{ 
+		"solicitudID" : 1,
+		"usuarioID": 1,
+		"fechaCreacion": "08/03/2016",
+		"estaVigente" : true,
+		"provinciaID" : 1,
+		"localidadID" : 2,
+		"grupoSanguineoID" : 0,
+		"factorSanguineoID" : 1,
+		"cantidadDadores" : 2,
+		"institucion" : "Sanatorio Mayo",
+		"direccion" : "Rivadavia 2345",
+		"horaDesde" : "08:00",
+		"horaHasta" : "18:00",
+		"datosAdicionales" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
 	}
 ]

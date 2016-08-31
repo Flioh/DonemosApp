@@ -24,7 +24,7 @@ export class SolicitudItem {
     }
 
     public getDescripcionTipoSanguineo(){
-    	return '0-';
+    	return '';
     }
 
 
