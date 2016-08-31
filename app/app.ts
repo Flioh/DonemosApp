@@ -1,5 +1,5 @@
 import { Component, ViewChild, provide, PLATFORM_DIRECTIVES } from '@angular/core';
-import { ionicBootstrap, App, Platform, MenuController, Nav } from 'ionic-angular';
+import { ionicBootstrap, App, Platform, AlertController, MenuController, Nav, Events } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
 
 // Nueva API de angular para forms
@@ -29,8 +29,8 @@ export class DonemosApp {
   rootPage: any = ListaSolicitudesPage;
   paginasMenu: Array<MenuItemModel> = [];
 
-  constructor(private platform: Platform, private menu: MenuController, private connectivityService : ConnectivityService) {
-    this.inicializarApp();     
+  constructor(private platform: Platform, private alertCtrl: AlertController, public events: Events, private menu: MenuController, private connectivityService : ConnectivityService) {
+    this.inicializarApp();
   }
 
   inicializarApp(): void {
@@ -44,11 +44,16 @@ export class DonemosApp {
   }
 
   abrirPagina(pagina: MenuItemModel) {
-    // close the menu when clicking a link from the menu
 
-      // navigate to the new page if it is not the current page
-      this.nav.push(pagina.getComponente()).then(() => {this.menu.close()});
-
+    if(pagina.getEsRoot()) {
+      this.nav.popToRoot().then(() => {
+        this.menu.close();
+      });
+    } else {
+      this.nav.push(pagina.getComponente()).then(() => {
+        this.menu.close();
+      });
+    }
   }
 
   login(servicio: string) {
@@ -59,14 +64,13 @@ export class DonemosApp {
 
   }
 
-  cargarOpcionesMenuPrincipal(): void {
-    this.paginasMenu.push(new MenuItemModel('add', 'Nueva solicitud', NuevaSolicitudPage));
-    this.paginasMenu.push(new MenuItemModel('list-box', 'Lista de solicitudes', ListaSolicitudesPage));
-    this.paginasMenu.push(new MenuItemModel('checkbox', 'Requisitos para donar', ListaSolicitudesPage));
-    this.paginasMenu.push(new MenuItemModel('person', 'Configurar perfil', ListaSolicitudesPage));
-    this.paginasMenu.push(new MenuItemModel('settings', 'Configuración', ListaSolicitudesPage));
-    this.paginasMenu.push(new MenuItemModel('log-out', 'Salir', ListaSolicitudesPage));
-    this.paginasMenu.push(new MenuItemModel('information-circle', 'Sobre nosotros', ListaSolicitudesPage));
+  cargarOpcionesMenuPrincipal(): void {    
+    this.paginasMenu.push(new MenuItemModel('list-box', 'Lista de solicitudes', ListaSolicitudesPage, true));
+    this.paginasMenu.push(new MenuItemModel('checkbox', 'Requisitos para donar', ListaSolicitudesPage, false));
+    this.paginasMenu.push(new MenuItemModel('person', 'Configurar perfil', ListaSolicitudesPage, false));
+    this.paginasMenu.push(new MenuItemModel('settings', 'Configuración', ListaSolicitudesPage, false));
+    this.paginasMenu.push(new MenuItemModel('log-out', 'Salir', ListaSolicitudesPage, false));
+    this.paginasMenu.push(new MenuItemModel('information-circle', 'Sobre nosotros', ListaSolicitudesPage, false));
   }
 }
 

@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { Platform, NavController, LoadingController } from 'ionic-angular';
+import { Platform, NavController, LoadingController, AlertController } from 'ionic-angular';
 import {FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -38,7 +38,8 @@ export class NuevaSolicitudPage {
 		private ngZone : NgZone,
 		private connectivityService : ConnectivityService,
 		private autocompleteService : AutocompleteService,
-		private loadingCtrl : LoadingController) {
+		private loadingCtrl : LoadingController,
+		private alertCtrl : AlertController) {
 		
 		// Creamos e inicializamos el modelo
 		this.nuevaSolicitud = new NuevaSolicitudModel();
@@ -187,11 +188,11 @@ export class NuevaSolicitudPage {
 		loadingPopup.present();
 
 		this.remoteDataService.getListaCiudadesPorProvincia(this.nuevaSolicitud.getProvinciaID())
-			.subscribe(result => {
-				if(result && result.length){
-					this.listaCiudades = result;
-									
-					if(nombreCiudad) {
+		.subscribe(result => {
+			if(result && result.length){
+				this.listaCiudades = result;
+
+				if(nombreCiudad) {
 						// Si recibimos el nombre de la ciudad (autocomplete), seleccionamos esa ciudad
 						this.actualizarCiudad(nombreCiudad);
 					} else {

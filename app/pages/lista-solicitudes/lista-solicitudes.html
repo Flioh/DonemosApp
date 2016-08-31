@@ -30,7 +30,7 @@
 			<!-- Creamos una lista de solicitudes usando el componente solicitud-item -->
 			<solicitud-item *ngFor="let solicitud of solicitudes" [solicitud]="solicitud" (seleccionarSolicitud)="abrirDetalles($event)"></solicitud-item>
 
-			<button red full>Ver mas solicitudes</button>
+			<button red full (click)="buscarSolicitudes()">Ver mas solicitudes</button>
 		</div>
 			
 		<ion-list *ngSwitchCase="'filtros'">

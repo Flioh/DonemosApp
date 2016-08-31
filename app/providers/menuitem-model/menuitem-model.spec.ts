@@ -17,7 +17,7 @@ export class MockPage {
 @Injectable()
 export class MenuItemModelMock extends MenuItemModel {
 	constructor(){
-		super('icono', 'titulo', MockPage);
+		super('icono', 'titulo', MockPage, true);
 	}
 }
 
@@ -50,14 +50,20 @@ describe('MenuItem Model', () => {
 		expect(menuItemModel.getComponente).toBeDefined();
 	}));
 
-	it('El metodo getIconoIosOutline() debe contener ios- y -outline', inject([MenuItemModel], (menuItemModel: MenuItemModelMock) => {
-		expect(menuItemModel.getIconoIosOutline()).toMatch(/ios-icono-outline/);
+	it('Debe tener un metodo getEsRoot()', inject([MenuItemModel], (menuItemModel: MenuItemModelMock) => {
+		expect(menuItemModel.getEsRoot).toBeDefined();
 	}));
+
+	
 
 
 
 	// Tests para asegurar que los metodos devuelven los valores correctamente
 	// -----------------------------------------------------------------------
+	it('El metodo getIconoIosOutline() debe contener ios- y -outline', inject([MenuItemModel], (menuItemModel: MenuItemModelMock) => {
+		expect(menuItemModel.getIconoIosOutline()).toMatch(/ios-icono-outline/);
+	}));
+
 	it('El metodo getIconoIos() debe contener ios-', inject([MenuItemModel], (menuItemModel: MenuItemModelMock) => {
 		expect(menuItemModel.getIconoIos()).toMatch(/ios-icono/);
 	}));
@@ -73,5 +79,9 @@ describe('MenuItem Model', () => {
 	it('El metodo getComponente() debe devolver la pagina de error', inject([MenuItemModel], (menuItemModel: MenuItemModelMock) => {
 		expect(typeof menuItemModel.getComponente()).toEqual(typeof MockPage);
 	
+	}));
+
+	it('El metodo getEsRoot() debe devolver true', inject([MenuItemModel], (menuItemModel: MenuItemModelMock) => {
+		expect(menuItemModel.getEsRoot()).toBe(true);
 	}));
 });

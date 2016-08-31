@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, LoadingController } from 'ionic-angular';
+import { NavController, LoadingController, Events } from 'ionic-angular';
 
 import { DetallesSolicitudPage } from '../detalles-solicitud/detalles-solicitud';
 import { NuevaSolicitudPage } from '../nueva-solicitud/nueva-solicitud';
@@ -37,7 +37,8 @@ export class ListaSolicitudesPage {
 
   constructor(private nav: NavController, 
               private loadingCtrl: LoadingController, 
-              private dataService: RemoteDataService) {
+              private dataService: RemoteDataService,
+              public events: Events) {
     
     // Indica que las listas usadas en los filtros no estan cargadas aun
     this.listadosCargados = false;
@@ -108,6 +109,10 @@ export class ListaSolicitudesPage {
         // TODO: manejar errores en las llamadas al servidor
         // -------------------------------------------------      
       });
+  }
+
+  public buscarSolicitudes() {
+
   }
 
   public abrirDetalles(event) {

@@ -8,7 +8,8 @@ export class MenuItemModel {
   constructor(
     private nombreIcono: string, 
     private titulo: string, 
-    private componente: any) {
+    private componente: any,
+    private esRoot: boolean) {
   }
 
   public getIconoIosOutline(): string {
@@ -29,6 +30,10 @@ export class MenuItemModel {
 
   public getComponente(): any {
 	  return this.componente;
+  }
+
+  public getEsRoot(): boolean {
+    return this.esRoot;
   }
 
 }
