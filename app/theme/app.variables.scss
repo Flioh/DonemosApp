@@ -29,7 +29,9 @@
 /* Colores principales de la aplicacion */
 $red1 : 	#f32d2e;
 $red2 : 	#e00d0e;
+$softRed:	#f4484b;
 $white1: 	#ffffff;
+$green:		#7ad596;
 
 
 
@@ -41,7 +43,9 @@ $colors: (
   light:      #f4f4f4,
   dark:       #222,
   favorite:   #69BB7B,
-  red: 	      #f32d2e,
+  red: 	      $red1,
+  gren:		  $green,
+  softRed:	  $softRed,
   grey: 	  #666
 );
 

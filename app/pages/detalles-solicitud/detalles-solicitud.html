@@ -4,13 +4,100 @@
 	</ion-navbar>
 </ion-header>
 
-<ion-content>
-  <ion-card *ngIf="solicitudSeleccionada">
-    <ion-card-header>
-      {{solicitudSeleccionada.cantidadDadores}}
-    </ion-card-header>
-    <ion-card-content>
-      {{solicitudSeleccionada.detalle}}
-    </ion-card-content>
-  </ion-card>
+<ion-content>    
+    <ion-list no-lines>
+
+
+
+      <ion-item class="header">
+        <h3>Se necesitan <span class="marked">6 dadores</span></h3>
+        <h2>A+, A-, <span class="marked">0-</span>,0+</h2>
+        <span class="fecha">
+          Hace 3 días
+        </span>
+      </ion-item>
+
+
+
+      <ion-item class="detail-item">
+        <ion-avatar item-left>
+          <ion-icon softRed name="water" item-left></ion-icon>
+        </ion-avatar>
+        <h2>Puede recibir de</h2>
+        <p>A+, A-, <span class="marked">0-</span>,0+</p>
+        <span><ion-icon name="checkmark"></ion-icon> Podés donar</span>
+      </ion-item>
+
+
+
+      <ion-item class="detail-item">
+        <ion-avatar item-left>
+          <ion-icon softRed name="pin" item-left></ion-icon>
+        </ion-avatar>
+        <h2>Localidad</h2>
+        <p>Santo Tomé, Santa Fe</p>
+      </ion-item>
+
+
+
+      <ion-item class="detail-item">
+        <ion-avatar item-left>
+          <ion-icon softRed name="home" item-left></ion-icon>
+        </ion-avatar>
+        <h2>Lugar y dirección</h2>
+        <p>Hospital Samco</p>
+        <p>1234 12 de Septiembre</p>
+        <a href="#">¿Cómo llego?</a>
+      </ion-item>
+
+
+
+      <div class="map-container">
+        <div id="map" style="width: 100%; height: 100%;"></div>
+        <div id="overlay"></div>  
+      </div>
+      
+
+
+      <ion-item class="detail-item">
+        <ion-avatar item-left>
+          <ion-icon softRed name="time" item-left></ion-icon>
+        </ion-avatar>
+        <h2>Horario de Donación</h2>
+        <p>07:00 - 11:00</p>
+      </ion-item>
+
+
+
+      <ion-item class="detail-item">
+        <ion-avatar item-left>
+          <ion-icon softRed name="person" item-left></ion-icon>
+        </ion-avatar>
+        <h2>Nombre del Paciente</h2>
+        <p>Austin Price</p>
+      </ion-item>
+
+
+
+      <ion-item class="detail-item">
+        <ion-avatar item-left>
+          <ion-icon softRed name="people" item-left></ion-icon>
+        </ion-avatar>
+        <h2>Dadores necesitados</h2>
+        <p>6</p>
+      </ion-item>
+
+
+
+      <ion-item class="detail-item">
+        <ion-avatar item-left>
+          <ion-icon softRed name="information-circle" item-left></ion-icon>
+        </ion-avatar>
+        <h2>Datos adicionales</h2>
+        <p>Fusce vehicula dolor arcu, sit amet blandit dolor mollis nec. Donec viverra eleifend lacus, vitae ullamcorper metus. Sed sollicitudin ipsum quis nunc sollicitudin ultrices</p>
+      </ion-item>
+
+
+
+    </ion-list>
 </ion-content>
