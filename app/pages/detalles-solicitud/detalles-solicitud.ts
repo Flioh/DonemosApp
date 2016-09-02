@@ -36,10 +36,6 @@ export class DetallesSolicitudPage {
 
 
     }
-
-  	nuevaSolicitud(): void {
-		this.nav.setRoot(NuevaSolicitudPage, {}, { animate: true, direction: 'forward' });
-    }
   }
 
 

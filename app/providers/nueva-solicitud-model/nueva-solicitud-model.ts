@@ -9,6 +9,7 @@ export class NuevaSolicitudModel {
   private estaVigente: boolean;
   private provinciaID: number;
   private localidadID: number;
+  private nombrePaciente: string;
   private grupoSanguineoID: number;
   private factorSanguineoID: number;
   private cantidadDadores: number;
@@ -30,6 +31,7 @@ export class NuevaSolicitudModel {
       this.fechaCreacion = new Date();
       this.provinciaID = null;
       this.localidadID = null;
+      this.nombrePaciente = null;
       this.grupoSanguineoID = null;
       this.factorSanguineoID = null;
       this.cantidadDadores = null;
@@ -80,6 +82,10 @@ export class NuevaSolicitudModel {
 
   public getInstitucion(): string {
     return this.institucion;
+  }
+
+  public getNombrePaciente(): string {
+    return this.nombrePaciente;
   }
 
   public getDireccion(): string {
@@ -137,6 +143,10 @@ export class NuevaSolicitudModel {
 
   public setInstitucion(institucion: string): string {
     return this.institucion = institucion;
+  }
+
+  public setNombrePaciente(nombrePaciente: string): string {
+    return this.nombrePaciente = nombrePaciente;
   }
 
   public setDireccion(direccion: string): string {

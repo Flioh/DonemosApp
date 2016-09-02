@@ -19,6 +19,7 @@ export class NuevaSolicitudModelMock extends NuevaSolicitudModel {
 			"localidadID" : 4,
 			"grupoSanguineoID" : 5,
 			"factorSanguineoID" : 6,
+			"nombrePaciente": "Nombre Apellido",
 			"cantidadDadores" : 7,
 			"institucion" : "Sanatorio Mayo",
 			"direccion" : "Rivadavia 2345",
@@ -78,6 +79,10 @@ describe('NuevaSolicitud Model', () => {
 
 	it('Debe tener un metodo getInstitucion()', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
 		expect(menuItemModel.getInstitucion).toBeDefined();		
+	}));
+
+	it('Debe tener un metodo getNombrePaciente()', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
+		expect(menuItemModel.getNombrePaciente).toBeDefined();		
 	}));
 
 	it('Debe tener un metodo getDireccion()', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
@@ -140,6 +145,10 @@ describe('NuevaSolicitud Model', () => {
 		expect(menuItemModel.getInstitucion()).toBe("Sanatorio Mayo");
 	}));
 
+	it('Debe tener un metodo getNombrePaciente() que devuelva el la institucion correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
+		expect(menuItemModel.getNombrePaciente()).toBe("Nombre Apellido");
+	}));
+
 	it('Debe tener un metodo getDireccion() que devuelva la direccion correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
 		expect(menuItemModel.getDireccion()).toBe("Rivadavia 2345");
 	}));
@@ -200,6 +209,10 @@ describe('NuevaSolicitud Model', () => {
 		expect(menuItemModel.setInstitucion).toBeDefined();		
 	}));
 
+	it('Debe tener un metodo setNombrePaciente()', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
+		expect(menuItemModel.setNombrePaciente).toBeDefined();		
+	}));
+
 	it('Debe tener un metodo setDireccion()', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
 		expect(menuItemModel.setDireccion).toBeDefined();
 	}));
@@ -220,60 +233,64 @@ describe('NuevaSolicitud Model', () => {
 
 	// Tests para asegurar que los metodos set modifican los valores correctamente
 	// ---------------------------------------------------------------------------
-	it('Debe tener un metodo setSolicitudID() que devuelva el ID de la solicitud correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {		
+	it('Debe tener un metodo setSolicitudID() que setee el ID de la solicitud correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {		
 		expect(menuItemModel.setSolicitudID(2)).toBe(2);
 	}));
 
-	it('Debe tener un metodo setUsuarioID() que devuelva el ID del usuario correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
+	it('Debe tener un metodo setUsuarioID() que setee el ID del usuario correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
 		expect(menuItemModel.setUsuarioID(3)).toBe(3);
 	}));
 
-	it('Debe tener un metodo setFechaCreacion() que devuelva la fecha de creacion correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
+	it('Debe tener un metodo setFechaCreacion() que setee la fecha de creacion correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
 		let nuevaFecha = new Date();
 		expect(menuItemModel.setFechaCreacion(nuevaFecha)).toBe(nuevaFecha);
 	}));
 
-	it('Debe tener un metodo setEstaVigente() que devuelva si esta vigente correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
+	it('Debe tener un metodo setEstaVigente() que setee si esta vigente correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
 		expect(menuItemModel.setEstaVigente(false)).toBe(false);
 	}));
 
-	it('Debe tener un metodo setProvinciaID() que devuelva el ID de la provincia correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
+	it('Debe tener un metodo setProvinciaID() que setee el ID de la provincia correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
 		expect(menuItemModel.setProvinciaID(4)).toBe(4);
 	}));
 
-	it('Debe tener un metodo setLocalidadID() que devuelva el ID de la localidad correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
+	it('Debe tener un metodo setLocalidadID() que setee el ID de la localidad correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
 		expect(menuItemModel.setLocalidadID(5)).toBe(5);
 	}));
 
-	it('Debe tener un metodo setGrupoSanguineoID() que devuelva el ID del grupo sanguineo correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
+	it('Debe tener un metodo setGrupoSanguineoID() que setee el ID del grupo sanguineo correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
 		expect(menuItemModel.setGrupoSanguineoID(6)).toBe(6);
 	}));
 
-	it('Debe tener un metodo setFactorSanguineoID() que devuelva el ID del factor sanguineo correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
+	it('Debe tener un metodo setFactorSanguineoID() que setee el ID del factor sanguineo correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
 		expect(menuItemModel.setFactorSanguineoID(7)).toBe(7);
 	}));
 
-	it('Debe tener un metodo setCantidadDadores() que devuelva la cantidad de dadores correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
+	it('Debe tener un metodo setCantidadDadores() que setee la cantidad de dadores correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
 		expect(menuItemModel.setCantidadDadores(8)).toBe(8);
 	}));
 
-	it('Debe tener un metodo setInstitucion() que devuelva el la institucion correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
+	it('Debe tener un metodo setInstitucion() que setee la institucion correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
 		expect(menuItemModel.setInstitucion("Sanatorio Garay")).toBe("Sanatorio Garay");
 	}));
 
-	it('Debe tener un metodo setDireccion() que devuelva la direccion correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
+	it('Debe tener un metodo setNombrePaciente() que setee el nombre del paciente correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
+		expect(menuItemModel.setNombrePaciente("NuevoNombre NuevoApellido")).toBe("NuevoNombre NuevoApellido");
+	}));
+
+	it('Debe tener un metodo setDireccion() que setee la direccion correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
 		expect(menuItemModel.setDireccion("Junin 1234")).toBe("Junin 1234");
 	}));
 
-	it('Debe tener un metodo setHoraDesde() que devuelva la hora inicial correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
+	it('Debe tener un metodo setHoraDesde() que setee la hora inicial correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
 		expect(menuItemModel.setHoraDesde("09:00")).toBe("09:00");
 	}));
 
-	it('Debe tener un metodo setHoraHasta() que devuelva la hora final correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
+	it('Debe tener un metodo setHoraHasta() que setee la hora final correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
 		expect(menuItemModel.setHoraHasta("19:00")).toBe("19:00");
 	}));
 
-	it('Debe tener un metodo setDatosAdicionales() que devuelva los datos adicionales correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
+	it('Debe tener un metodo setDatosAdicionales() que setee los datos adicionales correctamente', inject([NuevaSolicitudModel], (menuItemModel: NuevaSolicitudModelMock) => {
 		expect(menuItemModel.setDatosAdicionales("Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.")).toBe("Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.");
 	}));
 
