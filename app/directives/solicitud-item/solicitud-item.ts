@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { NuevaSolicitudModel } from '../../providers/nueva-solicitud-model/nueva-solicitud-model';
+import { SolicitudModel } from '../../providers/solicitud-model/solicitud-model';
 import { DonacionesHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
 import { TiposSanguineosPipe } from '../../pipes/format-tipos-sanguineos/format-tipos-sanguineos-pipe';
 import { TimeAgoPipe } from '../../pipes/time-ago/time-ago-pipe';
@@ -10,7 +10,7 @@ import { TimeAgoPipe } from '../../pipes/time-ago/time-ago-pipe';
     pipes: [ TiposSanguineosPipe, TimeAgoPipe]
 })
 export class SolicitudItem {
-	@Input() solicitud: NuevaSolicitudModel;
+	@Input() solicitud: SolicitudModel;
 	@Output() seleccionarSolicitud = new EventEmitter();
 
     constructor() { }

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 
 @Injectable()
-export class NuevaSolicitudModel {
+export class SolicitudModel {
 
   private solicitudID: number;
   private usuarioID: number;

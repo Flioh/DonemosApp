@@ -11,7 +11,7 @@ import { RemoteDataService } from '../../providers/remote-data-service/remote-da
 import { GrupoSanguineoHelper, FactorSanguineoHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
 
 /* Modelos utilizados */
-import { NuevaSolicitudModel } from '../../providers/nueva-solicitud-model/nueva-solicitud-model';
+import { SolicitudModel } from '../../providers/solicitud-model/solicitud-model';
 
 @Component({
 	templateUrl: 'build/pages/nueva-solicitud/nueva-solicitud.html',
@@ -27,7 +27,7 @@ export class NuevaSolicitudPage {
 	private listaFactoresSanguineos: any = [];
 
 	// Modelo a utilizar en el formulario
-	private nuevaSolicitud: NuevaSolicitudModel;
+	private nuevaSolicitud: SolicitudModel;
 
 	private submitted: boolean = false;
 
@@ -42,7 +42,7 @@ export class NuevaSolicitudPage {
 		private alertCtrl : AlertController) {
 		
 		// Creamos e inicializamos el modelo
-		this.nuevaSolicitud = new NuevaSolicitudModel();
+		this.nuevaSolicitud = new SolicitudModel();
 		this.inicializarSolicitud();
 
 		// Inicializa los listados de la pagina

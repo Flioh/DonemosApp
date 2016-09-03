@@ -8,7 +8,7 @@ import { RemoteDataService } from '../../providers/remote-data-service/remote-da
 
 import { SolicitudItem } from '../../directives/solicitud-item/solicitud-item';
 
-import { NuevaSolicitudModel } from '../../providers/nueva-solicitud-model/nueva-solicitud-model';
+import { SolicitudModel } from '../../providers/solicitud-model/solicitud-model';
 
 import { GrupoSanguineoHelper, FactorSanguineoHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
 
@@ -18,7 +18,7 @@ import { GrupoSanguineoHelper, FactorSanguineoHelper } from '../../providers/don
 })
 export class ListaSolicitudesPage {
 
-  private solicitudes: Array<NuevaSolicitudModel>;
+  private solicitudes: Array<SolicitudModel>;
 
   /* Filtros de busqueda */
   private provinciaID: number;
@@ -55,7 +55,7 @@ export class ListaSolicitudesPage {
 
     this.dataService.getSolicitudes().subscribe((solicitudesObj) => { 
       for(let i = 0; i < solicitudesObj.length; i++) {
-        this.solicitudes.push(new NuevaSolicitudModel(solicitudesObj[i]));
+        this.solicitudes.push(new SolicitudModel(solicitudesObj[i]));
       }
 
       // Oculta el mensaje de espera

@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { Http } from '@angular/http';
-import { NuevaSolicitudModel } from '../nueva-solicitud-model/nueva-solicitud-model';
+import { SolicitudModel } from '../solicitud-model/solicitud-model';
 import { MY_CONFIG_TOKEN, MY_CONFIG, ApplicationConfig } from '../../app-config.ts';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
@@ -24,7 +24,7 @@ export class RemoteDataService {
   }
 
   // Obtiene el listado de solicitudes
-  public getSolicitudes(): Observable<Array<NuevaSolicitudModel>> {
+  public getSolicitudes(): Observable<Array<SolicitudModel>> {
     
     return Observable.create(observer => {
       this.http.get(this.apiEndPointSolicitudes)

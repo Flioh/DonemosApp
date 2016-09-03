@@ -10,7 +10,12 @@
 
 
       <ion-item class="header">
-        <h3>Se necesitan <span class="marked">6 dadores</span></h3>
+        <h3>Se necesitan 
+          <span *ngIf="solicitudSeleccionada.cantidadDadores" class="marked">
+            {{ solicitudSeleccionada.cantidadDadores }} dadores
+          </span>
+          <span *ngIf="!solicitudSeleccionada.cantidadDadores"> dadores</span>
+          </h3>
         <h2>A+, A-, <span class="marked">0-</span>,0+</h2>
         <span class="fecha">
           Hace 3 días
@@ -84,7 +89,7 @@
           <ion-icon softRed name="people" item-left></ion-icon>
         </ion-avatar>
         <h2>Dadores necesitados</h2>
-        <p>6</p>
+        <p>{{ solicitudSeleccionada.cantidadDadores }}</p>
       </ion-item>
 
 

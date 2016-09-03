@@ -3,7 +3,7 @@ import { BaseRequestOptions, Response, ResponseOptions, Http } from '@angular/ht
 import { MockBackend, MockConnection } from '@angular/http/testing';
 import { beforeEachProviders, beforeEach, it, describe, expect, inject, async } from '@angular/core/testing';
 import { RemoteDataService } from './remote-data-service';
-import { NuevaSolicitudModel } from '../../providers/nueva-solicitud-model/nueva-solicitud-model';
+import { SolicitudModel } from '../../providers/solicitud-model/solicitud-model';
 
 describe('RemoteData Service Model', () => {
 
@@ -164,7 +164,7 @@ describe('RemoteData Service Model', () => {
 	  async(inject([RemoteDataService], (testService: RemoteDataService) => {
 	    testService.getSolicitudes().subscribe((response) => {
 	      let propiedadesSolicitudObtenida = JSON.stringify(Object.keys(response[0]).sort());
-	      let propiedadesSolicitudCreada = JSON.stringify(Object.keys(new NuevaSolicitudModel()).sort());
+	      let propiedadesSolicitudCreada = JSON.stringify(Object.keys(new SolicitudModel()).sort());
 	      expect(propiedadesSolicitudObtenida).toBe(propiedadesSolicitudCreada);
 	    })
 	  })
