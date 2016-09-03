@@ -4,6 +4,8 @@ import { MockBackend, MockConnection } from '@angular/http/testing';
 import { beforeEachProviders, beforeEach, it, describe, expect, inject, async } from '@angular/core/testing';
 import { RemoteDataService } from './remote-data-service';
 import { SolicitudModel } from '../../providers/solicitud-model/solicitud-model';
+import { ProvinciaModel } from '../../providers/provincia-model/provincia-model';
+import { CiudadModel } from '../../providers/ciudad-model/ciudad-model';
 
 describe('RemoteData Service Model', () => {
 
@@ -23,14 +25,14 @@ describe('RemoteData Service Model', () => {
 
 	// Mock para usar como respuesta en las llamadas a los servicios
 	let provinciasMock = [
-		{ "id" : 1, "nombre": "Mock 1"},
-		{ "id" : 1, "nombre": "Mock 2"},
-		{ "id" : 1, "nombre": "Mock 3"}];
+		{ "id" : 1, "nombre": "Provincia 1"},
+		{ "id" : 2, "nombre": "Provincia 2"},
+		{ "id" : 3, "nombre": "Provincia 3"}];
 
-	let localidadesMock = [
-		{ "id": 1, "provincia": 1, "nombre": "Localidad 1"},
-      	{ "id": 2, "provincia": 1, "nombre": "Localidad 2"},
-      	{ "id": 3, "provincia": 1, "nombre": "Localidad 3"}];
+	let ciudadesMock = [
+		{ "id": 1, "provinciaID": 1, "nombre": "Localidad 1"},
+      	{ "id": 2, "provinciaID": 1, "nombre": "Localidad 2"},
+      	{ "id": 3, "provinciaID": 1, "nombre": "Localidad 3"}];
 
     let solicitudesMock = [
 		{ 
@@ -97,9 +99,9 @@ describe('RemoteData Service Model', () => {
 	  			// Enviamos el array de provincias en la respuesta	  			
 	  			let provinciasResponse = new Response(new ResponseOptions({body: JSON.stringify(provinciasMock)}));
 	  			c.mockRespond(provinciasResponse);
-	  		} else if(c.request.url.indexOf("localidad") > -1) {
+	  		} else if(c.request.url.indexOf("ciudad") > -1) {
 	  			// Enviamos el array de localidades en la respuesta
-	  			let localidadesResponse = new Response(new ResponseOptions({body: JSON.stringify(localidadesMock)}));
+	  			let localidadesResponse = new Response(new ResponseOptions({body: JSON.stringify(ciudadesMock)}));
 	  			c.mockRespond(localidadesResponse);
 	  		} 
 		});
@@ -160,12 +162,32 @@ describe('RemoteData Service Model', () => {
 
 	// Tests para asegurar que el tipo de dato devuelvo coincide con el tipo de dato esperado
 	// --------------------------------------------------------------------------------------
-	it('El metodo getSolicitudes() debe devolver objetos del tipo NuevaSolicitudModel',
+	it('El metodo getSolicitudes() debe devolver objetos del tipo SolicitudModel',
 	  async(inject([RemoteDataService], (testService: RemoteDataService) => {
 	    testService.getSolicitudes().subscribe((response) => {
 	      let propiedadesSolicitudObtenida = JSON.stringify(Object.keys(response[0]).sort());
 	      let propiedadesSolicitudCreada = JSON.stringify(Object.keys(new SolicitudModel()).sort());
 	      expect(propiedadesSolicitudObtenida).toBe(propiedadesSolicitudCreada);
+	    })
+	  })
+	));
+
+	it('El metodo getListaProvincias() debe devolver objetos del tipo ProvinciaModel',
+	  async(inject([RemoteDataService], (testService: RemoteDataService) => {
+	    testService.getListaProvincias().subscribe((response) => {
+	      let propiedadesprovinciaObtenida = JSON.stringify(Object.keys(response[0]).sort());
+	      let propiedadesprovinciaCreada = JSON.stringify(Object.keys(new ProvinciaModel(provinciasMock[0])).sort());
+	      expect(propiedadesprovinciaObtenida).toBe(propiedadesprovinciaCreada);
+	    })
+	  })
+	));
+
+	it('El metodo getListaCiudadesPorProvincia() debe devolver objetos del tipo CiudadModel',
+	  async(inject([RemoteDataService], (testService: RemoteDataService) => {
+	    testService.getListaCiudadesPorProvincia(1).subscribe((response) => {
+	      let propiedadesCiudadObtenida = JSON.stringify(Object.keys(response[0]).sort());
+	      let propiedadesCiudadCreada = JSON.stringify(Object.keys(new CiudadModel(localidadesMock[0])).sort());
+	      expect(propiedadesCiudadObtenida).toBe(propiedadesCiudadCreada);
 	    })
 	  })
 	));
