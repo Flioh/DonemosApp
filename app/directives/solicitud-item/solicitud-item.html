@@ -16,17 +16,17 @@
 		<ion-row>
 			<ion-col>
 				<ion-icon name="pin"></ion-icon>
-				Santo Tome, Santa Fe
+				{{ solicitud.ciudad.nombre }}, {{ solicitud.provincia.nombre }}
 			</ion-col>			
 		</ion-row>
 		<ion-row>
 			<ion-col width-60>
 				<ion-icon name="home"></ion-icon>
-				Sanatorio Garay
+				{{ solicitud.institucion }}
 			</ion-col>
 			<ion-col width-40>
 				<ion-icon name="time"></ion-icon>
-				08:00 - 16:00
+				{{ solicitud.horaDesde }} - {{ solicitud.horaHasta }}
 			</ion-col>
 		</ion-row>	
 		<ion-row>
