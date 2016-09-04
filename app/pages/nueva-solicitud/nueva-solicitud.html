@@ -88,6 +88,17 @@
 
 
 
+			<!-- Nombre del paciente  -->
+			<ion-item>
+				<ion-label floating>Nombre del paciente</ion-label>
+				<ion-input [(ngModel)]="nuevaSolicitud.nombrePaciente" name="nombrePaciente" #nombrePaciente="ngModel" required type="text"></ion-input>
+			</ion-item>
+			<span [hidden]="nombrePaciente.valid || nombrePaciente.untouched" class="mensaje-error">
+				Ingrese la el nombre del paciente.
+			</span>
+
+
+
 			<!-- Grupo sanguineo  -->
 			<ion-item class="half-size">
 				<ion-label floating>Grupo</ion-label>
