@@ -44,7 +44,7 @@ export class NuevaSolicitudPage {
 		private autocompleteService : AutocompleteService,
 		private loadingCtrl : LoadingController,
 		private alertCtrl : AlertController) {
-		
+
 		// Creamos e inicializamos el modelo
 		this.nuevaSolicitud = new SolicitudModel();
 		this.inicializarSolicitud();
@@ -69,13 +69,6 @@ export class NuevaSolicitudPage {
 		// TODO: setar la propiedad usuarioID de la nueva solicitud
 		// --------------------------------------------------------
 		// this.nuevaSolicitud.setUsuarioID(usuarioID);
-
-		this.nuevaSolicitud.setHoraDesde('08:00');
-		this.nuevaSolicitud.setHoraHasta('20:00');
-		this.nuevaSolicitud.setCiudad(new CiudadModel());
-		this.nuevaSolicitud.setProvincia(new ProvinciaModel());
-		this.nuevaSolicitud.setFactorSanguineo(new FactorSanguineoModel());
-		this.nuevaSolicitud.setGrupoSanguineo(new GrupoSanguineoModel());
 	}	
 
 	// Método que recibe la dirección del autocomplete y la ingresa en el formulario

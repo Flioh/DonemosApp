@@ -24,27 +24,21 @@ export class SolicitudModel {
   private datosAdicionales: string;
 
   constructor(obj?) {
-    if(obj) {
-      // Si recibimos un objeto, copiamos sus propiedades
-      for (var prop in obj) this[prop] = obj[prop];
-    } else {
-      // Seteamos explicitamente todas las propiedades a null
-      this.solicitudID = null;
-      this.usuarioID = null;
-      this.estaVigente = true;
-      this.fechaCreacion = new Date();
-      this.provincia = null;
-      this.ciudad = null;
-      this.nombrePaciente = null;
-      this.grupoSanguineo = null;
-      this.factorSanguineo = null;
-      this.cantidadDadores = null;
-      this.institucion = null;
-      this.direccion = null;
-      this.horaDesde = null;
-      this.horaHasta = null;
-      this.datosAdicionales = null;
-    }
+      this.solicitudID = obj && obj.solicitudID ? obj.solicitudID : null;
+      this.usuarioID = obj && obj.usuarioID ? obj.usuarioID : null;
+      this.estaVigente = obj && obj.estaVigente ? obj.estaVigente : true;
+      this.fechaCreacion = obj && obj.fechaCreacion ? obj.fechaCreacion : new Date();
+      this.provincia = obj && obj.provincia ? new ProvinciaModel(obj.provincia.id, obj.provincia.nombre) : new ProvinciaModel();
+      this.ciudad = obj && obj.ciudad ? new CiudadModel(obj.ciudad.id, obj.ciudad.nombre) : new CiudadModel();
+      this.nombrePaciente = obj && obj.nombrePaciente ? obj.nombrePaciente : null;
+      this.grupoSanguineo = obj && obj.grupoSanguineo ? new GrupoSanguineoModel(obj.grupoSanguineo.id, obj.grupoSanguineo.nombre) : new GrupoSanguineoModel();
+      this.factorSanguineo = obj && obj.factorSanguineo ? new FactorSanguineoModel(obj.factorSanguineo.id, obj.factorSanguineo.nombre) : new FactorSanguineoModel();
+      this.cantidadDadores = obj && obj.cantidadDadores ? obj.cantidadDadores : null;
+      this.institucion = obj && obj.institucion ? obj.institucion : null;
+      this.direccion = obj && obj.direccion ? obj.direccion : null;
+      this.horaDesde = obj && obj.horaDesde ? obj.horaDesde : '08:00';
+      this.horaHasta = obj && obj.horaHasta ? obj.horaHasta : '16:00';
+      this.datosAdicionales = obj && obj.datosAdicionales ? obj.datosAdicionales : null;
   }
 
   /* Getters */

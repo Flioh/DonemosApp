@@ -65,13 +65,6 @@ export class RemoteDataService {
         .map(res => res.json())
         .subscribe(listadoSolicitudes => {
 
-          for(let i=0; i<listadoSolicitudes.length; i++) {
-            listadoSolicitudes[i].provincia = new ProvinciaModel(1, "Provincia 1");
-            listadoSolicitudes[i].ciudad = new CiudadModel(1, "Ciudad 1");
-            listadoSolicitudes[i].grupoSanguineo = new GrupoSanguineoModel(GrupoSanguineoEnum.A, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.A));
-            listadoSolicitudes[i].factorSanguineo = new FactorSanguineoModel(FactorSanguineoEnum.RhPositivo, FactorSanguineoHelper.getDescripcion(FactorSanguineoEnum.RhPositivo));
-          }
-
           // Simulamos un retardo al buscar las solicitudes
           setTimeout(() => {            
             observer.next(listadoSolicitudes);            
