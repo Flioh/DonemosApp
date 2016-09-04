@@ -1,12 +1,12 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
-export enum FactorSanguineo {
-  RhPositivo = 0,
+export enum FactorSanguineoEnum {
+  RhPositivo = 1,
   RhNegativo
 }
 
-export enum GrupoSanguineo {
-  Cero = 0,
+export enum GrupoSanguineoEnum {
+  Cero = 1,
   A,
   AB,
   B
@@ -16,33 +16,23 @@ export enum GrupoSanguineo {
 export namespace FactorSanguineoHelper {
 
   // Retorna la descripcion en base al id
-  export function getDescripcion(factor: FactorSanguineo): string {
-    switch (factor) {
-      case FactorSanguineo.RhPositivo:
+  export function getDescripcion(factorID: number): string {
+    switch (factorID) {
+      case FactorSanguineoEnum.RhPositivo:
       return 'RH+';
-      case FactorSanguineo.RhNegativo:
+      case FactorSanguineoEnum.RhNegativo:
       return 'RH-';
     }
   }
 
   // Retorna la descripcion abreviada en base al id
-  export function getAbreviacion(factor: FactorSanguineo): string {
-    switch (factor) {
-      case FactorSanguineo.RhPositivo:
+  export function getAbreviacion(factorID: number): string {
+    switch (factorID) {
+      case FactorSanguineoEnum.RhPositivo:
       return '+';
-      case FactorSanguineo.RhNegativo:
+      case FactorSanguineoEnum.RhNegativo:
       return '-';
     }
-  }
-
-  // Retorna la lista de todos los factores sanguineos
-  export function getFactoresSanguineos(): Array<FactorSanguineo> {
-    let listaFactoresSanguineos = [];
-
-    listaFactoresSanguineos.push({ id: FactorSanguineo.RhNegativo, nombre: this.getDescripcion(FactorSanguineo.RhNegativo)});
-    listaFactoresSanguineos.push({ id: FactorSanguineo.RhPositivo, nombre: this.getDescripcion(FactorSanguineo.RhPositivo)});
-
-    return listaFactoresSanguineos;
   }
 }
 
@@ -50,99 +40,87 @@ export namespace FactorSanguineoHelper {
 export namespace GrupoSanguineoHelper {
 
   // Retorna la descripcion en base al id
-  export function getDescripcion(grupo: GrupoSanguineo): string {
-    switch (grupo) {
-      case GrupoSanguineo.Cero:
+  export function getDescripcion(grupoID: number): string {
+    switch (grupoID) {
+      case GrupoSanguineoEnum.Cero:
         return '0';
-      case GrupoSanguineo.A:
+      case GrupoSanguineoEnum.A:
         return 'A';
-      case GrupoSanguineo.AB:
+      case GrupoSanguineoEnum.AB:
         return 'AB';
-      case GrupoSanguineo.B: 
+      case GrupoSanguineoEnum.B: 
         return 'B';
     }
-  }
-
-  // Retorna la lista de todos los grupos sanguineos
-  export function getGruposSanguineos(): Array<GrupoSanguineo> {
-    let listaGruposSanguineos = [];
-
-    listaGruposSanguineos.push({ id: GrupoSanguineo.Cero, nombre: this.getDescripcion(GrupoSanguineo.Cero)});
-    listaGruposSanguineos.push({ id: GrupoSanguineo.A, nombre: this.getDescripcion(GrupoSanguineo.A)});
-    listaGruposSanguineos.push({ id: GrupoSanguineo.AB, nombre: this.getDescripcion(GrupoSanguineo.AB)});
-    listaGruposSanguineos.push({ id: GrupoSanguineo.B, nombre: this.getDescripcion(GrupoSanguineo.B)});
-
-    return listaGruposSanguineos;
   }
 }
 
 export namespace DonacionesHelper {
 
   // Retorna la descripcion completa concatenando grupo y factor
-  export function getDescripcion(grupo: GrupoSanguineo, factor: FactorSanguineo): string {
-    return GrupoSanguineoHelper.getDescripcion(grupo) + FactorSanguineoHelper.getAbreviacion(factor);
+  export function getDescripcion(grupoID: number, factorID: number): string {
+    return GrupoSanguineoHelper.getDescripcion(grupoID) + FactorSanguineoHelper.getAbreviacion(factorID);
   }
 
   // Retorna a que grupos/factores puede donar en base a su grupo y factor
-  export function puedeDonarA(grupo: GrupoSanguineo, factor: FactorSanguineo): string {
+  export function puedeDonarA(grupoID: number, factorID: number): string {
     // No implementada aun
     return 'test';
   }
 
   // Retorna de que grupos puede recibir en base a su grupo y factor
-  export function puedeRecibirDe(grupo: GrupoSanguineo, factor: FactorSanguineo): Array<string> {
-    if(grupo == GrupoSanguineo.A && factor == FactorSanguineo.RhPositivo) {
+  export function puedeRecibirDe(grupoID: number, factorID: number): Array<string> {
+    if(grupoID == GrupoSanguineoEnum.A && factorID == FactorSanguineoEnum.RhPositivo) {
       // Si es del tipo A+
       // Puede recibir de ['0+', '0-', 'A+', 'A-'];
-      return [this.getDescripcion(GrupoSanguineo.Cero, FactorSanguineo.RhPositivo),
-              this.getDescripcion(GrupoSanguineo.Cero, FactorSanguineo.RhNegativo),
-              this.getDescripcion(GrupoSanguineo.A, FactorSanguineo.RhPositivo),
-              this.getDescripcion(GrupoSanguineo.A, FactorSanguineo.RhNegativo)];
+      return [this.getDescripcion(GrupoSanguineoEnum.Cero, FactorSanguineoEnum.RhPositivo),
+              this.getDescripcion(GrupoSanguineoEnum.Cero, FactorSanguineoEnum.RhNegativo),
+              this.getDescripcion(GrupoSanguineoEnum.A, FactorSanguineoEnum.RhPositivo),
+              this.getDescripcion(GrupoSanguineoEnum.A, FactorSanguineoEnum.RhNegativo)];
 
-    } else if(grupo == GrupoSanguineo.A && factor == FactorSanguineo.RhNegativo) {
+    } else if(grupoID == GrupoSanguineoEnum.A && factorID == FactorSanguineoEnum.RhNegativo) {
       // Si es del tipo A-
       // Puede recibir de ['0-', 'A-'];
-      return [this.getDescripcion(GrupoSanguineo.Cero, FactorSanguineo.RhNegativo),
-              this.getDescripcion(GrupoSanguineo.A, FactorSanguineo.RhNegativo)];
-    } else if(grupo == GrupoSanguineo.B && factor == FactorSanguineo.RhPositivo) {
+      return [this.getDescripcion(GrupoSanguineoEnum.Cero, FactorSanguineoEnum.RhNegativo),
+              this.getDescripcion(GrupoSanguineoEnum.A, FactorSanguineoEnum.RhNegativo)];
+    } else if(grupoID == GrupoSanguineoEnum.B && factorID == FactorSanguineoEnum.RhPositivo) {
       // Si es del tipo B+
       // Puede recibir de ['0+', '0-', 'B+', 'B-'];
-      return [this.getDescripcion(GrupoSanguineo.Cero, FactorSanguineo.RhPositivo),
-              this.getDescripcion(GrupoSanguineo.Cero, FactorSanguineo.RhNegativo),
-              this.getDescripcion(GrupoSanguineo.B, FactorSanguineo.RhPositivo),
-              this.getDescripcion(GrupoSanguineo.B, FactorSanguineo.RhNegativo)];
-    } else if(grupo == GrupoSanguineo.B && factor == FactorSanguineo.RhNegativo) {
+      return [this.getDescripcion(GrupoSanguineoEnum.Cero, FactorSanguineoEnum.RhPositivo),
+              this.getDescripcion(GrupoSanguineoEnum.Cero, FactorSanguineoEnum.RhNegativo),
+              this.getDescripcion(GrupoSanguineoEnum.B, FactorSanguineoEnum.RhPositivo),
+              this.getDescripcion(GrupoSanguineoEnum.B, FactorSanguineoEnum.RhNegativo)];
+    } else if(grupoID == GrupoSanguineoEnum.B && factorID == FactorSanguineoEnum.RhNegativo) {
       // Si es del tipo B-
       // Puede recibir de ['0-', 'B-'];
-      return [this.getDescripcion(GrupoSanguineo.Cero, FactorSanguineo.RhNegativo),
-              this.getDescripcion(GrupoSanguineo.B, FactorSanguineo.RhNegativo)];
-    } else if(grupo == GrupoSanguineo.AB && factor == FactorSanguineo.RhPositivo) {
+      return [this.getDescripcion(GrupoSanguineoEnum.Cero, FactorSanguineoEnum.RhNegativo),
+              this.getDescripcion(GrupoSanguineoEnum.B, FactorSanguineoEnum.RhNegativo)];
+    } else if(grupoID == GrupoSanguineoEnum.AB && factorID == FactorSanguineoEnum.RhPositivo) {
       // Si es del tipo AB+
       // Puede recibir de ['0+', '0-', 'A+', 'A-', 'AB+', 'AB-', 'B+', 'B-'];  
-      return [this.getDescripcion(GrupoSanguineo.Cero, FactorSanguineo.RhPositivo),
-              this.getDescripcion(GrupoSanguineo.Cero, FactorSanguineo.RhNegativo),
-              this.getDescripcion(GrupoSanguineo.A, FactorSanguineo.RhPositivo),
-              this.getDescripcion(GrupoSanguineo.A, FactorSanguineo.RhNegativo),
-              this.getDescripcion(GrupoSanguineo.AB,FactorSanguineo.RhPositivo),
-              this.getDescripcion(GrupoSanguineo.AB,FactorSanguineo.RhNegativo),
-              this.getDescripcion(GrupoSanguineo.B, FactorSanguineo.RhPositivo),
-              this.getDescripcion(GrupoSanguineo.B, FactorSanguineo.RhNegativo)];
-    } else if(grupo == GrupoSanguineo.AB && factor == FactorSanguineo.RhNegativo) {
+      return [this.getDescripcion(GrupoSanguineoEnum.Cero, FactorSanguineoEnum.RhPositivo),
+              this.getDescripcion(GrupoSanguineoEnum.Cero, FactorSanguineoEnum.RhNegativo),
+              this.getDescripcion(GrupoSanguineoEnum.A, FactorSanguineoEnum.RhPositivo),
+              this.getDescripcion(GrupoSanguineoEnum.A, FactorSanguineoEnum.RhNegativo),
+              this.getDescripcion(GrupoSanguineoEnum.AB,FactorSanguineoEnum.RhPositivo),
+              this.getDescripcion(GrupoSanguineoEnum.AB,FactorSanguineoEnum.RhNegativo),
+              this.getDescripcion(GrupoSanguineoEnum.B, FactorSanguineoEnum.RhPositivo),
+              this.getDescripcion(GrupoSanguineoEnum.B, FactorSanguineoEnum.RhNegativo)];
+    } else if(grupoID == GrupoSanguineoEnum.AB && factorID == FactorSanguineoEnum.RhNegativo) {
       // Si es del tipo AB-
       // Puede recibir de ['0-', 'A-', 'AB-', 'B-'];
-      return [this.getDescripcion(GrupoSanguineo.Cero,FactorSanguineo.RhNegativo),
-              this.getDescripcion(GrupoSanguineo.A, FactorSanguineo.RhNegativo),
-              this.getDescripcion(GrupoSanguineo.AB, FactorSanguineo.RhNegativo),
-              this.getDescripcion(GrupoSanguineo.B, FactorSanguineo.RhNegativo)];
-    }  else if(grupo == GrupoSanguineo.Cero && factor == FactorSanguineo.RhPositivo) {
+      return [this.getDescripcion(GrupoSanguineoEnum.Cero,FactorSanguineoEnum.RhNegativo),
+              this.getDescripcion(GrupoSanguineoEnum.A, FactorSanguineoEnum.RhNegativo),
+              this.getDescripcion(GrupoSanguineoEnum.AB, FactorSanguineoEnum.RhNegativo),
+              this.getDescripcion(GrupoSanguineoEnum.B, FactorSanguineoEnum.RhNegativo)];
+    }  else if(grupoID == GrupoSanguineoEnum.Cero && factorID == FactorSanguineoEnum.RhPositivo) {
       // Si es del tipo 0+
       // Puede recibir de  ['0+', '0-'];
-      return [this.getDescripcion(GrupoSanguineo.Cero, FactorSanguineo.RhPositivo),
-              this.getDescripcion(GrupoSanguineo.Cero, FactorSanguineo.RhNegativo)];
-    } else if(grupo == GrupoSanguineo.Cero && factor == FactorSanguineo.RhNegativo) {
+      return [this.getDescripcion(GrupoSanguineoEnum.Cero, FactorSanguineoEnum.RhPositivo),
+              this.getDescripcion(GrupoSanguineoEnum.Cero, FactorSanguineoEnum.RhNegativo)];
+    } else if(grupoID == GrupoSanguineoEnum.Cero && factorID == FactorSanguineoEnum.RhNegativo) {
       // Si es del tipo 0-
       // Puede recibir de ['0-'];
-      return [this.getDescripcion(GrupoSanguineo.Cero, FactorSanguineo.RhNegativo)];
+      return [this.getDescripcion(GrupoSanguineoEnum.Cero, FactorSanguineoEnum.RhNegativo)];
     }  
   }
 

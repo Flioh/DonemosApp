@@ -1,8 +1,16 @@
 import { Injectable } from '@angular/core';
 import { beforeEachProviders, beforeEach, it, describe, expect, inject } from '@angular/core/testing';
+
+/* Modelos usados en los tests */
 import { SolicitudModel } from './solicitud-model';
 import { CiudadModel } from '../ciudad-model/ciudad-model';
 import { ProvinciaModel } from '../provincia-model/provincia-model';
+import { FactorSanguineoModel } from '../factor-sanguineo-model/factor-sanguineo-model';
+import { GrupoSanguineoModel } from '../grupo-sanguineo-model/grupo-sanguineo-model';
+
+/* Helpers */
+import { GrupoSanguineoHelper, FactorSanguineoHelper } from '../donemos-helper-service/donemos-helper-service';
+import { FactorSanguineoEnum, GrupoSanguineoEnum } from '../donemos-helper-service/donemos-helper-service';
 
 import {Component} from '@angular/core';
 import {NavController} from 'ionic-angular';
@@ -19,8 +27,8 @@ export class SolicitudModelMock extends SolicitudModel {
 			"estaVigente" : true,
 			"provincia" : new ProvinciaModel(1, "Provincia 1"),
 			"ciudad" : new CiudadModel(1, "Ciudad 1"),
-			"grupoSanguineoID" : 5,
-			"factorSanguineoID" : 6,
+			"grupoSanguineo" : new GrupoSanguineoModel(GrupoSanguineoEnum.A, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.A)),
+			"factorSanguineo" : new FactorSanguineoModel(FactorSanguineoEnum.RhPositivo, FactorSanguineoHelper.getDescripcion(FactorSanguineoEnum.RhPositivo)),
 			"nombrePaciente": "Nombre Apellido",
 			"cantidadDadores" : 7,
 			"institucion" : "Sanatorio Mayo",
@@ -67,12 +75,12 @@ describe('Solicitud Model', () => {
 		expect(solicitudModel.getCiudad).toBeDefined();		
 	}));
 
-	it('Debe tener un metodo getGrupoSanguineoID()', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
-		expect(solicitudModel.getGrupoSanguineoID).toBeDefined();		
+	it('Debe tener un metodo getGrupoSanguineo()', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
+		expect(solicitudModel.getGrupoSanguineo).toBeDefined();		
 	}));
 
-	it('Debe tener un metodo getFactorSanguineoID()', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
-		expect(solicitudModel.getFactorSanguineoID).toBeDefined();
+	it('Debe tener un metodo getFactorSanguineo()', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
+		expect(solicitudModel.getFactorSanguineo).toBeDefined();
 	}));
 
 	it('Debe tener un metodo getCantidadDadores()', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
@@ -137,12 +145,16 @@ describe('Solicitud Model', () => {
 		expect(ciudad.getNombre()).toBe("Ciudad 1");
 	}));
 
-	it('Debe tener un metodo getGrupoSanguineoID() que devuelva el ID del grupo sanguineo correctamente', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
-		expect(solicitudModel.getGrupoSanguineoID()).toBe(5);
+	it('Debe tener un metodo getGrupoSanguineo() que devuelva el grupo sanguineo correctamente', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
+		let grupoSanguineo = solicitudModel.getGrupoSanguineo();
+		expect(grupoSanguineo.getId()).toBe(GrupoSanguineoEnum.A);
+		expect(grupoSanguineo.getNombre()).toBe(GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.A));
 	}));
 
-	it('Debe tener un metodo getFactorSanguineoID() que devuelva el ID del factor sanguineo correctamente', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
-		expect(solicitudModel.getFactorSanguineoID()).toBe(6);
+	it('Debe tener un metodo getFactorSanguineo() que devuelva el factor sanguineo correctamente', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
+		let factorSanguineo = solicitudModel.getFactorSanguineo();
+		expect(factorSanguineo.getId()).toBe(FactorSanguineoEnum.RhPositivo);
+		expect(factorSanguineo.getNombre()).toBe(FactorSanguineoHelper.getDescripcion(FactorSanguineoEnum.RhPositivo));
 	}));
 
 	it('Debe tener un metodo getCantidadDadores() que devuelva la cantidad de dadores correctamente', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
@@ -201,12 +213,12 @@ describe('Solicitud Model', () => {
 		expect(solicitudModel.setCiudad).toBeDefined();		
 	}));
 
-	it('Debe tener un metodo setGrupoSanguineoID()', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
-		expect(solicitudModel.setGrupoSanguineoID).toBeDefined();		
+	it('Debe tener un metodo setGrupoSanguineo()', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
+		expect(solicitudModel.setGrupoSanguineo).toBeDefined();		
 	}));
 
-	it('Debe tener un metodo setFactorSanguineoID()', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
-		expect(solicitudModel.setFactorSanguineoID).toBeDefined();
+	it('Debe tener un metodo setFactorSanguineo()', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
+		expect(solicitudModel.setFactorSanguineo).toBeDefined();
 	}));
 
 	it('Debe tener un metodo setCantidadDadores()', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
@@ -274,12 +286,20 @@ describe('Solicitud Model', () => {
 		expect(solicitudModel.getCiudad().getNombre()).toBe("Ciudad 2");
 	}));
 
-	it('Debe tener un metodo setGrupoSanguineoID() que setee el ID del grupo sanguineo correctamente', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
-		expect(solicitudModel.setGrupoSanguineoID(6)).toBe(6);
+	it('Debe tener un metodo setGrupoSanguineo() que setee el grupo sanguineo correctamente', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
+		let nuevoGrupoSanguineo = new GrupoSanguineoModel(GrupoSanguineoEnum.B, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.B));
+		solicitudModel.setGrupoSanguineo(nuevoGrupoSanguineo);
+		
+		expect(solicitudModel.getGrupoSanguineo().getId()).toBe(GrupoSanguineoEnum.B);
+		expect(solicitudModel.getGrupoSanguineo().getNombre()).toBe(GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.B));
 	}));
 
-	it('Debe tener un metodo setFactorSanguineoID() que setee el ID del factor sanguineo correctamente', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
-		expect(solicitudModel.setFactorSanguineoID(7)).toBe(7);
+	it('Debe tener un metodo setFactorSanguineo() que setee el factor sanguineo correctamente', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
+		let nuevoFactorSanguineo = new FactorSanguineoModel(FactorSanguineoEnum.RhNegativo, FactorSanguineoHelper.getDescripcion(FactorSanguineoEnum.RhNegativo));
+		solicitudModel.setFactorSanguineo(nuevoFactorSanguineo);
+		
+		expect(solicitudModel.getFactorSanguineo().getId()).toBe(FactorSanguineoEnum.RhNegativo);
+		expect(solicitudModel.getFactorSanguineo().getNombre()).toBe(FactorSanguineoHelper.getDescripcion(FactorSanguineoEnum.RhNegativo));
 	}));
 
 	it('Debe tener un metodo setCantidadDadores() que setee la cantidad de dadores correctamente', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {

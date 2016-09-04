@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { beforeEachProviders, beforeEach, it, describe, expect, inject } from '@angular/core/testing';
-import { FactorSanguineo, GrupoSanguineo } from '../donemos-helper-service/donemos-helper-service';
+import { FactorSanguineoEnum, GrupoSanguineoEnum } from '../donemos-helper-service/donemos-helper-service';
 import { FactorSanguineoHelper, GrupoSanguineoHelper, DonacionesHelper } from '../donemos-helper-service/donemos-helper-service';
 
 describe('FactorSanguineoEnum', () => {
 
-	var grupoSanguineoMock = FactorSanguineo;
+	var grupoSanguineoMock = FactorSanguineoEnum;
 
 	it('Debe existir un enumerado con los factores sanguineos', () => {
 		expect(grupoSanguineoMock).toBeDefined();
@@ -28,7 +28,7 @@ describe('FactorSanguineoEnum', () => {
 
 describe ('GrupoSanguineoEnum', () => {
 
-	var grupoSanguineoMock = GrupoSanguineo;
+	var grupoSanguineoMock = GrupoSanguineoEnum;
 
 	it('Debe existir un enumerado con los grupos sanguineos', () => {
 		expect(grupoSanguineoMock).toBeDefined();
@@ -67,7 +67,7 @@ describe ('GrupoSanguineoEnum', () => {
 
 describe('FactorSanguineoHelperEnum', () => {
 
-	let factorSanguineoMock = FactorSanguineo;
+	let factorSanguineoMock = FactorSanguineoEnum;
 	let factorSanguineoHelperMock = FactorSanguineoHelper;
 
 	it('Debe estar definido', () => {
@@ -91,21 +91,11 @@ describe('FactorSanguineoHelperEnum', () => {
 		expect(factorSanguineoHelperMock.getAbreviacion(factorSanguineoMock.RhNegativo)).toBeTruthy();
 		expect(factorSanguineoHelperMock.getAbreviacion(factorSanguineoMock.RhPositivo)).toBeTruthy();
 	});
-
-	it('Debe tener un metodo getFactoresSanguineos()', () => {
-		expect(factorSanguineoHelperMock.getFactoresSanguineos).toBeDefined();
-	});
-
-	it('Debe tener un metodo getFactoresSanguineos() que devuelva un listado con dos factores sanguineos', () => {
-		let listaFactoresSanguineos = factorSanguineoHelperMock.getFactoresSanguineos();
-		expect(listaFactoresSanguineos).toBeTruthy();
-		expect(listaFactoresSanguineos.length).toBe(2);
-	});
 });
 
 describe('GrupoSanguineoHelperEnum', () => {
 
-	let grupoSanguineoMock = GrupoSanguineo;
+	let grupoSanguineoMock = GrupoSanguineoEnum;
 	let grupoSanguineoHelperMock = GrupoSanguineoHelper;
 
 	it('Debe estar definido', () => {
@@ -121,16 +111,6 @@ describe('GrupoSanguineoHelperEnum', () => {
 		expect(grupoSanguineoHelperMock.getDescripcion(grupoSanguineoMock.A)).toBeTruthy();
 		expect(grupoSanguineoHelperMock.getDescripcion(grupoSanguineoMock.AB)).toBeTruthy();
 		expect(grupoSanguineoHelperMock.getDescripcion(grupoSanguineoMock.B)).toBeTruthy();
-	});
-
-	it('Debe tener un metodo getGruposSanguineos()', () => {
-		expect(grupoSanguineoHelperMock.getGruposSanguineos).toBeDefined();
-	});
-
-	it('Debe tener un metodo getGruposSanguineos() que devuelva un listado con cuatro grupos sanguineos', () => {
-		let listaGruposSanguineos = grupoSanguineoHelperMock.getGruposSanguineos();
-		expect(listaGruposSanguineos).toBeTruthy();
-		expect(listaGruposSanguineos.length).toBe(4);
 	});
 });
 
@@ -155,84 +135,84 @@ describe('DonacionesHelper', () => {
 	});
 
 	it('Si es del tipo A RH+ puede recibir de 0+, 0-, A+, A-', () => {
-		let resultado = donacionesHelperMock.puedeRecibirDe(GrupoSanguineo.A, FactorSanguineo.RhPositivo);
+		let resultado = donacionesHelperMock.puedeRecibirDe(GrupoSanguineoEnum.A, FactorSanguineoEnum.RhPositivo);
 
-		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineo.Cero, FactorSanguineo.RhPositivo)) > -1).toBe(true);
-		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineo.Cero, FactorSanguineo.RhNegativo)) > -1).toBe(true);
-		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineo.A, FactorSanguineo.RhPositivo)) > -1).toBe(true);
-		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineo.A, FactorSanguineo.RhNegativo)) > -1).toBe(true);
+		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineoEnum.Cero, FactorSanguineoEnum.RhPositivo)) > -1).toBe(true);
+		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineoEnum.Cero, FactorSanguineoEnum.RhNegativo)) > -1).toBe(true);
+		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineoEnum.A, FactorSanguineoEnum.RhPositivo)) > -1).toBe(true);
+		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineoEnum.A, FactorSanguineoEnum.RhNegativo)) > -1).toBe(true);
 
 		expect(resultado.length).toBe(4);
 	});
 
 	it('Si es del tipo A RH- puede recibir de 0-, A-', () => {
-		let resultado = donacionesHelperMock.puedeRecibirDe(GrupoSanguineo.A, FactorSanguineo.RhNegativo);
+		let resultado = donacionesHelperMock.puedeRecibirDe(GrupoSanguineoEnum.A, FactorSanguineoEnum.RhNegativo);
 
-		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineo.Cero, FactorSanguineo.RhNegativo)) > -1).toBe(true);
-		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineo.A, FactorSanguineo.RhNegativo)) > -1).toBe(true);
+		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineoEnum.Cero, FactorSanguineoEnum.RhNegativo)) > -1).toBe(true);
+		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineoEnum.A, FactorSanguineoEnum.RhNegativo)) > -1).toBe(true);
 
 		expect(resultado.length).toBe(2);
 	});
 
 	it('Si es del tipo B RH+ puede recibir de 0+, 0-, B+, B-', () => {
-		let resultado = donacionesHelperMock.puedeRecibirDe(GrupoSanguineo.B, FactorSanguineo.RhPositivo);
+		let resultado = donacionesHelperMock.puedeRecibirDe(GrupoSanguineoEnum.B, FactorSanguineoEnum.RhPositivo);
 
-		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineo.Cero, FactorSanguineo.RhPositivo)) > -1).toBe(true);
-		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineo.Cero, FactorSanguineo.RhNegativo)) > -1).toBe(true);
-		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineo.B, FactorSanguineo.RhPositivo)) > -1).toBe(true);
-		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineo.B, FactorSanguineo.RhNegativo)) > -1).toBe(true);
+		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineoEnum.Cero, FactorSanguineoEnum.RhPositivo)) > -1).toBe(true);
+		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineoEnum.Cero, FactorSanguineoEnum.RhNegativo)) > -1).toBe(true);
+		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineoEnum.B, FactorSanguineoEnum.RhPositivo)) > -1).toBe(true);
+		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineoEnum.B, FactorSanguineoEnum.RhNegativo)) > -1).toBe(true);
 
 		expect(resultado.length).toBe(4);
 	});
 
 	it('Si es del tipo B RH- puede recibir de 0-, B-', () => {
-		let resultado = donacionesHelperMock.puedeRecibirDe(GrupoSanguineo.B, FactorSanguineo.RhNegativo);
+		let resultado = donacionesHelperMock.puedeRecibirDe(GrupoSanguineoEnum.B, FactorSanguineoEnum.RhNegativo);
 	
-		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineo.Cero, FactorSanguineo.RhNegativo)) > -1).toBe(true);		
-		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineo.B, FactorSanguineo.RhNegativo)) > -1).toBe(true);
+		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineoEnum.Cero, FactorSanguineoEnum.RhNegativo)) > -1).toBe(true);		
+		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineoEnum.B, FactorSanguineoEnum.RhNegativo)) > -1).toBe(true);
 
 		expect(resultado.length).toBe(2);
 	});
 
 	it('Si es del tipo AB RH+ puede recibir de A+, A-, 0+, 0-, AB+, AB-, B+, B-', () => {
-		let resultado = donacionesHelperMock.puedeRecibirDe(GrupoSanguineo.AB, FactorSanguineo.RhPositivo);
+		let resultado = donacionesHelperMock.puedeRecibirDe(GrupoSanguineoEnum.AB, FactorSanguineoEnum.RhPositivo);
 
-		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineo.A, FactorSanguineo.RhPositivo)) > -1).toBe(true);
-		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineo.A, FactorSanguineo.RhNegativo)) > -1).toBe(true);
-		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineo.Cero, FactorSanguineo.RhPositivo)) > -1).toBe(true);
-		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineo.Cero, FactorSanguineo.RhNegativo)) > -1).toBe(true);
-		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineo.AB, FactorSanguineo.RhPositivo)) > -1).toBe(true);
-		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineo.AB, FactorSanguineo.RhNegativo)) > -1).toBe(true);
-		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineo.B, FactorSanguineo.RhPositivo)) > -1).toBe(true);
-		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineo.B, FactorSanguineo.RhNegativo)) > -1).toBe(true);
+		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineoEnum.A, FactorSanguineoEnum.RhPositivo)) > -1).toBe(true);
+		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineoEnum.A, FactorSanguineoEnum.RhNegativo)) > -1).toBe(true);
+		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineoEnum.Cero, FactorSanguineoEnum.RhPositivo)) > -1).toBe(true);
+		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineoEnum.Cero, FactorSanguineoEnum.RhNegativo)) > -1).toBe(true);
+		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineoEnum.AB, FactorSanguineoEnum.RhPositivo)) > -1).toBe(true);
+		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineoEnum.AB, FactorSanguineoEnum.RhNegativo)) > -1).toBe(true);
+		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineoEnum.B, FactorSanguineoEnum.RhPositivo)) > -1).toBe(true);
+		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineoEnum.B, FactorSanguineoEnum.RhNegativo)) > -1).toBe(true);
 
 		expect(resultado.length).toBe(8);
 	});
 
 	it('Si es del tipo AB RH- puede recibir de A-, 0-, AB-, B-', () => {
-		let resultado = donacionesHelperMock.puedeRecibirDe(GrupoSanguineo.AB, FactorSanguineo.RhNegativo);
+		let resultado = donacionesHelperMock.puedeRecibirDe(GrupoSanguineoEnum.AB, FactorSanguineoEnum.RhNegativo);
 
-		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineo.A, FactorSanguineo.RhNegativo)) > -1).toBe(true);		
-		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineo.Cero, FactorSanguineo.RhNegativo)) > -1).toBe(true);
-		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineo.AB, FactorSanguineo.RhNegativo)) > -1).toBe(true);		
-		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineo.B, FactorSanguineo.RhNegativo)) > -1).toBe(true);
+		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineoEnum.A, FactorSanguineoEnum.RhNegativo)) > -1).toBe(true);		
+		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineoEnum.Cero, FactorSanguineoEnum.RhNegativo)) > -1).toBe(true);
+		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineoEnum.AB, FactorSanguineoEnum.RhNegativo)) > -1).toBe(true);		
+		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineoEnum.B, FactorSanguineoEnum.RhNegativo)) > -1).toBe(true);
 
 		expect(resultado.length).toBe(4);
 	});
 
 	it('Si es del tipo 0 RH+ puede recibir de 0+, 0-', () => {
-		let resultado = donacionesHelperMock.puedeRecibirDe(GrupoSanguineo.Cero, FactorSanguineo.RhPositivo);
+		let resultado = donacionesHelperMock.puedeRecibirDe(GrupoSanguineoEnum.Cero, FactorSanguineoEnum.RhPositivo);
 
-		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineo.Cero, FactorSanguineo.RhPositivo)) > -1).toBe(true);		
-		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineo.Cero, FactorSanguineo.RhNegativo)) > -1).toBe(true);
+		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineoEnum.Cero, FactorSanguineoEnum.RhPositivo)) > -1).toBe(true);		
+		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineoEnum.Cero, FactorSanguineoEnum.RhNegativo)) > -1).toBe(true);
 
 		expect(resultado.length).toBe(2);
 	});
 
 	it('Si es del tipo 0 RH- puede recibir de 0-', () => {
-		let resultado = donacionesHelperMock.puedeRecibirDe(GrupoSanguineo.Cero, FactorSanguineo.RhNegativo);
+		let resultado = donacionesHelperMock.puedeRecibirDe(GrupoSanguineoEnum.Cero, FactorSanguineoEnum.RhNegativo);
 
-		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineo.Cero, FactorSanguineo.RhNegativo)) > -1).toBe(true);
+		expect(resultado.indexOf(DonacionesHelper.getDescripcion(GrupoSanguineoEnum.Cero, FactorSanguineoEnum.RhNegativo)) > -1).toBe(true);
 
 		expect(resultado.length).toBe(1);
 	});	

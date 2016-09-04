@@ -20,7 +20,7 @@ export class SolicitudItem {
     }
 
     public getTiposSanguineosBuscados(): Array<string> {
-    	return DonacionesHelper.puedeRecibirDe(this.solicitud.getGrupoSanguineoID(), this.solicitud.getFactorSanguineoID());
+    	return DonacionesHelper.puedeRecibirDe(this.solicitud.getGrupoSanguineo().getId(), this.solicitud.getFactorSanguineo().getId());
     }
 
     public getDescripcionTipoSanguineo(){

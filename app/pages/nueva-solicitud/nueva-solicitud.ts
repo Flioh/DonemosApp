@@ -14,6 +14,8 @@ import { GrupoSanguineoHelper, FactorSanguineoHelper } from '../../providers/don
 import { SolicitudModel } from '../../providers/solicitud-model/solicitud-model';
 import { ProvinciaModel } from '../../providers/provincia-model/provincia-model';
 import { CiudadModel } from '../../providers/ciudad-model/ciudad-model';
+import { GrupoSanguineoModel } from "../../providers/grupo-sanguineo-model/grupo-sanguineo-model";
+import { FactorSanguineoModel } from "../../providers/factor-sanguineo-model/factor-sanguineo-model";
 
 @Component({
 	templateUrl: 'build/pages/nueva-solicitud/nueva-solicitud.html',
@@ -70,6 +72,10 @@ export class NuevaSolicitudPage {
 
 		this.nuevaSolicitud.setHoraDesde('08:00');
 		this.nuevaSolicitud.setHoraHasta('20:00');
+		this.nuevaSolicitud.setCiudad(new CiudadModel());
+		this.nuevaSolicitud.setProvincia(new ProvinciaModel());
+		this.nuevaSolicitud.setFactorSanguineo(new FactorSanguineoModel());
+		this.nuevaSolicitud.setGrupoSanguineo(new GrupoSanguineoModel());
 	}	
 
 	// Método que recibe la dirección del autocomplete y la ingresa en el formulario
@@ -138,21 +144,21 @@ export class NuevaSolicitudPage {
 	// Metodo que inicializa el listado de grupos sanguineos
 	private inicializarGruposSanguineos(): void {
 		// Obtenemos el listado del helper
-		this.listaGruposSanguineos = GrupoSanguineoHelper.getGruposSanguineos();
+		this.listaGruposSanguineos = this.remoteDataService.getGruposSanguineos();
 
 		// TODO: asignar el que hayan configurado en la pagina de preferencias
 		// -------------------------------------------------------------------
-		this.nuevaSolicitud.setGrupoSanguineoID(this.listaGruposSanguineos[0].id);
+		this.nuevaSolicitud.setGrupoSanguineo(this.listaGruposSanguineos[0]);
 	}
 
 	// Metodo que inicializa el listado de factores sanguineos
 	private inicializarFactoresSanguineos(): void {
 		// Obtenemos el listado del helper
-		this.listaFactoresSanguineos = FactorSanguineoHelper.getFactoresSanguineos();
+		this.listaFactoresSanguineos = this.remoteDataService.getFactoresSanguineos();
 
 		// TODO: asignar el que hayan configurado en la pagina de preferencias
 		// -------------------------------------------------------------------
-		this.nuevaSolicitud.setFactorSanguineoID(this.listaFactoresSanguineos[0].id);
+		this.nuevaSolicitud.setFactorSanguineo(this.listaFactoresSanguineos[0]);
 	}
 
 	// Método que inicializa el listado de provincias
@@ -184,9 +190,6 @@ export class NuevaSolicitudPage {
 		
 		let provinciaId = this.nuevaSolicitud.getProvincia().getId();
 
-		// Primero actualizamos el nombre de la provincia seleccionada
-		this.nuevaSolicitud.setProvincia(new ProvinciaModel(provinciaId, this.getNombreProvinciaPorID(provinciaId)));
-
 		let loadingPopup = this.loadingCtrl.create({
 			content: 'Cargando ciudades'
 		});
@@ -214,17 +217,6 @@ export class NuevaSolicitudPage {
 				// TODO: manejar errores en las llamadas al servidor
 				// -------------------------------------------------			
 			});
-	}
-
-	// Método que devuelve el nombre de la provincia a partir de su ID
-	private getNombreProvinciaPorID(id: number) :string {
-		let nombre = '';
-		for(let i=0; i<this.listaProvincias.length; i++) {
-			if(this.listaProvincias[i].getId() == id) {
-				nombre = this.listaProvincias[i].getNombre();
-			}
-		}
-		return nombre;;
 	}
 
 	// Método que crea la nueva solicitud con la información ingresada en el formulario

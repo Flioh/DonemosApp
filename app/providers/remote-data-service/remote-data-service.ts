@@ -1,12 +1,21 @@
 import { Injectable, Inject } from '@angular/core';
 import { Http } from '@angular/http';
-import { MY_CONFIG_TOKEN, MY_CONFIG, ApplicationConfig } from '../../app-config.ts';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 
+/* Models usados en el servicio */
 import { SolicitudModel } from '../solicitud-model/solicitud-model';
 import { ProvinciaModel } from '../provincia-model/provincia-model';
 import { CiudadModel } from '../ciudad-model/ciudad-model';
+import { FactorSanguineoModel } from '../factor-sanguineo-model/factor-sanguineo-model';
+import { GrupoSanguineoModel } from '../grupo-sanguineo-model/grupo-sanguineo-model';
+
+/* Helpers */
+import { GrupoSanguineoHelper, FactorSanguineoHelper } from '../donemos-helper-service/donemos-helper-service';
+import { FactorSanguineoEnum, GrupoSanguineoEnum } from '../donemos-helper-service/donemos-helper-service';
+
+/* Objeto con las configuraciones de la app */
+import { MY_CONFIG_TOKEN, MY_CONFIG, ApplicationConfig } from '../../app-config.ts';
 
 @Injectable()
 export class RemoteDataService {
@@ -26,6 +35,28 @@ export class RemoteDataService {
     this.listaCiudades = [];
   }
 
+  // Obtiene el listado de factores sanguineos
+  public getFactoresSanguineos(): Array<FactorSanguineoModel> {
+    let listaFactoresSanguineos = [];
+
+    listaFactoresSanguineos.push(new FactorSanguineoModel(FactorSanguineoEnum.RhPositivo, FactorSanguineoHelper.getDescripcion(FactorSanguineoEnum.RhPositivo)));
+    listaFactoresSanguineos.push(new FactorSanguineoModel(FactorSanguineoEnum.RhNegativo, FactorSanguineoHelper.getDescripcion(FactorSanguineoEnum.RhNegativo)));
+
+    return listaFactoresSanguineos;
+  }
+
+  // Obtiene el listado de grupos sanguineos
+  public getGruposSanguineos(): Array<GrupoSanguineoModel> {
+    let listaGruposSanguineos = [];
+
+    listaGruposSanguineos.push(new GrupoSanguineoModel(GrupoSanguineoEnum.Cero, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.Cero)));
+    listaGruposSanguineos.push(new GrupoSanguineoModel(GrupoSanguineoEnum.A, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.A)));
+    listaGruposSanguineos.push(new GrupoSanguineoModel(GrupoSanguineoEnum.AB, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.AB)));
+    listaGruposSanguineos.push(new GrupoSanguineoModel(GrupoSanguineoEnum.B, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.B)));
+
+    return listaGruposSanguineos;
+  }
+
   // Obtiene el listado de solicitudes
   public getSolicitudes(): Observable<Array<SolicitudModel>> {
     
@@ -33,6 +64,13 @@ export class RemoteDataService {
       this.http.get(this.apiEndPointSolicitudes)
         .map(res => res.json())
         .subscribe(listadoSolicitudes => {
+
+          for(let i=0; i<listadoSolicitudes.length; i++) {
+            listadoSolicitudes[i].provincia = new ProvinciaModel(1, "Provincia 1");
+            listadoSolicitudes[i].ciudad = new CiudadModel(1, "Ciudad 1");
+            listadoSolicitudes[i].grupoSanguineo = new GrupoSanguineoModel(GrupoSanguineoEnum.A, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.A));
+            listadoSolicitudes[i].factorSanguineo = new FactorSanguineoModel(FactorSanguineoEnum.RhPositivo, FactorSanguineoHelper.getDescripcion(FactorSanguineoEnum.RhPositivo));
+          }
 
           // Simulamos un retardo al buscar las solicitudes
           setTimeout(() => {            

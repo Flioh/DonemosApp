@@ -2,10 +2,18 @@ import { Injectable, provide } from '@angular/core';
 import { BaseRequestOptions, Response, ResponseOptions, Http } from '@angular/http';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 import { beforeEachProviders, beforeEach, it, describe, expect, inject, async } from '@angular/core/testing';
+
 import { RemoteDataService } from './remote-data-service';
+
+/* Modelos a usar en los tests */
 import { SolicitudModel } from '../../providers/solicitud-model/solicitud-model';
 import { ProvinciaModel } from '../../providers/provincia-model/provincia-model';
 import { CiudadModel } from '../../providers/ciudad-model/ciudad-model';
+import { GrupoSanguineoModel } from '../../providers/grupo-sanguineo-model/grupo-sanguineo-model';
+import { FactorSanguineoModel } from '../../providers/factor-sanguineo-model/factor-sanguineo-model';
+
+import { GrupoSanguineoEnum, FactorSanguineoEnum} from '../../providers/donemos-helper-service/donemos-helper-service';
+import { GrupoSanguineoHelper, FactorSanguineoHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
 
 describe('RemoteData Service Model', () => {
 
@@ -42,8 +50,8 @@ describe('RemoteData Service Model', () => {
 			"estaVigente" : true,
 			"provincia" : new ProvinciaModel(1, "Provincia 1"),
 			"ciudad" : new CiudadModel(1, "Ciudad 1"),
-			"grupoSanguineoID" : 2,
-			"factorSanguineoID" : 1,
+			"grupoSanguineo" : new GrupoSanguineoModel(GrupoSanguineoEnum.A, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.A)),
+			"factorSanguineo" : new FactorSanguineoModel(FactorSanguineoEnum.RhPositivo, FactorSanguineoHelper.getDescripcion(FactorSanguineoEnum.RhPositivo)),
 			"nombrePaciente": "Nombre Apellido",
 			"cantidadDadores" : 5,
 			"institucion" : "Sanatorio Mayo",
@@ -59,8 +67,8 @@ describe('RemoteData Service Model', () => {
 			"estaVigente" : true,
 			"provincia" : new ProvinciaModel(1, "Provincia 1"),
 			"ciudad" : new CiudadModel(1, "Ciudad 1"),
-			"grupoSanguineoID" : 1,
-			"factorSanguineoID" : 1,
+			"grupoSanguineo" : new GrupoSanguineoModel(GrupoSanguineoEnum.A, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.A)),
+			"factorSanguineo" : new FactorSanguineoModel(FactorSanguineoEnum.RhPositivo, FactorSanguineoHelper.getDescripcion(FactorSanguineoEnum.RhPositivo)),
 			"cantidadDadores" : 3,
 			"nombrePaciente": "Nombre Apellido",
 			"institucion" : "Sanatorio Mayo",
@@ -76,8 +84,8 @@ describe('RemoteData Service Model', () => {
 			"estaVigente" : true,
 			"provincia" : new ProvinciaModel(1, "Provincia 1"),
 			"ciudad" : new CiudadModel(1, "Ciudad 1"),
-			"grupoSanguineoID" : 0,
-			"factorSanguineoID" : 1,
+			"grupoSanguineo" : new GrupoSanguineoModel(GrupoSanguineoEnum.A, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.A)),
+			"factorSanguineo" : new FactorSanguineoModel(FactorSanguineoEnum.RhPositivo, FactorSanguineoHelper.getDescripcion(FactorSanguineoEnum.RhPositivo)),
 			"cantidadDadores" : 2,
 			"nombrePaciente": "Nombre Apellido",
 			"institucion" : "Sanatorio Mayo",
@@ -86,6 +94,18 @@ describe('RemoteData Service Model', () => {
 			"horaHasta" : "18:00",
 			"datosAdicionales" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
 		}];
+
+	let gruposSanguineosMock = [
+		new GrupoSanguineoModel(GrupoSanguineoEnum.Cero, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.Cero)),
+    	new GrupoSanguineoModel(GrupoSanguineoEnum.A, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.A)),
+    	new GrupoSanguineoModel(GrupoSanguineoEnum.AB, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.AB)),
+    	new GrupoSanguineoModel(GrupoSanguineoEnum.B, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.B))
+	];
+
+	let factoresSanguineosMock = [
+		new FactorSanguineoModel(FactorSanguineoEnum.RhPositivo, FactorSanguineoHelper.getDescripcion(FactorSanguineoEnum.RhPositivo)),
+    	new FactorSanguineoModel(FactorSanguineoEnum.RhPositivo, FactorSanguineoHelper.getDescripcion(FactorSanguineoEnum.RhNegativo))
+	];
 
 	// Hacemos el mock de las respuestas de las solicitudes
 	beforeEach(inject([MockBackend], (backend: MockBackend) => {
@@ -100,8 +120,16 @@ describe('RemoteData Service Model', () => {
 	  			let provinciasResponse = new Response(new ResponseOptions({body: JSON.stringify(provinciasMock)}));
 	  			c.mockRespond(provinciasResponse);
 	  		} else if(c.request.url.indexOf("ciudad") > -1) {
-	  			// Enviamos el array de localidades en la respuesta
+	  			// Enviamos el array de ciudades en la respuesta
 	  			let localidadesResponse = new Response(new ResponseOptions({body: JSON.stringify(ciudadesMock)}));
+	  			c.mockRespond(localidadesResponse);
+	  		} else if(c.request.url.indexOf("grupo") > -1) {
+	  			// Enviamos el array de grupos sanguineos en la respuesta
+	  			let localidadesResponse = new Response(new ResponseOptions({body: JSON.stringify(gruposSanguineosMock)}));
+	  			c.mockRespond(localidadesResponse);
+	  		} else if(c.request.url.indexOf("factor") > -1) {
+	  			// Enviamos el array de factores sanguineos en la respuesta
+	  			let localidadesResponse = new Response(new ResponseOptions({body: JSON.stringify(factoresSanguineosMock)}));
 	  			c.mockRespond(localidadesResponse);
 	  		} 
 		});
@@ -124,6 +152,18 @@ describe('RemoteData Service Model', () => {
 	it('Debe tener un metodo para obtener el listado de solicitudes',
 	  inject([RemoteDataService], (testService: RemoteDataService) => {
 	  	expect(testService.getSolicitudes).toBeDefined();
+	  })
+	);
+
+	it('Debe tener un metodo para obtener el listado de grupos sanguineos',
+	  inject([RemoteDataService], (testService: RemoteDataService) => {
+	  	expect(testService.getGruposSanguineos).toBeDefined();
+	  })
+	);
+
+	it('Debe tener un metodo para obtener el listado de factores sanguineos',
+	  inject([RemoteDataService], (testService: RemoteDataService) => {
+	  	expect(testService.getFactoresSanguineos).toBeDefined();
 	  })
 	);
 
@@ -158,6 +198,18 @@ describe('RemoteData Service Model', () => {
 	  })
 	));
 
+	it('El metodo getGruposSanguineos() debe devolver un arreglo con cuatro grupos sanguineos',
+	  inject([RemoteDataService], (testService: RemoteDataService) => {
+	      expect(testService.getGruposSanguineos().length).toBe(4);
+	  })
+	);
+
+	it('El metodo getFactoresSanguineos() debe devolver un arreglo con dos factores sanguineos',
+	  inject([RemoteDataService], (testService: RemoteDataService) => {
+	      expect(testService.getFactoresSanguineos().length).toBe(2);
+	  })
+	);
+
 
 
 	// Tests para asegurar que el tipo de dato devuelvo coincide con el tipo de dato esperado
@@ -191,6 +243,24 @@ describe('RemoteData Service Model', () => {
 	    })
 	  })
 	));
+
+	it('El metodo getGruposSanguineos() debe devolver objetos del tipo GrupoSanguineoModel',
+	  inject([RemoteDataService], (testService: RemoteDataService) => {
+	  	let grupoObtenido = testService.getGruposSanguineos()[0];
+	  	let propiedadesGrupoObtenido = JSON.stringify(Object.keys(grupoObtenido).sort()) ;
+	  	let propiedadesGrupoCreado = JSON.stringify(Object.keys(new GrupoSanguineoModel(grupoObtenido.getId(), grupoObtenido.getNombre())).sort()) ;
+	      expect(propiedadesGrupoObtenido).toBe(propiedadesGrupoCreado);
+	  })
+	);
+
+	it('El metodo getFactoresSanguineos() debe devolver objetos del tipo FactorSanguineoModel',
+	  inject([RemoteDataService], (testService: RemoteDataService) => {
+	  	let factorObtenido = testService.getFactoresSanguineos()[0];
+	  	let propiedadesFactorObtenido = JSON.stringify(Object.keys(factorObtenido).sort()) ;
+	  	let propiedadesFactorCreado = JSON.stringify(Object.keys(new FactorSanguineoModel(factorObtenido.getId(), factorObtenido.getNombre())).sort()) ;
+	      expect(propiedadesFactorObtenido).toBe(propiedadesFactorCreado);
+	  })
+	);
 
 });
 

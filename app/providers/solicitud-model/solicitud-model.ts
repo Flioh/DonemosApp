@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ProvinciaModel } from "../provincia-model/provincia-model";
 import { CiudadModel } from "../ciudad-model/ciudad-model";
+import { GrupoSanguineoModel } from "../grupo-sanguineo-model/grupo-sanguineo-model";
+import { FactorSanguineoModel } from "../factor-sanguineo-model/factor-sanguineo-model";
 
 @Injectable()
 export class SolicitudModel {
@@ -12,8 +14,8 @@ export class SolicitudModel {
   private provincia: ProvinciaModel;
   private ciudad: CiudadModel;
   private nombrePaciente: string;
-  private grupoSanguineoID: number;
-  private factorSanguineoID: number;
+  private grupoSanguineo: GrupoSanguineoModel;
+  private factorSanguineo: FactorSanguineoModel;
   private cantidadDadores: number;
   private institucion: string;
   private direccion: string;
@@ -31,11 +33,11 @@ export class SolicitudModel {
       this.usuarioID = null;
       this.estaVigente = true;
       this.fechaCreacion = new Date();
-      this.provincia = new ProvinciaModel();
-      this.ciudad = new CiudadModel();
+      this.provincia = null;
+      this.ciudad = null;
       this.nombrePaciente = null;
-      this.grupoSanguineoID = null;
-      this.factorSanguineoID = null;
+      this.grupoSanguineo = null;
+      this.factorSanguineo = null;
       this.cantidadDadores = null;
       this.institucion = null;
       this.direccion = null;
@@ -70,12 +72,12 @@ export class SolicitudModel {
     return this.ciudad;
   }
 
-  public getGrupoSanguineoID(): number {
-    return this.grupoSanguineoID;
+  public getGrupoSanguineo(): GrupoSanguineoModel {
+    return this.grupoSanguineo;
   }
 
-  public getFactorSanguineoID(): number {
-    return this.factorSanguineoID;
+  public getFactorSanguineo(): FactorSanguineoModel {
+    return this.factorSanguineo;
   }
 
   public getCantidadDadores(): number {
@@ -131,12 +133,12 @@ export class SolicitudModel {
      return this.ciudad = ciudad;
   }
 
-  public setGrupoSanguineoID(grupoSanguineoID: number): number {
-    return this.grupoSanguineoID = grupoSanguineoID;
+  public setGrupoSanguineo(grupoSanguineo: GrupoSanguineoModel): GrupoSanguineoModel {
+    return this.grupoSanguineo = grupoSanguineo;
   }
 
-  public setFactorSanguineoID(factorSanguineoID: number): number {
-    return this.factorSanguineoID = factorSanguineoID;
+  public setFactorSanguineo(factorSanguineo: FactorSanguineoModel): FactorSanguineoModel {
+    return this.factorSanguineo = factorSanguineo;
   }
 
   public setCantidadDadores(cantidad: number): number {

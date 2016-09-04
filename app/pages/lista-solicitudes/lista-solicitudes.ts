@@ -76,8 +76,8 @@ export class ListaSolicitudesPage {
       loadingPopup.present();
 
       // Inicializamos todos los listados
-      this.listaFactoresSanguineos = FactorSanguineoHelper.getFactoresSanguineos();
-      this.listaGruposSanguineos = GrupoSanguineoHelper.getGruposSanguineos();
+      this.listaFactoresSanguineos = this.dataService.getFactoresSanguineos();
+      this.listaGruposSanguineos = this.dataService.getGruposSanguineos();
       this.dataService.getListaProvincias().subscribe(result => {
         if(result && result.length) {
           this.listaProvincias = result;
