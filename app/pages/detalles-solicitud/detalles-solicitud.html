@@ -15,10 +15,10 @@
             {{ solicitudSeleccionada.cantidadDadores }} dadores
           </span>
           <span *ngIf="!solicitudSeleccionada.cantidadDadores"> dadores</span>
-          </h3>
-        <h2>A+, A-, <span class="marked">0-</span>,0+</h2>
+        </h3>        
+        <h2 [innerHTML]="getTiposSanguineosBuscados() | tiposSanguineos: getDescripcionTipoSanguineo()"></h2>
         <span class="fecha">
-          Hace 3 días
+          {{ solicitudSeleccionada.fechaCreacion | timeago }}
         </span>
       </ion-item>
 
@@ -29,8 +29,8 @@
           <ion-icon softRed name="water" item-left></ion-icon>
         </ion-avatar>
         <h2>Puede recibir de</h2>
-        <p>A+, A-, <span class="marked">0-</span>,0+</p>
-        <span><ion-icon name="checkmark"></ion-icon> Podés donar</span>
+        <p [innerHTML]="getTiposSanguineosBuscados() | tiposSanguineos: getDescripcionTipoSanguineo()"></p>
+        <span *ngIf="getDescripcionTipoSanguineo()"><ion-icon name="checkmark"></ion-icon> Podés donar</span>
       </ion-item>
 
 
@@ -40,7 +40,7 @@
           <ion-icon softRed name="pin" item-left></ion-icon>
         </ion-avatar>
         <h2>Localidad</h2>
-        <p>Santo Tomé, Santa Fe</p>
+        <p>{{ solicitudSeleccionada.ciudad.nombre }}, {{ solicitudSeleccionada.provincia.nombre }},</p>
       </ion-item>
 
 
@@ -50,8 +50,8 @@
           <ion-icon softRed name="home" item-left></ion-icon>
         </ion-avatar>
         <h2>Lugar y dirección</h2>
-        <p>Hospital Samco</p>
-        <p>1234 12 de Septiembre</p>
+        <p>{{ solicitudSeleccionada.institucion }}</p>
+        <p>{{ solicitudSeleccionada.direccion }}</p>
         <a href="#">¿Cómo llego?</a>
       </ion-item>
 
@@ -69,7 +69,7 @@
           <ion-icon softRed name="time" item-left></ion-icon>
         </ion-avatar>
         <h2>Horario de Donación</h2>
-        <p>07:00 - 11:00</p>
+        <p>{{ solicitudSeleccionada.horaDesde }} - {{ solicitudSeleccionada.horaHasta }}</p>
       </ion-item>
 
 
@@ -79,7 +79,7 @@
           <ion-icon softRed name="person" item-left></ion-icon>
         </ion-avatar>
         <h2>Nombre del Paciente</h2>
-        <p>Austin Price</p>
+        <p>{{ solicitudSeleccionada.nombrePaciente }}</p>
       </ion-item>
 
 
@@ -89,17 +89,17 @@
           <ion-icon softRed name="people" item-left></ion-icon>
         </ion-avatar>
         <h2>Dadores necesitados</h2>
-        <p>{{ solicitudSeleccionada.cantidadDadores }}</p>
+        <p>{{ solicitudSeleccionada.cantidadDadores ? solicitudSeleccionada.cantidadDadores : 1 }}</p>
       </ion-item>
 
 
 
-      <ion-item class="detail-item">
+      <ion-item *ngIf="solicitudSeleccionada.datosAdicionales" class="detail-item">
         <ion-avatar item-left>
           <ion-icon softRed name="information-circle" item-left></ion-icon>
         </ion-avatar>
         <h2>Datos adicionales</h2>
-        <p>Fusce vehicula dolor arcu, sit amet blandit dolor mollis nec. Donec viverra eleifend lacus, vitae ullamcorper metus. Sed sollicitudin ipsum quis nunc sollicitudin ultrices</p>
+        <p>{{ solicitudSeleccionada.datosAdicionales }}</p>
       </ion-item>
 
 

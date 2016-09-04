@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, Alert } from 'ionic-angular';
 import { NuevaSolicitudPage } from '../nueva-solicitud/nueva-solicitud';
+import { DonacionesHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
+import { TiposSanguineosPipe } from '../../pipes/format-tipos-sanguineos/format-tipos-sanguineos-pipe';
+import { TimeAgoPipe } from '../../pipes/time-ago/time-ago-pipe';
 
 @Component({
-	/* This should not be done anymore */
-	templateUrl: 'build/pages/detalles-solicitud/detalles-solicitud.html'
+	templateUrl: 'build/pages/detalles-solicitud/detalles-solicitud.html',
+  pipes: [ TiposSanguineosPipe, TimeAgoPipe]
 })
 export class DetallesSolicitudPage {
 
@@ -16,6 +19,7 @@ export class DetallesSolicitudPage {
   		this.solicitudSeleccionada = navParams.get('unaSolicitud');
   	}
 
+    // Inicializa el mapa cuando el DOM ya esta listo
   	ionViewDidEnter(){
         let latLng = new google.maps.LatLng(43.458937999999996, -3.820382);               
 
@@ -33,8 +37,19 @@ export class DetallesSolicitudPage {
             animation: google.maps.Animation.DROP,
             position: map.getCenter()
         });
+    }
 
+    // Obtiene el listado de grupos y factores que se necesitan
+    public getTiposSanguineosBuscados(): Array<string> {
+      return DonacionesHelper.puedeRecibirDe(this.solicitudSeleccionada.getGrupoSanguineo().getId(), 
+                                             this.solicitudSeleccionada.getFactorSanguineo().getId());
+    }
 
+    // Obtiene el factor y grupo sanguineo del usuario
+    public getDescripcionTipoSanguineo(): string {
+      // TODO: reemplazar por los datos del usuario si existen
+      // -----------------------------------------------------
+      return 'A+';
     }
   }
 

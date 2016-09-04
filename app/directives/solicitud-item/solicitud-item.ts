@@ -19,12 +19,17 @@ export class SolicitudItem {
     	this.seleccionarSolicitud.emit({ value : this.solicitud });
     }
 
+    // Obtiene el listado de grupos y factores que se necesitan
     public getTiposSanguineosBuscados(): Array<string> {
-    	return DonacionesHelper.puedeRecibirDe(this.solicitud.getGrupoSanguineo().getId(), this.solicitud.getFactorSanguineo().getId());
+      return DonacionesHelper.puedeRecibirDe(this.solicitud.getGrupoSanguineo().getId(), 
+                                             this.solicitud.getFactorSanguineo().getId());
     }
 
-    public getDescripcionTipoSanguineo(){
-    	return '';
+    // Obtiene el factor y grupo sanguineo del usuario
+    public getDescripcionTipoSanguineo():string {
+      // TODO: reemplazar por los datos del usuario si existen
+      // -----------------------------------------------------
+      return '';
     }
 
 
