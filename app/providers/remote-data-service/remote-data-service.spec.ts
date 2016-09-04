@@ -40,8 +40,8 @@ describe('RemoteData Service Model', () => {
 			"usuarioID": 1,
 			"fechaCreacion": "12/03/2016",
 			"estaVigente" : true,
-			"provinciaID" : 1,
-			"localidadID" : 2,
+			"provincia" : new ProvinciaModel(1, "Provincia 1"),
+			"ciudad" : new CiudadModel(1, "Ciudad 1"),
 			"grupoSanguineoID" : 2,
 			"factorSanguineoID" : 1,
 			"nombrePaciente": "Nombre Apellido",
@@ -57,8 +57,8 @@ describe('RemoteData Service Model', () => {
 			"usuarioID": 1,
 			"fechaCreacion": "12/03/2016",
 			"estaVigente" : true,
-			"provinciaID" : 1,
-			"localidadID" : 2,
+			"provincia" : new ProvinciaModel(1, "Provincia 1"),
+			"ciudad" : new CiudadModel(1, "Ciudad 1"),
 			"grupoSanguineoID" : 1,
 			"factorSanguineoID" : 1,
 			"cantidadDadores" : 3,
@@ -74,8 +74,8 @@ describe('RemoteData Service Model', () => {
 			"usuarioID": 1,
 			"fechaCreacion": "12/03/2016",
 			"estaVigente" : true,
-			"provinciaID" : 1,
-			"localidadID" : 2,
+			"provincia" : new ProvinciaModel(1, "Provincia 1"),
+			"ciudad" : new CiudadModel(1, "Ciudad 1"),
 			"grupoSanguineoID" : 0,
 			"factorSanguineoID" : 1,
 			"cantidadDadores" : 2,
@@ -176,7 +176,7 @@ describe('RemoteData Service Model', () => {
 	  async(inject([RemoteDataService], (testService: RemoteDataService) => {
 	    testService.getListaProvincias().subscribe((response) => {
 	      let propiedadesprovinciaObtenida = JSON.stringify(Object.keys(response[0]).sort());
-	      let propiedadesprovinciaCreada = JSON.stringify(Object.keys(new ProvinciaModel(provinciasMock[0])).sort());
+	      let propiedadesprovinciaCreada = JSON.stringify(Object.keys(new ProvinciaModel(1, "Provincia 1")).sort());
 	      expect(propiedadesprovinciaObtenida).toBe(propiedadesprovinciaCreada);
 	    })
 	  })
@@ -186,7 +186,7 @@ describe('RemoteData Service Model', () => {
 	  async(inject([RemoteDataService], (testService: RemoteDataService) => {
 	    testService.getListaCiudadesPorProvincia(1).subscribe((response) => {
 	      let propiedadesCiudadObtenida = JSON.stringify(Object.keys(response[0]).sort());
-	      let propiedadesCiudadCreada = JSON.stringify(Object.keys(new CiudadModel(localidadesMock[0])).sort());
+	      let propiedadesCiudadCreada = JSON.stringify(Object.keys(new CiudadModel(1, "Ciudad 1")).sort());
 	      expect(propiedadesCiudadObtenida).toBe(propiedadesCiudadCreada);
 	    })
 	  })

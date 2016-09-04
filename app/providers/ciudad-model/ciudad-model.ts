@@ -6,12 +6,10 @@ export class CiudadModel {
 
 	private id: number;
 	private nombre: string;
-	private provinciaID: number;
 
-	constructor(obj: any) {
-		this.id = obj.id;
-	    this.nombre = obj.nombre;
-	    this.provinciaID = obj.provinciaID;
+	constructor(id?: number, nombre?: string) {
+		this.id = id ? id : null;
+		this.nombre = nombre ? nombre : null;		
 	}
 
 	public getId(): number {
@@ -22,7 +20,11 @@ export class CiudadModel {
 		return this.nombre;
 	}
 
-	public getProvinciaID(): number {
-		return this.provinciaID;
+	public setId(id: number): number {
+		return this.id = id;
+	}
+
+	public setNombre(nombre: string): string {
+		return this.nombre = nombre;
 	}
 }

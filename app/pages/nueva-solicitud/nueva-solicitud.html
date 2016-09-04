@@ -37,7 +37,7 @@
 			<!-- Provincia  -->
 			<ion-item>
 				<ion-label floating>Provincia</ion-label>
-				<ion-select [(ngModel)]="nuevaSolicitud.provinciaID"  okText="Aceptar" cancelText="Cancelar" required name="provincia" #provincia="ngModel" (ionChange)="inicializarCiudadesDeLaProvincia()">
+				<ion-select [(ngModel)]="nuevaSolicitud.provincia.id"  okText="Aceptar" cancelText="Cancelar" required name="provincia" #provincia="ngModel" (ionChange)="inicializarCiudadesDeLaProvincia()">
 					<ion-option *ngFor="let provincia of listaProvincias" value={{provincia.id}}>
 						{{provincia.nombre}}
 					</ion-option>
@@ -52,7 +52,7 @@
 			<!-- Ciudad  -->
 			<ion-item>
 				<ion-label floating>Ciudad</ion-label>
-				<ion-select [(ngModel)]="nuevaSolicitud.localidadID" okText="Aceptar" cancelText="Cancelar" required name="ciudad" #ciudad="ngModel">
+				<ion-select [(ngModel)]="nuevaSolicitud.ciudad.id" okText="Aceptar" cancelText="Cancelar" required name="ciudad" #ciudad="ngModel">
 					<ion-option *ngFor="let ciudad of listaCiudades" value={{ciudad.id}}>
 						{{ciudad.nombre}}
 					</ion-option>

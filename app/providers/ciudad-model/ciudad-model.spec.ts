@@ -10,8 +10,7 @@ import {NavController} from 'ionic-angular';
 @Injectable()
 export class CiudadModelMock extends CiudadModel {
 	constructor(){
-		let datosCiudadMock = { "id" : 1, "nombre": "Ciudad 1", "provinciaID": 2};
-		super(datosCiudadMock);
+		super(1, "Ciudad 1");
 	}
 }
 
@@ -32,23 +31,41 @@ describe('Ciudad Model', () => {
 		expect(ciudadModel.getNombre).toBeDefined();
 	}));
 
-	it('Debe tener un metodo getProvinciaID()', inject([CiudadModel], (ciudadModel: CiudadModelMock) => {
-		expect(ciudadModel.getProvinciaID).toBeDefined();
+
+
+	// Tests para asegurar que los metodos set esta definidos
+	// ------------------------------------------------------
+	it('Debe tener un metodo setId()', inject([CiudadModel], (ciudadModel: CiudadModelMock) => {
+		expect(ciudadModel.setId).toBeDefined();
 	}));
+
+	it('Debe tener un metodo setNombre()', inject([CiudadModel], (ciudadModel: CiudadModelMock) => {
+		expect(ciudadModel.setNombre).toBeDefined();
+	}));
+
+
 
 
 	// Tests para asegurar que los metodos get deuelven valores correctamente
-	// --------------------------------------------------------
-	it('Debe tener un metodo getId() que devuelva el ID de la solicitud correctamente', inject([CiudadModel], (ciudadModel: CiudadModelMock) => {		
+	// ----------------------------------------------------------------------
+	it('Debe tener un metodo getId() que devuelva el ID de la ciudad correctamente', inject([CiudadModel], (ciudadModel: CiudadModelMock) => {		
 		expect(ciudadModel.getId()).toBe(1);
 	}));
 
-	it('Debe tener un metodo getNombre() que devuelva el ID de la solicitud correctamente', inject([CiudadModel], (ciudadModel: CiudadModelMock) => {		
+	it('Debe tener un metodo getNombre() que devuelva el nombre de la ciudad correctamente', inject([CiudadModel], (ciudadModel: CiudadModelMock) => {		
 		expect(ciudadModel.getNombre()).toBe("Ciudad 1");
 	}));
 
-	it('Debe tener un metodo getProvinciaID() que devuelva el ID de la solicitud correctamente', inject([CiudadModel], (ciudadModel: CiudadModelMock) => {		
-		expect(ciudadModel.getProvinciaID()).toBe(2);
+
+
+	// Tests para asegurar que los metodos set modifican los valores correctamente
+	// ---------------------------------------------------------------------------
+	it('Debe tener un metodo setId() que setee el ID de la ciudad correctamente', inject([CiudadModel], (ciudadModel: CiudadModelMock) => {		
+		expect(ciudadModel.setId(2)).toBe(2);
+	}));
+
+	it('Debe tener un metodo setId() que setee el nombre de la ciudad correctamente', inject([CiudadModel], (ciudadModel: CiudadModelMock) => {		
+		expect(ciudadModel.setNombre("Ciudad 2")).toBe("Ciudad 2");
 	}));
 
 });

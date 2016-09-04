@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { beforeEachProviders, beforeEach, it, describe, expect, inject } from '@angular/core/testing';
 import { SolicitudModel } from './solicitud-model';
+import { CiudadModel } from '../ciudad-model/ciudad-model';
+import { ProvinciaModel } from '../provincia-model/provincia-model';
 
 import {Component} from '@angular/core';
 import {NavController} from 'ionic-angular';
@@ -15,8 +17,8 @@ export class SolicitudModelMock extends SolicitudModel {
 			"usuarioID": 2,
 			"fechaCreacion": "12/03/2016",
 			"estaVigente" : true,
-			"provinciaID" : 3,
-			"localidadID" : 4,
+			"provincia" : new ProvinciaModel(1, "Provincia 1"),
+			"ciudad" : new CiudadModel(1, "Ciudad 1"),
 			"grupoSanguineoID" : 5,
 			"factorSanguineoID" : 6,
 			"nombrePaciente": "Nombre Apellido",
@@ -57,12 +59,12 @@ describe('Solicitud Model', () => {
 		expect(solicitudModel.getEstaVigente).toBeDefined();		
 	}));
 
-	it('Debe tener un metodo getProvinciaID()', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
-		expect(solicitudModel.getProvinciaID).toBeDefined();		
+	it('Debe tener un metodo getProvincia()', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
+		expect(solicitudModel.getProvincia).toBeDefined();		
 	}));
 
-	it('Debe tener un metodo getLocalidadID()', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
-		expect(solicitudModel.getLocalidadID).toBeDefined();		
+	it('Debe tener un metodo getCiudad()', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
+		expect(solicitudModel.getCiudad).toBeDefined();		
 	}));
 
 	it('Debe tener un metodo getGrupoSanguineoID()', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
@@ -121,12 +123,18 @@ describe('Solicitud Model', () => {
 		expect(solicitudModel.getEstaVigente()).toBe(true);
 	}));
 
-	it('Debe tener un metodo getProvinciaID() que devuelva el ID de la provincia correctamente', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
-		expect(solicitudModel.getProvinciaID()).toBe(3);
+	it('Debe tener un metodo getProvincia() que devuelva el ID de la provincia correctamente', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
+		let provincia = solicitudModel.getProvincia();
+
+		expect(provincia.getId()).toBe(1);
+		expect(provincia.getNombre()).toBe("Provincia 1");
 	}));
 
-	it('Debe tener un metodo getLocalidadID() que devuelva el ID de la localidad correctamente', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
-		expect(solicitudModel.getLocalidadID()).toBe(4);
+	it('Debe tener un metodo getCiudad() que devuelva el ID de la localidad correctamente', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
+		let ciudad = solicitudModel.getCiudad();
+
+		expect(ciudad.getId()).toBe(1);
+		expect(ciudad.getNombre()).toBe("Ciudad 1");
 	}));
 
 	it('Debe tener un metodo getGrupoSanguineoID() que devuelva el ID del grupo sanguineo correctamente', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
@@ -185,12 +193,12 @@ describe('Solicitud Model', () => {
 		expect(solicitudModel.setEstaVigente).toBeDefined();		
 	}));
 
-	it('Debe tener un metodo setProvinciaID()', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
-		expect(solicitudModel.setProvinciaID).toBeDefined();		
+	it('Debe tener un metodo setProvincia()', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
+		expect(solicitudModel.setProvincia).toBeDefined();		
 	}));
 
-	it('Debe tener un metodo setLocalidadID()', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
-		expect(solicitudModel.setLocalidadID).toBeDefined();		
+	it('Debe tener un metodo setCiudad()', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
+		expect(solicitudModel.setCiudad).toBeDefined();		
 	}));
 
 	it('Debe tener un metodo setGrupoSanguineoID()', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
@@ -250,12 +258,20 @@ describe('Solicitud Model', () => {
 		expect(solicitudModel.setEstaVigente(false)).toBe(false);
 	}));
 
-	it('Debe tener un metodo setProvinciaID() que setee el ID de la provincia correctamente', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
-		expect(solicitudModel.setProvinciaID(4)).toBe(4);
+	it('Debe tener un metodo setProvincia() que setee la ciudad de la provincia correctamente', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
+		let nuevaProvincia = new ProvinciaModel(2, "Ciudad 2");
+		solicitudModel.setProvincia(nuevaProvincia);
+
+		expect(solicitudModel.getProvincia().getId()).toBe(2);
+		expect(solicitudModel.getProvincia().getNombre()).toBe("Ciudad 2");
 	}));
 
-	it('Debe tener un metodo setLocalidadID() que setee el ID de la localidad correctamente', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
-		expect(solicitudModel.setLocalidadID(5)).toBe(5);
+	it('Debe tener un metodo setLocalidadID() que setee la provincia de la localidad correctamente', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {
+		let nuevaCiudad = new CiudadModel(2, "Ciudad 2");
+		solicitudModel.setCiudad(nuevaCiudad);
+
+		expect(solicitudModel.getCiudad().getId()).toBe(2);
+		expect(solicitudModel.getCiudad().getNombre()).toBe("Ciudad 2");
 	}));
 
 	it('Debe tener un metodo setGrupoSanguineoID() que setee el ID del grupo sanguineo correctamente', inject([SolicitudModel], (solicitudModel: SolicitudModelMock) => {

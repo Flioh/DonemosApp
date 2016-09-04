@@ -1,7 +1,7 @@
 import { Component, NgZone } from '@angular/core';
 import { Platform, NavController, LoadingController, AlertController } from 'ionic-angular';
-import {FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Observable } from 'rxjs';
 
 /* Servicios utilizados */
@@ -12,6 +12,8 @@ import { GrupoSanguineoHelper, FactorSanguineoHelper } from '../../providers/don
 
 /* Modelos utilizados */
 import { SolicitudModel } from '../../providers/solicitud-model/solicitud-model';
+import { ProvinciaModel } from '../../providers/provincia-model/provincia-model';
+import { CiudadModel } from '../../providers/ciudad-model/ciudad-model';
 
 @Component({
 	templateUrl: 'build/pages/nueva-solicitud/nueva-solicitud.html',
@@ -21,8 +23,8 @@ import { SolicitudModel } from '../../providers/solicitud-model/solicitud-model'
 export class NuevaSolicitudPage {
 
 	// Listados usados en la pagina
-	private listaProvincias: any = [];
-	private listaCiudades: any = [];
+	private listaProvincias: Array<ProvinciaModel> = [];
+	private listaCiudades: Array<CiudadModel> = [];
 	private listaGruposSanguineos: any = [];
 	private listaFactoresSanguineos: any = [];
 
@@ -87,14 +89,13 @@ export class NuevaSolicitudPage {
 		for(let i=0; i< this.listaProvincias.length; i++) {
 
 			// Buscamos la provincia por el nombre
-			if(this.listaProvincias[i].nombre.toLowerCase() === nombreProvincia.toLowerCase()) {
-				
+			if(this.listaProvincias[i].getNombre().toLowerCase() === nombreProvincia.toLowerCase()) {
+
 				// Seleccionamos esta provincia
-				this.nuevaSolicitud.setProvinciaID(this.listaProvincias[i].id);
+				this.nuevaSolicitud.setProvincia(this.listaProvincias[i]);
 
 				// Inicializamos las ciudades de la provincia seleccionada
 				this.inicializarCiudadesDeLaProvincia(nombreCiudad);
-
 			}
 		}
 	}
@@ -103,8 +104,9 @@ export class NuevaSolicitudPage {
 	private actualizarCiudad(nombreCiudad: string) {
 		let indiceCiudad = -1; 
 		for(let i=0; i<this.listaCiudades.length; i++) {
+
 			// Buscamos la ciudad por su nombre
-			if(this.listaCiudades[i].nombre.toLowerCase() === nombreCiudad.toLowerCase()) {
+			if(this.listaCiudades[i].getNombre().toLowerCase() === nombreCiudad.toLowerCase()) {
 				indiceCiudad = i;
 			}
 		}
@@ -113,7 +115,7 @@ export class NuevaSolicitudPage {
 		indiceCiudad = indiceCiudad > -1 ? indiceCiudad : 0;
 
 		// Setea la ciudad en base a su ID
-		this.nuevaSolicitud.setLocalidadID(this.listaCiudades[indiceCiudad].id);
+		this.nuevaSolicitud.setCiudad(this.listaCiudades[indiceCiudad]);
 	}
 
 	// Método que se ejecuta antes de que el usuario ingrese a la página
@@ -164,8 +166,8 @@ export class NuevaSolicitudPage {
 				this.listaProvincias = result;
 
 				// TODO: usar geolocalizacion para cargar por defecto la provincia del usuario
-				// ------------------------------------------------------------------------
-				this.nuevaSolicitud.setProvinciaID(this.listaProvincias[0].id);
+				// ---------------------------------------------------------------------------
+				this.nuevaSolicitud.setProvincia(this.listaProvincias[0]);
 
 				// Carga las ciudades de la provincia seleccionada
 				this.inicializarCiudadesDeLaProvincia();
@@ -180,25 +182,30 @@ export class NuevaSolicitudPage {
 	// Método que inicializa el listado de ciudades de una provincia
 	public inicializarCiudadesDeLaProvincia(nombreCiudad?: string): void {
 		
+		let provinciaId = this.nuevaSolicitud.getProvincia().getId();
+
+		// Primero actualizamos el nombre de la provincia seleccionada
+		this.nuevaSolicitud.setProvincia(new ProvinciaModel(provinciaId, this.getNombreProvinciaPorID(provinciaId)));
+
 		let loadingPopup = this.loadingCtrl.create({
 			content: 'Cargando ciudades'
 		});
 
 		// Muestra el mensaje de cargando ciudades
 		loadingPopup.present();
-
-		this.remoteDataService.getListaCiudadesPorProvincia(this.nuevaSolicitud.getProvinciaID())
+		this.remoteDataService.getListaCiudadesPorProvincia(provinciaId)
 		.subscribe(result => {
 			if(result && result.length){
 				this.listaCiudades = result;
-
-				if(nombreCiudad) {
+					if(nombreCiudad) {
 						// Si recibimos el nombre de la ciudad (autocomplete), seleccionamos esa ciudad
 						this.actualizarCiudad(nombreCiudad);
 					} else {
 						// TODO: usar geolocalizacion para cargar por defecto la provincia del usuario
-						// ------------------------------------------------------------------------	
-						this.nuevaSolicitud.setLocalidadID(this.listaCiudades[0].id);	
+						// ---------------------------------------------------------------------------
+
+						// Setea la ciudad en base a su ID
+						this.nuevaSolicitud.setCiudad(this.listaCiudades[0]);	
 					}
 
 					// Oculta el mensaje de espera
@@ -209,9 +216,19 @@ export class NuevaSolicitudPage {
 			});
 	}
 
+	// Método que devuelve el nombre de la provincia a partir de su ID
+	private getNombreProvinciaPorID(id: number) :string {
+		let nombre = '';
+		for(let i=0; i<this.listaProvincias.length; i++) {
+			if(this.listaProvincias[i].getId() == id) {
+				nombre = this.listaProvincias[i].getNombre();
+			}
+		}
+		return nombre;;
+	}
+
 	// Método que crea la nueva solicitud con la información ingresada en el formulario
 	public guardarCambios(): void {
-		debugger;
 		this.submitted = true;
 	}
 

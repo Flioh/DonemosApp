@@ -10,8 +10,7 @@ import {NavController} from 'ionic-angular';
 @Injectable()
 export class ProvinciaModelMock extends ProvinciaModel {
 	constructor(){
-		let datosProvinciaMock = { "id" : 1, "nombre": "Provincia 1"};
-		super(datosProvinciaMock);
+		super(1, "Provincia 1");
 	}
 }
 
@@ -34,14 +33,38 @@ describe('Provincia Model', () => {
 
 
 
+	// Tests para asegurar que los metodos set esta definidos
+	// ------------------------------------------------------
+	it('Debe tener un metodo setId()', inject([ProvinciaModel], (provinciaModel: ProvinciaModelMock) => {
+		expect(provinciaModel.setId).toBeDefined();
+	}));
+
+	it('Debe tener un metodo setNombre()', inject([ProvinciaModel], (provinciaModel: ProvinciaModelMock) => {
+		expect(provinciaModel.setNombre).toBeDefined();
+	}));
+
+
+
 	// Tests para asegurar que los metodos get deuelven valores correctamente
-	// --------------------------------------------------------
-	it('Debe tener un metodo getId() que devuelva el ID de la solicitud correctamente', inject([ProvinciaModel], (provinciaModel: ProvinciaModelMock) => {		
+	// ----------------------------------------------------------------------
+	it('Debe tener un metodo getId() que devuelva el ID de la provincia correctamente', inject([ProvinciaModel], (provinciaModel: ProvinciaModelMock) => {		
 		expect(provinciaModel.getId()).toBe(1);
 	}));
 
-	it('Debe tener un metodo getNombre() que devuelva el ID de la solicitud correctamente', inject([ProvinciaModel], (provinciaModel: ProvinciaModelMock) => {		
+	it('Debe tener un metodo getNombre() que devuelva el nombre de la provincia correctamente', inject([ProvinciaModel], (provinciaModel: ProvinciaModelMock) => {		
 		expect(provinciaModel.getNombre()).toBe("Provincia 1");
+	}));
+
+
+
+	// Tests para asegurar que los metodos set modifican los valores correctamente
+	// ---------------------------------------------------------------------------
+	it('Debe tener un metodo setId() que setee el ID de la provincia correctamente', inject([ProvinciaModel], (provinciaModel: ProvinciaModelMock) => {		
+		expect(provinciaModel.setId(2)).toBe(2);
+	}));
+
+	it('Debe tener un metodo setId() que setee el nombre de la provincia correctamente', inject([ProvinciaModel], (provinciaModel: ProvinciaModelMock) => {		
+		expect(provinciaModel.setNombre("Provincia 2")).toBe("Provincia 2");
 	}));
 
 });

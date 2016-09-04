@@ -6,9 +6,9 @@ export class ProvinciaModel {
 	private id: number;
 	private nombre: string;
 
-	constructor(obj: any) {
-		this.id = obj.id;
-	    this.nombre = obj.nombre;
+	constructor(id?: number, nombre?: string) {
+		this.id = id ? id : null;
+		this.nombre = nombre ? nombre : null;
 	}
 
 	public getId(): number {
@@ -17,5 +17,13 @@ export class ProvinciaModel {
 
 	public getNombre(): string {
 		return this.nombre;
+	}
+
+	public setId(id: number): number {
+		return this.id = id;
+	}
+
+	public setNombre(nombre: string): string {
+		return this.nombre = nombre;
 	}
 }

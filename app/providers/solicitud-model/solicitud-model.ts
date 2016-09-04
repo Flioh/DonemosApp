@@ -1,4 +1,6 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
+import { ProvinciaModel } from "../provincia-model/provincia-model";
+import { CiudadModel } from "../ciudad-model/ciudad-model";
 
 @Injectable()
 export class SolicitudModel {
@@ -7,8 +9,8 @@ export class SolicitudModel {
   private usuarioID: number;
   private fechaCreacion: Date;
   private estaVigente: boolean;
-  private provinciaID: number;
-  private localidadID: number;
+  private provincia: ProvinciaModel;
+  private ciudad: CiudadModel;
   private nombrePaciente: string;
   private grupoSanguineoID: number;
   private factorSanguineoID: number;
@@ -29,8 +31,8 @@ export class SolicitudModel {
       this.usuarioID = null;
       this.estaVigente = true;
       this.fechaCreacion = new Date();
-      this.provinciaID = null;
-      this.localidadID = null;
+      this.provincia = new ProvinciaModel();
+      this.ciudad = new CiudadModel();
       this.nombrePaciente = null;
       this.grupoSanguineoID = null;
       this.factorSanguineoID = null;
@@ -60,12 +62,12 @@ export class SolicitudModel {
     return this.estaVigente;
   }
 
-  public getProvinciaID(): number {
-    return this.provinciaID;
+  public getProvincia(): ProvinciaModel {
+    return this.provincia;
   }
 
-  public getLocalidadID(): number {
-    return this.localidadID;
+  public getCiudad(): CiudadModel {
+    return this.ciudad;
   }
 
   public getGrupoSanguineoID(): number {
@@ -121,12 +123,12 @@ export class SolicitudModel {
     return this.estaVigente = vigente;
   }
 
-  public setProvinciaID(provinciaID: number): number {
-    return this.provinciaID = provinciaID;
+  public setProvincia(provincia: ProvinciaModel): ProvinciaModel {
+    return this.provincia = provincia;
   }
 
-  public setLocalidadID(localidadID: number): number {
-     return this.localidadID = localidadID;
+  public setCiudad(ciudad: CiudadModel): CiudadModel {
+     return this.ciudad = ciudad;
   }
 
   public setGrupoSanguineoID(grupoSanguineoID: number): number {

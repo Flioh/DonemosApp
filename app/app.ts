@@ -77,7 +77,7 @@ export class DonemosApp {
 ionicBootstrap(DonemosApp, 
   [
     disableDeprecatedForms(), // disable deprecated forms
-    provideForms() // enable new forms module]
+    provideForms() // enable new forms module
   ], 
   { 
     platforms: {
