@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, Alert } from 'ionic-angular';
+import { NavController, NavParams, LoadingController } from 'ionic-angular';
 import { NuevaSolicitudPage } from '../nueva-solicitud/nueva-solicitud';
 import { DonacionesHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
 import { TiposSanguineosPipe } from '../../pipes/format-tipos-sanguineos/format-tipos-sanguineos-pipe';
@@ -15,7 +15,7 @@ export class DetallesSolicitudPage {
 	// Variables de la clase
 	private solicitudSeleccionada: SolicitudModel;
 
-	constructor(private nav: NavController, navParams: NavParams) {
+	constructor(private nav: NavController, navParams: NavParams, private loadingCtrl: LoadingController ) {
   		// Obtenemos la solicitud seleccionada a traves de navParams
   		this.solicitudSeleccionada = navParams.get('unaSolicitud');
   	}
@@ -23,8 +23,13 @@ export class DetallesSolicitudPage {
     // Inicializa el mapa cuando el DOM ya esta listo
   	ionViewDidEnter(){
         
-        // TODO: obtener las coordenadas de la solicitud
-        // ---------------------------------------------
+        let loadingPopup = this.loadingCtrl.create({
+          content: 'Obteniendo los detalles'
+        });
+
+        // Muestra el mensaje de espera
+        loadingPopup.present();
+
         let geocoder = new google.maps.Geocoder();
 
         let mapOptions = {
@@ -48,6 +53,9 @@ export class DetallesSolicitudPage {
               map: map,
               position: results[0].geometry.location
             });
+
+            // Oculta el mensaje de espera
+            loadingPopup.dismiss();
 
           } else {
             // TODO: manejar el caso de error

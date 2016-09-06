@@ -32,8 +32,7 @@
 		"solicitudID" : 2,
 		"usuarioID": 1,
 		"fechaCreacion": "09/3/2016",
-		"estaVigente" : true,
-		"cantidadDadores" : 3,
+		"estaVigente" : true,		
 		"provincia" : {
 			"id": 21,
 			"nombre": "Santa Fe"	
@@ -90,7 +89,8 @@
 		"solicitudID" : 4,
 		"usuarioID": 3,
 		"fechaCreacion": "08/28/2016",
-		"estaVigente" : true,		
+		"estaVigente" : true,
+		"cantidadDadores" : 3,	
 		"provincia" : {
 			"id": 21,
 			"nombre": "Santa Fe"	
