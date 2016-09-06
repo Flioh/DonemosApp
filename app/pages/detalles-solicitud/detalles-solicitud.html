@@ -10,13 +10,15 @@
 
 
       <ion-item class="header">
-        <h3>Se necesitan 
-          <span *ngIf="solicitudSeleccionada.cantidadDadores" class="marked">
-            {{ solicitudSeleccionada.cantidadDadores }} dadores
-          </span>
-          <span *ngIf="!solicitudSeleccionada.cantidadDadores"> dadores</span>
+        
+        <h3> 
+          <span>{{ solicitudSeleccionada.cantidadDadores === 1 ? 'Se necesita ' : 'Se necesitan ' }}</span>
+          <span *ngIf="solicitudSeleccionada.cantidadDadores" class="marked">{{ solicitudSeleccionada.cantidadDadores }}</span>
+          <span>{{ solicitudSeleccionada.cantidadDadores === 1 ? ' dador' : ' dadores' }}</span>
         </h3>        
+        
         <h2 [innerHTML]="getTiposSanguineosBuscados() | tiposSanguineos: getDescripcionTipoSanguineo()"></h2>
+        
         <span class="fecha">
           {{ solicitudSeleccionada.fechaCreacion | timeago }}
         </span>
@@ -84,12 +86,12 @@
 
 
 
-      <ion-item class="detail-item">
+      <ion-item *ngIf="solicitudSeleccionada.cantidadDadores" class="detail-item">
         <ion-avatar item-left>
           <ion-icon softRed name="people" item-left></ion-icon>
         </ion-avatar>
         <h2>Dadores necesitados</h2>
-        <p>{{ solicitudSeleccionada.cantidadDadores ? solicitudSeleccionada.cantidadDadores : 1 }}</p>
+        <p>{{ solicitudSeleccionada.cantidadDadores }}</p>
       </ion-item>
 
 

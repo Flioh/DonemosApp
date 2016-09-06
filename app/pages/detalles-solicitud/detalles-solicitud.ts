@@ -4,6 +4,7 @@ import { NuevaSolicitudPage } from '../nueva-solicitud/nueva-solicitud';
 import { DonacionesHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
 import { TiposSanguineosPipe } from '../../pipes/format-tipos-sanguineos/format-tipos-sanguineos-pipe';
 import { TimeAgoPipe } from '../../pipes/time-ago/time-ago-pipe';
+import { SolicitudModel } from '../../providers/solicitud-model/solicitud-model';
 
 @Component({
 	templateUrl: 'build/pages/detalles-solicitud/detalles-solicitud.html',
@@ -12,7 +13,7 @@ import { TimeAgoPipe } from '../../pipes/time-ago/time-ago-pipe';
 export class DetallesSolicitudPage {
 
 	// Variables de la clase
-	solicitudSeleccionada: any;
+	private solicitudSeleccionada: SolicitudModel;
 
 	constructor(private nav: NavController, navParams: NavParams) {
   		// Obtenemos la solicitud seleccionada a traves de navParams
@@ -21,10 +22,12 @@ export class DetallesSolicitudPage {
 
     // Inicializa el mapa cuando el DOM ya esta listo
   	ionViewDidEnter(){
-        let latLng = new google.maps.LatLng(43.458937999999996, -3.820382);               
+        
+        // TODO: obtener las coordenadas de la solicitud
+        // ---------------------------------------------
+        let geocoder = new google.maps.Geocoder();
 
         let mapOptions = {
-            center: latLng,
             zoom: 15,
             disableDefaultUI: true,
             mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -32,10 +35,25 @@ export class DetallesSolicitudPage {
 
         let map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
-        let marker = new google.maps.Marker({
-            map: map,
-            animation: google.maps.Animation.DROP,
-            position: map.getCenter()
+        let direccion = `${ this.solicitudSeleccionada.getDireccion() }, ${ this.solicitudSeleccionada.getCiudad().getNombre() } ${ this.solicitudSeleccionada.getProvincia().getNombre() }`;
+
+        geocoder.geocode({'address': direccion}, function(results, status) {
+          if (status === google.maps.GeocoderStatus.OK) {
+            
+            // Centramos el mapa en las coordenadas del lugar
+            map.setCenter(results[0].geometry.location);
+
+            // Agregamos un marcador al luget
+            var marker = new google.maps.Marker({
+              map: map,
+              position: results[0].geometry.location
+            });
+
+          } else {
+            // TODO: manejar el caso de error
+            // ------------------------------
+            //valert('Geocode was not successful for the following reason: ' + status);
+          }
         });
     }
 

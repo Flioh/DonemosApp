@@ -36,4 +36,12 @@ solicitud-item {
 		font-weight: bold;
 		font-size: 2rem;
 	}
+
+	.solicitud h2 {
+		font-size: 1.4rem;
+	}
+
+	.solicitud h2:nth-child(1) {
+    	font-size: 1.6rem;
+	}
 }

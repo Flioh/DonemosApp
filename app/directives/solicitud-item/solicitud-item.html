@@ -1,10 +1,16 @@
 <ion-card>
 
-	<ion-item>
+	<ion-item class="solicitud">
 		<ion-avatar class="card-icon" item-left>
 			<ion-icon class="big" name="water"></ion-icon>
 		</ion-avatar>
-		<h2>Se necesitan <strong>{{solicitud.cantidadDadores}} dadores</strong> de tipo</h2>
+
+		<h2> 
+          <span>{{ solicitud.cantidadDadores === 1 ? 'Se necesita ' : 'Se necesitan ' }}</span>
+          <strong *ngIf="solicitud.cantidadDadores">{{ solicitud.cantidadDadores }}</strong>
+          <span>{{ solicitud.cantidadDadores === 1 ? ' dador' : ' dadores' }}</span>
+        </h2>  
+
 		<h2 [innerHTML]="getTiposSanguineosBuscados() | tiposSanguineos: getDescripcionTipoSanguineo()"></h2>
 	</ion-item>
 
