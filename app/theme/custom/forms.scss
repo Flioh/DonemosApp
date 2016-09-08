@@ -22,7 +22,9 @@ span.mensaje-error {
 
 button.submit {
 	margin-top: 30px;
-}
+	position: absolute;
+	bottom: 0;
+	}
 
 ion-item.half-size {
 	max-width: 49%;

@@ -15,6 +15,8 @@ import { MY_CONFIG_TOKEN, MY_CONFIG, ApplicationConfig } from './app-config.ts';
 // Paginas
 import { ListaSolicitudesPage } from './pages/lista-solicitudes/lista-solicitudes';
 import { NuevaSolicitudPage } from './pages/nueva-solicitud/nueva-solicitud';
+import { DatosPersonalesPage } from './pages/datos-personales/datos-personales';
+import { ErrorPage } from './pages/error/error';
 
 // Modelos
 import { MenuItemModel } from './providers/menuitem-model/menuitem-model';
@@ -66,11 +68,11 @@ export class DonemosApp {
 
   cargarOpcionesMenuPrincipal(): void {    
     this.paginasMenu.push(new MenuItemModel('list-box', 'Lista de solicitudes', ListaSolicitudesPage, true));
-    this.paginasMenu.push(new MenuItemModel('checkbox', 'Requisitos para donar', ListaSolicitudesPage, false));
-    this.paginasMenu.push(new MenuItemModel('person', 'Configurar perfil', ListaSolicitudesPage, false));
-    this.paginasMenu.push(new MenuItemModel('settings', 'Configuración', ListaSolicitudesPage, false));
-    this.paginasMenu.push(new MenuItemModel('log-out', 'Salir', ListaSolicitudesPage, false));
-    this.paginasMenu.push(new MenuItemModel('information-circle', 'Sobre nosotros', ListaSolicitudesPage, false));
+    this.paginasMenu.push(new MenuItemModel('checkbox', 'Requisitos para donar', ErrorPage, false));
+    this.paginasMenu.push(new MenuItemModel('person', 'Configurar perfil', DatosPersonalesPage, false));
+    this.paginasMenu.push(new MenuItemModel('settings', 'Configuración', ErrorPage, false));
+    this.paginasMenu.push(new MenuItemModel('log-out', 'Salir', ErrorPage, false));
+    this.paginasMenu.push(new MenuItemModel('information-circle', 'Sobre nosotros', ErrorPage, false));
   }
 }
 
