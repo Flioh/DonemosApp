@@ -1,16 +1,23 @@
 import { Component } from '@angular/core';
 import { NavController, LoadingController, Events } from 'ionic-angular';
 
+/* Paginas utilizadas */
 import { DetallesSolicitudPage } from '../detalles-solicitud/detalles-solicitud';
 import { NuevaSolicitudPage } from '../nueva-solicitud/nueva-solicitud';
 
+/* Servicios utilizados */
+import { AutocompleteService } from '../../providers/autocomplete-service/autocomplete-service';
+import { ConnectivityService } from '../../providers/connectivity-service/connectivity-service';
 import { RemoteDataService } from '../../providers/remote-data-service/remote-data-service';
-
-import { SolicitudItem } from '../../directives/solicitud-item/solicitud-item';
-
-import { SolicitudModel } from '../../providers/solicitud-model/solicitud-model';
-
 import { GrupoSanguineoHelper, FactorSanguineoHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
+
+/* Modelos utilizados */
+import { SolicitudItem } from '../../directives/solicitud-item/solicitud-item';
+import { SolicitudModel } from '../../providers/solicitud-model/solicitud-model';
+import { ProvinciaModel } from '../../providers/provincia-model/provincia-model';
+import { CiudadModel } from '../../providers/ciudad-model/ciudad-model';
+import { GrupoSanguineoModel } from "../../providers/grupo-sanguineo-model/grupo-sanguineo-model";
+import { FactorSanguineoModel } from "../../providers/factor-sanguineo-model/factor-sanguineo-model";
 
 @Component({
   templateUrl: 'build/pages/lista-solicitudes/lista-solicitudes.html',
@@ -20,16 +27,16 @@ export class ListaSolicitudesPage {
 
   private solicitudes: Array<SolicitudModel>;
 
-  /* Filtros de busqueda */
-  private provinciaID: number;
-  private ciudadID: number;
-  private grupoSanguineoID: number;
-  private factorSanguineoID: number;
+  // Filtros de busqueda
+  private grupoSanguineoSeleccionado: GrupoSanguineoModel;
+  private factorSanguineoSeleccionado: FactorSanguineoModel;
+  private provinciaSeleccionada: ProvinciaModel;
+  private ciudadSeleccionada: CiudadModel;
 
-  private listaGruposSanguineos: Array<any>;
-  private listaFactoresSanguineos: Array<any>;
-  private listaProvincias: Array<any>;
-  private listaCiudades: Array<any>;
+  private listaGruposSanguineos: Array<GrupoSanguineoModel>;
+  private listaFactoresSanguineos: Array<FactorSanguineoModel>;
+  private listaProvincias: Array<ProvinciaModel>;
+  private listaCiudades: Array<CiudadModel>;
 
   private listadosCargados: boolean;
 
@@ -45,6 +52,12 @@ export class ListaSolicitudesPage {
 
     // Inicializa la lista de solicitudes
     this.solicitudes = [];
+
+    // Inicializa los filtros de busqueda
+    this.grupoSanguineoSeleccionado = null;
+    this.factorSanguineoSeleccionado = null;
+    this.ciudadSeleccionada = null;
+    this.provinciaSeleccionada = null;
 
     let loadingPopup = this.loadingCtrl.create({
       content: 'Cargando solicitudes'
@@ -90,7 +103,6 @@ export class ListaSolicitudesPage {
 
   // Método que inicializa el listado de ciudades de una provincia
   public inicializarCiudadesDeLaProvincia(nombreCiudad: string): void {
-    
     let loadingPopup = this.loadingCtrl.create({
       content: 'Cargando ciudades'
     });
@@ -98,7 +110,7 @@ export class ListaSolicitudesPage {
     // Muestra el mensaje de cargando ciudades
     loadingPopup.present();
 
-    this.dataService.getListaCiudadesPorProvincia(this.provinciaID)
+    this.dataService.getListaCiudadesPorProvincia(this.provinciaSeleccionada.getId())
       .subscribe(result => {
         if(result && result.length){
           this.listaCiudades = result;

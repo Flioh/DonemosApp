@@ -41,8 +41,8 @@
 				<!-- Provincia  -->
 				<ion-item>
 					<ion-label floating>Provincia</ion-label>
-					<ion-select [(ngModel)]="provinciaID" okText="Aceptar" cancelText="Cancelar" name="provincia" #provincia="ngModel" (ionChange)="inicializarCiudadesDeLaProvincia()">
-						<ion-option *ngFor="let provincia of listaProvincias" value={{provincia.id}}>
+					<ion-select [(ngModel)]="provinciaSeleccionada" okText="Aceptar" cancelText="Cancelar" name="provincia" #provincia="ngModel" (ionChange)="inicializarCiudadesDeLaProvincia()">
+						<ion-option *ngFor="let provincia of listaProvincias" [value]="provincia">
 							{{provincia.nombre}}
 						</ion-option>
 					</ion-select>
@@ -53,8 +53,8 @@
 				<!-- Ciudad  -->
 				<ion-item>
 					<ion-label floating>Ciudad</ion-label>
-					<ion-select [(ngModel)]="ciudadID" okText="Aceptar" cancelText="Cancelar" name="ciudad" #ciudad="ngModel">
-						<ion-option *ngFor="let ciudad of listaCiudades" value={{ciudad.id}}>
+					<ion-select [(ngModel)]="ciudadSeleccionada" okText="Aceptar" cancelText="Cancelar" name="ciudad" #ciudad="ngModel">
+						<ion-option *ngFor="let ciudad of listaCiudades" [value]="ciudad">
 							{{ciudad.nombre}}
 						</ion-option>
 					</ion-select>
@@ -65,8 +65,8 @@
 				<!-- Grupo sanguineo  -->
 				<ion-item class="half-size">
 					<ion-label floating>Grupo</ion-label>
-					<ion-select [(ngModel)]="grupoSanguineoID" okText="Aceptar" cancelText="Cancelar" name="grupo" #grupo="ngModel">
-						<ion-option *ngFor="let grupo of listaGruposSanguineos" value={{grupo.id}}>
+					<ion-select [(ngModel)]="grupoSanguineoSeleccionado" okText="Aceptar" cancelText="Cancelar" name="grupo" #grupo="ngModel">
+						<ion-option *ngFor="let grupo of listaGruposSanguineos" [value]="grupo">
 							{{grupo.nombre}}
 						</ion-option>
 					</ion-select>
@@ -77,8 +77,8 @@
 				<!-- Factor sanguineo  -->
 				<ion-item class="half-size">
 					<ion-label floating>Factor</ion-label>
-					<ion-select [(ngModel)]="factorSanguineoID" okText="Aceptar" cancelText="Cancelar" name="factor" #factor="ngModel">
-						<ion-option *ngFor="let factor of listaFactoresSanguineos" value={{factor.id}}>
+					<ion-select [(ngModel)]="factorSanguineoSeleccionado" okText="Aceptar" cancelText="Cancelar" name="factor" #factor="ngModel">
+						<ion-option *ngFor="let factor of listaFactoresSanguineos" [value]="factor">
 							{{factor.nombre}}
 						</ion-option>
 					</ion-select>
