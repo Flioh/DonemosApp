@@ -27,8 +27,8 @@ export class NuevaSolicitudPage {
 	// Listados usados en la pagina
 	private listaProvincias: Array<ProvinciaModel> = [];
 	private listaCiudades: Array<CiudadModel> = [];
-	private listaGruposSanguineos: any = [];
-	private listaFactoresSanguineos: any = [];
+	private listaGruposSanguineos: Array<GrupoSanguineoModel> = [];
+	private listaFactoresSanguineos: Array<FactorSanguineoModel> = [];
 
 	// Modelo a utilizar en el formulario
 	private nuevaSolicitud: SolicitudModel;
