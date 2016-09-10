@@ -7,14 +7,14 @@
 
 
 <ion-content padding class="nueva-solicitud">
-	<ion-list>
+	<ion-item-group>
 		<form (ngSubmit)="guardarCambios()" #nuevaSolicitudForm="ngForm" >
 
 
 
 			<!-- Institucion  -->
 			<ion-item>
-				<ion-label stacked>Institucion</ion-label>
+				<ion-label stacked>Nombre de institución</ion-label>
 				<ion-input id="autocomplete" [(ngModel)]="nuevaSolicitud.institucion" name="institucion" #institucion="ngModel" required type="text" placeholder="Ejemplo: Hospital Cullen"></ion-input>
 			</ion-item>
 			<span [hidden]="institucion.valid || institucion.untouched" class="mensaje-error">
@@ -25,8 +25,8 @@
 
 			<!-- Dirección  -->
 			<ion-item>
-				<ion-label floating>Direccion</ion-label>
-				<ion-input [(ngModel)]="nuevaSolicitud.direccion" name="direccion" #direccion="ngModel" required type="text"></ion-input>
+				<ion-label stacked>Direccion</ion-label>
+				<ion-input [(ngModel)]="nuevaSolicitud.direccion" name="direccion" #direccion="ngModel" required type="text" placeholder="Ejemplo: San Martín 2345"></ion-input>
 			</ion-item>
 			<span [hidden]="direccion.valid || direccion.untouched" class="mensaje-error">
 				Ingrese la dirección.
@@ -36,7 +36,7 @@
 
 			<!-- Provincia  -->
 			<ion-item>
-				<ion-label floating>Provincia</ion-label>
+				<ion-label stacked>Provincia</ion-label>
 				<ion-select [(ngModel)]="nuevaSolicitud.provincia"  okText="Aceptar" cancelText="Cancelar" required name="provincia" #provincia="ngModel" (ionChange)="inicializarCiudadesDeLaProvincia()">
 					<ion-option *ngFor="let provincia of listaProvincias" [value]="provincia">
 						{{provincia.nombre}}
@@ -51,7 +51,7 @@
 
 			<!-- Ciudad  -->
 			<ion-item>
-				<ion-label floating>Ciudad</ion-label>
+				<ion-label stacked>Ciudad</ion-label>
 				<ion-select [(ngModel)]="nuevaSolicitud.ciudad" okText="Aceptar" cancelText="Cancelar" required name="ciudad" #ciudad="ngModel">
 					<ion-option *ngFor="let ciudad of listaCiudades" [value]="ciudad">
 						{{ciudad.nombre}}
@@ -90,8 +90,8 @@
 
 			<!-- Nombre del paciente  -->
 			<ion-item>
-				<ion-label floating>Nombre del paciente</ion-label>
-				<ion-input [(ngModel)]="nuevaSolicitud.nombrePaciente" name="nombrePaciente" #nombrePaciente="ngModel" required type="text"></ion-input>
+				<ion-label stacked>Nombre del paciente</ion-label>
+				<ion-input [(ngModel)]="nuevaSolicitud.nombrePaciente" name="nombrePaciente" #nombrePaciente="ngModel" required type="text" placeholder="Ejemplo: Juan Perez"></ion-input>
 			</ion-item>
 			<span [hidden]="nombrePaciente.valid || nombrePaciente.untouched" class="mensaje-error">
 				Ingrese la el nombre del paciente.
@@ -100,8 +100,8 @@
 
 
 			<!-- Grupo sanguineo  -->
-			<ion-item class="half-size">
-				<ion-label floating>Grupo</ion-label>
+			<ion-item>
+				<ion-label stacked>Grupo sanguineo</ion-label>
 				<ion-select [(ngModel)]="nuevaSolicitud.grupoSanguineo" okText="Aceptar" cancelText="Cancelar" required name="grupo" #grupo="ngModel">
 					<ion-option *ngFor="let grupo of listaGruposSanguineos" [value]="grupo">
 						{{grupo.nombre}}
@@ -112,8 +112,8 @@
 
 
 			<!-- Factor sanguineo  -->
-			<ion-item class="half-size">
-				<ion-label floating>Factor</ion-label>
+			<ion-item>
+				<ion-label stacked>Factor sanguineo</ion-label>
 				<ion-select [(ngModel)]="nuevaSolicitud.factorSanguineo" okText="Aceptar" cancelText="Cancelar" required name="factor" #factor="ngModel">
 					<ion-option *ngFor="let factor of listaFactoresSanguineos" [value]="factor">
 						{{factor.nombre}}
@@ -125,35 +125,28 @@
 
 			<!-- Cantidad  -->
 			<ion-item>
-				<ion-label floating>Cantidad</ion-label>
-				<ion-input [(ngModel)]="nuevaSolicitud.cantidad" name="cantidad" type="number"></ion-input>
+				<ion-label stacked>Cantidad</ion-label>
+				<ion-input [(ngModel)]="nuevaSolicitud.cantidad" name="cantidad" type="number" placeholder="Ejemplo: 5"></ion-input>
 			</ion-item>
 
 
 
 			<!-- Datos adicionales  -->
 			<ion-item>
-				<ion-label floating>Datos adicionales</ion-label>
-				<ion-textarea rows="6" [(ngModel)]="nuevaSolicitud.datosAdicionales" name="datosAdicionales"></ion-textarea>
+				<ion-label stacked>Datos adicionales</ion-label>
+				<ion-textarea rows="6" [(ngModel)]="nuevaSolicitud.datosAdicionales" name="datosAdicionales" placeholder="Ejemplo: Se necesitan dadores para mi papá/mamá/... El horario que figura es de Lunes a Viernes, los sábados también se puede donar pero sólo por la mañana..."></ion-textarea>
 			</ion-item>
 
 
 
-			<ion-item>
-				<h3>Value:</h3>
-				<pre>{{contenidoDelFormulario}}</pre>
-				<pre>Validity: {{nuevaSolicitudForm.form.valid}}</pre>
-			</ion-item>
 
-
-
-			<button [disabled]="!nuevaSolicitudForm.form.valid" class="submit" red block>Crear Solicitud</button>
+			<button [disabled]="!nuevaSolicitudForm.form.valid" type="submit" red full>Crear Solicitud</button>
 
 
 
 		</form>
 
-	</ion-list>
+	</ion-item-group>
 
 </ion-content>
 

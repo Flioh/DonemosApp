@@ -1,4 +1,4 @@
-import { Component, ViewChild, provide, PLATFORM_DIRECTIVES } from '@angular/core';
+import { Component, ViewChild, provide, PLATFORM_DIRECTIVES, enableProdMode } from '@angular/core';
 import { ionicBootstrap, App, Platform, AlertController, MenuController, Nav, Events } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
 
@@ -70,11 +70,12 @@ export class DonemosApp {
     this.paginasMenu.push(new MenuItemModel('list-box', 'Lista de solicitudes', ListaSolicitudesPage, true));
     this.paginasMenu.push(new MenuItemModel('checkbox', 'Requisitos para donar', ErrorPage, false));
     this.paginasMenu.push(new MenuItemModel('person', 'Configurar perfil', DatosPersonalesPage, false));
-    this.paginasMenu.push(new MenuItemModel('settings', 'Configuración', ErrorPage, false));
     this.paginasMenu.push(new MenuItemModel('log-out', 'Salir', ErrorPage, false));
     this.paginasMenu.push(new MenuItemModel('information-circle', 'Sobre nosotros', ErrorPage, false));
   }
 }
+
+enableProdMode();
 
 ionicBootstrap(DonemosApp, 
   [

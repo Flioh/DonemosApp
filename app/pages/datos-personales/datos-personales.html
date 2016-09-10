@@ -5,7 +5,7 @@
 </ion-header>
 
 
-<ion-content>
+<ion-content padding>
 
 	<ion-list>
 		<form (ngSubmit)="guardarCambios()" #datos="ngForm">
@@ -37,8 +37,8 @@
 
 
 			<!-- Grupo sanguineo  -->
-			<ion-item class="half-size">
-				<ion-label floating>Grupo</ion-label>
+			<ion-item>
+				<ion-label floating>Tu grupo sanguineo</ion-label>
 				<ion-select [(ngModel)]="datosUsuario.grupoSanguineo" okText="Aceptar" cancelText="Cancelar" name="grupo" #grupo="ngModel">
 					<ion-option *ngFor="let grupo of listaGruposSanguineos" [value]="grupo">
 						{{grupo.nombre}}
@@ -49,8 +49,8 @@
 
 
 			<!-- Factor sanguineo  -->
-			<ion-item class="half-size">
-				<ion-label floating>Factor</ion-label>
+			<ion-item>
+				<ion-label floating>Tu factor sanguineo</ion-label>
 				<ion-select [(ngModel)]="datosUsuario.factorSanguineo" okText="Aceptar" cancelText="Cancelar" name="factor" #factor="ngModel">
 					<ion-option *ngFor="let factor of listaFactoresSanguineos" [value]="factor">
 						{{factor.nombre}}
@@ -59,6 +59,11 @@
 			</ion-item>
 
 			
+
+			<ion-item>
+				<p>Sus datos se guardarán de forma local en su móvil y <strong>nunca serán enviados</strong> a nuestros servidores ni compartidos de niguna forma.</p>
+			</ion-item>
+
 
 
 			<button class="submit" red full>

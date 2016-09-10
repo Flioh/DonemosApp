@@ -15,7 +15,7 @@
 			<ion-segment-button value="solicitudes">
 				Solicitudes
 			</ion-segment-button>
-			<ion-segment-button value="filtros" (ionSelect)="cargarListados()">
+			<ion-segment-button value="filtros" (ionSelect)="inicializarFiltros()">
 				Filtros
 			</ion-segment-button>
 		</ion-segment>
@@ -23,14 +23,17 @@
 
 </ion-header>
 
-<ion-content>
+<ion-content padding>
 
 	<div [ngSwitch]="seccion">
 		<div *ngSwitchCase="'solicitudes'">
 			<!-- Creamos una lista de solicitudes usando el componente solicitud-item -->
-			<solicitud-item *ngFor="let solicitud of solicitudes" [solicitud]="solicitud" (seleccionarSolicitud)="abrirDetalles($event)"></solicitud-item>
+			<solicitud-item *ngFor="let solicitud of solicitudes" 
+				[solicitud]="solicitud" 
+				(seleccionarSolicitud)="abrirDetalles($event)">		
+			</solicitud-item>
 
-			<button red full (click)="buscarSolicitudes()">Ver mas solicitudes</button>
+			<button class="submit" red full (click)="buscarSolicitudes()">Ver mas solicitudes</button>
 		</div>
 			
 		<ion-list *ngSwitchCase="'filtros'">
@@ -63,8 +66,8 @@
 
 
 				<!-- Grupo sanguineo  -->
-				<ion-item class="half-size">
-					<ion-label floating>Grupo</ion-label>
+				<ion-item>
+					<ion-label floating>Tu grupo sanguineo</ion-label>
 					<ion-select [(ngModel)]="grupoSanguineoSeleccionado" okText="Aceptar" cancelText="Cancelar" name="grupo" #grupo="ngModel">
 						<ion-option *ngFor="let grupo of listaGruposSanguineos" [value]="grupo">
 							{{grupo.nombre}}
@@ -75,8 +78,8 @@
 
 
 				<!-- Factor sanguineo  -->
-				<ion-item class="half-size">
-					<ion-label floating>Factor</ion-label>
+				<ion-item>
+					<ion-label floating>Tu factor sanguineo</ion-label>
 					<ion-select [(ngModel)]="factorSanguineoSeleccionado" okText="Aceptar" cancelText="Cancelar" name="factor" #factor="ngModel">
 						<ion-option *ngFor="let factor of listaFactoresSanguineos" [value]="factor">
 							{{factor.nombre}}
@@ -85,8 +88,21 @@
 				</ion-item>
 
 
+				<!-- Toggle para usar datos personales como filtro -->
+				<ion-item *ngIf="datosUsuarioObj">
+				    <ion-label>Usar los datos de mi perfil</ion-label>
+				    <ion-toggle red [(ngModel)]="usarDatosPersonales" (ionChange)="usarDatosUsuario()" name="usarDatosPersonales"></ion-toggle>
+				</ion-item>
+				<ion-item *ngIf="!datosUsuarioObj">
+					<p>Si desea puede configurar sus datos en <strong>Configurar perfil</strong> para luego poder utilizarlos automáticamente como filtro de búsqueda.</p>
+				</ion-item>
 
-				<button class="submit" red full>
+
+				<button class="btn-inline btn-secondary reset" grey full (click)="borrarFiltros()">
+					Borrar
+				</button>
+
+				<button class="btn-inline btn-primary" red full>
 					Buscar Solicitudes
 				</button>
 

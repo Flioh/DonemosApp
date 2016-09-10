@@ -20,19 +20,25 @@ span.mensaje-error {
     display: block;
 }
 
+p {
+	white-space: pre-line;
+}
+
 button.submit {
-	margin-top: 30px;
-	position: absolute;
-	bottom: 0;
-	}
+	margin-top: 50px;
+
+}
 
 ion-item.half-size {
 	max-width: 49%;
 	display: inline-block;
 }
 
-/* Fix para mostrar correctamente la opcion seleccionada del popup que se usa en los elementod de tipo select */
-button[aria-checked="true"] {
+/* 
+	Fix para mostrar correctamente la opcion seleccionada 
+	del popup que se usa en los elementod de tipo select 
+*/
+button.alert-radio-button[aria-checked="true"] {
 	background-color: #f32d2e;
 }
 

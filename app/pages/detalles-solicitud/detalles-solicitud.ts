@@ -22,13 +22,6 @@ export class DetallesSolicitudPage {
 
     // Inicializa el mapa cuando el DOM ya esta listo
   	ionViewDidEnter(){
-        
-        let loadingPopup = this.loadingCtrl.create({
-          content: 'Obteniendo los detalles'
-        });
-
-        // Muestra el mensaje de espera
-        loadingPopup.present();
 
         let geocoder = new google.maps.Geocoder();
 
@@ -53,9 +46,6 @@ export class DetallesSolicitudPage {
               map: map,
               position: results[0].geometry.location
             });
-
-            // Oculta el mensaje de espera
-            loadingPopup.dismiss();
 
           } else {
             // TODO: manejar el caso de error
