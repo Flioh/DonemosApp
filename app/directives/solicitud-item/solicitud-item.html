@@ -11,7 +11,7 @@
           <span>{{ solicitud.cantidadDadores === 1 ? ' dador' : ' dadores' }}</span>
         </h2>  
 
-		<h2 [innerHTML]="getTiposSanguineosBuscados() | tiposSanguineos: getDescripcionTipoSanguineo()"></h2>
+		<h2 [innerHTML]="mostrarTiposBuscados()"></h2>
 	</ion-item>
 
 	<button class="top-middle" fab fab-right>

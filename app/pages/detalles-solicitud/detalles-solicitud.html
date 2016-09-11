@@ -17,7 +17,7 @@
           <span>{{ solicitudSeleccionada.cantidadDadores === 1 ? ' dador' : ' dadores' }}</span>
         </h3>        
         
-        <h2 [innerHTML]="getTiposSanguineosBuscados() | tiposSanguineos: getDescripcionTipoSanguineo()"></h2>
+        <h2 [innerHTML]="mostrarTiposBuscados()"></h2>
         
         <span class="fecha">
           {{ solicitudSeleccionada.fechaCreacion | timeago }}
@@ -31,8 +31,8 @@
           <ion-icon softRed name="water" item-left></ion-icon>
         </ion-avatar>
         <h2>Puede recibir de</h2>
-        <p [innerHTML]="getTiposSanguineosBuscados() | tiposSanguineos: getDescripcionTipoSanguineo()"></p>
-        <span *ngIf="getDescripcionTipoSanguineo()"><ion-icon name="checkmark"></ion-icon> Podés donar</span>
+        <p [innerHTML]="mostrarTiposBuscados()"></p>
+        <span *ngIf="compatibleConUsuario"><ion-icon name="checkmark"></ion-icon> Podés donar</span>
       </ion-item>
 
 
