@@ -39,7 +39,7 @@
 		</div>
 			
 		<ion-list *ngSwitchCase="'filtros'">
-			<form (ngSubmit)="buscarSolicitudes()" #filtros="ngForm">
+			<form #filtros="ngForm">
 
 
 
@@ -97,18 +97,18 @@
 				</ion-item>
 				<ion-item *ngIf="!datosUsuarioObj">
 					<p>Si desea puede configurar sus datos en <strong>Configurar perfil</strong> para luego poder utilizarlos automáticamente como filtro de búsqueda.</p>
-				</ion-item>
-
-
-				<button class="btn-inline btn-secondary reset" grey full (click)="borrarFiltros()">
-					Borrar
-				</button>
-
-				<button class="btn-inline btn-primary" red full>
-					Buscar Solicitudes
-				</button>
+				</ion-item>				
 
 			</form>
+
+			<button class="btn-inline btn-secondary reset" grey full (click)="borrarFiltros()">
+				Borrar
+			</button>
+
+			<button class="btn-inline btn-primary" (click)="buscarSolicitudes()" red full>
+				Buscar Solicitudes
+			</button>
+				
 		</ion-list>
 	</div>
 

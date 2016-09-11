@@ -41,7 +41,7 @@ export class ListaSolicitudesPage {
 
   private listadosCargados: boolean;
 
-  private seccion: string =  'solicitudes';
+  private seccion: string = 'solicitudes';
 
   private storage: Storage;
   private usarDatosPersonales: boolean;
@@ -72,6 +72,14 @@ export class ListaSolicitudesPage {
     this.ciudadSeleccionada = null;
     this.provinciaSeleccionada = null;
 
+    // Cargamos las ultimas solicitudes
+    this.buscarSolicitudes();
+  }
+
+  public buscarSolicitudes(): void {
+    // Mostramos las solicitudes
+    this.seccion = 'solicitudes';
+
     let loadingPopup = this.loadingCtrl.create({
       content: 'Cargando solicitudes'
     });
@@ -87,7 +95,6 @@ export class ListaSolicitudesPage {
 
       // Oculta el mensaje de espera
       loadingPopup.dismiss();
-
     });  
   }
 
@@ -250,9 +257,6 @@ export class ListaSolicitudesPage {
         // TODO: manejar errores en las llamadas al servidor
         // -------------------------------------------------      
       });
-  }
-
-  public buscarSolicitudes() {
   }
 
   public abrirDetalles(event) {
