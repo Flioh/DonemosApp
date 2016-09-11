@@ -87,7 +87,7 @@ export class ListaSolicitudesPage {
     });  
   }
 
-  ionViewDidEnter(){
+  ionViewDidEnter() {
     this.datosUsuarioObj = null;
 
     this.obtenerDatosUsuario();
@@ -126,6 +126,7 @@ export class ListaSolicitudesPage {
     this.grupoSanguineoSeleccionado = null;
     this.factorSanguineoSeleccionado = null;
     this.listaCiudades = null;
+    this.usarDatosPersonales = false;
   }
 
   public usarDatosUsuario() {
