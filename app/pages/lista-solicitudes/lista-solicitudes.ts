@@ -47,6 +47,8 @@ export class ListaSolicitudesPage {
   private usarDatosPersonales: boolean;
   private datosUsuarioObj: any;
 
+  private hayMasSolicitudes: boolean;
+
   constructor(private nav: NavController, 
               private loadingCtrl: LoadingController,
               private alertCtrl: AlertController, 
@@ -61,6 +63,8 @@ export class ListaSolicitudesPage {
     // Por defecto no usa los datos personales
     this.usarDatosPersonales = false;
     this.datosUsuarioObj = null;
+
+    this.hayMasSolicitudes = false;
 
     // Inicializa los filtros de busqueda
     this.grupoSanguineoSeleccionado = null;
