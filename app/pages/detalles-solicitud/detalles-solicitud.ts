@@ -14,7 +14,7 @@ export class DetallesSolicitudPage {
 	// Variables de la clase
 	private solicitudSeleccionada: SolicitudModel;
 
-  private datosUsuario: string;
+  private tiposSanguineosSolicitud: string;
   private compatibleConUsuario: boolean;
 
   private storage: Storage;
@@ -27,7 +27,9 @@ export class DetallesSolicitudPage {
   	}
 
     public obtenerDatosUsuario(){
-      this.datosUsuario = '';
+      this.tiposSanguineosSolicitud = DonacionesHelper.puedeRecibirDe(this.solicitudSeleccionada.getGrupoSanguineo().getId(), 
+                                                                      this.solicitudSeleccionada.getFactorSanguineo().getId()).join(' ');
+      this.compatibleConUsuario = false;
 
       if(!this.storage) {
         this.storage = new Storage(SqlStorage);  
@@ -36,7 +38,13 @@ export class DetallesSolicitudPage {
       this.storage.get('datosUsuarioObj').then((datosUsuario) => {
         if(datosUsuario) {
           let datosUsuarioObj = JSON.parse(datosUsuario);
-          this.datosUsuario = DonacionesHelper.getDescripcion(datosUsuarioObj.grupoSanguineoID, datosUsuarioObj.factorSanguineoID);
+          let tipoSanguineoUsuario = DonacionesHelper.getDescripcion(datosUsuarioObj.grupoSanguineoID, datosUsuarioObj.factorSanguineoID);
+
+          // Si es compatible mostramos un mensjae informandolo
+          this.compatibleConUsuario = this.tiposSanguineosSolicitud.indexOf(tipoSanguineoUsuario) > -1;
+
+          // Resaltamos el tipo sanguineo del usuario
+          this.tiposSanguineosSolicitud = this.tiposSanguineosSolicitud.replace(tipoSanguineoUsuario, '<span class="marked">' + tipoSanguineoUsuario + '</span> ');
         }
       });
     }
@@ -74,39 +82,6 @@ export class DetallesSolicitudPage {
             //valert('Geocode was not successful for the following reason: ' + status);
           }
         });
-    }
-
-    // Obtiene el listado de grupos y factores que se necesitan
-    public mostrarTiposBuscados(): string {
-      let result = '';
-      this.compatibleConUsuario = false;
-
-      let posiblesDadores = DonacionesHelper.puedeRecibirDe(this.solicitudSeleccionada.getGrupoSanguineo().getId(), 
-                                             this.solicitudSeleccionada.getFactorSanguineo().getId());
-
-      for(let i=0; i<posiblesDadores.length; i++) {
-        if(posiblesDadores[i] == this.datosUsuario) {
-          result += '<span class="marked">' + posiblesDadores[i] + '</span> ';
-          this.compatibleConUsuario = true;
-        } else {
-          result += posiblesDadores[i] + ' ';
-        }
-      }
-
-      return result;
-    }
-
-    // Obtiene el listado de grupos y factores que se necesitan
-    public getTiposSanguineosBuscados(): Array<string> {
-      return DonacionesHelper.puedeRecibirDe(this.solicitudSeleccionada.getGrupoSanguineo().getId(), 
-                                             this.solicitudSeleccionada.getFactorSanguineo().getId());
-    }
-
-    // Obtiene el factor y grupo sanguineo del usuario
-    public getDescripcionTipoSanguineo(): string {
-      // TODO: reemplazar por los datos del usuario si existen
-      // -----------------------------------------------------
-      return 'A+';
     }
   }
 

@@ -6,8 +6,7 @@ import { TimeAgoPipe } from '../../pipes/time-ago/time-ago-pipe';
 @Component({
     selector: 'solicitud-item',
     templateUrl: 'build/directives/solicitud-item/solicitud-item.html',
-    pipes: [ TimeAgoPipe ],
-    changeDetection: ChangeDetectionStrategy.OnPush 
+    pipes: [ TimeAgoPipe ]
 })
 export class SolicitudItem {
 	  @Input() solicitud: SolicitudModel;
