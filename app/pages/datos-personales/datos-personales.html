@@ -8,7 +8,7 @@
 <ion-content padding>
 
 	<ion-list>
-		<form (ngSubmit)="guardarCambios()" #datos="ngForm">
+		<form #datos="ngForm">
 
 
 
@@ -63,14 +63,13 @@
 			<ion-item>
 				<p>Sus datos se guardarán de forma local en su móvil y <strong>nunca serán enviados</strong> a nuestros servidores ni compartidos de niguna forma.</p>
 			</ion-item>
-
-
-
-			<button class="submit" red full>
-				Guardar datos
-			</button>
+			
 
 		</form>
+
+		<button (click)="guardarCambios()" class="submit" red full>
+			Guardar datos
+		</button>
 	</ion-list>
 
 </ion-content>

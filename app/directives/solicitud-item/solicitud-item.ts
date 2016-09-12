@@ -1,36 +1,20 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { SolicitudModel } from '../../providers/solicitud-model/solicitud-model';
 import { DonacionesHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
 import { TimeAgoPipe } from '../../pipes/time-ago/time-ago-pipe';
-import { SqlStorage, Storage } from 'ionic-angular';
 
 @Component({
     selector: 'solicitud-item',
     templateUrl: 'build/directives/solicitud-item/solicitud-item.html',
-    pipes: [ TimeAgoPipe ]
+    pipes: [ TimeAgoPipe ],
+    changeDetection: ChangeDetectionStrategy.OnPush 
 })
 export class SolicitudItem {
 	  @Input() solicitud: SolicitudModel;
+    @Input() tipoSanguineoUsuario: string;
 	  @Output() seleccionarSolicitud = new EventEmitter();
 
-    private storage : Storage;
-    private datosUsuario : string;
-
-    constructor() {
-
-      this.datosUsuario = '';
-
-      if(!this.storage) {
-        this.storage = new Storage(SqlStorage);  
-      }
-
-      this.storage.get('datosUsuarioObj').then((datosUsuario) => {
-        if(datosUsuario) {
-          let datosUsuarioObj = JSON.parse(datosUsuario);
-          this.datosUsuario = DonacionesHelper.getDescripcion(datosUsuarioObj.grupoSanguineoID, datosUsuarioObj.factorSanguineoID);
-        }
-      });
-    }
+    constructor() { }
 
     public verDetalles(): void {
     	this.seleccionarSolicitud.emit({ value : this.solicitud });
@@ -42,13 +26,11 @@ export class SolicitudItem {
       let posiblesDadores = DonacionesHelper.puedeRecibirDe(this.solicitud.getGrupoSanguineo().getId(), 
                                              this.solicitud.getFactorSanguineo().getId());
 
-      for(let i=0; i<posiblesDadores.length; i++) {
-        if(posiblesDadores[i] == this.datosUsuario) {
-          result += '<span class="marked">' + posiblesDadores[i] + '</span> ';
-        } else {
-          result += posiblesDadores[i] + ' ';
-        }
-      }
+      // Obtenems un string con todos los tipos sanguineos buscados
+      result = posiblesDadores.join(' ');
+
+      // Resaltamos el tipo sanguineo del usuario
+      result = result.replace(this.tipoSanguineoUsuario, '<span class="marked">' + this.tipoSanguineoUsuario + '</span> ');
 
       return result;
     }

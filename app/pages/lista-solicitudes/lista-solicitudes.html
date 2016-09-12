@@ -29,7 +29,8 @@
 		<div *ngSwitchCase="'solicitudes'">
 			<!-- Creamos una lista de solicitudes usando el componente solicitud-item -->
 			<solicitud-item *ngFor="let solicitud of solicitudes" 
-				[solicitud]="solicitud" 
+				[solicitud]="solicitud"
+				[tipoSanguineoUsuario]="tipoSanguineoUsuario"
 				(seleccionarSolicitud)="abrirDetalles($event)">		
 			</solicitud-item>
 

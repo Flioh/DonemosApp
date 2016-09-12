@@ -11,6 +11,7 @@ import { AutocompleteService } from '../../providers/autocomplete-service/autoco
 import { ConnectivityService } from '../../providers/connectivity-service/connectivity-service';
 import { RemoteDataService } from '../../providers/remote-data-service/remote-data-service';
 import { GrupoSanguineoHelper, FactorSanguineoHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
+import { DonacionesHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
 
 /* Modelos utilizados */
 import { SolicitudItem } from '../../directives/solicitud-item/solicitud-item';
@@ -47,6 +48,8 @@ export class ListaSolicitudesPage {
   private usarDatosPersonales: boolean;
   private datosUsuarioObj: any;
 
+  private tipoSanguineoUsuario: string;
+
   private hayMasSolicitudes: boolean;
 
   constructor(private nav: NavController, 
@@ -63,6 +66,7 @@ export class ListaSolicitudesPage {
     // Por defecto no usa los datos personales
     this.usarDatosPersonales = false;
     this.datosUsuarioObj = null;
+    this.tipoSanguineoUsuario = '';
 
     this.hayMasSolicitudes = false;
 
@@ -183,6 +187,7 @@ export class ListaSolicitudesPage {
         } else {
           // Inicializamos los listados con la informacion del usuario
           this.datosUsuarioObj = JSON.parse(datosUsuario);
+          this.tipoSanguineoUsuario = DonacionesHelper.getDescripcion(this.datosUsuarioObj.grupoSanguineoID, this.datosUsuarioObj.factorSanguineoID);
           resolve(true);          
         }
       });
