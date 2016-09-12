@@ -80,6 +80,7 @@ export class ListaSolicitudesPage {
     this.buscarSolicitudes();
   }
 
+  // Método que obtiene las solicitudes del servidor
   public buscarSolicitudes(): void {
     // Mostramos las solicitudes
     this.seccion = 'solicitudes';
@@ -135,6 +136,7 @@ export class ListaSolicitudesPage {
     }
   }
 
+  // Resetea los filtros de busqueda
   public borrarFiltros() {
     this.provinciaSeleccionada = null;
     this.ciudadSeleccionada = null;
@@ -144,6 +146,7 @@ export class ListaSolicitudesPage {
     this.usarDatosPersonales = false;
   }
 
+  // Inicializa los filtros de busqueda con los datos del usuario
   public usarDatosUsuario() {
 
     if(this.usarDatosPersonales) {
@@ -264,6 +267,7 @@ export class ListaSolicitudesPage {
       });
   }
 
+  // Método que muestra los detalles de la solicitud seleccionada
   public abrirDetalles(event) {
     this.nav.push(DetallesSolicitudPage, {
       // Obtenemos la solicitud del evento
@@ -271,6 +275,7 @@ export class ListaSolicitudesPage {
     }, { animate: true, direction: 'forward' });
   }
 
+  // Método que lleva a la pantalla de creación de solicitudes
   public nuevaSolicitud(): void {
     this.nav.push(NuevaSolicitudPage, {}, { animate: true, direction: 'forward' });
   }
