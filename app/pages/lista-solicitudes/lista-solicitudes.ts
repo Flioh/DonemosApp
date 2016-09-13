@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { NavController, LoadingController, AlertController, SqlStorage, Storage } from 'ionic-angular';
 
+/* Directivas utilizadas */
+import { SolicitudItem } from '../../directives/solicitud-item/solicitud-item';
+
 /* Paginas utilizadas */
 import { DetallesSolicitudPage } from '../detalles-solicitud/detalles-solicitud';
 import { NuevaSolicitudPage } from '../nueva-solicitud/nueva-solicitud';
@@ -14,7 +17,7 @@ import { GrupoSanguineoHelper, FactorSanguineoHelper } from '../../providers/don
 import { DonacionesHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
 
 /* Modelos utilizados */
-import { SolicitudItem } from '../../directives/solicitud-item/solicitud-item';
+import { SolicitudItemModel } from '../../providers/solicitud-item-model/solicitud-item-model';
 import { SolicitudModel } from '../../providers/solicitud-model/solicitud-model';
 import { ProvinciaModel } from '../../providers/provincia-model/provincia-model';
 import { CiudadModel } from '../../providers/ciudad-model/ciudad-model';
@@ -27,7 +30,7 @@ import { FactorSanguineoModel } from "../../providers/factor-sanguineo-model/fac
 })
 export class ListaSolicitudesPage {
 
-  private solicitudes: Array<SolicitudModel>;
+  private solicitudes: Array<SolicitudItemModel>;
 
   // Filtros de busqueda
   private grupoSanguineoSeleccionado: GrupoSanguineoModel;
@@ -108,7 +111,11 @@ export class ListaSolicitudesPage {
     // Obtenemos las solicitudes del servidor
     this.dataService.getSolicitudes().subscribe((solicitudesObj) => { 
       for(let i = 0; i < solicitudesObj.length; i++) {
-        this.solicitudes.push(new SolicitudModel(solicitudesObj[i]));
+        let solicitud = new SolicitudModel(solicitudesObj[i]);
+        let descripcionTiposSanguineos = this.obtenerInformacionTiposSanguineos(solicitud);
+
+        // Creamos una instancia del modelo que posee tanto la solicitud como su encabezado
+        this.solicitudes.push(new SolicitudItemModel(solicitud, descripcionTiposSanguineos));
       }
 
       // Oculta el mensaje de espera
@@ -255,6 +262,30 @@ export class ListaSolicitudesPage {
       });
     });
   }
+
+  // Método que obtiene la informacion de los tipos sanguineos buscados, resaltando el del usuario
+  public obtenerInformacionTiposSanguineos(unaSolicitud: SolicitudModel): string {
+
+      if(this.dataService.modoDebugActivado()) {
+        console.time('ListaSolicitudesPage / obtenerInformacionTiposSanguineos');
+      }
+
+      let result = '';
+      let posiblesDadores = DonacionesHelper.puedeRecibirDe(unaSolicitud.getGrupoSanguineo().getId(), 
+                                                             unaSolicitud.getFactorSanguineo().getId());
+
+      // Obtenems un string con todos los tipos sanguineos buscados
+      result = posiblesDadores.join(' ');
+
+      // Resaltamos el tipo sanguineo del usuario
+      result = result.replace(this.tipoSanguineoUsuario, '<span class="marked">' + this.tipoSanguineoUsuario + '</span> ');
+
+      if(this.dataService.modoDebugActivado()) {
+        console.timeEnd('ListaSolicitudesPage / obtenerInformacionTiposSanguineos');
+      }
+
+      return result;
+    }
 
   // Método que inicializa el formulario con los datos del usuario
   public inicializarDatosUsuario(): Promise<boolean> {

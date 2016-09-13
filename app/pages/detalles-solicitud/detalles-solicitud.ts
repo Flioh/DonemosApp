@@ -74,7 +74,7 @@ export class DetallesSolicitudPage {
     // Inicializa el mapa cuando el DOM ya esta listo
   	ionViewDidEnter(){
 
-      if(this.dataService.modoDebugActivado()) {
+      /*if(this.dataService.modoDebugActivado()) {
         console.time('DetallesSolicitudPage / ionViewDidEnter');
       }
 
@@ -111,7 +111,7 @@ export class DetallesSolicitudPage {
           // ------------------------------
           //valert('Geocode was not successful for the following reason: ' + status);
         }
-      });
+      });*/
     }
   }
 

@@ -6,12 +6,14 @@
 		</ion-avatar>
 
 		<h2> 
-          <span>{{ solicitud.cantidadDadores === 1 ? 'Se necesita ' : 'Se necesitan ' }}</span>
-          <strong *ngIf="solicitud.cantidadDadores">{{ solicitud.cantidadDadores }}</strong>
-          <span>{{ solicitud.cantidadDadores === 1 ? ' dador' : ' dadores' }}</span>
+          <span>{{ solicitudItemModel.solicitud.cantidadDadores === 1 ? 'Se necesita ' : 'Se necesitan ' }}</span>
+          <strong *ngIf="solicitudItemModel.solicitud.cantidadDadores">
+          	{{ solicitudItemModel.solicitud.cantidadDadores }}
+          </strong>
+          <span>{{ solicitudItemModel.solicitud.cantidadDadores === 1 ? ' dador' : ' dadores' }}</span>
         </h2>  
 
-		<h2 [innerHTML]="mostrarTiposBuscados()"></h2>
+		<h2 [innerHTML]="solicitudItemModel.descripcionTiposSanguineos"></h2>
 	</ion-item>
 
 	<button class="top-middle" fab fab-right>
@@ -22,23 +24,23 @@
 		<ion-row>
 			<ion-col>
 				<ion-icon name="pin"></ion-icon>
-				{{ solicitud.ciudad.nombre }}, {{ solicitud.provincia.nombre }}
+				{{ solicitudItemModel.solicitud.ciudad.nombre }}, {{ solicitudItemModel.solicitud.provincia.nombre }}
 			</ion-col>			
 		</ion-row>
 		<ion-row>
 			<ion-col width-60>
 				<ion-icon name="home"></ion-icon>
-				{{ solicitud.institucion }}
+				{{ solicitudItemModel.solicitud.institucion }}
 			</ion-col>
 			<ion-col width-40>
 				<ion-icon name="time"></ion-icon>
-				{{ solicitud.horaDesde }} - {{ solicitud.horaHasta }}
+				{{ solicitudItemModel.solicitud.horaDesde }} - {{ solicitudItemModel.solicitud.horaHasta }}
 			</ion-col>
 		</ion-row>	
 		<ion-row>
 			<ion-col width-60>
 				<ion-note>
-					{{ solicitud.fechaCreacion | timeago }}
+					{{ solicitudItemModel.solicitud.fechaCreacion | timeago }}
 				</ion-note>
 			</ion-col>
 			<ion-col tappable width-40 (click)="verDetalles()">
