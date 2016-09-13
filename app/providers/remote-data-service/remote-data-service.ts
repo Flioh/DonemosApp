@@ -29,10 +29,21 @@ export class RemoteDataService {
   private apiEndPointLocalidades: string = './localidades.json';
   private apiEndPointSolicitudes: string = './solicitudes.json';
 
+  private modoDebug: boolean;
+
   constructor(public http: Http) {
+
+    // Loguea en la consola cada vez que se inicia o finaliza un método
+    this.modoDebug = true;
+
     this.listaProvincias = [];
     this.provinciaSeleccionadaID = null;
     this.listaCiudades = [];
+  }
+
+
+  public modoDebugActivado(): boolean {
+    return this.modoDebug;
   }
 
   // Obtiene el listado de factores sanguineos

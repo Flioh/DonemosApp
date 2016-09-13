@@ -33,6 +33,10 @@ export class DatosPersonalesPage {
 		private dataService: RemoteDataService,
 		public toastCtrl: ToastController) {
 
+		if(this.dataService.modoDebugActivado()) {
+        	console.time('DatosPersonalesPage / constructor');
+      	}
+
 		this.datosUsuario = new DatosUsuarioModel();
 
 		this.storage = new Storage(SqlStorage);  		
@@ -42,16 +46,28 @@ export class DatosPersonalesPage {
 			if(!datosUsuario) {
 				// No hay datos guardados, por lo que inicializamos los listados sin setear ninguna opcion por defecto
 				this.cargarListados(false);
+
+				if(this.dataService.modoDebugActivado()) {
+        			console.timeEnd('DatosPersonalesPage / constructor');
+      			}
 			} else {
 				// Inicializamos los listados con la informacion del usuario
 				this.datosUsuarioObj = JSON.parse(datosUsuario);
 				this.cargarListados(true);
+
+				if(this.dataService.modoDebugActivado()) {
+        			console.timeEnd('DatosPersonalesPage / constructor');
+      			}
 			}
 		});
 	}
 
   	// Método que inicializa los listados de la pagina
   	public cargarListados(inicializarDatos: boolean) {
+
+  		if(this.dataService.modoDebugActivado()) {
+        	console.time('DatosPersonalesPage / cargarListados');
+        }
 
   		let mensajeEspera = inicializarDatos ? 'Cargando datos guardados' : 'Cargando listados';
 
@@ -74,9 +90,17 @@ export class DatosPersonalesPage {
       				this.inicializarDatosUsuario()
       				.then((result) => {
       					loadingPopup.dismiss();
+
+      					if(this.dataService.modoDebugActivado()) {
+        					console.timeEnd('DatosPersonalesPage / cargarListados');
+        				}
       				});
       			} else {
       				loadingPopup.dismiss();
+
+      				if(this.dataService.modoDebugActivado()) {
+        				console.timeEnd('DatosPersonalesPage / cargarListados');
+        			}	
       			}      		
       		}
       	});
@@ -86,6 +110,10 @@ export class DatosPersonalesPage {
     public inicializarDatosUsuario(): Promise<boolean> {
     	return new Promise((resolve) => {
     		
+    		if(this.dataService.modoDebugActivado()) {
+        		console.time('DatosPersonalesPage / inicializarDatosUsuario');
+        	}
+
     		// Obtenemos el indice de la provincia del usuario y la seleccionamos
     		let indiceProvincia = this.getIndicePorID(this.listaProvincias, this.datosUsuarioObj.provinciaID);    		
  			this.datosUsuario.setProvincia(this.listaProvincias[indiceProvincia]);
@@ -111,6 +139,10 @@ export class DatosPersonalesPage {
 
 			    		// Resolvemos la promesa
 			    		resolve(true);
+
+			    		if(this.dataService.modoDebugActivado()) {
+        					console.timeEnd('DatosPersonalesPage / inicializarDatosUsuario');
+        				}
 			      	}
 		        	// TODO: manejar errores en las llamadas al servidor
 		        	// -------------------------------------------------      
@@ -120,15 +152,30 @@ export class DatosPersonalesPage {
 
     // Método que obtiene el indice del elemento cuyo id es el pasado como parametro
     public getIndicePorID(listado: Array<any>, id: number): number {
+    	
+    	if(this.dataService.modoDebugActivado()) {
+    		console.time('DatosPersonalesPage / getIndicePorID');
+    	}
+
     	for(let i=0; i<listado.length; i++) {
     		if(id === listado[i].getId())
     			return i;
     	}
+
+    	if(this.dataService.modoDebugActivado()) {
+    		console.timeEnd('DatosPersonalesPage / getIndicePorID');
+    	}
+
     	return -1;
     }
 
   	// Método que inicializa el listado de ciudades de una provincia
   	public inicializarCiudadesDeLaProvincia(): void {
+
+  		if(this.dataService.modoDebugActivado()) {
+    		console.time('DatosPersonalesPage / inicializarCiudadesDeLaProvincia');
+    	}
+
   		let loadingPopup = this.loadingCtrl.create({
   			content: 'Cargando ciudades'
   		});
@@ -143,6 +190,10 @@ export class DatosPersonalesPage {
 
 	          // Oculta el mensaje de espera
 	          loadingPopup.dismiss();
+
+	          if(this.dataService.modoDebugActivado()) {
+    			console.timeEnd('DatosPersonalesPage / inicializarCiudadesDeLaProvincia');
+    		  }
 	      }
 	        // TODO: manejar errores en las llamadas al servidor
 	        // -------------------------------------------------      
@@ -151,6 +202,10 @@ export class DatosPersonalesPage {
 
 	// Método que guarda los cambios en la base de datos local
 	public guardarCambios(): void {
+
+		if(this.dataService.modoDebugActivado()) {
+    		console.time('DatosPersonalesPage / guardarCambios');
+    	}
 
 		let nuevosDatosUsuarioObj = {
 			provinciaID : this.datosUsuario.getProvincia().getId(),
@@ -169,6 +224,10 @@ export class DatosPersonalesPage {
 
 		    // Mostramos el mensaje al usuario
 		    toast.present();
+
+		    if(this.dataService.modoDebugActivado()) {
+    			console.timeEnd('DatosPersonalesPage / guardarCambios');
+    		}
 		});
 	}
 

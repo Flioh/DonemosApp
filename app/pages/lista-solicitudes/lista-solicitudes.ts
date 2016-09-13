@@ -55,8 +55,12 @@ export class ListaSolicitudesPage {
   constructor(private nav: NavController, 
               private loadingCtrl: LoadingController,
               private alertCtrl: AlertController, 
-              private dataService: RemoteDataService) {
-    
+              private dataService: RemoteDataService) {    
+
+    if(this.dataService.modoDebugActivado()) {
+      console.time('ListaSolicitudesPage / constructor');
+    }
+
     // Indica que las listas usadas en los filtros no estan cargadas aun
     this.listadosCargados = false;
 
@@ -78,10 +82,19 @@ export class ListaSolicitudesPage {
 
     // Cargamos las ultimas solicitudes
     this.buscarSolicitudes();
+
+    if(this.dataService.modoDebugActivado()) {
+      console.timeEnd('ListaSolicitudesPage / constructor');
+    }
   }
 
   // Método que obtiene las solicitudes del servidor
   public buscarSolicitudes(): void {
+
+    if(this.dataService.modoDebugActivado()) {
+      console.time('ListaSolicitudesPage / buscarSolicitudes');
+    }
+
     // Mostramos las solicitudes
     this.seccion = 'solicitudes';
 
@@ -100,6 +113,11 @@ export class ListaSolicitudesPage {
 
       // Oculta el mensaje de espera
       loadingPopup.dismiss();
+
+      if(this.dataService.modoDebugActivado()) {
+        console.timeEnd('ListaSolicitudesPage / buscarSolicitudes');
+      }
+
     });  
   }
 
@@ -111,6 +129,11 @@ export class ListaSolicitudesPage {
 
   // Inicializa los listados de la pagina
   public inicializarFiltros() {
+
+    if(this.dataService.modoDebugActivado()) {
+      console.time('ListaSolicitudesPage / inicializarFiltros');
+    }
+
     if(!this.listadosCargados) {
 
       let loadingPopup = this.loadingCtrl.create({
@@ -131,6 +154,10 @@ export class ListaSolicitudesPage {
 
           // Ocultamos el mensaje de espera
           loadingPopup.dismiss();
+
+          if(this.dataService.modoDebugActivado()) {
+            console.timeEnd('ListaSolicitudesPage / inicializarFiltros');
+          }
         } 
       });
     }
@@ -138,18 +165,31 @@ export class ListaSolicitudesPage {
 
   // Resetea los filtros de busqueda
   public borrarFiltros() {
+
+    if(this.dataService.modoDebugActivado()) {
+      console.time('ListaSolicitudesPage / borrarFiltros');
+    }
+
     this.provinciaSeleccionada = null;
     this.ciudadSeleccionada = null;
     this.grupoSanguineoSeleccionado = null;
     this.factorSanguineoSeleccionado = null;
     this.listaCiudades = null;
     this.usarDatosPersonales = false;
+
+    if(this.dataService.modoDebugActivado()) {
+      console.timeEnd('ListaSolicitudesPage / borrarFiltros');
+    }
   }
 
   // Inicializa los filtros de busqueda con los datos del usuario
   public usarDatosUsuario() {
 
     if(this.usarDatosPersonales) {
+
+      if(this.dataService.modoDebugActivado()) {
+        console.time('ListaSolicitudesPage / usarDatosUsuario');
+      }
 
       let loadingPopup = this.loadingCtrl.create({
         content: 'Obteniendo datos'
@@ -162,6 +202,10 @@ export class ListaSolicitudesPage {
 
         // Ocultamos el mensaje de espera
         loadingPopup.dismiss();
+
+        if(this.dataService.modoDebugActivado()) {
+          console.timeEnd('ListaSolicitudesPage / usarDatosUsuario');
+        }
 
       }); 
 
@@ -179,18 +223,33 @@ export class ListaSolicitudesPage {
   private obtenerDatosUsuario(): Promise<boolean> {
 
     return new Promise((resolve)=> {
+
+      if(this.dataService.modoDebugActivado()) {
+        console.time('ListaSolicitudesPage / obtenerDatosUsuario');
+      }
+
       if(!this.storage) {
         this.storage = new Storage(SqlStorage);  
       }
       
       this.storage.get('datosUsuarioObj').then((datosUsuario) => {
         if(!datosUsuario) {
+
+          if(this.dataService.modoDebugActivado()) {
+            console.timeEnd('ListaSolicitudesPage / obtenerDatosUsuario');
+          }
+
           // No hay datos guardados, por lo que mostramos un mensaje al usuario
           resolve(false);
         } else {
           // Inicializamos los listados con la informacion del usuario
           this.datosUsuarioObj = JSON.parse(datosUsuario);
           this.tipoSanguineoUsuario = DonacionesHelper.getDescripcion(this.datosUsuarioObj.grupoSanguineoID, this.datosUsuarioObj.factorSanguineoID);
+
+          if(this.dataService.modoDebugActivado()) {
+            console.timeEnd('ListaSolicitudesPage / obtenerDatosUsuario');
+          }
+
           resolve(true);          
         }
       });
@@ -200,6 +259,10 @@ export class ListaSolicitudesPage {
   // Método que inicializa el formulario con los datos del usuario
   public inicializarDatosUsuario(): Promise<boolean> {
     return new Promise((resolve) => {
+
+        if(this.dataService.modoDebugActivado()) {
+          console.time('ListaSolicitudesPage / inicializarDatosUsuario');
+        }
 
         // Obtenemos el indice de la provincia del usuario y la seleccionamos
         let indiceProvincia = this.getIndicePorID(this.listaProvincias, this.datosUsuarioObj.provinciaID);        
@@ -226,6 +289,10 @@ export class ListaSolicitudesPage {
                   let indiceCiudad = this.getIndicePorID(this.listaCiudades, this.datosUsuarioObj.ciudadID);
                   this.ciudadSeleccionada = this.listaCiudades[indiceCiudad];
 
+                  if(this.dataService.modoDebugActivado()) {
+                    console.timeEnd('ListaSolicitudesPage / inicializarDatosUsuario');
+                  } 
+
                   // Resolvemos la promesa
                   resolve(true);
                 }
@@ -238,15 +305,30 @@ export class ListaSolicitudesPage {
 
   // Método que obtiene el indice del elemento cuyo id es el pasado como parametro
   public getIndicePorID(listado: Array<any>, id: number): number {
+
+    if(this.dataService.modoDebugActivado()) {
+      console.time('ListaSolicitudesPage / getIndicePorID');
+    }
+
     for(let i=0; i<listado.length; i++) {
       if(id === listado[i].getId())
         return i;
     }
+
+    if(this.dataService.modoDebugActivado()) {
+      console.timeEnd('ListaSolicitudesPage / getIndicePorID');
+    }
+
     return -1;
   }
 
   // Método que inicializa el listado de ciudades de una provincia
   public inicializarCiudadesDeLaProvincia(nombreCiudad: string): void {
+
+    if(this.dataService.modoDebugActivado()) {
+      console.time('ListaSolicitudesPage / inicializarCiudadesDeLaProvincia');
+    }
+
     let loadingPopup = this.loadingCtrl.create({
       content: 'Cargando ciudades'
     });
@@ -261,6 +343,10 @@ export class ListaSolicitudesPage {
 
           // Oculta el mensaje de espera
           loadingPopup.dismiss();
+
+          if(this.dataService.modoDebugActivado()) {
+            console.timeEnd('ListaSolicitudesPage / inicializarCiudadesDeLaProvincia');
+          }
         }
         // TODO: manejar errores en las llamadas al servidor
         // -------------------------------------------------      

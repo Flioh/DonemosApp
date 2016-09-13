@@ -75,7 +75,7 @@ export class DonemosApp {
   }
 }
 
-//enableProdMode();
+enableProdMode();
 
 ionicBootstrap(DonemosApp, 
   [
