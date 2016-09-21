@@ -1,29 +1,19 @@
-import { Component, ViewChild, provide, PLATFORM_DIRECTIVES, enableProdMode } from '@angular/core';
-import { ionicBootstrap, App, Platform, AlertController, MenuController, Nav, Events } from 'ionic-angular';
-import { StatusBar } from 'ionic-native';
-
-// Nueva API de angular para forms
-import { disableDeprecatedForms, provideForms } from '@angular/forms';
-
-/* Servicios */
-import { ConnectivityService } from './providers/connectivity-service/connectivity-service';
-import { RemoteDataService } from './providers/remote-data-service/remote-data-service';
-
-// Configuracion de la app
-import { MY_CONFIG_TOKEN, MY_CONFIG, ApplicationConfig } from './app-config.ts';
-
-// Paginas
-import { ListaSolicitudesPage } from './pages/lista-solicitudes/lista-solicitudes';
-import { NuevaSolicitudPage } from './pages/nueva-solicitud/nueva-solicitud';
+import { MY_CONFIG, MY_CONFIG_TOKEN } from './app-config.ts';
 import { DatosPersonalesPage } from './pages/datos-personales/datos-personales';
 import { ErrorPage } from './pages/error/error';
-
-// Modelos
+import { ListaSolicitudesPage } from './pages/lista-solicitudes/lista-solicitudes';
+import { ConnectivityService } from './providers/connectivity-service/connectivity-service';
 import { MenuItemModel } from './providers/menuitem-model/menuitem-model';
+import { RemoteDataService } from './providers/remote-data-service/remote-data-service';
+import { UserDataService } from './providers/user-data-service/user-data-service';
+import { Component, enableProdMode, provide, ViewChild } from '@angular/core';
+import { disableDeprecatedForms, provideForms } from '@angular/forms';
+import { AlertController, Events, ionicBootstrap, MenuController, Nav, Platform } from 'ionic-angular';
+import { StatusBar } from 'ionic-native';
 
 @Component({
   templateUrl: 'build/app.html',
-  providers: [ConnectivityService, RemoteDataService, { provide: MY_CONFIG_TOKEN, useValue: MY_CONFIG }]
+  providers: [ConnectivityService, UserDataService, RemoteDataService, { provide: MY_CONFIG_TOKEN, useValue: MY_CONFIG }]
 })
 export class DonemosApp {
   @ViewChild(Nav) nav: Nav;

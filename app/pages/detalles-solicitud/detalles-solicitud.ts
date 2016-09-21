@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
-import { NavController, NavParams, LoadingController, SqlStorage, Storage } from 'ionic-angular';
-import { NuevaSolicitudPage } from '../nueva-solicitud/nueva-solicitud';
-import { DonacionesHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
 import { TimeAgoPipe } from '../../pipes/time-ago/time-ago-pipe';
-import { SolicitudModel } from '../../providers/solicitud-model/solicitud-model';
+import { DonacionesHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
 import { RemoteDataService } from '../../providers/remote-data-service/remote-data-service';
+import { SolicitudModel } from '../../providers/solicitud-model/solicitud-model';
+import { UserDataService } from '../../providers/user-data-service/user-data-service';
+import { Component } from '@angular/core';
+import { LoadingController, NavController, NavParams } from 'ionic-angular';
 
 @Component({
 	templateUrl: 'build/pages/detalles-solicitud/detalles-solicitud.html',
@@ -23,9 +23,10 @@ export class DetallesSolicitudPage {
 	constructor(private nav: NavController, 
               private navParams: NavParams, 
               private loadingCtrl: LoadingController, 
-              private dataService: RemoteDataService) {
+              private remoteDataService: RemoteDataService,
+              private userDataService: UserDataService) {
 
-      if(this.dataService.modoDebugActivado()) {
+      if(this.remoteDataService.modoDebugActivado()) {
         console.time('DetallesSolicitudPage / constructor');
       }
 
@@ -34,14 +35,14 @@ export class DetallesSolicitudPage {
 
       this.obtenerDatosUsuario();
 
-      if(this.dataService.modoDebugActivado()) {
+      if(this.remoteDataService.modoDebugActivado()) {
         console.timeEnd('DetallesSolicitudPage / constructor');
       }
   	}
 
     public obtenerDatosUsuario(){
 
-      if(this.dataService.modoDebugActivado()) {
+      if(this.remoteDataService.modoDebugActivado()) {
         console.time('DetallesSolicitudPage / obtenerDatosUsuario');
       }
 
@@ -49,14 +50,10 @@ export class DetallesSolicitudPage {
                                                                       this.solicitudSeleccionada.getFactorSanguineo().getId()).join(' ');
       this.compatibleConUsuario = false;
 
-      if(!this.storage) {
-        this.storage = new Storage(SqlStorage);  
-      }
-
-      this.storage.get('datosUsuarioObj').then((datosUsuario) => {
+      // Obtenemos los datos del servicio de datos del usuario
+      this.userDataService.getDatosUsuario().then((datosUsuario) => {
         if(datosUsuario) {
-          let datosUsuarioObj = JSON.parse(datosUsuario);
-          let tipoSanguineoUsuario = DonacionesHelper.getDescripcion(datosUsuarioObj.grupoSanguineoID, datosUsuarioObj.factorSanguineoID);
+          let tipoSanguineoUsuario = DonacionesHelper.getDescripcion(datosUsuario.grupoSanguineoID, datosUsuario.factorSanguineoID);
 
           // Si es compatible mostramos un mensjae informandolo
           this.compatibleConUsuario = this.tiposSanguineosSolicitud.indexOf(tipoSanguineoUsuario) > -1;
@@ -64,7 +61,7 @@ export class DetallesSolicitudPage {
           // Resaltamos el tipo sanguineo del usuario
           this.tiposSanguineosSolicitud = this.tiposSanguineosSolicitud.replace(tipoSanguineoUsuario, '<span class="marked">' + tipoSanguineoUsuario + '</span> ');
 
-          if(this.dataService.modoDebugActivado()) {
+          if(this.remoteDataService.modoDebugActivado()) {
             console.timeEnd('DetallesSolicitudPage / obtenerDatosUsuario');
           }
         }
@@ -74,7 +71,7 @@ export class DetallesSolicitudPage {
     // Inicializa el mapa cuando el DOM ya esta listo
   	ionViewDidEnter(){
 
-      /*if(this.dataService.modoDebugActivado()) {
+      /*if(this.remoteDataService.modoDebugActivado()) {
         console.time('DetallesSolicitudPage / ionViewDidEnter');
       }
 
@@ -102,7 +99,7 @@ export class DetallesSolicitudPage {
             position: results[0].geometry.location
           });
 
-          if(this.dataService.modoDebugActivado()) {
+          if(this.remoteDataService.modoDebugActivado()) {
             console.timeEnd('DetallesSolicitudPage / ionViewDidEnter');
           }
 

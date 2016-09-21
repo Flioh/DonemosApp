@@ -1,21 +1,15 @@
-import { Component, NgZone } from '@angular/core';
-import { Platform, NavController, LoadingController, AlertController } from 'ionic-angular';
-import { FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES } from '@angular/forms';
-import { FormBuilder, FormGroup, Validators} from '@angular/forms';
-import { Observable } from 'rxjs';
-
-/* Servicios utilizados */
 import { AutocompleteService } from '../../providers/autocomplete-service/autocomplete-service';
-import { ConnectivityService } from '../../providers/connectivity-service/connectivity-service';
-import { RemoteDataService } from '../../providers/remote-data-service/remote-data-service';
-import { GrupoSanguineoHelper, FactorSanguineoHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
-
-/* Modelos utilizados */
-import { SolicitudModel } from '../../providers/solicitud-model/solicitud-model';
-import { ProvinciaModel } from '../../providers/provincia-model/provincia-model';
 import { CiudadModel } from '../../providers/ciudad-model/ciudad-model';
-import { GrupoSanguineoModel } from "../../providers/grupo-sanguineo-model/grupo-sanguineo-model";
-import { FactorSanguineoModel } from "../../providers/factor-sanguineo-model/factor-sanguineo-model";
+import { ConnectivityService } from '../../providers/connectivity-service/connectivity-service';
+import { FactorSanguineoModel } from '../../providers/factor-sanguineo-model/factor-sanguineo-model';
+import { GrupoSanguineoModel } from '../../providers/grupo-sanguineo-model/grupo-sanguineo-model';
+import { ProvinciaModel } from '../../providers/provincia-model/provincia-model';
+import { RemoteDataService } from '../../providers/remote-data-service/remote-data-service';
+import { SolicitudModel } from '../../providers/solicitud-model/solicitud-model';
+import { Component, NgZone } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { FORM_DIRECTIVES } from '@angular/forms';
+import { AlertController, LoadingController, NavController, Platform } from 'ionic-angular';
 
 @Component({
 	templateUrl: 'build/pages/nueva-solicitud/nueva-solicitud.html',

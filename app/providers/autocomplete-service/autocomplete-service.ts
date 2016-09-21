@@ -1,7 +1,6 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-
-import {ConnectivityService} from '../../providers/connectivity-service/connectivity-service';
+import { ConnectivityService } from '../../providers/connectivity-service/connectivity-service';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class AutocompleteService {

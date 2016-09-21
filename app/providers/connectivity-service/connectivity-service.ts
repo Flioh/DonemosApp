@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
-import { Observable } from 'rxjs/Observable';
-import { Network } from 'ionic-native';
 
 @Injectable()
 export class ConnectivityService {

@@ -1,21 +1,20 @@
-import { Injectable, Inject } from '@angular/core';
-import { Http } from '@angular/http';
-import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
-
-/* Models usados en el servicio */
-import { SolicitudModel } from '../solicitud-model/solicitud-model';
-import { ProvinciaModel } from '../provincia-model/provincia-model';
 import { CiudadModel } from '../ciudad-model/ciudad-model';
+import { FactorSanguineoHelper, GrupoSanguineoHelper } from '../donemos-helper-service/donemos-helper-service';
+import { FactorSanguineoEnum, GrupoSanguineoEnum } from '../donemos-helper-service/donemos-helper-service';
 import { FactorSanguineoModel } from '../factor-sanguineo-model/factor-sanguineo-model';
 import { GrupoSanguineoModel } from '../grupo-sanguineo-model/grupo-sanguineo-model';
+import { ProvinciaModel } from '../provincia-model/provincia-model';
+import { SolicitudModel } from '../solicitud-model/solicitud-model';
+import { Injectable } from '@angular/core';
+import { Http } from '@angular/http';
+import { Observable } from 'rxjs';
+
+/* Models usados en el servicio */
 
 /* Helpers */
-import { GrupoSanguineoHelper, FactorSanguineoHelper } from '../donemos-helper-service/donemos-helper-service';
-import { FactorSanguineoEnum, GrupoSanguineoEnum } from '../donemos-helper-service/donemos-helper-service';
 
 /* Objeto con las configuraciones de la app */
-import { MY_CONFIG_TOKEN, MY_CONFIG, ApplicationConfig } from '../../app-config.ts';
 
 @Injectable()
 export class RemoteDataService {
@@ -75,7 +74,6 @@ export class RemoteDataService {
       this.http.get(this.apiEndPointSolicitudes)
         .map(res => res.json())
         .subscribe(listadoSolicitudes => {
-
           // Simulamos un retardo al buscar las solicitudes
           setTimeout(() => {            
             observer.next(listadoSolicitudes);            

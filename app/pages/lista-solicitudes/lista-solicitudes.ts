@@ -1,28 +1,17 @@
-import { Component } from '@angular/core';
-import { NavController, LoadingController, AlertController, SqlStorage, Storage } from 'ionic-angular';
-
-/* Directivas utilizadas */
 import { SolicitudItem } from '../../directives/solicitud-item/solicitud-item';
-
-/* Paginas utilizadas */
-import { DetallesSolicitudPage } from '../detalles-solicitud/detalles-solicitud';
-import { NuevaSolicitudPage } from '../nueva-solicitud/nueva-solicitud';
-import { DatosPersonalesPage } from '../datos-personales/datos-personales';
-
-/* Servicios utilizados */
-import { AutocompleteService } from '../../providers/autocomplete-service/autocomplete-service';
-import { ConnectivityService } from '../../providers/connectivity-service/connectivity-service';
-import { RemoteDataService } from '../../providers/remote-data-service/remote-data-service';
-import { GrupoSanguineoHelper, FactorSanguineoHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
+import { CiudadModel } from '../../providers/ciudad-model/ciudad-model';
 import { DonacionesHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
-
-/* Modelos utilizados */
+import { FactorSanguineoModel } from '../../providers/factor-sanguineo-model/factor-sanguineo-model';
+import { GrupoSanguineoModel } from '../../providers/grupo-sanguineo-model/grupo-sanguineo-model';
+import { ProvinciaModel } from '../../providers/provincia-model/provincia-model';
+import { RemoteDataService } from '../../providers/remote-data-service/remote-data-service';
 import { SolicitudItemModel } from '../../providers/solicitud-item-model/solicitud-item-model';
 import { SolicitudModel } from '../../providers/solicitud-model/solicitud-model';
-import { ProvinciaModel } from '../../providers/provincia-model/provincia-model';
-import { CiudadModel } from '../../providers/ciudad-model/ciudad-model';
-import { GrupoSanguineoModel } from "../../providers/grupo-sanguineo-model/grupo-sanguineo-model";
-import { FactorSanguineoModel } from "../../providers/factor-sanguineo-model/factor-sanguineo-model";
+import { UserDataService } from '../../providers/user-data-service/user-data-service';
+import { DetallesSolicitudPage } from '../detalles-solicitud/detalles-solicitud';
+import { NuevaSolicitudPage } from '../nueva-solicitud/nueva-solicitud';
+import { Component } from '@angular/core';
+import { AlertController, LoadingController, NavController, Storage } from 'ionic-angular';
 
 @Component({
   templateUrl: 'build/pages/lista-solicitudes/lista-solicitudes.html',
@@ -58,9 +47,10 @@ export class ListaSolicitudesPage {
   constructor(private nav: NavController, 
               private loadingCtrl: LoadingController,
               private alertCtrl: AlertController, 
-              private dataService: RemoteDataService) {    
+              private remoteDataService: RemoteDataService,
+              private userDataService: UserDataService) {    
 
-    if(this.dataService.modoDebugActivado()) {
+    if(this.remoteDataService.modoDebugActivado()) {
       console.time('ListaSolicitudesPage / constructor');
     }
 
@@ -83,10 +73,15 @@ export class ListaSolicitudesPage {
     this.ciudadSeleccionada = null;
     this.provinciaSeleccionada = null;
 
+    this.userDataService.datosUsuario.subscribe(() => {
+      this.solicitudes = [];
+      this.buscarSolicitudes();    
+    });
+
     // Cargamos las ultimas solicitudes
     this.buscarSolicitudes();
 
-    if(this.dataService.modoDebugActivado()) {
+    if(this.remoteDataService.modoDebugActivado()) {
       console.timeEnd('ListaSolicitudesPage / constructor');
     }
   }
@@ -94,7 +89,7 @@ export class ListaSolicitudesPage {
   // Método que obtiene las solicitudes del servidor
   public buscarSolicitudes(): void {
 
-    if(this.dataService.modoDebugActivado()) {
+    if(this.remoteDataService.modoDebugActivado()) {
       console.time('ListaSolicitudesPage / buscarSolicitudes');
     }
 
@@ -108,36 +103,41 @@ export class ListaSolicitudesPage {
     // Muestra el mensaje de cargando ciudades
     loadingPopup.present();
 
-    // Obtenemos las solicitudes del servidor
-    this.dataService.getSolicitudes().subscribe((solicitudesObj) => { 
-      for(let i = 0; i < solicitudesObj.length; i++) {
-        let solicitud = new SolicitudModel(solicitudesObj[i]);
-        let descripcionTiposSanguineos = this.obtenerInformacionTiposSanguineos(solicitud);
 
-        // Creamos una instancia del modelo que posee tanto la solicitud como su encabezado
-        this.solicitudes.push(new SolicitudItemModel(solicitud, descripcionTiposSanguineos));
-      }
+    this.userDataService.getDatosUsuario().then((datosUsuario) => {
+        if(datosUsuario) {          
+          // Inicializamos los listados con la informacion del usuario
+          this.datosUsuarioObj = datosUsuario;
 
-      // Oculta el mensaje de espera
-      loadingPopup.dismiss();
+          // Obtenemos el tipo sanguineo del usuario
+          this.tipoSanguineoUsuario = DonacionesHelper.getDescripcion(this.datosUsuarioObj.grupoSanguineoID, this.datosUsuarioObj.factorSanguineoID);
+        }
 
-      if(this.dataService.modoDebugActivado()) {
-        console.timeEnd('ListaSolicitudesPage / buscarSolicitudes');
-      }
+        // Obtenemos las solicitudes del servidor
+        this.remoteDataService.getSolicitudes().subscribe((solicitudesObj) => { 
+          for(let i = 0; i < solicitudesObj.length; i++) {
+            let solicitud = new SolicitudModel(solicitudesObj[i]);
+            let descripcionTiposSanguineos = this.obtenerInformacionTiposSanguineos(solicitud);
 
+            // Creamos una instancia del modelo que posee tanto la solicitud como su encabezado
+            this.solicitudes.push(new SolicitudItemModel(solicitud, descripcionTiposSanguineos));
+          }
+
+          // Oculta el mensaje de espera
+          loadingPopup.dismiss();
+
+          if(this.remoteDataService.modoDebugActivado()) {
+            console.timeEnd('ListaSolicitudesPage / buscarSolicitudes');
+          }
+
+        });
     });  
-  }
-
-  ionViewDidEnter() {
-    this.datosUsuarioObj = null;
-
-    this.obtenerDatosUsuario();
   }
 
   // Inicializa los listados de la pagina
   public inicializarFiltros() {
 
-    if(this.dataService.modoDebugActivado()) {
+    if(this.remoteDataService.modoDebugActivado()) {
       console.time('ListaSolicitudesPage / inicializarFiltros');
     }
 
@@ -150,9 +150,9 @@ export class ListaSolicitudesPage {
       loadingPopup.present();
 
       // Inicializamos todos los listados
-      this.listaFactoresSanguineos = this.dataService.getFactoresSanguineos();
-      this.listaGruposSanguineos = this.dataService.getGruposSanguineos();
-      this.dataService.getListaProvincias().subscribe(result => {
+      this.listaFactoresSanguineos = this.remoteDataService.getFactoresSanguineos();
+      this.listaGruposSanguineos = this.remoteDataService.getGruposSanguineos();
+      this.remoteDataService.getListaProvincias().subscribe(result => {
         if(result && result.length) {
           this.listaProvincias = result;
           
@@ -162,7 +162,7 @@ export class ListaSolicitudesPage {
           // Ocultamos el mensaje de espera
           loadingPopup.dismiss();
 
-          if(this.dataService.modoDebugActivado()) {
+          if(this.remoteDataService.modoDebugActivado()) {
             console.timeEnd('ListaSolicitudesPage / inicializarFiltros');
           }
         } 
@@ -173,7 +173,7 @@ export class ListaSolicitudesPage {
   // Resetea los filtros de busqueda
   public borrarFiltros() {
 
-    if(this.dataService.modoDebugActivado()) {
+    if(this.remoteDataService.modoDebugActivado()) {
       console.time('ListaSolicitudesPage / borrarFiltros');
     }
 
@@ -184,7 +184,7 @@ export class ListaSolicitudesPage {
     this.listaCiudades = null;
     this.usarDatosPersonales = false;
 
-    if(this.dataService.modoDebugActivado()) {
+    if(this.remoteDataService.modoDebugActivado()) {
       console.timeEnd('ListaSolicitudesPage / borrarFiltros');
     }
   }
@@ -194,7 +194,7 @@ export class ListaSolicitudesPage {
 
     if(this.usarDatosPersonales) {
 
-      if(this.dataService.modoDebugActivado()) {
+      if(this.remoteDataService.modoDebugActivado()) {
         console.time('ListaSolicitudesPage / usarDatosUsuario');
       }
 
@@ -210,7 +210,7 @@ export class ListaSolicitudesPage {
         // Ocultamos el mensaje de espera
         loadingPopup.dismiss();
 
-        if(this.dataService.modoDebugActivado()) {
+        if(this.remoteDataService.modoDebugActivado()) {
           console.timeEnd('ListaSolicitudesPage / usarDatosUsuario');
         }
 
@@ -226,47 +226,10 @@ export class ListaSolicitudesPage {
     }
   }
 
-  // Método que obtiene los datos del usuario
-  private obtenerDatosUsuario(): Promise<boolean> {
-
-    return new Promise((resolve)=> {
-
-      if(this.dataService.modoDebugActivado()) {
-        console.time('ListaSolicitudesPage / obtenerDatosUsuario');
-      }
-
-      if(!this.storage) {
-        this.storage = new Storage(SqlStorage);  
-      }
-      
-      this.storage.get('datosUsuarioObj').then((datosUsuario) => {
-        if(!datosUsuario) {
-
-          if(this.dataService.modoDebugActivado()) {
-            console.timeEnd('ListaSolicitudesPage / obtenerDatosUsuario');
-          }
-
-          // No hay datos guardados, por lo que mostramos un mensaje al usuario
-          resolve(false);
-        } else {
-          // Inicializamos los listados con la informacion del usuario
-          this.datosUsuarioObj = JSON.parse(datosUsuario);
-          this.tipoSanguineoUsuario = DonacionesHelper.getDescripcion(this.datosUsuarioObj.grupoSanguineoID, this.datosUsuarioObj.factorSanguineoID);
-
-          if(this.dataService.modoDebugActivado()) {
-            console.timeEnd('ListaSolicitudesPage / obtenerDatosUsuario');
-          }
-
-          resolve(true);          
-        }
-      });
-    });
-  }
-
   // Método que obtiene la informacion de los tipos sanguineos buscados, resaltando el del usuario
   public obtenerInformacionTiposSanguineos(unaSolicitud: SolicitudModel): string {
 
-      if(this.dataService.modoDebugActivado()) {
+      if(this.remoteDataService.modoDebugActivado()) {
         console.time('ListaSolicitudesPage / obtenerInformacionTiposSanguineos');
       }
 
@@ -280,7 +243,7 @@ export class ListaSolicitudesPage {
       // Resaltamos el tipo sanguineo del usuario
       result = result.replace(this.tipoSanguineoUsuario, '<span class="marked">' + this.tipoSanguineoUsuario + '</span> ');
 
-      if(this.dataService.modoDebugActivado()) {
+      if(this.remoteDataService.modoDebugActivado()) {
         console.timeEnd('ListaSolicitudesPage / obtenerInformacionTiposSanguineos');
       }
 
@@ -291,7 +254,7 @@ export class ListaSolicitudesPage {
   public inicializarDatosUsuario(): Promise<boolean> {
     return new Promise((resolve) => {
 
-        if(this.dataService.modoDebugActivado()) {
+        if(this.remoteDataService.modoDebugActivado()) {
           console.time('ListaSolicitudesPage / inicializarDatosUsuario');
         }
 
@@ -309,7 +272,7 @@ export class ListaSolicitudesPage {
 
         if(this.provinciaSeleccionada) {
 
-          this.dataService.getListaCiudadesPorProvincia(this.provinciaSeleccionada.getId())
+          this.remoteDataService.getListaCiudadesPorProvincia(this.provinciaSeleccionada.getId())
             .subscribe(result => {
               if(result && result.length){
 
@@ -320,7 +283,7 @@ export class ListaSolicitudesPage {
                   let indiceCiudad = this.getIndicePorID(this.listaCiudades, this.datosUsuarioObj.ciudadID);
                   this.ciudadSeleccionada = this.listaCiudades[indiceCiudad];
 
-                  if(this.dataService.modoDebugActivado()) {
+                  if(this.remoteDataService.modoDebugActivado()) {
                     console.timeEnd('ListaSolicitudesPage / inicializarDatosUsuario');
                   } 
 
@@ -337,7 +300,7 @@ export class ListaSolicitudesPage {
   // Método que obtiene el indice del elemento cuyo id es el pasado como parametro
   public getIndicePorID(listado: Array<any>, id: number): number {
 
-    if(this.dataService.modoDebugActivado()) {
+    if(this.remoteDataService.modoDebugActivado()) {
       console.time('ListaSolicitudesPage / getIndicePorID');
     }
 
@@ -346,7 +309,7 @@ export class ListaSolicitudesPage {
         return i;
     }
 
-    if(this.dataService.modoDebugActivado()) {
+    if(this.remoteDataService.modoDebugActivado()) {
       console.timeEnd('ListaSolicitudesPage / getIndicePorID');
     }
 
@@ -356,7 +319,7 @@ export class ListaSolicitudesPage {
   // Método que inicializa el listado de ciudades de una provincia
   public inicializarCiudadesDeLaProvincia(nombreCiudad: string): void {
 
-    if(this.dataService.modoDebugActivado()) {
+    if(this.remoteDataService.modoDebugActivado()) {
       console.time('ListaSolicitudesPage / inicializarCiudadesDeLaProvincia');
     }
 
@@ -367,7 +330,7 @@ export class ListaSolicitudesPage {
     // Muestra el mensaje de cargando ciudades
     loadingPopup.present();
 
-    this.dataService.getListaCiudadesPorProvincia(this.provinciaSeleccionada.getId())
+    this.remoteDataService.getListaCiudadesPorProvincia(this.provinciaSeleccionada.getId())
       .subscribe(result => {
         if(result && result.length){
           this.listaCiudades = result;
@@ -375,7 +338,7 @@ export class ListaSolicitudesPage {
           // Oculta el mensaje de espera
           loadingPopup.dismiss();
 
-          if(this.dataService.modoDebugActivado()) {
+          if(this.remoteDataService.modoDebugActivado()) {
             console.timeEnd('ListaSolicitudesPage / inicializarCiudadesDeLaProvincia');
           }
         }

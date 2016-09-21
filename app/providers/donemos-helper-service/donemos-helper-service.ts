@@ -1,5 +1,3 @@
-import { Injectable } from '@angular/core';
-
 export enum FactorSanguineoEnum {
   RhPositivo = 1,
   RhNegativo

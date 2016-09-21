@@ -1,17 +1,12 @@
-import { Component } from '@angular/core';
-import { NavController, LoadingController, SqlStorage, Storage, ToastController } from 'ionic-angular';
-import { Observable } from 'rxjs';
-
-/* Servicios utilizados */
-import { RemoteDataService } from '../../providers/remote-data-service/remote-data-service';
-import { GrupoSanguineoHelper, FactorSanguineoHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
-
-/* Modelos utilizados */
-import { ProvinciaModel } from '../../providers/provincia-model/provincia-model';
 import { CiudadModel } from '../../providers/ciudad-model/ciudad-model';
-import { GrupoSanguineoModel } from "../../providers/grupo-sanguineo-model/grupo-sanguineo-model";
-import { FactorSanguineoModel } from "../../providers/factor-sanguineo-model/factor-sanguineo-model";
 import { DatosUsuarioModel } from '../../providers/datos-usuario-model/datos-usuario-model';
+import { FactorSanguineoModel } from '../../providers/factor-sanguineo-model/factor-sanguineo-model';
+import { GrupoSanguineoModel } from '../../providers/grupo-sanguineo-model/grupo-sanguineo-model';
+import { ProvinciaModel } from '../../providers/provincia-model/provincia-model';
+import { RemoteDataService } from '../../providers/remote-data-service/remote-data-service';
+import { UserDataService } from '../../providers/user-data-service/user-data-service';
+import { Component } from '@angular/core';
+import { LoadingController, NavController, ToastController } from 'ionic-angular';
 
 @Component({
 	templateUrl: 'build/pages/datos-personales/datos-personales.html',
@@ -30,34 +25,33 @@ export class DatosPersonalesPage {
 
 	constructor(private navCtrl: NavController,
 		private loadingCtrl: LoadingController, 
-		private dataService: RemoteDataService,
-		public toastCtrl: ToastController) {
+		private remoteDataService: RemoteDataService,
+    	private userDataService: UserDataService,
+		private toastCtrl: ToastController) {
 
-		if(this.dataService.modoDebugActivado()) {
+		if(this.remoteDataService.modoDebugActivado()) {
         	console.time('DatosPersonalesPage / constructor');
       	}
 
 		this.datosUsuario = new DatosUsuarioModel();
-
-		this.storage = new Storage(SqlStorage);  		
 		
-		this.storage.get('datosUsuarioObj').then((datosUsuario) => {
+		this.userDataService.getDatosUsuario().then((datosUsuario) => {
 			
 			if(!datosUsuario) {
 				// No hay datos guardados, por lo que inicializamos los listados sin setear ninguna opcion por defecto
 				this.cargarListados(false);
 
-				if(this.dataService.modoDebugActivado()) {
-        			console.timeEnd('DatosPersonalesPage / constructor');
-      			}
+				if(this.remoteDataService.modoDebugActivado()) {
+          			console.timeEnd('DatosPersonalesPage / constructor');
+        		}
 			} else {
 				// Inicializamos los listados con la informacion del usuario
-				this.datosUsuarioObj = JSON.parse(datosUsuario);
+				this.datosUsuarioObj = datosUsuario;
 				this.cargarListados(true);
 
-				if(this.dataService.modoDebugActivado()) {
-        			console.timeEnd('DatosPersonalesPage / constructor');
-      			}
+				if(this.remoteDataService.modoDebugActivado()) {
+          			console.timeEnd('DatosPersonalesPage / constructor');
+       	 		}
 			}
 		});
 	}
@@ -65,7 +59,7 @@ export class DatosPersonalesPage {
   	// Método que inicializa los listados de la pagina
   	public cargarListados(inicializarDatos: boolean) {
 
-  		if(this.dataService.modoDebugActivado()) {
+  		if(this.remoteDataService.modoDebugActivado()) {
         	console.time('DatosPersonalesPage / cargarListados');
         }
 
@@ -78,9 +72,9 @@ export class DatosPersonalesPage {
   		loadingPopup.present();
 
       	// Inicializamos todos los listados
-      	this.listaFactoresSanguineos = this.dataService.getFactoresSanguineos();
-      	this.listaGruposSanguineos = this.dataService.getGruposSanguineos();
-      	this.dataService.getListaProvincias().subscribe(result => {
+      	this.listaFactoresSanguineos = this.remoteDataService.getFactoresSanguineos();
+      	this.listaGruposSanguineos = this.remoteDataService.getGruposSanguineos();
+      	this.remoteDataService.getListaProvincias().subscribe(result => {
 
       		if(result && result.length) {
       			this.listaProvincias = result;
@@ -91,14 +85,14 @@ export class DatosPersonalesPage {
       				.then((result) => {
       					loadingPopup.dismiss();
 
-      					if(this.dataService.modoDebugActivado()) {
+      					if(this.remoteDataService.modoDebugActivado()) {
         					console.timeEnd('DatosPersonalesPage / cargarListados');
         				}
       				});
       			} else {
       				loadingPopup.dismiss();
 
-      				if(this.dataService.modoDebugActivado()) {
+      				if(this.remoteDataService.modoDebugActivado()) {
         				console.timeEnd('DatosPersonalesPage / cargarListados');
         			}	
       			}      		
@@ -110,23 +104,23 @@ export class DatosPersonalesPage {
     public inicializarDatosUsuario(): Promise<boolean> {
     	return new Promise((resolve) => {
     		
-    		if(this.dataService.modoDebugActivado()) {
+    		if(this.remoteDataService.modoDebugActivado()) {
         		console.time('DatosPersonalesPage / inicializarDatosUsuario');
         	}
 
     		// Obtenemos el indice de la provincia del usuario y la seleccionamos
     		let indiceProvincia = this.getIndicePorID(this.listaProvincias, this.datosUsuarioObj.provinciaID);    		
- 			this.datosUsuario.setProvincia(this.listaProvincias[indiceProvincia]);
+ 			  this.datosUsuario.setProvincia(this.listaProvincias[indiceProvincia]);
 
     		// Obtenemos el indice del grupo sanguineo del usuario y lo seleccionamos
     		let indiceGrupoSanguineo = this.getIndicePorID(this.listaGruposSanguineos, this.datosUsuarioObj.grupoSanguineoID);
- 			this.datosUsuario.setGrupoSanguineo(this.listaGruposSanguineos[indiceGrupoSanguineo]);
+ 			  this.datosUsuario.setGrupoSanguineo(this.listaGruposSanguineos[indiceGrupoSanguineo]);
 
     		// Obtenemos el indice del factor sanguineo del usuario y lo seleccionamos
     		let indiceFactorSanguineo = this.getIndicePorID(this.listaFactoresSanguineos, this.datosUsuarioObj.factorSanguineoID);
     		this.datosUsuario.setFactorSanguineo(this.listaFactoresSanguineos[indiceFactorSanguineo]);
 
-    		this.dataService.getListaCiudadesPorProvincia(this.datosUsuario.getProvincia().getId())
+    		this.remoteDataService.getListaCiudadesPorProvincia(this.datosUsuario.getProvincia().getId())
 	    		.subscribe(result => {
 			    	if(result && result.length){
 
@@ -140,7 +134,7 @@ export class DatosPersonalesPage {
 			    		// Resolvemos la promesa
 			    		resolve(true);
 
-			    		if(this.dataService.modoDebugActivado()) {
+			    		if(this.remoteDataService.modoDebugActivado()) {
         					console.timeEnd('DatosPersonalesPage / inicializarDatosUsuario');
         				}
 			      	}
@@ -153,7 +147,7 @@ export class DatosPersonalesPage {
     // Método que obtiene el indice del elemento cuyo id es el pasado como parametro
     public getIndicePorID(listado: Array<any>, id: number): number {
     	
-    	if(this.dataService.modoDebugActivado()) {
+    	if(this.remoteDataService.modoDebugActivado()) {
     		console.time('DatosPersonalesPage / getIndicePorID');
     	}
 
@@ -162,7 +156,7 @@ export class DatosPersonalesPage {
     			return i;
     	}
 
-    	if(this.dataService.modoDebugActivado()) {
+    	if(this.remoteDataService.modoDebugActivado()) {
     		console.timeEnd('DatosPersonalesPage / getIndicePorID');
     	}
 
@@ -172,7 +166,7 @@ export class DatosPersonalesPage {
   	// Método que inicializa el listado de ciudades de una provincia
   	public inicializarCiudadesDeLaProvincia(): void {
 
-  		if(this.dataService.modoDebugActivado()) {
+  		if(this.remoteDataService.modoDebugActivado()) {
     		console.time('DatosPersonalesPage / inicializarCiudadesDeLaProvincia');
     	}
 
@@ -183,7 +177,7 @@ export class DatosPersonalesPage {
 	    // Muestra el mensaje de cargando ciudades
 	    loadingPopup.present();
 
-	    this.dataService.getListaCiudadesPorProvincia(this.datosUsuario.getProvincia().getId())
+	    this.remoteDataService.getListaCiudadesPorProvincia(this.datosUsuario.getProvincia().getId())
 	    .subscribe(result => {
 	    	if(result && result.length){
 	    		this.listaCiudades = result;
@@ -191,7 +185,7 @@ export class DatosPersonalesPage {
 	          // Oculta el mensaje de espera
 	          loadingPopup.dismiss();
 
-	          if(this.dataService.modoDebugActivado()) {
+	          if(this.remoteDataService.modoDebugActivado()) {
     			console.timeEnd('DatosPersonalesPage / inicializarCiudadesDeLaProvincia');
     		  }
 	      }
@@ -203,7 +197,7 @@ export class DatosPersonalesPage {
 	// Método que guarda los cambios en la base de datos local
 	public guardarCambios(): void {
 
-		if(this.dataService.modoDebugActivado()) {
+		if(this.remoteDataService.modoDebugActivado()) {
     		console.time('DatosPersonalesPage / guardarCambios');
     	}
 
@@ -214,21 +208,21 @@ export class DatosPersonalesPage {
 			factorSanguineoID : this.datosUsuario.getFactorSanguineo().getId(),
 		};
 
-		this.storage.set('datosUsuarioObj', JSON.stringify(nuevosDatosUsuarioObj))
-		.then(() => {
-			let toast = this.toastCtrl.create({
-		      message: 'Los datos se actualizaron correctamente.',
-		      position: 'bottom',
-		      duration: 3000
-		    });
+		this.userDataService.setDatosUsuario(nuevosDatosUsuarioObj)
+    		.then(() => {
+    			let toast = this.toastCtrl.create({
+    		      message: 'Los datos se actualizaron correctamente.',
+    		      position: 'bottom',
+    		      duration: 3000
+    		    });
 
-		    // Mostramos el mensaje al usuario
-		    toast.present();
+    		    // Mostramos el mensaje al usuario
+    		    toast.present();
 
-		    if(this.dataService.modoDebugActivado()) {
-    			console.timeEnd('DatosPersonalesPage / guardarCambios');
-    		}
-		});
+    		    if(this.remoteDataService.modoDebugActivado()) {
+        			console.timeEnd('DatosPersonalesPage / guardarCambios');
+        		}
+    		});
 	}
 
 	// Método usado para debug, muestra el contenido del form en tiempo real

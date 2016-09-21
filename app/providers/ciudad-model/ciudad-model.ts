@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ProvinciaModel } from "../provincia-model/provincia-model";
 
 @Injectable()
 export class CiudadModel {

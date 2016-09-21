@@ -1,8 +1,8 @@
+import { CiudadModel } from '../ciudad-model/ciudad-model';
+import { FactorSanguineoModel } from '../factor-sanguineo-model/factor-sanguineo-model';
+import { GrupoSanguineoModel } from '../grupo-sanguineo-model/grupo-sanguineo-model';
+import { ProvinciaModel } from '../provincia-model/provincia-model';
 import { Injectable } from '@angular/core';
-import { ProvinciaModel } from "../provincia-model/provincia-model";
-import { CiudadModel } from "../ciudad-model/ciudad-model";
-import { GrupoSanguineoModel } from "../grupo-sanguineo-model/grupo-sanguineo-model";
-import { FactorSanguineoModel } from "../factor-sanguineo-model/factor-sanguineo-model";
 
 @Injectable()
 export class SolicitudModel {
