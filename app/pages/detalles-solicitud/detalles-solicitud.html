@@ -42,7 +42,7 @@
           <ion-icon softRed name="pin" item-left></ion-icon>
         </ion-avatar>
         <h2>Localidad</h2>
-        <p>{{ solicitudSeleccionada.ciudad.nombre }}, {{ solicitudSeleccionada.provincia.nombre }},</p>
+        <p>{{ solicitudSeleccionada.ciudad.nombre }}, {{ solicitudSeleccionada.provincia.nombre }}</p>
       </ion-item>
 
 
@@ -59,12 +59,7 @@
 
 
 
-      <!-- <div class="map-container">
-        <div id="map" style="width: 100%; height: 100%;"></div>
-        <div id="overlay"></div>  
-      </div> -->
-
-      <img src="https://maps.googleapis.com/maps/api/staticmap?center=Berkeley,CA&zoom=14&size=400x400&key=AIzaSyBSNUkmMjCKd0w5JRBORaMTL_VMTZ1dTvU">
+      <img [src]="mapSrc">
       
 
 
