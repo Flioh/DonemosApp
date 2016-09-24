@@ -2,6 +2,8 @@ import { ConnectivityService } from '../../providers/connectivity-service/connec
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
+declare var google: any;
+
 @Injectable()
 export class AutocompleteService {
 

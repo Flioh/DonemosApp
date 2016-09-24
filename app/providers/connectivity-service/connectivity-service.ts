@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
 
+declare var Connection: any;
+
 @Injectable()
 export class ConnectivityService {
  
-  onDevice: boolean;
+  private onDevice: boolean;
 
   constructor(private platform: Platform){
     this.onDevice = this.platform.is('ios') || this.platform.is('android');
