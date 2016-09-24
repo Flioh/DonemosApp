@@ -1,11 +1,13 @@
+import { collectAndResolveStyles } from '@angular/platform-browser/esm/core_private';
 import { ConfigMock } from '../../../test/mocks';
 import { TimeAgoPipe } from '../../pipes/time-ago/time-ago-pipe';
 import { DonacionesHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
 import { RemoteDataService } from '../../providers/remote-data-service/remote-data-service';
 import { SolicitudModel } from '../../providers/solicitud-model/solicitud-model';
 import { UserDataService } from '../../providers/user-data-service/user-data-service';
+import { NavigationService } from '../../providers/navigation-service/navigation-service';
 import { Component, Inject } from '@angular/core';
-import { LoadingController, NavController, NavParams } from 'ionic-angular';
+import { LoadingController, NavController, NavParams, Platform } from 'ionic-angular';
 import { MY_CONFIG, MY_CONFIG_TOKEN, ApplicationConfig } from '../../app-config.ts';
 
 @Component({
@@ -25,11 +27,13 @@ export class DetallesSolicitudPage {
 
   private storage: Storage;
 
-	constructor(private nav: NavController, 
+	constructor(private platform: Platform,
+              private nav: NavController, 
               private navParams: NavParams, 
               private loadingCtrl: LoadingController, 
               private remoteDataService: RemoteDataService,
               private userDataService: UserDataService,
+              private navigationService: NavigationService,
               @Inject(MY_CONFIG_TOKEN) config: ApplicationConfig) {
       
       if(this.remoteDataService.modoDebugActivado()) {
@@ -56,52 +60,18 @@ export class DetallesSolicitudPage {
       let direccion = `${ this.solicitudSeleccionada.getDireccion() },${ this.solicitudSeleccionada.getCiudad().getNombre() },${ this.solicitudSeleccionada.getProvincia().getNombre() },Argentina`;
 
       // Generamos la url del mapa estatico
-      this.mapSrc = `${ mapUrl }?zoom=${ zoom }&size=${ width }x${ height }&markers=color:blue%7C${ direccion.replace(/ /g, '+') }&key=${ mapKey }`;
+      this.mapSrc = `${ mapUrl }?zoom=${ zoom }&size=${ width }x${ height }&markers=color:red%7C${ direccion.replace(/ /g, '+') }&key=${ mapKey }`;
     }
 
-    // Inicializa el mapa cuando el DOM ya esta listo
-  	ionViewDidEnter(){
+    // Método que abre la aplicacion de GPS por defecto del usuario para guiarlo hacia la institucion
+    public mostrarRuta():void {   
 
-      /*if(this.remoteDataService.modoDebugActivado()) {
-        console.time('DetallesSolicitudPage / ionViewDidEnter');
-      }
+      // Obtenemos la direccion de la institución
+      let direccion = `${ this.solicitudSeleccionada.getDireccion() },${ this.solicitudSeleccionada.getCiudad().getNombre() },${ this.solicitudSeleccionada.getProvincia().getNombre() },Argentina`;
 
-      let geocoder = new google.maps.Geocoder();
-
-      let mapOptions = {
-        zoom: 15,
-        disableDefaultUI: true,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      }
-
-      let map = new google.maps.Map(document.getElementById("map"), mapOptions);
-
-      let direccion = `${ this.solicitudSeleccionada.getDireccion() }, ${ this.solicitudSeleccionada.getCiudad().getNombre() } ${ this.solicitudSeleccionada.getProvincia().getNombre() }`;
-
-      geocoder.geocode({'address': direccion}, (results, status)  => {
-        if (status === google.maps.GeocoderStatus.OK) {
-
-          // Centramos el mapa en las coordenadas del lugar
-          map.setCenter(results[0].geometry.location);
-
-          // Agregamos un marcador al luget
-          var marker = new google.maps.Marker({
-            map: map,
-            position: results[0].geometry.location
-          });
-
-          if(this.remoteDataService.modoDebugActivado()) {
-            console.timeEnd('DetallesSolicitudPage / ionViewDidEnter');
-          }
-
-        } else {
-          // TODO: manejar el caso de error
-          // ------------------------------
-          //valert('Geocode was not successful for the following reason: ' + status);
-        }
-      });*/
+      // Invocamos al servicio usando la direccion y el nombre de la institucion 
+      this.navigationService.mostrarRuta(direccion, this.solicitudSeleccionada.getInstitucion());
     }
-
 
     // Método que obtiene los datos del usuario
     public obtenerDatosUsuario(){
