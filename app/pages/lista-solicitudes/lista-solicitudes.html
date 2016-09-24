@@ -5,7 +5,7 @@
 			<ion-icon name="menu"></ion-icon>
 		</button>
 
-		<ion-buttons end>
+		<ion-buttons *ngIf="isIos" end>
 			<button (click)="nuevaSolicitud()"><ion-icon name="add"></ion-icon></button>
 		</ion-buttons>
 	</ion-navbar>
@@ -32,6 +32,8 @@
 				[solicitudItemModel]="solicitudItemModel"
 				(seleccionarSolicitud)="abrirDetalles($event)">		
 			</solicitud-item>
+
+			<button *ngIf="!isIos" class="floating-btn" red fab (click)="nuevaSolicitud()"><ion-icon name="add"></ion-icon></button>
 
 			<button *ngIf="hayMasSolicitudes" class="submit" red full (click)="buscarSolicitudes()">
 				Ver mas solicitudes

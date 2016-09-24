@@ -11,7 +11,7 @@ import { UserDataService } from '../../providers/user-data-service/user-data-ser
 import { DetallesSolicitudPage } from '../detalles-solicitud/detalles-solicitud';
 import { NuevaSolicitudPage } from '../nueva-solicitud/nueva-solicitud';
 import { Component } from '@angular/core';
-import { AlertController, LoadingController, NavController, Storage } from 'ionic-angular';
+import { AlertController, LoadingController, NavController, Storage, Platform } from 'ionic-angular';
 
 @Component({
   templateUrl: 'build/pages/lista-solicitudes/lista-solicitudes.html',
@@ -40,11 +40,14 @@ export class ListaSolicitudesPage {
   private usarDatosPersonales: boolean;
   private datosUsuarioObj: any;
 
+  private isIos: boolean;
+
   private tipoSanguineoUsuario: string;
 
   private hayMasSolicitudes: boolean;
 
-  constructor(private nav: NavController, 
+  constructor(private platform: Platform,
+              private nav: NavController, 
               private loadingCtrl: LoadingController,
               private alertCtrl: AlertController, 
               private remoteDataService: RemoteDataService,
@@ -59,6 +62,8 @@ export class ListaSolicitudesPage {
 
     // Inicializa la lista de solicitudes
     this.solicitudes = [];
+
+    this.isIos = this.platform.is('ios');
 
     // Por defecto no usa los datos personales
     this.usarDatosPersonales = false;
