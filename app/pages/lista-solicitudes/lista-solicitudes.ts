@@ -11,7 +11,7 @@ import { UserDataService } from '../../providers/user-data-service/user-data-ser
 import { DetallesSolicitudPage } from '../detalles-solicitud/detalles-solicitud';
 import { NuevaSolicitudPage } from '../nueva-solicitud/nueva-solicitud';
 import { Component } from '@angular/core';
-import { AlertController, LoadingController, NavController, Storage, Platform } from 'ionic-angular';
+import { AlertController, LoadingController, NavController, Storage, Platform, MenuController } from 'ionic-angular';
 
 @Component({
   templateUrl: 'build/pages/lista-solicitudes/lista-solicitudes.html',
@@ -48,6 +48,7 @@ export class ListaSolicitudesPage {
 
   constructor(private platform: Platform,
               private nav: NavController, 
+              private menuCtrl: MenuController,
               private loadingCtrl: LoadingController,
               private alertCtrl: AlertController, 
               private remoteDataService: RemoteDataService,
@@ -55,7 +56,7 @@ export class ListaSolicitudesPage {
 
     if(this.remoteDataService.modoDebugActivado()) {
       console.time('ListaSolicitudesPage / constructor');
-    }
+    }    
 
     // Indica que las listas usadas en los filtros no estan cargadas aun
     this.listadosCargados = false;
@@ -89,6 +90,11 @@ export class ListaSolicitudesPage {
     if(this.remoteDataService.modoDebugActivado()) {
       console.timeEnd('ListaSolicitudesPage / constructor');
     }
+  }
+
+  ionViewDidEnter(){
+    // Habilitamos el menu lateral
+		this.menuCtrl.enable(true, 'unauthenticated');
   }
 
   // Método que obtiene las solicitudes del servidor
@@ -253,7 +259,7 @@ export class ListaSolicitudesPage {
       }
 
       return result;
-    }
+  }
 
   // Método que inicializa el formulario con los datos del usuario
   public inicializarDatosUsuario(): Promise<boolean> {

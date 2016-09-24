@@ -9,7 +9,7 @@ import { SolicitudModel } from '../../providers/solicitud-model/solicitud-model'
 import { Component, NgZone } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { FORM_DIRECTIVES } from '@angular/forms';
-import { AlertController, LoadingController, NavController, Platform } from 'ionic-angular';
+import { AlertController, LoadingController, NavController, Platform, MenuController } from 'ionic-angular';
 
 @Component({
 	templateUrl: 'build/pages/nueva-solicitud/nueva-solicitud.html',
@@ -31,6 +31,7 @@ export class NuevaSolicitudPage {
 
 	constructor(private remoteDataService: RemoteDataService,
 		private platform: Platform,
+		private menuCtrl: MenuController,
 		private navCtrl: NavController, 
 		private formBuilder : FormBuilder, 
 		private ngZone : NgZone,
@@ -150,6 +151,9 @@ export class NuevaSolicitudPage {
 	ionViewDidEnter() {
 	  	// TODO: Antes de ingresar, verificar si hay información no guardada
 	  	// -----------------------------------------------------------------
+
+		// Deshabilitamos el menu lateral
+		this.menuCtrl.enable(false, 'unauthenticated');
 
 	  	// Obtiene el input dentro del elemento ion-input
 	  	let autocompleteInput = document.getElementById('autocomplete').childNodes[1];
