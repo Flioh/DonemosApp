@@ -136,7 +136,7 @@ export class SolicitudModel {
   }
 
   public setCantidadDadores(cantidad: number): number {
-    return this.cantidadDadores = cantidad;
+    return this.cantidadDadores = +cantidad;
   }
 
   public setInstitucion(institucion: string): string {
@@ -164,4 +164,3 @@ export class SolicitudModel {
   }
 
 }
-

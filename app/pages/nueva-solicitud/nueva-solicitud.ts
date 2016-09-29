@@ -282,6 +282,9 @@ export class NuevaSolicitudPage {
 	// Método que crea la nueva solicitud con la información ingresada en el formulario
 	public guardarCambios(): void {
 		console.log("submit", this.nuevaSolicitud);
+
+		// TODO: Esto no va a hacer falta, los input con numbers devuelven string, *supuestamente* se arregló en el RC de Ionic2
+		this.nuevaSolicitud.setCantidadDadores(this.nuevaSolicitud.getCantidadDadores());
 		this.submitted = true;
 		this.remoteDataService.postSolicitud(this.nuevaSolicitud).subscribe(r => {
 			if (r !== this.nuevaSolicitud) {
