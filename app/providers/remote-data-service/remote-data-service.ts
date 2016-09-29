@@ -85,7 +85,6 @@ export class RemoteDataService {
   public getListaProvincias(): Observable<Array<ProvinciaModel>>{
 
     return this.http.get(this.apiEndPointProvincias)
-    .delay(1000) // Simulamos un retardo al buscar las solicitudes
     .map(res => res.json())
     .map(listadoProvincias => {
       this.listaProvincias = [];
@@ -112,8 +111,7 @@ export class RemoteDataService {
     // Guardamos el ID de la provincia para evitar volver a pedir las ciudades si ya tenemos ese listado cargado
     this.provinciaSeleccionadaID = provinciaID;
 
-    return this.http.get(`this.apiEndPointLocalidades/${provinciaID}`)
-    .delay(1000) // Simulamos un retardo al buscar las solicitudes
+    return this.http.get(`${this.apiEndPointLocalidades}/${provinciaID}`)
     .map(res => res.json())
     .map(listadoCiudades => {
       for(let i=0; i<listadoCiudades.length; i++) {
