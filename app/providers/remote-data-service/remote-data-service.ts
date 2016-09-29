@@ -22,11 +22,13 @@ export class RemoteDataService {
   private listaProvincias: Array<ProvinciaModel>;
   private listaCiudades: Array<CiudadModel>;
 
-  private provinciaSeleccionadaID: number;
+  private provinciaSeleccionadaID: string;
 
-  private apiEndPointProvincias : string = './provincias.json';
-  private apiEndPointLocalidades: string = './localidades.json';
-  private apiEndPointSolicitudes: string = './solicitudes.json';
+  private baseUrl: string = 'http://192.168.1.2:8080';
+
+  private apiEndPointProvincias : string = `${this.baseUrl}/provincia`
+  private apiEndPointLocalidades: string = `${this.baseUrl}/localidad`;
+  private apiEndPointSolicitudes: string = `${this.baseUrl}/solicitud`;
 
   private modoDebug: boolean;
 
@@ -71,8 +73,11 @@ export class RemoteDataService {
   public getSolicitudes(): Observable<Array<SolicitudModel>> {
 
     return this.http.get(this.apiEndPointSolicitudes)
-    .delay(1000) // Simulamos un retardo al buscar las solicitudes
-    .map(res => res.json());
+    .map(res => res.json())
+    .catch(err => {
+      console.error(err);
+      return Observable.from([]);
+    });
 
   }
 
@@ -95,7 +100,7 @@ export class RemoteDataService {
   }
 
   // Obtiene el listado de ciudades de la provincia pasada como parametro
-  public getListaCiudadesPorProvincia(provinciaID: number): Observable<Array<CiudadModel>>{
+  public getListaCiudadesPorProvincia(provinciaID: string): Observable<Array<CiudadModel>>{
 
     if(this.provinciaSeleccionadaID == provinciaID) {
       // Ya tenemos cargadas las ciudades de esa provincia, por lo que no hacemos la llamada http al servidor
@@ -107,14 +112,19 @@ export class RemoteDataService {
     // Guardamos el ID de la provincia para evitar volver a pedir las ciudades si ya tenemos ese listado cargado
     this.provinciaSeleccionadaID = provinciaID;
 
-    return this.http.get(this.apiEndPointLocalidades)
+    return this.http.get(`this.apiEndPointLocalidades/${provinciaID}`)
     .delay(1000) // Simulamos un retardo al buscar las solicitudes
-    .map(res => res.json().filter(unaCiudad => unaCiudad.provincia == provinciaID))
+    .map(res => res.json())
     .map(listadoCiudades => {
       for(let i=0; i<listadoCiudades.length; i++) {
         this.listaCiudades.push(new CiudadModel(listadoCiudades[i].id, listadoCiudades[i].nombre));
       }
       return this.listaCiudades;
     });
+  }
+
+  public postSolicitud(solicitud: SolicitudModel): Observable<SolicitudModel> {
+    return this.http.post(this.apiEndPointSolicitudes, JSON.stringify(solicitud))
+    .map(res => res.json());
   }
 }

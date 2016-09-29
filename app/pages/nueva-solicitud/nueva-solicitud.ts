@@ -32,8 +32,8 @@ export class NuevaSolicitudPage {
 	constructor(private remoteDataService: RemoteDataService,
 		private platform: Platform,
 		private menuCtrl: MenuController,
-		private navCtrl: NavController, 
-		private formBuilder : FormBuilder, 
+		private navCtrl: NavController,
+		private formBuilder : FormBuilder,
 		private ngZone : NgZone,
 		private connectivityService : ConnectivityService,
 		private autocompleteService : AutocompleteService,
@@ -56,7 +56,7 @@ export class NuevaSolicitudPage {
 		// Nos suscribimos al autocomplete para que nos envie la informacion de la direccion cuando este lista
 		this.autocompleteService.autocomplete.subscribe((informacionDelLugar) => {
 			this.ngZone.run(() => {
-				// Ejecutamos este metodo dentro de ngZone para que angular sepa que 
+				// Ejecutamos este metodo dentro de ngZone para que angular sepa que
 				// tiene que actualizar la vista cuando finalice
 				this.setearDireccion(informacionDelLugar);
 			});
@@ -72,7 +72,7 @@ export class NuevaSolicitudPage {
 		// TODO: setar la propiedad usuarioID de la nueva solicitud
 		// --------------------------------------------------------
 		// this.nuevaSolicitud.setUsuarioID(usuarioID);
-	}	
+	}
 
 	// Método que recibe la dirección del autocomplete y la ingresa en el formulario
 	private setearDireccion(informacionSobreDireccion: any) {
@@ -83,7 +83,7 @@ export class NuevaSolicitudPage {
 
 		// Setea la institucion
 		this.nuevaSolicitud.setInstitucion(informacionSobreDireccion.getName());
-		
+
 		// Setea la direccion de la institucion
 		this.nuevaSolicitud.setDireccion(informacionSobreDireccion.getAdressLine1());
 
@@ -92,7 +92,7 @@ export class NuevaSolicitudPage {
 
 		if(this.remoteDataService.modoDebugActivado()) {
       		console.timeEnd('NuevaSolicitudPage / setearDireccion');
-    	}		
+    	}
 	}
 
 	// Método que dado el nombre de una provincia, la setea como seleccionada en el formulario y actualiza el listado de ciudades
@@ -127,7 +127,7 @@ export class NuevaSolicitudPage {
       		console.time('NuevaSolicitudPage / actualizarCiudad');
     	}
 
-		let indiceCiudad = -1; 
+		let indiceCiudad = -1;
 		for(let i=0; i<this.listaCiudades.length; i++) {
 
 			// Buscamos la ciudad por su nombre
@@ -215,7 +215,7 @@ export class NuevaSolicitudPage {
 		// Obtenemos el listado de provincias del servidor
 		this.remoteDataService.getListaProvincias().subscribe(result => {
 			if(result && result.length) {
-				
+
 				// Inicializamos el listado de provincias
 				this.listaProvincias = result;
 
@@ -243,7 +243,7 @@ export class NuevaSolicitudPage {
 		if(this.remoteDataService.modoDebugActivado()) {
       		console.time('NuevaSolicitudPage / inicializarCiudadesDeLaProvincia');
     	}
-		
+
 		let provinciaId = this.nuevaSolicitud.getProvincia().getId();
 
 		let loadingPopup = this.loadingCtrl.create({
@@ -264,7 +264,7 @@ export class NuevaSolicitudPage {
 						// ---------------------------------------------------------------------------
 
 						// Setea la ciudad en base a su ID
-						this.nuevaSolicitud.setCiudad(this.listaCiudades[0]);	
+						this.nuevaSolicitud.setCiudad(this.listaCiudades[0]);
 					}
 
 					// Oculta el mensaje de espera
@@ -275,13 +275,19 @@ export class NuevaSolicitudPage {
     				}
 				}
 				// TODO: manejar errores en las llamadas al servidor
-				// -------------------------------------------------			
+				// -------------------------------------------------
 			});
 	}
 
 	// Método que crea la nueva solicitud con la información ingresada en el formulario
 	public guardarCambios(): void {
+		console.log("submit", this.nuevaSolicitud);
 		this.submitted = true;
+		this.remoteDataService.postSolicitud(this.nuevaSolicitud).subscribe(r => {
+			if (r !== this.nuevaSolicitud) {
+				console.error("solicitud creada pero es diferente.");
+			}
+		});
 	}
 
 	// Método usado para debug, muestra el contenido del form en tiempo real

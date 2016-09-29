@@ -3,15 +3,15 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class CiudadModel {
 
-	private id: number;
+	private id: string;
 	private nombre: string;
 
-	constructor(id?: number, nombre?: string) {
+	constructor(id?: string, nombre?: string) {
 		this.id = id ? id : null;
-		this.nombre = nombre ? nombre : null;		
+		this.nombre = nombre ? nombre : null;
 	}
 
-	public getId(): number {
+	public getId(): string {
 		return this.id;
 	}
 
@@ -19,7 +19,7 @@ export class CiudadModel {
 		return this.nombre;
 	}
 
-	public setId(id: number): number {
+	public setId(id: string): string {
 		return this.id = id;
 	}
 
