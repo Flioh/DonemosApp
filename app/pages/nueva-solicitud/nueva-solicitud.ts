@@ -287,9 +287,6 @@ export class NuevaSolicitudPage {
 		this.nuevaSolicitud.setCantidadDadores(this.nuevaSolicitud.getCantidadDadores());
 		this.submitted = true;
 		this.remoteDataService.postSolicitud(this.nuevaSolicitud).subscribe(r => {
-			if (r !== this.nuevaSolicitud) {
-				console.error("solicitud creada pero es diferente.");
-			}
 		});
 	}
 
