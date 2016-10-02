@@ -1,3 +1,4 @@
+import { AuthService } from '../../providers/auth-service/auth-service';
 import { SolicitudItem } from '../../directives/solicitud-item/solicitud-item';
 import { CiudadModel } from '../../providers/ciudad-model/ciudad-model';
 import { DonacionesHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
@@ -11,6 +12,7 @@ import { UserDataService } from '../../providers/user-data-service/user-data-ser
 import { DetallesSolicitudPage } from '../detalles-solicitud/detalles-solicitud';
 import { NuevaSolicitudPage } from '../nueva-solicitud/nueva-solicitud';
 import { Component } from '@angular/core';
+import { AuthService } from './providers/auth-service/auth-service';
 import { AlertController, LoadingController, NavController, Storage, Platform, MenuController } from 'ionic-angular';
 
 @Component({
@@ -52,7 +54,8 @@ export class ListaSolicitudesPage {
               private loadingCtrl: LoadingController,
               private alertCtrl: AlertController, 
               private remoteDataService: RemoteDataService,
-              private userDataService: UserDataService) {    
+              private userDataService: UserDataService,
+              private authService: AuthService) {    
 
     if(this.remoteDataService.modoDebugActivado()) {
       console.time('ListaSolicitudesPage / constructor');
@@ -95,6 +98,7 @@ export class ListaSolicitudesPage {
   ionViewDidEnter(){
     // Habilitamos el menu lateral
 		this.menuCtrl.enable(true, 'unauthenticated');
+    this.authService.login();
   }
 
   // Método que obtiene las solicitudes del servidor

@@ -14,7 +14,7 @@ export const MY_CONFIG: ApplicationConfig = {
   apiEndPointLocalidades: 	'./localidades.json',
   apiEndPointSolicitudes: 	'./solicitudes.json',
   staticMapUrl:             'https://maps.googleapis.com/maps/api/staticmap',
-  staticMapKey:             ''
+  staticMapKey:             'AIzaSyCW_Mlb8DXkLE4ga5YreODfY6ECo5kTiw8'
 };
 
 // Creamos un token para evitar conflictos por nombres
