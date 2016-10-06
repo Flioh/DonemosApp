@@ -7,7 +7,7 @@ import { GrupoSanguineoModel } from '../grupo-sanguineo-model/grupo-sanguineo-mo
 import { ProvinciaModel } from '../provincia-model/provincia-model';
 import { SolicitudModel } from '../solicitud-model/solicitud-model';
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs';
 
 /* Models usados en el servicio */
@@ -24,7 +24,7 @@ export class RemoteDataService {
 
   private provinciaSeleccionadaID: string;
 
-  private baseUrl: string = 'http://192.168.1.2:8080';
+  private baseUrl: string = 'http://192.168.1.7:8080';
 
   private apiEndPointProvincias : string = `${this.baseUrl}/provincia`
   private apiEndPointLocalidades: string = `${this.baseUrl}/localidad`;
@@ -122,7 +122,10 @@ export class RemoteDataService {
   }
 
   public postSolicitud(solicitud: SolicitudModel): Observable<SolicitudModel> {
-    return this.http.post(this.apiEndPointSolicitudes, JSON.stringify(solicitud))
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    return this.http
+    .post(this.apiEndPointSolicitudes, JSON.stringify(solicitud))
     .map(res => res.json());
   }
 }

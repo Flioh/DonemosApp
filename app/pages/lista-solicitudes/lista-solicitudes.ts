@@ -47,16 +47,16 @@ export class ListaSolicitudesPage {
   private hayMasSolicitudes: boolean;
 
   constructor(private platform: Platform,
-              private nav: NavController, 
+              private nav: NavController,
               private menuCtrl: MenuController,
               private loadingCtrl: LoadingController,
-              private alertCtrl: AlertController, 
+              private alertCtrl: AlertController,
               private remoteDataService: RemoteDataService,
-              private userDataService: UserDataService) {    
+              private userDataService: UserDataService) {
 
     if(this.remoteDataService.modoDebugActivado()) {
       console.time('ListaSolicitudesPage / constructor');
-    }    
+    }
 
     // Indica que las listas usadas en los filtros no estan cargadas aun
     this.listadosCargados = false;
@@ -81,7 +81,7 @@ export class ListaSolicitudesPage {
 
     this.userDataService.datosUsuario.subscribe(() => {
       this.solicitudes = [];
-      this.buscarSolicitudes();    
+      this.buscarSolicitudes();
     });
 
     // Cargamos las ultimas solicitudes
@@ -116,7 +116,7 @@ export class ListaSolicitudesPage {
 
 
     this.userDataService.getDatosUsuario().then((datosUsuario) => {
-        if(datosUsuario) {          
+        if(datosUsuario) {
           // Inicializamos los listados con la informacion del usuario
           this.datosUsuarioObj = datosUsuario;
 
@@ -125,7 +125,8 @@ export class ListaSolicitudesPage {
         }
 
         // Obtenemos las solicitudes del servidor
-        this.remoteDataService.getSolicitudes().subscribe((solicitudesObj) => { 
+        this.remoteDataService.getSolicitudes().subscribe((solicitudesObj) => {
+          console.debug("solicitudes: ", solicitudesObj);
           for(let i = 0; i < solicitudesObj.length; i++) {
             let solicitud = new SolicitudModel(solicitudesObj[i]);
             let descripcionTiposSanguineos = this.obtenerInformacionTiposSanguineos(solicitud);
@@ -142,7 +143,7 @@ export class ListaSolicitudesPage {
           }
 
         });
-    });  
+    });
   }
 
   // Inicializa los listados de la pagina
@@ -166,7 +167,7 @@ export class ListaSolicitudesPage {
       this.remoteDataService.getListaProvincias().subscribe(result => {
         if(result && result.length) {
           this.listaProvincias = result;
-          
+
           // Evitamos cargar los datos cada vez que se muestran los filtros
           this.listadosCargados = true;
 
@@ -176,7 +177,7 @@ export class ListaSolicitudesPage {
           if(this.remoteDataService.modoDebugActivado()) {
             console.timeEnd('ListaSolicitudesPage / inicializarFiltros');
           }
-        } 
+        }
       });
     }
   }
@@ -225,7 +226,7 @@ export class ListaSolicitudesPage {
           console.timeEnd('ListaSolicitudesPage / usarDatosUsuario');
         }
 
-      }); 
+      });
 
     } else {
       // Limpiamos el formulario
@@ -245,7 +246,7 @@ export class ListaSolicitudesPage {
       }
 
       let result = '';
-      let posiblesDadores = DonacionesHelper.puedeRecibirDe(unaSolicitud.getGrupoSanguineo().getId(), 
+      let posiblesDadores = DonacionesHelper.puedeRecibirDe(unaSolicitud.getGrupoSanguineo().getId(),
                                                              unaSolicitud.getFactorSanguineo().getId());
 
       // Obtenems un string con todos los tipos sanguineos buscados
@@ -270,7 +271,7 @@ export class ListaSolicitudesPage {
         }
 
         // Obtenemos el indice de la provincia del usuario y la seleccionamos
-        let indiceProvincia = this.getIndicePorID(this.listaProvincias, this.datosUsuarioObj.provinciaID);        
+        let indiceProvincia = this.getIndicePorID(this.listaProvincias, this.datosUsuarioObj.provinciaID);
         this.provinciaSeleccionada = this.listaProvincias[indiceProvincia];
 
         // Obtenemos el indice del grupo sanguineo del usuario y lo seleccionamos
@@ -296,13 +297,13 @@ export class ListaSolicitudesPage {
 
                   if(this.remoteDataService.modoDebugActivado()) {
                     console.timeEnd('ListaSolicitudesPage / inicializarDatosUsuario');
-                  } 
+                  }
 
                   // Resolvemos la promesa
                   resolve(true);
                 }
                   // TODO: manejar errores en las llamadas al servidor
-                  // -------------------------------------------------      
+                  // -------------------------------------------------
                 });
         }
       });
@@ -354,7 +355,7 @@ export class ListaSolicitudesPage {
           }
         }
         // TODO: manejar errores en las llamadas al servidor
-        // -------------------------------------------------      
+        // -------------------------------------------------
       });
   }
 
