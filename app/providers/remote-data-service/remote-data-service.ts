@@ -1,7 +1,7 @@
 import 'rxjs/add/operator/map';
 import { CiudadModel } from '../../models/ciudad-model/ciudad-model';
-import { FactorSanguineoHelper, GrupoSanguineoHelper } from '../donemos-helper-service/donemos-helper-service';
-import { FactorSanguineoEnum, GrupoSanguineoEnum } from '../donemos-helper-service/donemos-helper-service';
+import { FactorSanguineoHelper, GrupoSanguineoHelper } from '../donaciones-service/donaciones-service';
+import { FactorSanguineoEnum, GrupoSanguineoEnum } from '../donaciones-service/donaciones-service';
 import { FactorSanguineoModel } from '../../models/factor-sanguineo-model/factor-sanguineo-model';
 import { GrupoSanguineoModel } from '../../models/grupo-sanguineo-model/grupo-sanguineo-model';
 import { ProvinciaModel } from '../../models/provincia-model/provincia-model';

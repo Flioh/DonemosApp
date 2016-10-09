@@ -1,6 +1,6 @@
 import { ResumenSolicitud } from '../../directives/resumen-solicitud/resumen-solicitud';
 import { CiudadModel } from '../../models/ciudad-model/ciudad-model';
-import { DonacionesHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
+import { DonacionesHelper } from '../../providers/donaciones-service/donaciones-service';
 import { FactorSanguineoModel } from '../../models/factor-sanguineo-model/factor-sanguineo-model';
 import { GrupoSanguineoModel } from '../../models/grupo-sanguineo-model/grupo-sanguineo-model';
 import { ProvinciaModel } from '../../models/provincia-model/provincia-model';

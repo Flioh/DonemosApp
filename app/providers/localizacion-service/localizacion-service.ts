@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 declare var google: any;
 
 @Injectable()
-export class NavigationService {
+export class LocalizacionService {
 
   private geocoder: any;
 

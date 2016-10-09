@@ -12,8 +12,8 @@ import { CiudadModel } from '../../models/ciudad-model/ciudad-model';
 import { GrupoSanguineoModel } from '../../models/grupo-sanguineo-model/grupo-sanguineo-model';
 import { FactorSanguineoModel } from '../../models/factor-sanguineo-model/factor-sanguineo-model';
 
-import { GrupoSanguineoEnum, FactorSanguineoEnum} from '../../providers/donemos-helper-service/donemos-helper-service';
-import { GrupoSanguineoHelper, FactorSanguineoHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
+import { GrupoSanguineoEnum, FactorSanguineoEnum} from '../../providers/donaciones-service/donaciones-service';
+import { GrupoSanguineoHelper, FactorSanguineoHelper } from '../../providers/donaciones-service/donaciones-service';
 
 describe('RemoteData Service Model', () => {
 

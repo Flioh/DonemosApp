@@ -5,7 +5,7 @@ import { ListaSolicitudesPage } from './pages/lista-solicitudes/lista-solicitude
 import { LoginService, PerfilUsuarioModel } from './providers/login-service/login-service';
 import { ConectividadService } from './providers/conectividad-service/conectividad-service';
 import { MenuItemModel } from './models/menuitem-model/menuitem-model';
-import { NavigationService } from './providers/navigation-service/navigation-service';
+import { LocalizacionService } from './providers/localizacion-service/localizacion-service';
 import { RemoteDataService } from './providers/remote-data-service/remote-data-service';
 import { UserDataService } from './providers/user-data-service/user-data-service';
 import { Component, enableProdMode, provide, ViewChild } from '@angular/core';
@@ -18,7 +18,7 @@ import { StatusBar } from 'ionic-native';
 @Component({
   templateUrl: 'build/app.html',
   providers: [ConectividadService, 
-              NavigationService, 
+              LocalizacionService, 
               UserDataService, 
               RemoteDataService, 
               { provide: MY_CONFIG_TOKEN, useValue: MY_CONFIG },
@@ -60,7 +60,7 @@ export class DonemosApp {
       this.inicializarEventosMenuPrincipal();
 
       this.cargarOpcionesMenuPrincipal(); 
-      this.addConnectivityListeners();
+      this.inicializarEventosConectividad();
     });
   }
 
@@ -117,7 +117,7 @@ export class DonemosApp {
   }
 
   // Método que controla los eventos de conexion y desconexion a internet
-  public addConnectivityListeners() {
+  public inicializarEventosConectividad() {
 
   }
 

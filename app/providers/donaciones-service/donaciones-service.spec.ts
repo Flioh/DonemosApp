@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { beforeEachProviders, beforeEach, it, describe, expect, inject } from '@angular/core/testing';
-import { FactorSanguineoEnum, GrupoSanguineoEnum } from '../donemos-helper-service/donemos-helper-service';
-import { FactorSanguineoHelper, GrupoSanguineoHelper, DonacionesHelper } from '../donemos-helper-service/donemos-helper-service';
+import { FactorSanguineoEnum, GrupoSanguineoEnum } from '../donaciones-service/donaciones-service';
+import { FactorSanguineoHelper, GrupoSanguineoHelper, DonacionesHelper } from '../donaciones-service/donaciones-service';
 
 describe('FactorSanguineoEnum', () => {
 

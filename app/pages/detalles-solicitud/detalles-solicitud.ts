@@ -1,11 +1,12 @@
+import { ConectividadService } from '../../providers/conectividad-service/conectividad-service';
 import { collectAndResolveStyles } from '@angular/platform-browser/esm/core_private';
 import { ConfigMock } from '../../../test/mocks';
 import { FormatearFechaPipe } from '../../pipes/formatear-fecha-pipe/formatear-fecha-pipe';
-import { DonacionesHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
+import { DonacionesHelper } from '../../providers/donaciones-service/donaciones-service';
 import { RemoteDataService } from '../../providers/remote-data-service/remote-data-service';
 import { SolicitudModel } from '../../models/solicitud-model/solicitud-model';
 import { UserDataService } from '../../providers/user-data-service/user-data-service';
-import { NavigationService } from '../../providers/navigation-service/navigation-service';
+import { LocalizacionService } from '../../providers/localizacion-service/localizacion-service';
 import { Component, Inject } from '@angular/core';
 import { LoadingController, NavController, NavParams, Platform } from 'ionic-angular';
 import { MY_CONFIG, MY_CONFIG_TOKEN, ApplicationConfig } from '../../app-config.ts';
@@ -33,7 +34,7 @@ export class DetallesSolicitudPage {
               private loadingCtrl: LoadingController, 
               private remoteDataService: RemoteDataService,
               private userDataService: UserDataService,
-              private navigationService: NavigationService,
+              private localizacionService: LocalizacionService,
               @Inject(MY_CONFIG_TOKEN) config: ApplicationConfig) {
       
       if(this.remoteDataService.modoDebugActivado()) {
@@ -70,7 +71,7 @@ export class DetallesSolicitudPage {
       let direccion = `${ this.solicitudSeleccionada.getDireccion() },${ this.solicitudSeleccionada.getCiudad().getNombre() },${ this.solicitudSeleccionada.getProvincia().getNombre() },Argentina`;
 
       // Invocamos al servicio usando la direccion y el nombre de la institucion 
-      this.navigationService.mostrarRuta(direccion, this.solicitudSeleccionada.getInstitucion());
+      this.localizacionService.mostrarRuta(direccion, this.solicitudSeleccionada.getInstitucion());
     }
 
     // Método que obtiene los datos del usuario
