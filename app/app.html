@@ -24,8 +24,8 @@
     <!-- Menu cuando el usuario esta autenticado -->
     <ion-row class="profile">
       <ion-col width-100>
-        <img [src]="authService.user?.picture || '/img/perfil-usuario.png'">
-        <h3>{{ authService.user?.name }}</h3>
+        <img [src]="getImagenPerfil()">
+        <h3>{{ getNombrePerfil() }}</h3>
       </ion-col>
     </ion-row>
 
@@ -37,7 +37,7 @@
         {{pagina.getTitulo()}}
       </button>
 
-      <button ion-item detail-none (click)="authService.logout()">
+      <button ion-item detail-none (click)="logout()">
         <ion-icon ios="ios-log-out-outline" md="md-log-out" item-left></ion-icon>
         Salir
       </button>

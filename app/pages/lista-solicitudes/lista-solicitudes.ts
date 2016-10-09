@@ -1,4 +1,3 @@
-import { AuthService } from '../../providers/auth-service/auth-service';
 import { ResumenSolicitud } from '../../directives/resumen-solicitud/resumen-solicitud';
 import { CiudadModel } from '../../providers/ciudad-model/ciudad-model';
 import { DonacionesHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
@@ -54,7 +53,6 @@ export class ListaSolicitudesPage extends BasePage {
               private loadingCtrl: LoadingController,
               private alertCtrl: AlertController, 
               private userDataService: UserDataService,
-              private authService: AuthService,
               eventsCtrl: Events,
               remoteDataService: RemoteDataService) 
   {    

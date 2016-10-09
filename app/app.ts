@@ -2,7 +2,7 @@ import { MY_CONFIG, MY_CONFIG_TOKEN } from './app-config.ts';
 import { DatosPersonalesPage } from './pages/datos-personales/datos-personales';
 import { ErrorPage } from './pages/error/error';
 import { ListaSolicitudesPage } from './pages/lista-solicitudes/lista-solicitudes';
-import { AuthService } from './providers/auth-service/auth-service';
+import { LoginService, PerfilUsuarioModel } from './providers/login-service/login-service';
 import { ConnectivityService } from './providers/connectivity-service/connectivity-service';
 import { MenuItemModel } from './providers/menuitem-model/menuitem-model';
 import { NavigationService } from './providers/navigation-service/navigation-service';
@@ -27,7 +27,7 @@ import { StatusBar } from 'ionic-native';
                   return new AuthHttp(new AuthConfig({noJwtError: true}), http);
                 }, deps: [Http]
               }),
-              AuthService]
+              LoginService]
 })
 export class DonemosApp {
   @ViewChild(Nav) nav: Nav;
@@ -41,7 +41,7 @@ export class DonemosApp {
               public events: Events, 
               private menuCtrl: MenuController, 
               private connectivityService : ConnectivityService,
-              private authService: AuthService) {
+              private loginService: LoginService) {
     this.inicializarApp();
   }
 
@@ -56,7 +56,7 @@ export class DonemosApp {
       // token in local storage. If there is, we should
       // schedule an initial token refresh for when the
       // token expires
-      this.authService.startupTokenRefresh();
+      this.loginService.startupTokenRefresh();
 
       this.inicializarEventosMenuPrincipal();
 
@@ -76,7 +76,7 @@ export class DonemosApp {
     });
 
     this.events.subscribe('page:load', () => {
-      this.habilitarMenuCorrespondiente(this.authService.authenticated());
+      this.habilitarMenuCorrespondiente(this.loginService.authenticated());
     });
   }
 
@@ -89,14 +89,14 @@ export class DonemosApp {
       this.menuCtrl.enable(true, 'authenticated');
 
       // Oculta las opciones para loguearse
-      this.authService.ocultarLogin();
+      this.loginService.ocultarLogin();
 
     } else {
       // Habilita el menu para usuarios no logueados
       this.menuCtrl.enable(true, 'unauthenticated');
 
       // Muestra las opciones para loguearse
-      this.authService.mostrarLogin();
+      this.loginService.mostrarLogin();
     }
     
   }
@@ -116,17 +116,37 @@ export class DonemosApp {
   }
 
   // Método que controla los eventos de conexion y desconexion a internet
-  addConnectivityListeners() {
+  public addConnectivityListeners() {
 
   }
 
   // Método que inicializa el menú principal
-  cargarOpcionesMenuPrincipal(): void {    
+  public cargarOpcionesMenuPrincipal(): void {    
     this.paginasMenu.push(new MenuItemModel('list-box', 'Lista de solicitudes', ListaSolicitudesPage, true, false));
     this.paginasMenu.push(new MenuItemModel('checkbox', 'Requisitos para donar', ErrorPage, false, false));
     this.paginasMenu.push(new MenuItemModel('person', 'Configurar perfil', DatosPersonalesPage, false, false));
     this.paginasMenu.push(new MenuItemModel('information-circle', 'Sobre nosotros', ErrorPage, false, false));
   }
+
+  // Método que desloguea al usuario
+  public logout(){
+    this.loginService.logout()
+  }
+
+  // Método que devuelve la ruta de la imagen del perfil del usuario o una imagen genérica
+  public getImagenPerfil() {
+
+    let perfilUsuario = this.loginService.getUser();
+    return perfilUsuario && perfilUsuario.picture ? perfilUsuario.picture : '/img/perfil-usuario.png';
+  }
+
+  // Método que devuelve el nombre del usuario logueado o un string vacio
+  public getNombrePerfil() {
+
+    let perfilUsuario = this.loginService.getUser();
+    return perfilUsuario && perfilUsuario.name ? perfilUsuario.name : ''; 
+  }
+
 }
 
 enableProdMode();
