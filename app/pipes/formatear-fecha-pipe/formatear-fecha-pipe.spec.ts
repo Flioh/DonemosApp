@@ -1,9 +1,9 @@
-import { TimeAgoPipe } from './time-ago-pipe';
+import { FormatearFechaPipe } from './formatear-fecha-pipe';
 import {beforeEachProviders, beforeEach, it, describe, expect, inject} from '@angular/core/testing';
 
-describe('TimeAgo Pipe', () => {
+describe('FormatearFechaPipe', () => {
 
-	let timeAgoPipeMock: TimeAgoPipe = new TimeAgoPipe();
+	let timeAgoPipeMock: FormatearFechaPipe = new FormatearFechaPipe();
 
 	it('Debe estar definido', () => {
 		expect(timeAgoPipeMock).toBeDefined();

@@ -1,14 +1,14 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { ResumenSolicitudModel } from '../../providers/resumen-solicitud-model/resumen-solicitud-model';
 import { DonacionesHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
-import { TimeAgoPipe } from '../../pipes/time-ago/time-ago-pipe';
+import { FormatearFechaPipe } from '../../pipes/formatear-fecha-pipe/formatear-fecha-pipe';
 import { RemoteDataService } from '../../providers/remote-data-service/remote-data-service';
 import { NavigationService } from '../../providers/navigation-service/navigation-service';
 
 @Component({
     selector: 'resumen-solicitud',
     templateUrl: 'build/directives/resumen-solicitud/resumen-solicitud.html',
-    pipes: [ TimeAgoPipe ]
+    pipes: [ FormatearFechaPipe ]
 })
 export class ResumenSolicitud {
 	  @Input() solicitudItemModel: ResumenSolicitudModel;

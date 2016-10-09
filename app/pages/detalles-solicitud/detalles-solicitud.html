@@ -19,7 +19,7 @@
         <h2 [innerHTML]="tiposSanguineosSolicitud"></h2>
         
         <span class="fecha">
-          {{ solicitudSeleccionada.fechaCreacion | timeago }}
+          {{ solicitudSeleccionada.fechaCreacion | formatearFecha }}
         </span>
       </ion-item>
 

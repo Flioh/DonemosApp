@@ -1,6 +1,6 @@
 import { collectAndResolveStyles } from '@angular/platform-browser/esm/core_private';
 import { ConfigMock } from '../../../test/mocks';
-import { TimeAgoPipe } from '../../pipes/time-ago/time-ago-pipe';
+import { FormatearFechaPipe } from '../../pipes/formatear-fecha-pipe/formatear-fecha-pipe';
 import { DonacionesHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
 import { RemoteDataService } from '../../providers/remote-data-service/remote-data-service';
 import { SolicitudModel } from '../../providers/solicitud-model/solicitud-model';
@@ -12,7 +12,7 @@ import { MY_CONFIG, MY_CONFIG_TOKEN, ApplicationConfig } from '../../app-config.
 
 @Component({
 	templateUrl: 'build/pages/detalles-solicitud/detalles-solicitud.html',
-  pipes: [ TimeAgoPipe ]
+  pipes: [ FormatearFechaPipe ]
 })
 export class DetallesSolicitudPage {
 

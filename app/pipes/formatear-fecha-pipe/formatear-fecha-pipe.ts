@@ -1,12 +1,12 @@
-import { Injectable, Pipe } from '@angular/core';
+import { Injectable, Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'timeago'
+  name: 'formatearFecha'
 })
 @Injectable()
-export class TimeAgoPipe {
+export class FormatearFechaPipe implements PipeTransform {
 
-  transform(value: Date, args: any[]) {
+  transform(value: Date, args?: any[]) {
 
     if(typeof value === 'string') {
       value = new Date(value.toString());

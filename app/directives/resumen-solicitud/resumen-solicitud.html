@@ -40,7 +40,7 @@
 		<ion-row>
 			<ion-col width-60>
 				<ion-note>
-					{{ solicitudItemModel.solicitud.fechaCreacion | timeago }}
+					{{ solicitudItemModel.solicitud.fechaCreacion | formatearFecha }}
 				</ion-note>
 			</ion-col>
 			<ion-col tappable width-40 (click)="verDetalles()">
