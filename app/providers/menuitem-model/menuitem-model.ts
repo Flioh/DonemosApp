@@ -8,7 +8,8 @@ export class MenuItemModel {
     private nombreIcono: string, 
     private titulo: string, 
     private componente: any,
-    private esRoot: boolean) {
+    private esRoot: boolean,
+    private requiereLogin: boolean) {
   }
 
   public getIconoIosOutline(): string {
@@ -33,6 +34,10 @@ export class MenuItemModel {
 
   public getEsRoot(): boolean {
     return this.esRoot;
+  }
+
+  public getRequiereLogin(): boolean {
+    return this.requiereLogin;
   }
 
 }

@@ -1,7 +1,8 @@
-import {Storage, LocalStorage} from 'ionic-angular';
-import {AuthHttp, JwtHelper, tokenNotExpired} from 'angular2-jwt';
-import {Injectable, NgZone} from '@angular/core';
-import {Observable} from 'rxjs/Rx';
+import { Storage, LocalStorage } from 'ionic-angular';
+import { AuthHttp, JwtHelper, tokenNotExpired } from 'angular2-jwt';
+import { Injectable, NgZone } from '@angular/core';
+import { Observable } from 'rxjs/Rx';
+import { Events } from 'ionic-angular';
 
 // Avoid name not found warnings
 declare var Auth0: any;
@@ -10,10 +11,10 @@ declare var Auth0Lock: any;
 @Injectable()
 export class AuthService {
 
-    jwtHelper: JwtHelper = new JwtHelper();
+    private jwtHelper: JwtHelper = new JwtHelper();
 
-    auth0 = new Auth0({clientID: '4gUa8ibKIj6T8gMUvec3AzxbpirH5rGq', domain: 'donemos.auth0.com'});
-    lock = new Auth0Lock('4gUa8ibKIj6T8gMUvec3AzxbpirH5rGq', 'donemos.auth0.com', {
+    private auth0 = new Auth0({clientID: '4gUa8ibKIj6T8gMUvec3AzxbpirH5rGq', domain: 'donemos.auth0.com'});
+    private lock = new Auth0Lock('4gUa8ibKIj6T8gMUvec3AzxbpirH5rGq', 'donemos.auth0.com', {
         auth: {
             redirect: false,
             params: {
@@ -22,7 +23,7 @@ export class AuthService {
         },
         allowedConnections: ['google-oauth2', 'facebook', 'twitter'],
         socialButtonStyle: 'small',
-        // rememberLastLogin: false,
+        rememberLastLogin: false,
         language: 'es',
         container: 'hiw-login-container',
         languageDictionary: {    
@@ -34,22 +35,26 @@ export class AuthService {
         } 
     });
 
-    local: Storage = new Storage(LocalStorage);
-    refreshSubscription: any;
-    user: Object;
-    zoneImpl: NgZone;
+    private local: Storage = new Storage(LocalStorage);
+    private refreshSubscription: any;
+    private user: Object;
+    private zoneImpl: NgZone;
   
-    constructor(private authHttp: AuthHttp, zone: NgZone) {
+    constructor(private authHttp: AuthHttp, public eventsCtrl: Events, zone: NgZone) {
         this.zoneImpl = zone;
-        
+
         // Check if there is a profile saved in local storage
         this.local.get('profile').then(profile => {
             this.user = JSON.parse(profile);
+            this.eventsCtrl.publish('user:login');
         }).catch(error => {
             console.log(error);
         });
 
         this.lock.on('authenticated', authResult => {
+
+            this.eventsCtrl.publish('user:login');
+
             this.local.set('id_token', authResult.idToken);
 
             // Fetch profile information
@@ -62,10 +67,8 @@ export class AuthService {
 
                 profile.user_metadata = profile.user_metadata || {};
                 this.local.set('profile', JSON.stringify(profile));
-                this.user = profile;
+                this.user = profile;                
             });
-
-            this.lock.hide();
 
             this.local.set('refresh_token', authResult.refreshToken);
             this.zoneImpl.run(() => this.user = authResult.profile);
@@ -77,19 +80,33 @@ export class AuthService {
         return tokenNotExpired();
     }
 
-    public login() {
+    public mostrarLogin() {
         // Show the Auth0 Lock widget
         this.lock.show();    
     }
 
-    public logout() {
-        this.local.remove('profile');
-        this.local.remove('id_token');
-        this.local.remove('refresh_token');
-        this.zoneImpl.run(() => this.user = null);
-        // Unschedule the token refresh
-        this.unscheduleRefresh();
+    public ocultarLogin() {
+        // Hide the Auth0 Lock widget
+        this.lock.hide();
+    }
 
+    public logout() {
+
+        this.eventsCtrl.publish('user:logout');
+
+        // Damos un poco de tiempo para que se cierre el menu antes de
+        // cerrar la sesion del usuario
+        setTimeout(() => {
+            this.local.remove('profile');
+            this.local.remove('id_token');
+            this.local.remove('refresh_token');
+            this.zoneImpl.run(() => {
+                this.user = null;
+
+                // Unschedule the token refresh
+                this.unscheduleRefresh();         
+            });
+        }, 1000);
     }
 
     public scheduleRefresh() {
@@ -163,5 +180,9 @@ export class AuthService {
         }).catch(error => {
             console.log(error);
         });
+    }
+
+    public getUser(): Object{
+        return this.user;
     }
 }

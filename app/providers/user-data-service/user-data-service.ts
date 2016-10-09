@@ -52,14 +52,11 @@ export class UserDataService {
 		});
 	}
 
-	public setDatosUsuario(datosUsuario: any): Promise<boolean> {
-		return new Promise((resolve) => {
-			this.storage.set('datosUsuarioObj', JSON.stringify(datosUsuario))
+	public setDatosUsuario(datosUsuario: any): Promise<any> {
+		return this.storage.set('datosUsuarioObj', JSON.stringify(datosUsuario))
 				.then(() => { 
 					this.datosUsuarioObj = datosUsuario;
 					this.datosUsuarioObserver.next(datosUsuario);
-					resolve(true);
 				});
-		});
 	}
 }

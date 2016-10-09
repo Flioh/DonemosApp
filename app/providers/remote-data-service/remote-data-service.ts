@@ -10,12 +10,6 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Observable } from 'rxjs';
 
-/* Models usados en el servicio */
-
-/* Helpers */
-
-/* Objeto con las configuraciones de la app */
-
 @Injectable()
 export class RemoteDataService {
 
@@ -24,6 +18,7 @@ export class RemoteDataService {
 
   private provinciaSeleccionadaID: number;
 
+  // TODO: usar las propiedades del objeto de configuracion
   private apiEndPointProvincias : string = './provincias.json';
   private apiEndPointLocalidades: string = './localidades.json';
   private apiEndPointSolicitudes: string = './solicitudes.json';
@@ -33,14 +28,14 @@ export class RemoteDataService {
   constructor(public http: Http) {
 
     // Loguea en la consola cada vez que se inicia o finaliza un método
-    this.modoDebug = true;
+    this.modoDebug = false;
 
     this.listaProvincias = [];
     this.provinciaSeleccionadaID = null;
     this.listaCiudades = [];
   }
 
-
+  // Método que devuelve true si el modo debug esta activado
   public modoDebugActivado(): boolean {
     return this.modoDebug;
   }

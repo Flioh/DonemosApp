@@ -1,3 +1,4 @@
+import { constructDependencies } from '@angular/core/src/di/reflective_provider';
 import { AuthService } from '../../providers/auth-service/auth-service';
 import { SolicitudItem } from '../../directives/solicitud-item/solicitud-item';
 import { CiudadModel } from '../../providers/ciudad-model/ciudad-model';
@@ -12,14 +13,14 @@ import { UserDataService } from '../../providers/user-data-service/user-data-ser
 import { DetallesSolicitudPage } from '../detalles-solicitud/detalles-solicitud';
 import { NuevaSolicitudPage } from '../nueva-solicitud/nueva-solicitud';
 import { Component } from '@angular/core';
-import { AuthService } from './providers/auth-service/auth-service';
-import { AlertController, LoadingController, NavController, Storage, Platform, MenuController } from 'ionic-angular';
+import { AlertController, LoadingController, NavController, Events, Storage, Platform, MenuController } from 'ionic-angular';
+import { BasePage } from '../base/base';
 
 @Component({
   templateUrl: 'build/pages/lista-solicitudes/lista-solicitudes.html',
   directives: [SolicitudItem]
 })
-export class ListaSolicitudesPage {
+export class ListaSolicitudesPage extends BasePage {
 
   private solicitudes: Array<SolicitudItemModel>;
 
@@ -53,9 +54,14 @@ export class ListaSolicitudesPage {
               private menuCtrl: MenuController,
               private loadingCtrl: LoadingController,
               private alertCtrl: AlertController, 
-              private remoteDataService: RemoteDataService,
               private userDataService: UserDataService,
-              private authService: AuthService) {    
+              private authService: AuthService,
+              eventsCtrl: Events,
+              remoteDataService: RemoteDataService,) 
+  {    
+
+    // Inicializa la clase padre
+    super(eventsCtrl, remoteDataService);
 
     if(this.remoteDataService.modoDebugActivado()) {
       console.time('ListaSolicitudesPage / constructor');
@@ -82,9 +88,15 @@ export class ListaSolicitudesPage {
     this.ciudadSeleccionada = null;
     this.provinciaSeleccionada = null;
 
-    this.userDataService.datosUsuario.subscribe(() => {
-      this.solicitudes = [];
-      this.buscarSolicitudes();    
+    // Cuando cambien los datos del usuario, refrescamos el listado de solicitudes para
+    // resaltar el nuevo tipo sanguineo y no el anterior
+    this.userDataService.datosUsuario.subscribe((datosUsuario) => {
+
+      // Actualizamos la informacion del usuario
+      this.datosUsuarioObj = datosUsuario;
+
+      // Actualizamos la descripcion que se muestra en cada solicitud del listado
+      this.actualizarDescripcionTiposSanguineos();
     });
 
     // Cargamos las ultimas solicitudes
@@ -93,12 +105,6 @@ export class ListaSolicitudesPage {
     if(this.remoteDataService.modoDebugActivado()) {
       console.timeEnd('ListaSolicitudesPage / constructor');
     }
-  }
-
-  ionViewDidEnter(){
-    // Habilitamos el menu lateral
-		this.menuCtrl.enable(true, 'unauthenticated');
-    this.authService.login();
   }
 
   // Método que obtiene las solicitudes del servidor
@@ -123,9 +129,6 @@ export class ListaSolicitudesPage {
         if(datosUsuario) {          
           // Inicializamos los listados con la informacion del usuario
           this.datosUsuarioObj = datosUsuario;
-
-          // Obtenemos el tipo sanguineo del usuario
-          this.tipoSanguineoUsuario = DonacionesHelper.getDescripcion(this.datosUsuarioObj.grupoSanguineoID, this.datosUsuarioObj.factorSanguineoID);
         }
 
         // Obtenemos las solicitudes del servidor
@@ -147,6 +150,17 @@ export class ListaSolicitudesPage {
 
         });
     });  
+  }
+
+  // Metodo que actualiza la descripcion de los tipos sanguineos del listado de solicitudes
+  public actualizarDescripcionTiposSanguineos():void {
+    for(let i = 0; i < this.solicitudes.length; i++) {
+      let solicitud = this.solicitudes[i].getSolicitud();
+      let descripcionTiposSanguineos = this.obtenerInformacionTiposSanguineos(solicitud);
+
+      // Actualizamos la solicitud
+      this.solicitudes[i].setDescripcionTiposSanguineos(descripcionTiposSanguineos);
+    }
   }
 
   // Inicializa los listados de la pagina
@@ -255,8 +269,13 @@ export class ListaSolicitudesPage {
       // Obtenems un string con todos los tipos sanguineos buscados
       result = posiblesDadores.join(' ');
 
-      // Resaltamos el tipo sanguineo del usuario
-      result = result.replace(this.tipoSanguineoUsuario, '<span class="marked">' + this.tipoSanguineoUsuario + '</span> ');
+      if(this.datosUsuarioObj) {
+        // Obtenemos el tipo sanguineo del usuario
+        this.tipoSanguineoUsuario = DonacionesHelper.getDescripcion(this.datosUsuarioObj.grupoSanguineoID, this.datosUsuarioObj.factorSanguineoID);
+
+        // Resaltamos el tipo sanguineo del usuario
+        result = result.replace(this.tipoSanguineoUsuario, '<span class="marked">' + this.tipoSanguineoUsuario + '</span> ');
+      }
 
       if(this.remoteDataService.modoDebugActivado()) {
         console.timeEnd('ListaSolicitudesPage / obtenerInformacionTiposSanguineos');

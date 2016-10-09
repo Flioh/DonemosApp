@@ -15,4 +15,8 @@ export class SolicitudItemModel {
   public getDescripcionTiposSanguineos(): string {
   	return this.descripcionTiposSanguineos;
   }
+
+  public setDescripcionTiposSanguineos(descripcionTiposSanguineos): void {
+  	this.descripcionTiposSanguineos = descripcionTiposSanguineos;
+  }
 }

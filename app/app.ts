@@ -32,20 +32,20 @@ import { StatusBar } from 'ionic-native';
 export class DonemosApp {
   @ViewChild(Nav) nav: Nav;
 
-  private userData: any;
-
-  rootPage: any = ListaSolicitudesPage;
-  paginasMenu: Array<MenuItemModel> = [];
+  public rootPage: any = ListaSolicitudesPage;
+  public paginasMenu: Array<MenuItemModel> = [];
+  public perfilUsuario: any;
 
   constructor(private platform: Platform, 
               private alertCtrl: AlertController, 
               public events: Events, 
-              private menu: MenuController, 
+              private menuCtrl: MenuController, 
               private connectivityService : ConnectivityService,
               private authService: AuthService) {
     this.inicializarApp();
   }
 
+  // Método que inicializa los servicios globales de la aplicacion
   inicializarApp(): void {
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -58,33 +58,74 @@ export class DonemosApp {
       // token expires
       this.authService.startupTokenRefresh();
 
+      this.inicializarEventosMenuPrincipal();
+
       this.cargarOpcionesMenuPrincipal(); 
       this.addConnectivityListeners();
     });
   }
 
+  private inicializarEventosMenuPrincipal() {
+    
+    this.events.subscribe('user:login', () => {
+      this.habilitarMenuCorrespondiente(true);
+    });
+
+    this.events.subscribe('user:logout', () => {
+      this.habilitarMenuCorrespondiente(false);
+    });
+
+    this.events.subscribe('page:load', () => {
+      this.habilitarMenuCorrespondiente(this.authService.authenticated());
+    });
+  }
+
+  private habilitarMenuCorrespondiente(estaLogueado: boolean) {
+    // Cierra el menu
+    this.menuCtrl.close();
+
+    if(estaLogueado) {
+      // Habilita el menu de usuarios logueados 
+      this.menuCtrl.enable(true, 'authenticated');
+
+      // Oculta las opciones para loguearse
+      this.authService.ocultarLogin();
+
+    } else {
+      // Habilita el menu para usuarios no logueados
+      this.menuCtrl.enable(true, 'unauthenticated');
+
+      // Muestra las opciones para loguearse
+      this.authService.mostrarLogin();
+    }
+    
+  }
+
+  // Método que abre la pagina pasada como parametro
   public abrirPagina(pagina: MenuItemModel) {
 
     if(pagina.getEsRoot()) {
       this.nav.popToRoot().then(() => {
-        this.menu.close();
+        this.menuCtrl.close();
       });
     } else {
       this.nav.push(pagina.getComponente()).then(() => {
-        this.menu.close();
+        this.menuCtrl.close();
       });
     }
   }
 
+  // Método que controla los eventos de conexion y desconexion a internet
   addConnectivityListeners() {
 
   }
 
+  // Método que inicializa el menú principal
   cargarOpcionesMenuPrincipal(): void {    
-    this.paginasMenu.push(new MenuItemModel('list-box', 'Lista de solicitudes', ListaSolicitudesPage, true));
-    this.paginasMenu.push(new MenuItemModel('checkbox', 'Requisitos para donar', ErrorPage, false));
-    this.paginasMenu.push(new MenuItemModel('person', 'Configurar perfil', DatosPersonalesPage, false));
-    this.paginasMenu.push(new MenuItemModel('information-circle', 'Sobre nosotros', ErrorPage, false));
+    this.paginasMenu.push(new MenuItemModel('list-box', 'Lista de solicitudes', ListaSolicitudesPage, true, false));
+    this.paginasMenu.push(new MenuItemModel('checkbox', 'Requisitos para donar', ErrorPage, false, false));
+    this.paginasMenu.push(new MenuItemModel('person', 'Configurar perfil', DatosPersonalesPage, false, false));
+    this.paginasMenu.push(new MenuItemModel('information-circle', 'Sobre nosotros', ErrorPage, false, false));
   }
 }
 
