@@ -7,7 +7,7 @@ import { ProvinciaModel } from '../../models/provincia-model/provincia-model';
 import { DatosRemotosService } from '../../providers/datos-remotos-service/datos-remotos-service';
 import { ResumenSolicitudModel } from '../../models/resumen-solicitud-model/resumen-solicitud-model';
 import { SolicitudModel } from '../../models/solicitud-model/solicitud-model';
-import { UserDataService } from '../../providers/user-data-service/user-data-service';
+import { DatosPersonalesService } from '../../providers/datos-personales-service/datos-personales-service';
 import { DetallesSolicitudPage } from '../detalles-solicitud/detalles-solicitud';
 import { NuevaSolicitudPage } from '../nueva-solicitud/nueva-solicitud';
 import { Component } from '@angular/core';
@@ -52,7 +52,7 @@ export class ListaSolicitudesPage extends BasePage {
               private menuCtrl: MenuController,
               private loadingCtrl: LoadingController,
               private alertCtrl: AlertController, 
-              private userDataService: UserDataService,
+              private datosPersonalesService: DatosPersonalesService,
               eventsCtrl: Events,
               datosRemotosService: DatosRemotosService) 
   {    
@@ -87,7 +87,7 @@ export class ListaSolicitudesPage extends BasePage {
 
     // Cuando cambien los datos del usuario, refrescamos el listado de solicitudes para
     // resaltar el nuevo tipo sanguineo y no el anterior
-    this.userDataService.datosUsuario.subscribe((datosUsuario) => {
+    this.datosPersonalesService.datosUsuario.subscribe((datosUsuario) => {
 
       // Actualizamos la informacion del usuario
       this.datosUsuarioObj = datosUsuario;
@@ -122,7 +122,7 @@ export class ListaSolicitudesPage extends BasePage {
     loadingPopup.present();
 
 
-    this.userDataService.getDatosUsuario().then((datosUsuario) => {
+    this.datosPersonalesService.getDatosUsuario().then((datosUsuario) => {
         if(datosUsuario) {          
           // Inicializamos los listados con la informacion del usuario
           this.datosUsuarioObj = datosUsuario;

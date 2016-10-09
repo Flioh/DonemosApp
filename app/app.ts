@@ -1,3 +1,4 @@
+import { DatosPersonalesModel } from './models/datos-personales-model/datos-personales-model';
 import { MY_CONFIG, MY_CONFIG_TOKEN } from './app-config.ts';
 import { DatosPersonalesPage } from './pages/datos-personales/datos-personales';
 import { ErrorPage } from './pages/error/error';
@@ -7,7 +8,7 @@ import { ConectividadService } from './providers/conectividad-service/conectivid
 import { MenuItemModel } from './models/menuitem-model/menuitem-model';
 import { LocalizacionService } from './providers/localizacion-service/localizacion-service';
 import { DatosRemotosService } from './providers/datos-remotos-service/datos-remotos-service';
-import { UserDataService } from './providers/user-data-service/user-data-service';
+import { DatosPersonalesService } from './providers/datos-personales-service/datos-personales-service';
 import { Component, enableProdMode, provide, ViewChild } from '@angular/core';
 import { disableDeprecatedForms, provideForms } from '@angular/forms';
 import { Http } from '@angular/http';
@@ -19,7 +20,7 @@ import { StatusBar } from 'ionic-native';
   templateUrl: 'build/app.html',
   providers: [ConectividadService, 
               LocalizacionService, 
-              UserDataService, 
+              DatosPersonalesService, 
               DatosRemotosService, 
               { provide: MY_CONFIG_TOKEN, useValue: MY_CONFIG },
               provide(AuthHttp, { useFactory: (http) => {

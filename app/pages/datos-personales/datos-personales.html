@@ -15,7 +15,7 @@
 			<!-- Provincia  -->
 			<ion-item>
 				<ion-label floating>Provincia</ion-label>
-				<ion-select [(ngModel)]="datosUsuario.provincia" okText="Aceptar" cancelText="Cancelar" name="provincia" #provincia="ngModel" (ionChange)="inicializarCiudadesDeLaProvincia()">
+				<ion-select [(ngModel)]="datosPersonales.provincia" okText="Aceptar" cancelText="Cancelar" name="provincia" #provincia="ngModel" (ionChange)="inicializarCiudadesDeLaProvincia()">
 					<ion-option *ngFor="let provincia of listaProvincias" [value]="provincia">
 						{{provincia.nombre}}
 					</ion-option>
@@ -27,7 +27,7 @@
 			<!-- Ciudad  -->
 			<ion-item>
 				<ion-label floating>Ciudad</ion-label>
-				<ion-select [(ngModel)]="datosUsuario.ciudad" okText="Aceptar" cancelText="Cancelar" name="ciudad" #ciudad="ngModel">
+				<ion-select [(ngModel)]="datosPersonales.ciudad" okText="Aceptar" cancelText="Cancelar" name="ciudad" #ciudad="ngModel">
 					<ion-option *ngFor="let ciudad of listaCiudades" [value]="ciudad">
 						{{ciudad.nombre}}
 					</ion-option>
@@ -39,7 +39,7 @@
 			<!-- Grupo sanguineo  -->
 			<ion-item>
 				<ion-label floating>Tu grupo sanguineo</ion-label>
-				<ion-select [(ngModel)]="datosUsuario.grupoSanguineo" okText="Aceptar" cancelText="Cancelar" name="grupo" #grupo="ngModel">
+				<ion-select [(ngModel)]="datosPersonales.grupoSanguineo" okText="Aceptar" cancelText="Cancelar" name="grupo" #grupo="ngModel">
 					<ion-option *ngFor="let grupo of listaGruposSanguineos" [value]="grupo">
 						{{grupo.nombre}}
 					</ion-option>
@@ -51,7 +51,7 @@
 			<!-- Factor sanguineo  -->
 			<ion-item>
 				<ion-label floating>Tu factor sanguineo</ion-label>
-				<ion-select [(ngModel)]="datosUsuario.factorSanguineo" okText="Aceptar" cancelText="Cancelar" name="factor" #factor="ngModel">
+				<ion-select [(ngModel)]="datosPersonales.factorSanguineo" okText="Aceptar" cancelText="Cancelar" name="factor" #factor="ngModel">
 					<ion-option *ngFor="let factor of listaFactoresSanguineos" [value]="factor">
 						{{factor.nombre}}
 					</ion-option>

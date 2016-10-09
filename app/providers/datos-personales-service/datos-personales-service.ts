@@ -3,7 +3,7 @@ import { SqlStorage, Storage } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 
 @Injectable()
-export class UserDataService {
+export class DatosPersonalesService {
 
 	private storage: Storage;
   	private datosUsuarioObj: any;

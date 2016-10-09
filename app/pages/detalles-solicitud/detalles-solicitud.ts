@@ -5,7 +5,7 @@ import { FormatearFechaPipe } from '../../pipes/formatear-fecha-pipe/formatear-f
 import { DonacionesHelper } from '../../providers/donaciones-service/donaciones-service';
 import { DatosRemotosService } from '../../providers/datos-remotos-service/datos-remotos-service';
 import { SolicitudModel } from '../../models/solicitud-model/solicitud-model';
-import { UserDataService } from '../../providers/user-data-service/user-data-service';
+import { DatosPersonalesService } from '../../providers/datos-personales-service/datos-personales-service';
 import { LocalizacionService } from '../../providers/localizacion-service/localizacion-service';
 import { Component, Inject } from '@angular/core';
 import { LoadingController, NavController, NavParams, Platform } from 'ionic-angular';
@@ -33,7 +33,7 @@ export class DetallesSolicitudPage {
               private navParams: NavParams, 
               private loadingCtrl: LoadingController, 
               private datosRemotosService: DatosRemotosService,
-              private userDataService: UserDataService,
+              private datosPersonalesService: DatosPersonalesService,
               private localizacionService: LocalizacionService,
               @Inject(MY_CONFIG_TOKEN) config: ApplicationConfig) {
       
@@ -86,7 +86,7 @@ export class DetallesSolicitudPage {
       this.compatibleConUsuario = false;
 
       // Obtenemos los datos del servicio de datos del usuario
-      this.userDataService.getDatosUsuario().then((datosUsuario) => {
+      this.datosPersonalesService.getDatosUsuario().then((datosUsuario) => {
         if(datosUsuario) {
           let tipoSanguineoUsuario = DonacionesHelper.getDescripcion(datosUsuario.grupoSanguineoID, datosUsuario.factorSanguineoID);
 

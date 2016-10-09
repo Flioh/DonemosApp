@@ -1,10 +1,10 @@
 import { CiudadModel } from '../../models/ciudad-model/ciudad-model';
-import { DatosUsuarioModel } from '../../models/datos-usuario-model/datos-usuario-model';
+import { DatosPersonalesModel } from '../../models/datos-personales-model/datos-personales-model';
 import { FactorSanguineoModel } from '../../models/factor-sanguineo-model/factor-sanguineo-model';
 import { GrupoSanguineoModel } from '../../models/grupo-sanguineo-model/grupo-sanguineo-model';
 import { ProvinciaModel } from '../../models/provincia-model/provincia-model';
 import { DatosRemotosService } from '../../providers/datos-remotos-service/datos-remotos-service';
-import { UserDataService } from '../../providers/user-data-service/user-data-service';
+import { DatosPersonalesService } from '../../providers/datos-personales-service/datos-personales-service';
 import { Component } from '@angular/core';
 import { LoadingController, NavController, ToastController } from 'ionic-angular';
 
@@ -18,26 +18,26 @@ export class DatosPersonalesPage {
 	private listaProvincias: Array<ProvinciaModel>;
 	private listaCiudades: Array<CiudadModel>;
 
-	private datosUsuario: DatosUsuarioModel;
-	private datosUsuarioObj: any;
+	private datosPersonales: DatosPersonalesModel;
+	private datosPersonalesObj: any;
 
 	private storage: Storage;
 
 	constructor(private navCtrl: NavController,
 		private loadingCtrl: LoadingController, 
 		private datosRemotosService: DatosRemotosService,
-    	private userDataService: UserDataService,
+    	private datosPersonalesService: DatosPersonalesService,
 		private toastCtrl: ToastController) {
 
 		if(this.datosRemotosService.modoDebugActivado()) {
         	console.time('DatosPersonalesPage / constructor');
       	}
 
-		this.datosUsuario = new DatosUsuarioModel();
+		this.datosPersonales = new DatosPersonalesModel();
 		
-		this.userDataService.getDatosUsuario().then((datosUsuario) => {
+		this.datosPersonalesService.getDatosUsuario().then((datosPersonales) => {
 			
-			if(!datosUsuario) {
+			if(!datosPersonales) {
 				// No hay datos guardados, por lo que inicializamos los listados sin setear ninguna opcion por defecto
 				this.cargarListados(false);
 
@@ -46,7 +46,7 @@ export class DatosPersonalesPage {
         		}
 			} else {
 				// Inicializamos los listados con la informacion del usuario
-				this.datosUsuarioObj = datosUsuario;
+				this.datosPersonalesObj = datosPersonales;
 				this.cargarListados(true);
 
 				if(this.datosRemotosService.modoDebugActivado()) {
@@ -109,18 +109,18 @@ export class DatosPersonalesPage {
         	}
 
     		// Obtenemos el indice de la provincia del usuario y la seleccionamos
-    		let indiceProvincia = this.getIndicePorID(this.listaProvincias, this.datosUsuarioObj.provinciaID);    		
- 			  this.datosUsuario.setProvincia(this.listaProvincias[indiceProvincia]);
+    		let indiceProvincia = this.getIndicePorID(this.listaProvincias, this.datosPersonalesObj.provinciaID);    		
+ 			  this.datosPersonales.setProvincia(this.listaProvincias[indiceProvincia]);
 
     		// Obtenemos el indice del grupo sanguineo del usuario y lo seleccionamos
-    		let indiceGrupoSanguineo = this.getIndicePorID(this.listaGruposSanguineos, this.datosUsuarioObj.grupoSanguineoID);
- 			  this.datosUsuario.setGrupoSanguineo(this.listaGruposSanguineos[indiceGrupoSanguineo]);
+    		let indiceGrupoSanguineo = this.getIndicePorID(this.listaGruposSanguineos, this.datosPersonalesObj.grupoSanguineoID);
+ 			  this.datosPersonales.setGrupoSanguineo(this.listaGruposSanguineos[indiceGrupoSanguineo]);
 
     		// Obtenemos el indice del factor sanguineo del usuario y lo seleccionamos
-    		let indiceFactorSanguineo = this.getIndicePorID(this.listaFactoresSanguineos, this.datosUsuarioObj.factorSanguineoID);
-    		this.datosUsuario.setFactorSanguineo(this.listaFactoresSanguineos[indiceFactorSanguineo]);
+    		let indiceFactorSanguineo = this.getIndicePorID(this.listaFactoresSanguineos, this.datosPersonalesObj.factorSanguineoID);
+    		this.datosPersonales.setFactorSanguineo(this.listaFactoresSanguineos[indiceFactorSanguineo]);
 
-    		this.datosRemotosService.getListaCiudadesPorProvincia(this.datosUsuario.getProvincia().getId())
+    		this.datosRemotosService.getListaCiudadesPorProvincia(this.datosPersonales.getProvincia().getId())
 	    		.subscribe(result => {
 			    	if(result && result.length){
 
@@ -128,8 +128,8 @@ export class DatosPersonalesPage {
 			    		this.listaCiudades = result;
 
 			    		// Seleccionamos la ciudad del usuario
-			    		let indiceCiudad = this.getIndicePorID(this.listaCiudades, this.datosUsuarioObj.ciudadID);
-			    		this.datosUsuario.setCiudad(this.listaCiudades[indiceCiudad]);
+			    		let indiceCiudad = this.getIndicePorID(this.listaCiudades, this.datosPersonalesObj.ciudadID);
+			    		this.datosPersonales.setCiudad(this.listaCiudades[indiceCiudad]);
 
 			    		// Resolvemos la promesa
 			    		resolve(true);
@@ -177,7 +177,7 @@ export class DatosPersonalesPage {
 	    // Muestra el mensaje de cargando ciudades
 	    loadingPopup.present();
 
-	    this.datosRemotosService.getListaCiudadesPorProvincia(this.datosUsuario.getProvincia().getId())
+	    this.datosRemotosService.getListaCiudadesPorProvincia(this.datosPersonales.getProvincia().getId())
 	    .subscribe(result => {
 	    	if(result && result.length){
 	    		this.listaCiudades = result;
@@ -202,13 +202,13 @@ export class DatosPersonalesPage {
     	}
 
 		let nuevosDatosUsuarioObj = {
-			provinciaID : this.datosUsuario.getProvincia().getId(),
-			ciudadID : this.datosUsuario.getCiudad().getId(),
-			grupoSanguineoID : this.datosUsuario.getGrupoSanguineo().getId(),
-			factorSanguineoID : this.datosUsuario.getFactorSanguineo().getId(),
+			provinciaID : this.datosPersonales.getProvincia().getId(),
+			ciudadID : this.datosPersonales.getCiudad().getId(),
+			grupoSanguineoID : this.datosPersonales.getGrupoSanguineo().getId(),
+			factorSanguineoID : this.datosPersonales.getFactorSanguineo().getId(),
 		};
 
-		this.userDataService.setDatosUsuario(nuevosDatosUsuarioObj)
+		this.datosPersonalesService.setDatosUsuario(nuevosDatosUsuarioObj)
     		.then(() => {
     			let toast = this.toastCtrl.create({
     		      message: 'Los datos se actualizaron correctamente.',
@@ -227,7 +227,7 @@ export class DatosPersonalesPage {
 
 	// Método usado para debug, muestra el contenido del form en tiempo real
 	get contenidoDelFormulario(): string {
-		return JSON.stringify(this.datosUsuario, null, 2);
+		return JSON.stringify(this.datosPersonales, null, 2);
 	}
 
 }

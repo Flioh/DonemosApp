@@ -5,7 +5,7 @@ import { ProvinciaModel } from '../../models/provincia-model/provincia-model';
 import { Injectable } from '@angular/core';
 
 @Injectable()
-export class DatosUsuarioModel {
+export class DatosPersonalesModel {
 
 	private provincia : ProvinciaModel;
 	private ciudad: CiudadModel;
