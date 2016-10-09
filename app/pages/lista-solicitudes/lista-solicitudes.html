@@ -28,10 +28,10 @@
 	<div [ngSwitch]="seccion">
 		<div *ngSwitchCase="'solicitudes'">
 			<!-- Creamos una lista de solicitudes usando el componente solicitud-item -->
-			<solicitud-item *ngFor="let solicitudItemModel of solicitudes" 
+			<resumen-solicitud *ngFor="let solicitudItemModel of solicitudes" 
 				[solicitudItemModel]="solicitudItemModel"
 				(seleccionarSolicitud)="abrirDetalles($event)">		
-			</solicitud-item>
+			</resumen-solicitud>
 
 			<button *ngIf="!isIos" class="floating-btn" red fab (click)="nuevaSolicitud()"><ion-icon name="add"></ion-icon></button>
 

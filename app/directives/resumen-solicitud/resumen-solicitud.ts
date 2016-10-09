@@ -6,11 +6,11 @@ import { RemoteDataService } from '../../providers/remote-data-service/remote-da
 import { NavigationService } from '../../providers/navigation-service/navigation-service';
 
 @Component({
-    selector: 'solicitud-item',
-    templateUrl: 'build/directives/solicitud-item/solicitud-item.html',
+    selector: 'resumen-solicitud',
+    templateUrl: 'build/directives/resumen-solicitud/resumen-solicitud.html',
     pipes: [ TimeAgoPipe ]
 })
-export class SolicitudItem {
+export class ResumenSolicitud {
 	  @Input() solicitudItemModel: SolicitudItemModel;
 	  @Output() seleccionarSolicitud = new EventEmitter();
 

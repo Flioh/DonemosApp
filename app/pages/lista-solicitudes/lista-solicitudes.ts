@@ -1,5 +1,5 @@
 import { AuthService } from '../../providers/auth-service/auth-service';
-import { SolicitudItem } from '../../directives/solicitud-item/solicitud-item';
+import { ResumenSolicitud } from '../../directives/resumen-solicitud/resumen-solicitud';
 import { CiudadModel } from '../../providers/ciudad-model/ciudad-model';
 import { DonacionesHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
 import { FactorSanguineoModel } from '../../providers/factor-sanguineo-model/factor-sanguineo-model';
@@ -17,7 +17,7 @@ import { BasePage } from '../base/base';
 
 @Component({
   templateUrl: 'build/pages/lista-solicitudes/lista-solicitudes.html',
-  directives: [SolicitudItem]
+  directives: [ ResumenSolicitud ]
 })
 export class ListaSolicitudesPage extends BasePage {
 
