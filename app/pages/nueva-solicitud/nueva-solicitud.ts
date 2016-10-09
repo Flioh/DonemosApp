@@ -1,6 +1,5 @@
 import { AutocompleteService } from '../../providers/autocomplete-service/autocomplete-service';
 import { CiudadModel } from '../../models/ciudad-model/ciudad-model';
-import { ConnectivityService } from '../../providers/connectivity-service/connectivity-service';
 import { FactorSanguineoModel } from '../../models/factor-sanguineo-model/factor-sanguineo-model';
 import { GrupoSanguineoModel } from '../../models/grupo-sanguineo-model/grupo-sanguineo-model';
 import { ProvinciaModel } from '../../models/provincia-model/provincia-model';
@@ -35,7 +34,6 @@ export class NuevaSolicitudPage {
 		private navCtrl: NavController, 
 		private formBuilder : FormBuilder, 
 		private ngZone : NgZone,
-		private connectivityService : ConnectivityService,
 		private autocompleteService : AutocompleteService,
 		private loadingCtrl : LoadingController,
 		private alertCtrl : AlertController) {

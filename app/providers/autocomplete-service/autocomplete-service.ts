@@ -1,4 +1,4 @@
-import { ConnectivityService } from '../../providers/connectivity-service/connectivity-service';
+import { ConectividadService } from '../../providers/conectividad-service/conectividad-service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
@@ -16,7 +16,7 @@ export class AutocompleteService {
 	private autocompleteElement: any;
 	private googleAddressInformation: any = {};
 
-	constructor(private connectivityService: ConnectivityService) {
+	constructor(private conectividadService: ConectividadService) {
 		this.autocompleteObserver = null;
 
 		this.autocomplete = Observable.create(observer => {

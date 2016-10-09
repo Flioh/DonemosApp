@@ -3,7 +3,7 @@ import { DatosPersonalesPage } from './pages/datos-personales/datos-personales';
 import { ErrorPage } from './pages/error/error';
 import { ListaSolicitudesPage } from './pages/lista-solicitudes/lista-solicitudes';
 import { LoginService, PerfilUsuarioModel } from './providers/login-service/login-service';
-import { ConnectivityService } from './providers/connectivity-service/connectivity-service';
+import { ConectividadService } from './providers/conectividad-service/conectividad-service';
 import { MenuItemModel } from './models/menuitem-model/menuitem-model';
 import { NavigationService } from './providers/navigation-service/navigation-service';
 import { RemoteDataService } from './providers/remote-data-service/remote-data-service';
@@ -17,15 +17,14 @@ import { StatusBar } from 'ionic-native';
 
 @Component({
   templateUrl: 'build/app.html',
-  providers: [ConnectivityService, 
+  providers: [ConectividadService, 
               NavigationService, 
               UserDataService, 
               RemoteDataService, 
               { provide: MY_CONFIG_TOKEN, useValue: MY_CONFIG },
-              provide(AuthHttp, {
-                useFactory: (http) => {
-                  return new AuthHttp(new AuthConfig({noJwtError: true}), http);
-                }, deps: [Http]
+              provide(AuthHttp, { useFactory: (http) => {
+                                    return new AuthHttp(new AuthConfig({noJwtError: true}), http);
+                                  }, deps: [Http]
               }),
               LoginService]
 })
@@ -40,13 +39,13 @@ export class DonemosApp {
               private alertCtrl: AlertController, 
               public events: Events, 
               private menuCtrl: MenuController, 
-              private connectivityService : ConnectivityService,
+              private conectividadService : ConectividadService,
               private loginService: LoginService) {
     this.inicializarApp();
   }
 
   // Método que inicializa los servicios globales de la aplicacion
-  inicializarApp(): void {
+  public inicializarApp(): void {
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -65,6 +64,7 @@ export class DonemosApp {
     });
   }
 
+  // Método que inicializa los eventos que modifican el menu principal
   private inicializarEventosMenuPrincipal() {
     
     this.events.subscribe('user:login', () => {
@@ -80,6 +80,7 @@ export class DonemosApp {
     });
   }
 
+  // Método que muestra/oculta el menu correspondiente
   private habilitarMenuCorrespondiente(estaLogueado: boolean) {
     // Cierra el menu
     this.menuCtrl.close();
@@ -146,11 +147,12 @@ export class DonemosApp {
     let perfilUsuario = this.loginService.getUser();
     return perfilUsuario && perfilUsuario.name ? perfilUsuario.name : ''; 
   }
-
 }
 
+// Habilitamos el modo de produccion
 enableProdMode();
 
+// Bootstrapping
 ionicBootstrap(DonemosApp, 
   [
     disableDeprecatedForms(), // disable deprecated forms
