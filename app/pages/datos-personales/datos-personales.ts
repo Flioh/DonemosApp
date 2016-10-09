@@ -1,10 +1,10 @@
-import { CiudadModel } from '../../models/ciudad-model/ciudad-model';
-import { DatosPersonalesModel } from '../../models/datos-personales-model/datos-personales-model';
-import { FactorSanguineoModel } from '../../models/factor-sanguineo-model/factor-sanguineo-model';
-import { GrupoSanguineoModel } from '../../models/grupo-sanguineo-model/grupo-sanguineo-model';
-import { ProvinciaModel } from '../../models/provincia-model/provincia-model';
-import { DatosRemotosService } from '../../providers/datos-remotos-service/datos-remotos-service';
-import { DatosPersonalesService } from '../../providers/datos-personales-service/datos-personales-service';
+import { CiudadModel } from '../../models/ciudad/ciudad';
+import { DatosPersonalesModel } from '../../models/datos-personales/datos-personales';
+import { FactorSanguineoModel } from '../../models/factor-sanguineo/factor-sanguineo';
+import { GrupoSanguineoModel } from '../../models/grupo-sanguineo/grupo-sanguineo';
+import { ProvinciaModel } from '../../models/provincia/provincia';
+import { DatosRemotosService } from '../../providers/datos-remotos/datos-remotos';
+import { DatosPersonalesService } from '../../providers/datos-personales/datos-personales';
 import { Component } from '@angular/core';
 import { LoadingController, NavController, ToastController } from 'ionic-angular';
 

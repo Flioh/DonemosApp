@@ -1,6 +1,5 @@
-import { DatosPersonalesPage } from '../datos-personales/datos-personales';
 import { Events } from 'ionic-angular';
-import { DatosRemotosService } from '../../providers/datos-remotos-service/datos-remotos-service';
+import { DatosRemotosService } from '../../providers/datos-remotos/datos-remotos';
 
 export class BasePage {
 

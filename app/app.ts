@@ -1,14 +1,14 @@
-import { DatosPersonalesModel } from './models/datos-personales-model/datos-personales-model';
+import { DatosPersonalesModel } from './models/datos-personales/datos-personales';
 import { MY_CONFIG, MY_CONFIG_TOKEN } from './app-config.ts';
 import { DatosPersonalesPage } from './pages/datos-personales/datos-personales';
 import { ErrorPage } from './pages/error/error';
 import { ListaSolicitudesPage } from './pages/lista-solicitudes/lista-solicitudes';
-import { LoginService, PerfilUsuarioModel } from './providers/login-service/login-service';
-import { ConectividadService } from './providers/conectividad-service/conectividad-service';
-import { MenuItemModel } from './models/menuitem-model/menuitem-model';
-import { LocalizacionService } from './providers/localizacion-service/localizacion-service';
-import { DatosRemotosService } from './providers/datos-remotos-service/datos-remotos-service';
-import { DatosPersonalesService } from './providers/datos-personales-service/datos-personales-service';
+import { LoginService, PerfilUsuarioModel } from './providers/login/login';
+import { ConectividadService } from './providers/conectividad/conectividad';
+import { ItemMenuModel } from './models/item-menu/item-menu';
+import { LocalizacionService } from './providers/localizacion/localizacion';
+import { DatosRemotosService } from './providers/datos-remotos/datos-remotos';
+import { DatosPersonalesService } from './providers/datos-personales/datos-personales';
 import { Component, enableProdMode, provide, ViewChild } from '@angular/core';
 import { disableDeprecatedForms, provideForms } from '@angular/forms';
 import { Http } from '@angular/http';
@@ -33,7 +33,7 @@ export class DonemosApp {
   @ViewChild(Nav) nav: Nav;
 
   public rootPage: any = ListaSolicitudesPage;
-  public paginasMenu: Array<MenuItemModel> = [];
+  public paginasMenu: Array<ItemMenuModel> = [];
   public perfilUsuario: any;
 
   constructor(private platform: Platform, 
@@ -104,7 +104,7 @@ export class DonemosApp {
   }
 
   // Método que abre la pagina pasada como parametro
-  public abrirPagina(pagina: MenuItemModel) {
+  public abrirPagina(pagina: ItemMenuModel) {
 
     if(pagina.getEsRoot()) {
       this.nav.popToRoot().then(() => {
@@ -124,10 +124,10 @@ export class DonemosApp {
 
   // Método que inicializa el menú principal
   public cargarOpcionesMenuPrincipal(): void {    
-    this.paginasMenu.push(new MenuItemModel('list-box', 'Lista de solicitudes', ListaSolicitudesPage, true, false));
-    this.paginasMenu.push(new MenuItemModel('checkbox', 'Requisitos para donar', ErrorPage, false, false));
-    this.paginasMenu.push(new MenuItemModel('person', 'Configurar perfil', DatosPersonalesPage, false, false));
-    this.paginasMenu.push(new MenuItemModel('information-circle', 'Sobre nosotros', ErrorPage, false, false));
+    this.paginasMenu.push(new ItemMenuModel('list-box', 'Lista de solicitudes', ListaSolicitudesPage, true, false));
+    this.paginasMenu.push(new ItemMenuModel('checkbox', 'Requisitos para donar', ErrorPage, false, false));
+    this.paginasMenu.push(new ItemMenuModel('person', 'Configurar perfil', DatosPersonalesPage, false, false));
+    this.paginasMenu.push(new ItemMenuModel('information-circle', 'Sobre nosotros', ErrorPage, false, false));
   }
 
   // Método que desloguea al usuario

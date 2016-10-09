@@ -1,10 +1,10 @@
-import { AutocompleteService } from '../../providers/autocomplete-service/autocomplete-service';
-import { CiudadModel } from '../../models/ciudad-model/ciudad-model';
-import { FactorSanguineoModel } from '../../models/factor-sanguineo-model/factor-sanguineo-model';
-import { GrupoSanguineoModel } from '../../models/grupo-sanguineo-model/grupo-sanguineo-model';
-import { ProvinciaModel } from '../../models/provincia-model/provincia-model';
-import { DatosRemotosService } from '../../providers/datos-remotos-service/datos-remotos-service';
-import { SolicitudModel } from '../../models/solicitud-model/solicitud-model';
+import { AutocompleteService } from '../../providers/autocomplete/autocomplete';
+import { CiudadModel } from '../../models/ciudad/ciudad';
+import { FactorSanguineoModel } from '../../models/factor-sanguineo/factor-sanguineo';
+import { GrupoSanguineoModel } from '../../models/grupo-sanguineo/grupo-sanguineo';
+import { ProvinciaModel } from '../../models/provincia/provincia';
+import { DatosRemotosService } from '../../providers/datos-remotos/datos-remotos';
+import { SolicitudModel } from '../../models/solicitud/solicitud';
 import { Component, NgZone } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { FORM_DIRECTIVES } from '@angular/forms';

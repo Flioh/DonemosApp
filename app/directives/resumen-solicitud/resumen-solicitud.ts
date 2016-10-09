@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { ResumenSolicitudModel } from '../../models/resumen-solicitud-model/resumen-solicitud-model';
-import { DonacionesHelper } from '../../providers/donaciones-service/donaciones-service';
-import { FormatearFechaPipe } from '../../pipes/formatear-fecha-pipe/formatear-fecha-pipe';
-import { LocalizacionService } from '../../providers/localizacion-service/localizacion-service';
+import { ResumenSolicitudModel } from '../../models/resumen-solicitud/resumen-solicitud';
+import { DonacionesHelper } from '../../providers/donaciones/donaciones';
+import { FormatearFechaPipe } from '../../pipes/formatear-fecha/formatear-fecha';
+import { LocalizacionService } from '../../providers/localizacion/localizacion';
 
 @Component({
     selector: 'resumen-solicitud',
