@@ -3,10 +3,10 @@ import { beforeEachProviders, beforeEach, it, describe, expect, inject } from '@
 import {NavController} from 'ionic-angular';
 
 import { DatosUsuarioModel } from './datos-usuario-model';
-import { ProvinciaModel } from '../../providers/provincia-model/provincia-model';
-import { CiudadModel } from '../../providers/ciudad-model/ciudad-model';
-import { GrupoSanguineoModel } from "../../providers/grupo-sanguineo-model/grupo-sanguineo-model";
-import { FactorSanguineoModel } from "../../providers/factor-sanguineo-model/factor-sanguineo-model";
+import { ProvinciaModel } from '../../models/provincia-model/provincia-model';
+import { CiudadModel } from '../../models/ciudad-model/ciudad-model';
+import { GrupoSanguineoModel } from "../../models/grupo-sanguineo-model/grupo-sanguineo-model";
+import { FactorSanguineoModel } from "../../models/factor-sanguineo-model/factor-sanguineo-model";
 
 // Mock de la clase DatosUsuarioModel
 @Injectable()

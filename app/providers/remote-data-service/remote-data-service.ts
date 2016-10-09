@@ -1,11 +1,11 @@
 import 'rxjs/add/operator/map';
-import { CiudadModel } from '../ciudad-model/ciudad-model';
+import { CiudadModel } from '../../models/ciudad-model/ciudad-model';
 import { FactorSanguineoHelper, GrupoSanguineoHelper } from '../donemos-helper-service/donemos-helper-service';
 import { FactorSanguineoEnum, GrupoSanguineoEnum } from '../donemos-helper-service/donemos-helper-service';
-import { FactorSanguineoModel } from '../factor-sanguineo-model/factor-sanguineo-model';
-import { GrupoSanguineoModel } from '../grupo-sanguineo-model/grupo-sanguineo-model';
-import { ProvinciaModel } from '../provincia-model/provincia-model';
-import { SolicitudModel } from '../solicitud-model/solicitud-model';
+import { FactorSanguineoModel } from '../../models/factor-sanguineo-model/factor-sanguineo-model';
+import { GrupoSanguineoModel } from '../../models/grupo-sanguineo-model/grupo-sanguineo-model';
+import { ProvinciaModel } from '../../models/provincia-model/provincia-model';
+import { SolicitudModel } from '../../models/solicitud-model/solicitud-model';
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Observable } from 'rxjs';

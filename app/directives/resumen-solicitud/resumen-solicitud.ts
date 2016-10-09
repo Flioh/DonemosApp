@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { ResumenSolicitudModel } from '../../providers/resumen-solicitud-model/resumen-solicitud-model';
+import { ResumenSolicitudModel } from '../../models/resumen-solicitud-model/resumen-solicitud-model';
 import { DonacionesHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
 import { FormatearFechaPipe } from '../../pipes/formatear-fecha-pipe/formatear-fecha-pipe';
 import { RemoteDataService } from '../../providers/remote-data-service/remote-data-service';

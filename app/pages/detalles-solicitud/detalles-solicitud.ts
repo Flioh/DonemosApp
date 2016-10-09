@@ -3,7 +3,7 @@ import { ConfigMock } from '../../../test/mocks';
 import { FormatearFechaPipe } from '../../pipes/formatear-fecha-pipe/formatear-fecha-pipe';
 import { DonacionesHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
 import { RemoteDataService } from '../../providers/remote-data-service/remote-data-service';
-import { SolicitudModel } from '../../providers/solicitud-model/solicitud-model';
+import { SolicitudModel } from '../../models/solicitud-model/solicitud-model';
 import { UserDataService } from '../../providers/user-data-service/user-data-service';
 import { NavigationService } from '../../providers/navigation-service/navigation-service';
 import { Component, Inject } from '@angular/core';

@@ -4,7 +4,7 @@ import { ErrorPage } from './pages/error/error';
 import { ListaSolicitudesPage } from './pages/lista-solicitudes/lista-solicitudes';
 import { LoginService, PerfilUsuarioModel } from './providers/login-service/login-service';
 import { ConnectivityService } from './providers/connectivity-service/connectivity-service';
-import { MenuItemModel } from './providers/menuitem-model/menuitem-model';
+import { MenuItemModel } from './models/menuitem-model/menuitem-model';
 import { NavigationService } from './providers/navigation-service/navigation-service';
 import { RemoteDataService } from './providers/remote-data-service/remote-data-service';
 import { UserDataService } from './providers/user-data-service/user-data-service';

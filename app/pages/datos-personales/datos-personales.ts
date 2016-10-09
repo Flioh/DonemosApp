@@ -1,8 +1,8 @@
-import { CiudadModel } from '../../providers/ciudad-model/ciudad-model';
-import { DatosUsuarioModel } from '../../providers/datos-usuario-model/datos-usuario-model';
-import { FactorSanguineoModel } from '../../providers/factor-sanguineo-model/factor-sanguineo-model';
-import { GrupoSanguineoModel } from '../../providers/grupo-sanguineo-model/grupo-sanguineo-model';
-import { ProvinciaModel } from '../../providers/provincia-model/provincia-model';
+import { CiudadModel } from '../../models/ciudad-model/ciudad-model';
+import { DatosUsuarioModel } from '../../models/datos-usuario-model/datos-usuario-model';
+import { FactorSanguineoModel } from '../../models/factor-sanguineo-model/factor-sanguineo-model';
+import { GrupoSanguineoModel } from '../../models/grupo-sanguineo-model/grupo-sanguineo-model';
+import { ProvinciaModel } from '../../models/provincia-model/provincia-model';
 import { RemoteDataService } from '../../providers/remote-data-service/remote-data-service';
 import { UserDataService } from '../../providers/user-data-service/user-data-service';
 import { Component } from '@angular/core';

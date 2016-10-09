@@ -10,9 +10,9 @@ import { FactorSanguineoModel } from '../factor-sanguineo-model/factor-sanguineo
 import { GrupoSanguineoModel } from '../grupo-sanguineo-model/grupo-sanguineo-model';
 
 /* Helpers */
-import { DonacionesHelper} from '../donemos-helper-service/donemos-helper-service';
-import { GrupoSanguineoHelper, FactorSanguineoHelper } from '../donemos-helper-service/donemos-helper-service';
-import { FactorSanguineoEnum, GrupoSanguineoEnum } from '../donemos-helper-service/donemos-helper-service';
+import { DonacionesHelper} from '../../providers/donemos-helper-service/donemos-helper-service';
+import { GrupoSanguineoHelper, FactorSanguineoHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
+import { FactorSanguineoEnum, GrupoSanguineoEnum } from '../../providers/donemos-helper-service/donemos-helper-service';
 
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';

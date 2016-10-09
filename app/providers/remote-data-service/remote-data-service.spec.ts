@@ -6,11 +6,11 @@ import { beforeEachProviders, beforeEach, it, describe, expect, inject, async } 
 import { RemoteDataService } from './remote-data-service';
 
 /* Modelos a usar en los tests */
-import { SolicitudModel } from '../../providers/solicitud-model/solicitud-model';
-import { ProvinciaModel } from '../../providers/provincia-model/provincia-model';
-import { CiudadModel } from '../../providers/ciudad-model/ciudad-model';
-import { GrupoSanguineoModel } from '../../providers/grupo-sanguineo-model/grupo-sanguineo-model';
-import { FactorSanguineoModel } from '../../providers/factor-sanguineo-model/factor-sanguineo-model';
+import { SolicitudModel } from '../../models/solicitud-model/solicitud-model';
+import { ProvinciaModel } from '../../models/provincia-model/provincia-model';
+import { CiudadModel } from '../../models/ciudad-model/ciudad-model';
+import { GrupoSanguineoModel } from '../../models/grupo-sanguineo-model/grupo-sanguineo-model';
+import { FactorSanguineoModel } from '../../models/factor-sanguineo-model/factor-sanguineo-model';
 
 import { GrupoSanguineoEnum, FactorSanguineoEnum} from '../../providers/donemos-helper-service/donemos-helper-service';
 import { GrupoSanguineoHelper, FactorSanguineoHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
