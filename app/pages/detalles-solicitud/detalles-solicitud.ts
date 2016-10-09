@@ -3,7 +3,7 @@ import { collectAndResolveStyles } from '@angular/platform-browser/esm/core_priv
 import { ConfigMock } from '../../../test/mocks';
 import { FormatearFechaPipe } from '../../pipes/formatear-fecha-pipe/formatear-fecha-pipe';
 import { DonacionesHelper } from '../../providers/donaciones-service/donaciones-service';
-import { RemoteDataService } from '../../providers/remote-data-service/remote-data-service';
+import { DatosRemotosService } from '../../providers/datos-remotos-service/datos-remotos-service';
 import { SolicitudModel } from '../../models/solicitud-model/solicitud-model';
 import { UserDataService } from '../../providers/user-data-service/user-data-service';
 import { LocalizacionService } from '../../providers/localizacion-service/localizacion-service';
@@ -32,12 +32,12 @@ export class DetallesSolicitudPage {
               private nav: NavController, 
               private navParams: NavParams, 
               private loadingCtrl: LoadingController, 
-              private remoteDataService: RemoteDataService,
+              private datosRemotosService: DatosRemotosService,
               private userDataService: UserDataService,
               private localizacionService: LocalizacionService,
               @Inject(MY_CONFIG_TOKEN) config: ApplicationConfig) {
       
-      if(this.remoteDataService.modoDebugActivado()) {
+      if(this.datosRemotosService.modoDebugActivado()) {
         console.time('DetallesSolicitudPage / constructor');
       }
 
@@ -49,7 +49,7 @@ export class DetallesSolicitudPage {
       // Crea el mapa
       this.obteneMapaUrl(config.staticMapUrl, config.staticMapKey, 400, 400, 16);
 
-      if(this.remoteDataService.modoDebugActivado()) {
+      if(this.datosRemotosService.modoDebugActivado()) {
         console.timeEnd('DetallesSolicitudPage / constructor');
       }
   	}
@@ -77,7 +77,7 @@ export class DetallesSolicitudPage {
     // Método que obtiene los datos del usuario
     public obtenerDatosUsuario(){
 
-      if(this.remoteDataService.modoDebugActivado()) {
+      if(this.datosRemotosService.modoDebugActivado()) {
         console.time('DetallesSolicitudPage / obtenerDatosUsuario');
       }
 
@@ -96,7 +96,7 @@ export class DetallesSolicitudPage {
           // Resaltamos el tipo sanguineo del usuario
           this.tiposSanguineosSolicitud = this.tiposSanguineosSolicitud.replace(tipoSanguineoUsuario, '<span class="marked">' + tipoSanguineoUsuario + '</span> ');
 
-          if(this.remoteDataService.modoDebugActivado()) {
+          if(this.datosRemotosService.modoDebugActivado()) {
             console.timeEnd('DetallesSolicitudPage / obtenerDatosUsuario');
           }
         }

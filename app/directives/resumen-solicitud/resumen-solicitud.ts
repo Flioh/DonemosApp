@@ -2,7 +2,6 @@ import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from 
 import { ResumenSolicitudModel } from '../../models/resumen-solicitud-model/resumen-solicitud-model';
 import { DonacionesHelper } from '../../providers/donaciones-service/donaciones-service';
 import { FormatearFechaPipe } from '../../pipes/formatear-fecha-pipe/formatear-fecha-pipe';
-import { RemoteDataService } from '../../providers/remote-data-service/remote-data-service';
 import { LocalizacionService } from '../../providers/localizacion-service/localizacion-service';
 
 @Component({
@@ -14,8 +13,7 @@ export class ResumenSolicitud {
 	  @Input() solicitudItemModel: ResumenSolicitudModel;
 	  @Output() seleccionarSolicitud = new EventEmitter();
 
-    constructor(private dataService: RemoteDataService, 
-                private localizacionService: LocalizacionService) { }
+    constructor(private localizacionService: LocalizacionService) { }
 
     // Método que emite un evento para mostrar el detalle de la solicitud
     public verDetalles(): void {

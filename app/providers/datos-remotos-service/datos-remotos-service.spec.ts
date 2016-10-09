@@ -3,7 +3,7 @@ import { BaseRequestOptions, Response, ResponseOptions, Http } from '@angular/ht
 import { MockBackend, MockConnection } from '@angular/http/testing';
 import { beforeEachProviders, beforeEach, it, describe, expect, inject, async } from '@angular/core/testing';
 
-import { RemoteDataService } from './remote-data-service';
+import { DatosRemotosService } from './datos-remotos-service';
 
 /* Modelos a usar en los tests */
 import { SolicitudModel } from '../../models/solicitud-model/solicitud-model';
@@ -18,7 +18,7 @@ import { GrupoSanguineoHelper, FactorSanguineoHelper } from '../../providers/don
 describe('RemoteData Service Model', () => {
 
 	beforeEachProviders(() => [
-	  	RemoteDataService,
+	  	DatosRemotosService,
 	  	BaseRequestOptions,
 	  	MockBackend,
 
@@ -138,31 +138,31 @@ describe('RemoteData Service Model', () => {
 	// Tests para asegurar que los metodos existen
 	// ------------------------------------------
 	it('Debe tener un metodo para obtener el listado de provincias',
-	  inject([RemoteDataService], (testService: RemoteDataService) => {
+	  inject([DatosRemotosService], (testService: DatosRemotosService) => {
 	  	expect(testService.getListaProvincias).toBeDefined();
 	  })
 	);
 
 	it('Debe tener un metodo para obtener el listado de localidades',
-	  inject([RemoteDataService], (testService: RemoteDataService) => {
+	  inject([DatosRemotosService], (testService: DatosRemotosService) => {
 	  	expect(testService.getListaCiudadesPorProvincia).toBeDefined();
 	  })
 	);
 
 	it('Debe tener un metodo para obtener el listado de solicitudes',
-	  inject([RemoteDataService], (testService: RemoteDataService) => {
+	  inject([DatosRemotosService], (testService: DatosRemotosService) => {
 	  	expect(testService.getSolicitudes).toBeDefined();
 	  })
 	);
 
 	it('Debe tener un metodo para obtener el listado de grupos sanguineos',
-	  inject([RemoteDataService], (testService: RemoteDataService) => {
+	  inject([DatosRemotosService], (testService: DatosRemotosService) => {
 	  	expect(testService.getGruposSanguineos).toBeDefined();
 	  })
 	);
 
 	it('Debe tener un metodo para obtener el listado de factores sanguineos',
-	  inject([RemoteDataService], (testService: RemoteDataService) => {
+	  inject([DatosRemotosService], (testService: DatosRemotosService) => {
 	  	expect(testService.getFactoresSanguineos).toBeDefined();
 	  })
 	);
@@ -172,7 +172,7 @@ describe('RemoteData Service Model', () => {
 	// Tests para asegurar que no devuelven un listado vacio
 	// -----------------------------------------------------
 	it('El metodo getSolicitudes() debe devolver un arreglo no vacio',
-	  inject([RemoteDataService], (testService: RemoteDataService) => {
+	  inject([DatosRemotosService], (testService: DatosRemotosService) => {
 	    testService.getSolicitudes().subscribe((response) => {
 	      expect(response.length).toBeGreaterThan(0);
 	    })
@@ -181,7 +181,7 @@ describe('RemoteData Service Model', () => {
 	);
 
 	it('El metodo getListaProvincias() debe devolver un arreglo no vacio',
-	  inject([RemoteDataService], (testService: RemoteDataService) => {
+	  inject([DatosRemotosService], (testService: DatosRemotosService) => {
 	    testService.getListaProvincias().subscribe((response) => {
 	      expect(response.length).toBeGreaterThan(0);
 	    })
@@ -190,7 +190,7 @@ describe('RemoteData Service Model', () => {
 	);
 
 	it('El metodo getListaCiudadesPorProvincia() debe devolver un arreglo no vacio',
-	  inject([RemoteDataService], (testService: RemoteDataService) => {
+	  inject([DatosRemotosService], (testService: DatosRemotosService) => {
 	    testService.getListaCiudadesPorProvincia(1).subscribe((response) => {
 	      expect(response.length).toBeGreaterThan(0);
 	    })
@@ -199,13 +199,13 @@ describe('RemoteData Service Model', () => {
 	);
 
 	it('El metodo getGruposSanguineos() debe devolver un arreglo con cuatro grupos sanguineos',
-	  inject([RemoteDataService], (testService: RemoteDataService) => {
+	  inject([DatosRemotosService], (testService: DatosRemotosService) => {
 	      expect(testService.getGruposSanguineos().length).toBe(4);
 	  })
 	);
 
 	it('El metodo getFactoresSanguineos() debe devolver un arreglo con dos factores sanguineos',
-	  inject([RemoteDataService], (testService: RemoteDataService) => {
+	  inject([DatosRemotosService], (testService: DatosRemotosService) => {
 	      expect(testService.getFactoresSanguineos().length).toBe(2);
 	  })
 	);
@@ -215,7 +215,7 @@ describe('RemoteData Service Model', () => {
 	// Tests para asegurar que el tipo de dato devuelvo coincide con el tipo de dato esperado
 	// --------------------------------------------------------------------------------------
 	it('El metodo getSolicitudes() debe devolver objetos del tipo SolicitudModel',
-	  inject([RemoteDataService], (testService: RemoteDataService) => {
+	  inject([DatosRemotosService], (testService: DatosRemotosService) => {
 	    testService.getSolicitudes().subscribe((response) => {
 	      let propiedadesSolicitudObtenida = JSON.stringify(Object.keys(response[0]).sort());
 	      let propiedadesSolicitudCreada = JSON.stringify(Object.keys(new SolicitudModel()).sort());
@@ -225,7 +225,7 @@ describe('RemoteData Service Model', () => {
 	);
 
 	it('El metodo getListaProvincias() debe devolver objetos del tipo ProvinciaModel',
-	  inject([RemoteDataService], (testService: RemoteDataService) => {
+	  inject([DatosRemotosService], (testService: DatosRemotosService) => {
 	    testService.getListaProvincias().subscribe((response) => {
 	      let propiedadesprovinciaObtenida = JSON.stringify(Object.keys(response[0]).sort());
 	      let propiedadesprovinciaCreada = JSON.stringify(Object.keys(new ProvinciaModel(1, "Provincia 1")).sort());
@@ -235,7 +235,7 @@ describe('RemoteData Service Model', () => {
 	);
 
 	it('El metodo getListaCiudadesPorProvincia() debe devolver objetos del tipo CiudadModel',
-	  inject([RemoteDataService], (testService: RemoteDataService) => {
+	  inject([DatosRemotosService], (testService: DatosRemotosService) => {
 	    testService.getListaCiudadesPorProvincia(1).subscribe((response) => {
 	      let propiedadesCiudadObtenida = JSON.stringify(Object.keys(response[0]).sort());
 	      let propiedadesCiudadCreada = JSON.stringify(Object.keys(new CiudadModel(1, "Ciudad 1")).sort());
@@ -245,7 +245,7 @@ describe('RemoteData Service Model', () => {
 	);
 
 	it('El metodo getGruposSanguineos() debe devolver objetos del tipo GrupoSanguineoModel',
-	  inject([RemoteDataService], (testService: RemoteDataService) => {
+	  inject([DatosRemotosService], (testService: DatosRemotosService) => {
 	  	let grupoObtenido = testService.getGruposSanguineos()[0];
 	  	let propiedadesGrupoObtenido = JSON.stringify(Object.keys(grupoObtenido).sort()) ;
 	  	let propiedadesGrupoCreado = JSON.stringify(Object.keys(new GrupoSanguineoModel(grupoObtenido.getId(), grupoObtenido.getNombre())).sort()) ;
@@ -254,7 +254,7 @@ describe('RemoteData Service Model', () => {
 	);
 
 	it('El metodo getFactoresSanguineos() debe devolver objetos del tipo FactorSanguineoModel',
-	  inject([RemoteDataService], (testService: RemoteDataService) => {
+	  inject([DatosRemotosService], (testService: DatosRemotosService) => {
 	  	let factorObtenido = testService.getFactoresSanguineos()[0];
 	  	let propiedadesFactorObtenido = JSON.stringify(Object.keys(factorObtenido).sort()) ;
 	  	let propiedadesFactorCreado = JSON.stringify(Object.keys(new FactorSanguineoModel(factorObtenido.getId(), factorObtenido.getNombre())).sort()) ;

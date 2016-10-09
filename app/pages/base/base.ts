@@ -1,9 +1,10 @@
+import { DatosPersonalesPage } from '../datos-personales/datos-personales';
 import { Events } from 'ionic-angular';
-import { RemoteDataService } from '../../providers/remote-data-service/remote-data-service';
+import { DatosRemotosService } from '../../providers/datos-remotos-service/datos-remotos-service';
 
 export class BasePage {
 
-  constructor(public eventsCtrl: Events, public remoteDataService: RemoteDataService){
+  constructor(public eventsCtrl: Events, public datosRemotosService: DatosRemotosService){
 
   }
 
@@ -12,13 +13,13 @@ export class BasePage {
   }
 
   public iniciarTimer(nombreMetodo: string): void {
-    if(this.remoteDataService.modoDebugActivado()) {
+    if(this.datosRemotosService.modoDebugActivado()) {
       console.time(nombreMetodo);
     }   
   }
 
   public detenerTimer(nombreMetodo: string): void {
-    if(this.remoteDataService.modoDebugActivado()) {
+    if(this.datosRemotosService.modoDebugActivado()) {
       console.timeEnd(nombreMetodo);
     }   
   }

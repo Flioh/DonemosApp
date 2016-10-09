@@ -3,7 +3,7 @@ import { DatosUsuarioModel } from '../../models/datos-usuario-model/datos-usuari
 import { FactorSanguineoModel } from '../../models/factor-sanguineo-model/factor-sanguineo-model';
 import { GrupoSanguineoModel } from '../../models/grupo-sanguineo-model/grupo-sanguineo-model';
 import { ProvinciaModel } from '../../models/provincia-model/provincia-model';
-import { RemoteDataService } from '../../providers/remote-data-service/remote-data-service';
+import { DatosRemotosService } from '../../providers/datos-remotos-service/datos-remotos-service';
 import { UserDataService } from '../../providers/user-data-service/user-data-service';
 import { Component } from '@angular/core';
 import { LoadingController, NavController, ToastController } from 'ionic-angular';
@@ -25,11 +25,11 @@ export class DatosPersonalesPage {
 
 	constructor(private navCtrl: NavController,
 		private loadingCtrl: LoadingController, 
-		private remoteDataService: RemoteDataService,
+		private datosRemotosService: DatosRemotosService,
     	private userDataService: UserDataService,
 		private toastCtrl: ToastController) {
 
-		if(this.remoteDataService.modoDebugActivado()) {
+		if(this.datosRemotosService.modoDebugActivado()) {
         	console.time('DatosPersonalesPage / constructor');
       	}
 
@@ -41,7 +41,7 @@ export class DatosPersonalesPage {
 				// No hay datos guardados, por lo que inicializamos los listados sin setear ninguna opcion por defecto
 				this.cargarListados(false);
 
-				if(this.remoteDataService.modoDebugActivado()) {
+				if(this.datosRemotosService.modoDebugActivado()) {
           			console.timeEnd('DatosPersonalesPage / constructor');
         		}
 			} else {
@@ -49,7 +49,7 @@ export class DatosPersonalesPage {
 				this.datosUsuarioObj = datosUsuario;
 				this.cargarListados(true);
 
-				if(this.remoteDataService.modoDebugActivado()) {
+				if(this.datosRemotosService.modoDebugActivado()) {
           			console.timeEnd('DatosPersonalesPage / constructor');
        	 		}
 			}
@@ -59,7 +59,7 @@ export class DatosPersonalesPage {
   	// Método que inicializa los listados de la pagina
   	public cargarListados(inicializarDatos: boolean) {
 
-  		if(this.remoteDataService.modoDebugActivado()) {
+  		if(this.datosRemotosService.modoDebugActivado()) {
         	console.time('DatosPersonalesPage / cargarListados');
         }
 
@@ -72,9 +72,9 @@ export class DatosPersonalesPage {
   		loadingPopup.present();
 
       	// Inicializamos todos los listados
-      	this.listaFactoresSanguineos = this.remoteDataService.getFactoresSanguineos();
-      	this.listaGruposSanguineos = this.remoteDataService.getGruposSanguineos();
-      	this.remoteDataService.getListaProvincias().subscribe(result => {
+      	this.listaFactoresSanguineos = this.datosRemotosService.getFactoresSanguineos();
+      	this.listaGruposSanguineos = this.datosRemotosService.getGruposSanguineos();
+      	this.datosRemotosService.getListaProvincias().subscribe(result => {
 
       		if(result && result.length) {
       			this.listaProvincias = result;
@@ -85,14 +85,14 @@ export class DatosPersonalesPage {
       				.then((result) => {
       					loadingPopup.dismiss();
 
-      					if(this.remoteDataService.modoDebugActivado()) {
+      					if(this.datosRemotosService.modoDebugActivado()) {
         					console.timeEnd('DatosPersonalesPage / cargarListados');
         				}
       				});
       			} else {
       				loadingPopup.dismiss();
 
-      				if(this.remoteDataService.modoDebugActivado()) {
+      				if(this.datosRemotosService.modoDebugActivado()) {
         				console.timeEnd('DatosPersonalesPage / cargarListados');
         			}	
       			}      		
@@ -104,7 +104,7 @@ export class DatosPersonalesPage {
     public inicializarDatosUsuario(): Promise<boolean> {
     	return new Promise((resolve) => {
     		
-    		if(this.remoteDataService.modoDebugActivado()) {
+    		if(this.datosRemotosService.modoDebugActivado()) {
         		console.time('DatosPersonalesPage / inicializarDatosUsuario');
         	}
 
@@ -120,7 +120,7 @@ export class DatosPersonalesPage {
     		let indiceFactorSanguineo = this.getIndicePorID(this.listaFactoresSanguineos, this.datosUsuarioObj.factorSanguineoID);
     		this.datosUsuario.setFactorSanguineo(this.listaFactoresSanguineos[indiceFactorSanguineo]);
 
-    		this.remoteDataService.getListaCiudadesPorProvincia(this.datosUsuario.getProvincia().getId())
+    		this.datosRemotosService.getListaCiudadesPorProvincia(this.datosUsuario.getProvincia().getId())
 	    		.subscribe(result => {
 			    	if(result && result.length){
 
@@ -134,7 +134,7 @@ export class DatosPersonalesPage {
 			    		// Resolvemos la promesa
 			    		resolve(true);
 
-			    		if(this.remoteDataService.modoDebugActivado()) {
+			    		if(this.datosRemotosService.modoDebugActivado()) {
         					console.timeEnd('DatosPersonalesPage / inicializarDatosUsuario');
         				}
 			      	}
@@ -147,7 +147,7 @@ export class DatosPersonalesPage {
     // Método que obtiene el indice del elemento cuyo id es el pasado como parametro
     public getIndicePorID(listado: Array<any>, id: number): number {
     	
-    	if(this.remoteDataService.modoDebugActivado()) {
+    	if(this.datosRemotosService.modoDebugActivado()) {
     		console.time('DatosPersonalesPage / getIndicePorID');
     	}
 
@@ -156,7 +156,7 @@ export class DatosPersonalesPage {
     			return i;
     	}
 
-    	if(this.remoteDataService.modoDebugActivado()) {
+    	if(this.datosRemotosService.modoDebugActivado()) {
     		console.timeEnd('DatosPersonalesPage / getIndicePorID');
     	}
 
@@ -166,7 +166,7 @@ export class DatosPersonalesPage {
   	// Método que inicializa el listado de ciudades de una provincia
   	public inicializarCiudadesDeLaProvincia(): void {
 
-  		if(this.remoteDataService.modoDebugActivado()) {
+  		if(this.datosRemotosService.modoDebugActivado()) {
     		console.time('DatosPersonalesPage / inicializarCiudadesDeLaProvincia');
     	}
 
@@ -177,7 +177,7 @@ export class DatosPersonalesPage {
 	    // Muestra el mensaje de cargando ciudades
 	    loadingPopup.present();
 
-	    this.remoteDataService.getListaCiudadesPorProvincia(this.datosUsuario.getProvincia().getId())
+	    this.datosRemotosService.getListaCiudadesPorProvincia(this.datosUsuario.getProvincia().getId())
 	    .subscribe(result => {
 	    	if(result && result.length){
 	    		this.listaCiudades = result;
@@ -185,7 +185,7 @@ export class DatosPersonalesPage {
 	          // Oculta el mensaje de espera
 	          loadingPopup.dismiss();
 
-	          if(this.remoteDataService.modoDebugActivado()) {
+	          if(this.datosRemotosService.modoDebugActivado()) {
     			console.timeEnd('DatosPersonalesPage / inicializarCiudadesDeLaProvincia');
     		  }
 	      }
@@ -197,7 +197,7 @@ export class DatosPersonalesPage {
 	// Método que guarda los cambios en la base de datos local
 	public guardarCambios(): void {
 
-		if(this.remoteDataService.modoDebugActivado()) {
+		if(this.datosRemotosService.modoDebugActivado()) {
     		console.time('DatosPersonalesPage / guardarCambios');
     	}
 
@@ -219,7 +219,7 @@ export class DatosPersonalesPage {
     		    // Mostramos el mensaje al usuario
     		    toast.present();
 
-    		    if(this.remoteDataService.modoDebugActivado()) {
+    		    if(this.datosRemotosService.modoDebugActivado()) {
         			console.timeEnd('DatosPersonalesPage / guardarCambios');
         		}
     		});

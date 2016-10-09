@@ -4,7 +4,7 @@ import { DonacionesHelper } from '../../providers/donaciones-service/donaciones-
 import { FactorSanguineoModel } from '../../models/factor-sanguineo-model/factor-sanguineo-model';
 import { GrupoSanguineoModel } from '../../models/grupo-sanguineo-model/grupo-sanguineo-model';
 import { ProvinciaModel } from '../../models/provincia-model/provincia-model';
-import { RemoteDataService } from '../../providers/remote-data-service/remote-data-service';
+import { DatosRemotosService } from '../../providers/datos-remotos-service/datos-remotos-service';
 import { ResumenSolicitudModel } from '../../models/resumen-solicitud-model/resumen-solicitud-model';
 import { SolicitudModel } from '../../models/solicitud-model/solicitud-model';
 import { UserDataService } from '../../providers/user-data-service/user-data-service';
@@ -54,13 +54,13 @@ export class ListaSolicitudesPage extends BasePage {
               private alertCtrl: AlertController, 
               private userDataService: UserDataService,
               eventsCtrl: Events,
-              remoteDataService: RemoteDataService) 
+              datosRemotosService: DatosRemotosService) 
   {    
 
     // Inicializa la clase padre
-    super(eventsCtrl, remoteDataService);
+    super(eventsCtrl, datosRemotosService);
 
-    if(this.remoteDataService.modoDebugActivado()) {
+    if(this.datosRemotosService.modoDebugActivado()) {
       console.time('ListaSolicitudesPage / constructor');
     }    
 
@@ -99,7 +99,7 @@ export class ListaSolicitudesPage extends BasePage {
     // Cargamos las ultimas solicitudes
     this.buscarSolicitudes();
 
-    if(this.remoteDataService.modoDebugActivado()) {
+    if(this.datosRemotosService.modoDebugActivado()) {
       console.timeEnd('ListaSolicitudesPage / constructor');
     }
   }
@@ -107,7 +107,7 @@ export class ListaSolicitudesPage extends BasePage {
   // Método que obtiene las solicitudes del servidor
   public buscarSolicitudes(): void {
 
-    if(this.remoteDataService.modoDebugActivado()) {
+    if(this.datosRemotosService.modoDebugActivado()) {
       console.time('ListaSolicitudesPage / buscarSolicitudes');
     }
 
@@ -129,7 +129,7 @@ export class ListaSolicitudesPage extends BasePage {
         }
 
         // Obtenemos las solicitudes del servidor
-        this.remoteDataService.getSolicitudes().subscribe((solicitudesObj) => { 
+        this.datosRemotosService.getSolicitudes().subscribe((solicitudesObj) => { 
           for(let i = 0; i < solicitudesObj.length; i++) {
             let solicitud = new SolicitudModel(solicitudesObj[i]);
             let descripcionTiposSanguineos = this.obtenerInformacionTiposSanguineos(solicitud);
@@ -141,7 +141,7 @@ export class ListaSolicitudesPage extends BasePage {
           // Oculta el mensaje de espera
           loadingPopup.dismiss();
 
-          if(this.remoteDataService.modoDebugActivado()) {
+          if(this.datosRemotosService.modoDebugActivado()) {
             console.timeEnd('ListaSolicitudesPage / buscarSolicitudes');
           }
 
@@ -163,7 +163,7 @@ export class ListaSolicitudesPage extends BasePage {
   // Inicializa los listados de la pagina
   public inicializarFiltros() {
 
-    if(this.remoteDataService.modoDebugActivado()) {
+    if(this.datosRemotosService.modoDebugActivado()) {
       console.time('ListaSolicitudesPage / inicializarFiltros');
     }
 
@@ -176,9 +176,9 @@ export class ListaSolicitudesPage extends BasePage {
       loadingPopup.present();
 
       // Inicializamos todos los listados
-      this.listaFactoresSanguineos = this.remoteDataService.getFactoresSanguineos();
-      this.listaGruposSanguineos = this.remoteDataService.getGruposSanguineos();
-      this.remoteDataService.getListaProvincias().subscribe(result => {
+      this.listaFactoresSanguineos = this.datosRemotosService.getFactoresSanguineos();
+      this.listaGruposSanguineos = this.datosRemotosService.getGruposSanguineos();
+      this.datosRemotosService.getListaProvincias().subscribe(result => {
         if(result && result.length) {
           this.listaProvincias = result;
           
@@ -188,7 +188,7 @@ export class ListaSolicitudesPage extends BasePage {
           // Ocultamos el mensaje de espera
           loadingPopup.dismiss();
 
-          if(this.remoteDataService.modoDebugActivado()) {
+          if(this.datosRemotosService.modoDebugActivado()) {
             console.timeEnd('ListaSolicitudesPage / inicializarFiltros');
           }
         } 
@@ -199,7 +199,7 @@ export class ListaSolicitudesPage extends BasePage {
   // Resetea los filtros de busqueda
   public borrarFiltros() {
 
-    if(this.remoteDataService.modoDebugActivado()) {
+    if(this.datosRemotosService.modoDebugActivado()) {
       console.time('ListaSolicitudesPage / borrarFiltros');
     }
 
@@ -210,7 +210,7 @@ export class ListaSolicitudesPage extends BasePage {
     this.listaCiudades = null;
     this.usarDatosPersonales = false;
 
-    if(this.remoteDataService.modoDebugActivado()) {
+    if(this.datosRemotosService.modoDebugActivado()) {
       console.timeEnd('ListaSolicitudesPage / borrarFiltros');
     }
   }
@@ -220,7 +220,7 @@ export class ListaSolicitudesPage extends BasePage {
 
     if(this.usarDatosPersonales) {
 
-      if(this.remoteDataService.modoDebugActivado()) {
+      if(this.datosRemotosService.modoDebugActivado()) {
         console.time('ListaSolicitudesPage / usarDatosUsuario');
       }
 
@@ -236,7 +236,7 @@ export class ListaSolicitudesPage extends BasePage {
         // Ocultamos el mensaje de espera
         loadingPopup.dismiss();
 
-        if(this.remoteDataService.modoDebugActivado()) {
+        if(this.datosRemotosService.modoDebugActivado()) {
           console.timeEnd('ListaSolicitudesPage / usarDatosUsuario');
         }
 
@@ -255,7 +255,7 @@ export class ListaSolicitudesPage extends BasePage {
   // Método que obtiene la informacion de los tipos sanguineos buscados, resaltando el del usuario
   public obtenerInformacionTiposSanguineos(unaSolicitud: SolicitudModel): string {
 
-      if(this.remoteDataService.modoDebugActivado()) {
+      if(this.datosRemotosService.modoDebugActivado()) {
         console.time('ListaSolicitudesPage / obtenerInformacionTiposSanguineos');
       }
 
@@ -274,7 +274,7 @@ export class ListaSolicitudesPage extends BasePage {
         result = result.replace(this.tipoSanguineoUsuario, '<span class="marked">' + this.tipoSanguineoUsuario + '</span> ');
       }
 
-      if(this.remoteDataService.modoDebugActivado()) {
+      if(this.datosRemotosService.modoDebugActivado()) {
         console.timeEnd('ListaSolicitudesPage / obtenerInformacionTiposSanguineos');
       }
 
@@ -285,7 +285,7 @@ export class ListaSolicitudesPage extends BasePage {
   public inicializarDatosUsuario(): Promise<boolean> {
     return new Promise((resolve) => {
 
-        if(this.remoteDataService.modoDebugActivado()) {
+        if(this.datosRemotosService.modoDebugActivado()) {
           console.time('ListaSolicitudesPage / inicializarDatosUsuario');
         }
 
@@ -303,7 +303,7 @@ export class ListaSolicitudesPage extends BasePage {
 
         if(this.provinciaSeleccionada) {
 
-          this.remoteDataService.getListaCiudadesPorProvincia(this.provinciaSeleccionada.getId())
+          this.datosRemotosService.getListaCiudadesPorProvincia(this.provinciaSeleccionada.getId())
             .subscribe(result => {
               if(result && result.length){
 
@@ -314,7 +314,7 @@ export class ListaSolicitudesPage extends BasePage {
                   let indiceCiudad = this.getIndicePorID(this.listaCiudades, this.datosUsuarioObj.ciudadID);
                   this.ciudadSeleccionada = this.listaCiudades[indiceCiudad];
 
-                  if(this.remoteDataService.modoDebugActivado()) {
+                  if(this.datosRemotosService.modoDebugActivado()) {
                     console.timeEnd('ListaSolicitudesPage / inicializarDatosUsuario');
                   } 
 
@@ -331,7 +331,7 @@ export class ListaSolicitudesPage extends BasePage {
   // Método que obtiene el indice del elemento cuyo id es el pasado como parametro
   public getIndicePorID(listado: Array<any>, id: number): number {
 
-    if(this.remoteDataService.modoDebugActivado()) {
+    if(this.datosRemotosService.modoDebugActivado()) {
       console.time('ListaSolicitudesPage / getIndicePorID');
     }
 
@@ -340,7 +340,7 @@ export class ListaSolicitudesPage extends BasePage {
         return i;
     }
 
-    if(this.remoteDataService.modoDebugActivado()) {
+    if(this.datosRemotosService.modoDebugActivado()) {
       console.timeEnd('ListaSolicitudesPage / getIndicePorID');
     }
 
@@ -350,7 +350,7 @@ export class ListaSolicitudesPage extends BasePage {
   // Método que inicializa el listado de ciudades de una provincia
   public inicializarCiudadesDeLaProvincia(nombreCiudad: string): void {
 
-    if(this.remoteDataService.modoDebugActivado()) {
+    if(this.datosRemotosService.modoDebugActivado()) {
       console.time('ListaSolicitudesPage / inicializarCiudadesDeLaProvincia');
     }
 
@@ -361,7 +361,7 @@ export class ListaSolicitudesPage extends BasePage {
     // Muestra el mensaje de cargando ciudades
     loadingPopup.present();
 
-    this.remoteDataService.getListaCiudadesPorProvincia(this.provinciaSeleccionada.getId())
+    this.datosRemotosService.getListaCiudadesPorProvincia(this.provinciaSeleccionada.getId())
       .subscribe(result => {
         if(result && result.length){
           this.listaCiudades = result;
@@ -369,7 +369,7 @@ export class ListaSolicitudesPage extends BasePage {
           // Oculta el mensaje de espera
           loadingPopup.dismiss();
 
-          if(this.remoteDataService.modoDebugActivado()) {
+          if(this.datosRemotosService.modoDebugActivado()) {
             console.timeEnd('ListaSolicitudesPage / inicializarCiudadesDeLaProvincia');
           }
         }

@@ -11,7 +11,7 @@ import { Http } from '@angular/http';
 import { Observable } from 'rxjs';
 
 @Injectable()
-export class RemoteDataService {
+export class DatosRemotosService {
 
   private listaProvincias: Array<ProvinciaModel>;
   private listaCiudades: Array<CiudadModel>;

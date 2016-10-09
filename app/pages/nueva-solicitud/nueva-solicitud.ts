@@ -3,7 +3,7 @@ import { CiudadModel } from '../../models/ciudad-model/ciudad-model';
 import { FactorSanguineoModel } from '../../models/factor-sanguineo-model/factor-sanguineo-model';
 import { GrupoSanguineoModel } from '../../models/grupo-sanguineo-model/grupo-sanguineo-model';
 import { ProvinciaModel } from '../../models/provincia-model/provincia-model';
-import { RemoteDataService } from '../../providers/remote-data-service/remote-data-service';
+import { DatosRemotosService } from '../../providers/datos-remotos-service/datos-remotos-service';
 import { SolicitudModel } from '../../models/solicitud-model/solicitud-model';
 import { Component, NgZone } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
@@ -28,7 +28,7 @@ export class NuevaSolicitudPage {
 
 	private submitted: boolean = false;
 
-	constructor(private remoteDataService: RemoteDataService,
+	constructor(private datosRemotosService: DatosRemotosService,
 		private platform: Platform,
 		private menuCtrl: MenuController,
 		private navCtrl: NavController, 
@@ -38,7 +38,7 @@ export class NuevaSolicitudPage {
 		private loadingCtrl : LoadingController,
 		private alertCtrl : AlertController) {
 
-		if(this.remoteDataService.modoDebugActivado()) {
+		if(this.datosRemotosService.modoDebugActivado()) {
       		console.time('NuevaSolicitudPage / constructor');
     	}
 
@@ -60,7 +60,7 @@ export class NuevaSolicitudPage {
 			});
 		});
 
-		if(this.remoteDataService.modoDebugActivado()) {
+		if(this.datosRemotosService.modoDebugActivado()) {
       		console.timeEnd('NuevaSolicitudPage / constructor');
     	}
 	}
@@ -75,7 +75,7 @@ export class NuevaSolicitudPage {
 	// Método que recibe la dirección del autocomplete y la ingresa en el formulario
 	private setearDireccion(informacionSobreDireccion: any) {
 
-		if(this.remoteDataService.modoDebugActivado()) {
+		if(this.datosRemotosService.modoDebugActivado()) {
       		console.time('NuevaSolicitudPage / setearDireccion');
     	}
 
@@ -88,7 +88,7 @@ export class NuevaSolicitudPage {
 		// Setea la provincia y la ciudad de la institucion
 		this.actualizarProvinciaYCiudad(informacionSobreDireccion.getProvince(), informacionSobreDireccion.getCity());
 
-		if(this.remoteDataService.modoDebugActivado()) {
+		if(this.datosRemotosService.modoDebugActivado()) {
       		console.timeEnd('NuevaSolicitudPage / setearDireccion');
     	}		
 	}
@@ -96,7 +96,7 @@ export class NuevaSolicitudPage {
 	// Método que dado el nombre de una provincia, la setea como seleccionada en el formulario y actualiza el listado de ciudades
 	private actualizarProvinciaYCiudad(nombreProvincia: string, nombreCiudad: string) {
 
-		if(this.remoteDataService.modoDebugActivado()) {
+		if(this.datosRemotosService.modoDebugActivado()) {
       		console.time('NuevaSolicitudPage / actualizarProvinciaYCiudad');
     	}
 
@@ -113,7 +113,7 @@ export class NuevaSolicitudPage {
 			}
 		}
 
-		if(this.remoteDataService.modoDebugActivado()) {
+		if(this.datosRemotosService.modoDebugActivado()) {
       		console.timeEnd('NuevaSolicitudPage / actualizarProvinciaYCiudad');
     	}
 	}
@@ -121,7 +121,7 @@ export class NuevaSolicitudPage {
 	// Método que dado el nombre de una ciudad, la setea como seleccionada en el formulario
 	private actualizarCiudad(nombreCiudad: string) {
 
-		if(this.remoteDataService.modoDebugActivado()) {
+		if(this.datosRemotosService.modoDebugActivado()) {
       		console.time('NuevaSolicitudPage / actualizarCiudad');
     	}
 
@@ -140,7 +140,7 @@ export class NuevaSolicitudPage {
 		// Setea la ciudad en base a su ID
 		this.nuevaSolicitud.setCiudad(this.listaCiudades[indiceCiudad]);
 
-		if(this.remoteDataService.modoDebugActivado()) {
+		if(this.datosRemotosService.modoDebugActivado()) {
       		console.timeEnd('NuevaSolicitudPage / actualizarCiudad');
     	}
 	}
@@ -168,18 +168,18 @@ export class NuevaSolicitudPage {
 	// Metodo que inicializa el listado de grupos sanguineos
 	private inicializarGruposSanguineos(): void {
 
-		if(this.remoteDataService.modoDebugActivado()) {
+		if(this.datosRemotosService.modoDebugActivado()) {
       		console.time('NuevaSolicitudPage / inicializarGruposSanguineos');
     	}
 
 		// Obtenemos el listado del helper
-		this.listaGruposSanguineos = this.remoteDataService.getGruposSanguineos();
+		this.listaGruposSanguineos = this.datosRemotosService.getGruposSanguineos();
 
 		// TODO: asignar el que hayan configurado en la pagina de preferencias
 		// -------------------------------------------------------------------
 		this.nuevaSolicitud.setGrupoSanguineo(this.listaGruposSanguineos[0]);
 
-		if(this.remoteDataService.modoDebugActivado()) {
+		if(this.datosRemotosService.modoDebugActivado()) {
       		console.timeEnd('NuevaSolicitudPage / inicializarGruposSanguineos');
     	}
 	}
@@ -187,18 +187,18 @@ export class NuevaSolicitudPage {
 	// Metodo que inicializa el listado de factores sanguineos
 	private inicializarFactoresSanguineos(): void {
 
-		if(this.remoteDataService.modoDebugActivado()) {
+		if(this.datosRemotosService.modoDebugActivado()) {
       		console.time('NuevaSolicitudPage / inicializarFactoresSanguineos');
     	}
 
 		// Obtenemos el listado del helper
-		this.listaFactoresSanguineos = this.remoteDataService.getFactoresSanguineos();
+		this.listaFactoresSanguineos = this.datosRemotosService.getFactoresSanguineos();
 
 		// TODO: asignar el que hayan configurado en la pagina de preferencias
 		// -------------------------------------------------------------------
 		this.nuevaSolicitud.setFactorSanguineo(this.listaFactoresSanguineos[0]);
 
-		if(this.remoteDataService.modoDebugActivado()) {
+		if(this.datosRemotosService.modoDebugActivado()) {
       		console.timeEnd('NuevaSolicitudPage / inicializarFactoresSanguineos');
     	}
 	}
@@ -206,12 +206,12 @@ export class NuevaSolicitudPage {
 	// Método que inicializa el listado de provincias
 	private inicializarProvincias(): void {
 
-		if(this.remoteDataService.modoDebugActivado()) {
+		if(this.datosRemotosService.modoDebugActivado()) {
       		console.time('NuevaSolicitudPage / inicializarProvincias');
     	}
 
 		// Obtenemos el listado de provincias del servidor
-		this.remoteDataService.getListaProvincias().subscribe(result => {
+		this.datosRemotosService.getListaProvincias().subscribe(result => {
 			if(result && result.length) {
 				
 				// Inicializamos el listado de provincias
@@ -224,7 +224,7 @@ export class NuevaSolicitudPage {
 				// Carga las ciudades de la provincia seleccionada
 				this.inicializarCiudadesDeLaProvincia();
 
-				if(this.remoteDataService.modoDebugActivado()) {
+				if(this.datosRemotosService.modoDebugActivado()) {
       				console.timeEnd('NuevaSolicitudPage / inicializarProvincias');
     			}
 
@@ -238,7 +238,7 @@ export class NuevaSolicitudPage {
 	// Método que inicializa el listado de ciudades de una provincia
 	public inicializarCiudadesDeLaProvincia(nombreCiudad?: string): void {
 
-		if(this.remoteDataService.modoDebugActivado()) {
+		if(this.datosRemotosService.modoDebugActivado()) {
       		console.time('NuevaSolicitudPage / inicializarCiudadesDeLaProvincia');
     	}
 		
@@ -250,7 +250,7 @@ export class NuevaSolicitudPage {
 
 		// Muestra el mensaje de cargando ciudades
 		loadingPopup.present();
-		this.remoteDataService.getListaCiudadesPorProvincia(provinciaId)
+		this.datosRemotosService.getListaCiudadesPorProvincia(provinciaId)
 		.subscribe(result => {
 			if(result && result.length){
 				this.listaCiudades = result;
@@ -268,7 +268,7 @@ export class NuevaSolicitudPage {
 					// Oculta el mensaje de espera
 					loadingPopup.dismiss();
 
-					if(this.remoteDataService.modoDebugActivado()) {
+					if(this.datosRemotosService.modoDebugActivado()) {
       					console.timeEnd('NuevaSolicitudPage / inicializarCiudadesDeLaProvincia');
     				}
 				}
