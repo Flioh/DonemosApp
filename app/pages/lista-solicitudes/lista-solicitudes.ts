@@ -1,4 +1,3 @@
-import { constructDependencies } from '@angular/core/src/di/reflective_provider';
 import { AuthService } from '../../providers/auth-service/auth-service';
 import { SolicitudItem } from '../../directives/solicitud-item/solicitud-item';
 import { CiudadModel } from '../../providers/ciudad-model/ciudad-model';
@@ -57,7 +56,7 @@ export class ListaSolicitudesPage extends BasePage {
               private userDataService: UserDataService,
               private authService: AuthService,
               eventsCtrl: Events,
-              remoteDataService: RemoteDataService,) 
+              remoteDataService: RemoteDataService) 
   {    
 
     // Inicializa la clase padre
