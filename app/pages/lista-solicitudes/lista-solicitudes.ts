@@ -1,4 +1,4 @@
-import { ResumenSolicitud } from '../../directives/resumen-solicitud/resumen-solicitud';
+import { ResumenSolicitudDirective } from '../../directives/resumen-solicitud/resumen-solicitud';
 import { CiudadModel } from '../../models/ciudad/ciudad';
 import { DonacionesHelper } from '../../providers/donaciones/donaciones';
 import { FactorSanguineoModel } from '../../models/factor-sanguineo/factor-sanguineo';
@@ -16,7 +16,7 @@ import { BasePage } from '../base/base';
 
 @Component({
   templateUrl: 'build/pages/lista-solicitudes/lista-solicitudes.html',
-  directives: [ ResumenSolicitud ]
+  directives: [ ResumenSolicitudDirective ]
 })
 export class ListaSolicitudesPage extends BasePage {
 

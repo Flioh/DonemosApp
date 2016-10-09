@@ -9,7 +9,7 @@ import { LocalizacionService } from '../../providers/localizacion/localizacion';
     templateUrl: 'build/directives/resumen-solicitud/resumen-solicitud.html',
     pipes: [ FormatearFechaPipe ]
 })
-export class ResumenSolicitud {
+export class ResumenSolicitudDirective {
 	  @Input() solicitudItemModel: ResumenSolicitudModel;
 	  @Output() seleccionarSolicitud = new EventEmitter();
 
