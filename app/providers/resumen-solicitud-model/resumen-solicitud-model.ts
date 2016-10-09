@@ -2,7 +2,7 @@ import { SolicitudModel } from '../solicitud-model/solicitud-model';
 import { Injectable } from '@angular/core';
 
 @Injectable()
-export class SolicitudItemModel {
+export class ResumenSolicitudModel {
 
   constructor(private solicitud: SolicitudModel, private descripcionTiposSanguineos: string) {
 

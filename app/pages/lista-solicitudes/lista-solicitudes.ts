@@ -6,7 +6,7 @@ import { FactorSanguineoModel } from '../../providers/factor-sanguineo-model/fac
 import { GrupoSanguineoModel } from '../../providers/grupo-sanguineo-model/grupo-sanguineo-model';
 import { ProvinciaModel } from '../../providers/provincia-model/provincia-model';
 import { RemoteDataService } from '../../providers/remote-data-service/remote-data-service';
-import { SolicitudItemModel } from '../../providers/solicitud-item-model/solicitud-item-model';
+import { ResumenSolicitudModel } from '../../providers/resumen-solicitud-model/resumen-solicitud-model';
 import { SolicitudModel } from '../../providers/solicitud-model/solicitud-model';
 import { UserDataService } from '../../providers/user-data-service/user-data-service';
 import { DetallesSolicitudPage } from '../detalles-solicitud/detalles-solicitud';
@@ -21,7 +21,7 @@ import { BasePage } from '../base/base';
 })
 export class ListaSolicitudesPage extends BasePage {
 
-  private solicitudes: Array<SolicitudItemModel>;
+  private solicitudes: Array<ResumenSolicitudModel>;
 
   // Filtros de busqueda
   private grupoSanguineoSeleccionado: GrupoSanguineoModel;
@@ -137,7 +137,7 @@ export class ListaSolicitudesPage extends BasePage {
             let descripcionTiposSanguineos = this.obtenerInformacionTiposSanguineos(solicitud);
 
             // Creamos una instancia del modelo que posee tanto la solicitud como su encabezado
-            this.solicitudes.push(new SolicitudItemModel(solicitud, descripcionTiposSanguineos));
+            this.solicitudes.push(new ResumenSolicitudModel(solicitud, descripcionTiposSanguineos));
           }
 
           // Oculta el mensaje de espera

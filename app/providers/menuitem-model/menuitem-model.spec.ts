@@ -17,7 +17,7 @@ export class MockPage {
 @Injectable()
 export class MenuItemModelMock extends MenuItemModel {
 	constructor(){
-		super('icono', 'titulo', MockPage, true);
+		super('icono', 'titulo', MockPage, true, true);
 	}
 }
 

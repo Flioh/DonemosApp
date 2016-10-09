@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { beforeEachProviders, beforeEach, it, describe, expect, inject } from '@angular/core/testing';
-import { SolicitudItemModel } from './solicitud-item-model';
+import { ResumenSolicitudModel } from './resumen-solicitud-model';
 
 /* Modelos usados en los tests */
 import { SolicitudModel } from '../solicitud-model/solicitud-model';
@@ -27,7 +27,7 @@ export class MockPage {
 
 // Mock de la clase MenuItemModel
 @Injectable()
-export class SolicitudItemModelMock extends SolicitudItemModel {
+export class ResumenSolicitudModelMock extends ResumenSolicitudModel {
 	constructor(){
 
 		let datosSolicitudMock = { 
@@ -58,18 +58,22 @@ export class SolicitudItemModelMock extends SolicitudItemModel {
 describe('SolicitudItem Model', () => {
 
 	// Usamos el mock en lugar del modelo real
-	beforeEachProviders(() => [{ provide: SolicitudItemModel, useClass: SolicitudItemModelMock}]);
+	beforeEachProviders(() => [{ provide: ResumenSolicitudModel, useClass: ResumenSolicitudModelMock}]);
 
 
 
 	// Tests para asegurar que los metodos necesarios estan definidos
 	// --------------------------------------------------------------
-	it('Debe tener un metodo getSolicitud()', inject([SolicitudItemModel], (solicitudItemModel: SolicitudItemModelMock) => {
-		expect(solicitudItemModel.getSolicitud).toBeDefined();
+	it('Debe tener un metodo getSolicitud()', inject([ResumenSolicitudModel], (ResumenSolicitudModel: ResumenSolicitudModelMock) => {
+		expect(ResumenSolicitudModel.getSolicitud).toBeDefined();
 	}));
 
-	it('Debe tener un metodo getDescripcionTiposSanguineos()', inject([SolicitudItemModel], (solicitudItemModel: SolicitudItemModelMock) => {
-		expect(solicitudItemModel.getDescripcionTiposSanguineos).toBeDefined();
+	it('Debe tener un metodo getDescripcionTiposSanguineos()', inject([ResumenSolicitudModel], (ResumenSolicitudModel: ResumenSolicitudModelMock) => {
+		expect(ResumenSolicitudModel.getDescripcionTiposSanguineos).toBeDefined();
+	}));
+
+	it('Debe tener un metodo setDescripcionTiposSanguineos()', inject([ResumenSolicitudModel], (ResumenSolicitudModel: ResumenSolicitudModelMock) => {
+		expect(ResumenSolicitudModel.setDescripcionTiposSanguineos).toBeDefined();
 	}));
 
 	
@@ -78,17 +82,17 @@ describe('SolicitudItem Model', () => {
 
 	// Tests para asegurar que los metodos devuelven los valores correctamente
 	// -----------------------------------------------------------------------
-	it('El metodo getSolicitud() debe devolver una solicitud', inject([SolicitudItemModel], (solicitudItemModel: SolicitudItemModelMock) => {
-		let solicitudObtenida = solicitudItemModel.getSolicitud();
+	it('El metodo getSolicitud() debe devolver una solicitud', inject([ResumenSolicitudModel], (ResumenSolicitudModel: ResumenSolicitudModelMock) => {
+		let solicitudObtenida = ResumenSolicitudModel.getSolicitud();
 
 		let propiedadesSolicitudObtenida = JSON.stringify(Object.keys(solicitudObtenida).sort());
 	    let propiedadesSolicitudCreada = JSON.stringify(Object.keys(new SolicitudModel()).sort());
 	    expect(propiedadesSolicitudObtenida).toBe(propiedadesSolicitudCreada);
 	}));
 
-	it('El metodo getDescripcionTiposSanguineos() debe devolver un string con la descripcion de los tipos sanguineos buscados', inject([SolicitudItemModel], (solicitudItemModel: SolicitudItemModelMock) => {
-		let solicitudObtenida = solicitudItemModel.getSolicitud();
-		let descripcionTiposSanguineosObtenida = solicitudItemModel.getDescripcionTiposSanguineos();
+	it('El metodo getDescripcionTiposSanguineos() debe devolver un string con la descripcion de los tipos sanguineos buscados', inject([ResumenSolicitudModel], (ResumenSolicitudModel: ResumenSolicitudModelMock) => {
+		let solicitudObtenida = ResumenSolicitudModel.getSolicitud();
+		let descripcionTiposSanguineosObtenida = ResumenSolicitudModel.getDescripcionTiposSanguineos();
 		let descripcionTiposSanguineosCreada = DonacionesHelper.puedeRecibirDe(solicitudObtenida.getGrupoSanguineo().getId(), 
                                                 			  				   solicitudObtenida.getFactorSanguineo().getId()).join(' ');
 

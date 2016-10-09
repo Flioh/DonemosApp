@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { SolicitudItemModel } from '../../providers/solicitud-item-model/solicitud-item-model';
+import { ResumenSolicitudModel } from '../../providers/resumen-solicitud-model/resumen-solicitud-model';
 import { DonacionesHelper } from '../../providers/donemos-helper-service/donemos-helper-service';
 import { TimeAgoPipe } from '../../pipes/time-ago/time-ago-pipe';
 import { RemoteDataService } from '../../providers/remote-data-service/remote-data-service';
@@ -11,7 +11,7 @@ import { NavigationService } from '../../providers/navigation-service/navigation
     pipes: [ TimeAgoPipe ]
 })
 export class ResumenSolicitud {
-	  @Input() solicitudItemModel: SolicitudItemModel;
+	  @Input() solicitudItemModel: ResumenSolicitudModel;
 	  @Output() seleccionarSolicitud = new EventEmitter();
 
     constructor(private dataService: RemoteDataService, 
