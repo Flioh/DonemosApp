@@ -11,15 +11,24 @@
 		<form (ngSubmit)="guardarCambios()" #nuevaSolicitudForm="ngForm" >
 
 
-
 			<!-- Institucion  -->
+			<ion-item>
+				<ion-label stacked>Nombre de institución</ion-label>
+				<ion-input institucionesAutocomplete [(ngModel)]="nuevaSolicitud.institucion" (seleccionarInstitucion)="setearDireccion($event)" name="institucion" #institucion="ngModel" required type="text" placeholder="Ejemplo: Hospital Cullen"></ion-input>
+			</ion-item>
+			<span [hidden]="institucion.valid || institucion.untouched" class="mensaje-error">
+				Ingrese el nombre de la institución.
+			</span>
+
+
+			<!-- Institucion  
 			<ion-item>
 				<ion-label stacked>Nombre de institución</ion-label>
 				<ion-input id="autocomplete" [(ngModel)]="nuevaSolicitud.institucion" name="institucion" #institucion="ngModel" required type="text" placeholder="Ejemplo: Hospital Cullen"></ion-input>
 			</ion-item>
 			<span [hidden]="institucion.valid || institucion.untouched" class="mensaje-error">
 				Ingrese el nombre de la institución.
-			</span>
+			</span> -->
 
 
 

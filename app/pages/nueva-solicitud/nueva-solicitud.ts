@@ -1,4 +1,3 @@
-import { AutocompleteService } from '../../providers/autocomplete/autocomplete';
 import { CiudadModel } from '../../models/ciudad/ciudad';
 import { FactorSanguineoModel } from '../../models/factor-sanguineo/factor-sanguineo';
 import { GrupoSanguineoModel } from '../../models/grupo-sanguineo/grupo-sanguineo';
@@ -9,11 +8,11 @@ import { Component, NgZone } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { FORM_DIRECTIVES } from '@angular/forms';
 import { AlertController, LoadingController, NavController, Platform, MenuController } from 'ionic-angular';
+import { InstitucionesAutocompleteDirective } from '../../directives/instituciones-autocomplete/instituciones-autocomplete';
 
 @Component({
 	templateUrl: 'build/pages/nueva-solicitud/nueva-solicitud.html',
-	directives: [FORM_DIRECTIVES],
-	providers: [AutocompleteService]
+	directives: [ InstitucionesAutocompleteDirective, FORM_DIRECTIVES ]
 })
 export class NuevaSolicitudPage {
 
@@ -34,7 +33,6 @@ export class NuevaSolicitudPage {
 		private navCtrl: NavController, 
 		private formBuilder : FormBuilder, 
 		private ngZone : NgZone,
-		private autocompleteService : AutocompleteService,
 		private loadingCtrl : LoadingController,
 		private alertCtrl : AlertController) {
 
@@ -51,20 +49,12 @@ export class NuevaSolicitudPage {
 		this.inicializarGruposSanguineos();
 		this.inicializarFactoresSanguineos();
 
-		// Nos suscribimos al autocomplete para que nos envie la informacion de la direccion cuando este lista
-		this.autocompleteService.autocomplete.subscribe((informacionDelLugar) => {
-			this.ngZone.run(() => {
-				// Ejecutamos este metodo dentro de ngZone para que angular sepa que 
-				// tiene que actualizar la vista cuando finalice
-				this.setearDireccion(informacionDelLugar);
-			});
-		});
-
 		if(this.datosRemotosService.modoDebugActivado()) {
       		console.timeEnd('NuevaSolicitudPage / constructor');
     	}
 	}
 
+	// Método que inicializa la solicitud con los datos del usuario
 	private inicializarSolicitud() {
 
 		// TODO: setar la propiedad usuarioID de la nueva solicitud
@@ -80,13 +70,13 @@ export class NuevaSolicitudPage {
     	}
 
 		// Setea la institucion
-		this.nuevaSolicitud.setInstitucion(informacionSobreDireccion.getName());
+		this.nuevaSolicitud.setInstitucion(informacionSobreDireccion.getNombreInstitucion());
 		
 		// Setea la direccion de la institucion
-		this.nuevaSolicitud.setDireccion(informacionSobreDireccion.getAdressLine1());
+		this.nuevaSolicitud.setDireccion(informacionSobreDireccion.getDireccion());
 
 		// Setea la provincia y la ciudad de la institucion
-		this.actualizarProvinciaYCiudad(informacionSobreDireccion.getProvince(), informacionSobreDireccion.getCity());
+		this.actualizarProvinciaCiudad(informacionSobreDireccion.getNombreProvincia(), informacionSobreDireccion.getNombreCiudad());
 
 		if(this.datosRemotosService.modoDebugActivado()) {
       		console.timeEnd('NuevaSolicitudPage / setearDireccion');
@@ -94,10 +84,10 @@ export class NuevaSolicitudPage {
 	}
 
 	// Método que dado el nombre de una provincia, la setea como seleccionada en el formulario y actualiza el listado de ciudades
-	private actualizarProvinciaYCiudad(nombreProvincia: string, nombreCiudad: string) {
+	private actualizarProvinciaCiudad(nombreProvincia: string, nombreCiudad: string) {
 
 		if(this.datosRemotosService.modoDebugActivado()) {
-      		console.time('NuevaSolicitudPage / actualizarProvinciaYCiudad');
+      		console.time('NuevaSolicitudPage / actualizarProvinciaCiudad');
     	}
 
 		for(let i=0; i< this.listaProvincias.length; i++) {
@@ -114,7 +104,7 @@ export class NuevaSolicitudPage {
 		}
 
 		if(this.datosRemotosService.modoDebugActivado()) {
-      		console.timeEnd('NuevaSolicitudPage / actualizarProvinciaYCiudad');
+      		console.timeEnd('NuevaSolicitudPage / actualizarProvinciaCiudad');
     	}
 	}
 
@@ -154,10 +144,10 @@ export class NuevaSolicitudPage {
 		this.menuCtrl.enable(false, 'unauthenticated');
 
 	  	// Obtiene el input dentro del elemento ion-input
-	  	let autocompleteInput = document.getElementById('autocomplete').childNodes[1];
+	  	//let autocompleteInput = document.getElementById('autocomplete').childNodes[1];
 	  	// Inicializar el autocomplete
-	  	this.autocompleteService.initializeAutocomplete(autocompleteInput);
-	  }
+	  	//this.autocompleteService.initializeAutocomplete(autocompleteInput);
+	}
 
 	// Método que se ejecuta antes de que el usuario salga de la página
 	ionViewWillLeave() {
