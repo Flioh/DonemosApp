@@ -6,7 +6,7 @@ import { DonacionesHelper } from '../../shared/services/donaciones.service';
 import { DatosService } from '../../shared/services/datos.service';
 
 // Directivas
-import { ResumenSolicitudDirective } from '../../solicitudes/resumen-solicitud/resumen-solicitud.directive';
+import { ResumenSolicitudDirective } from '../../solicitudes/resumen-solicitud.directive';
 
 // Modelos
 import { SolicitudModel } from '../solicitud.model';

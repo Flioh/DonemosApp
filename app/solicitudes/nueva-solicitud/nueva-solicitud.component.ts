@@ -20,7 +20,7 @@ import { GrupoSanguineoModel } from '../../shared/models/grupo-sanguineo.model';
 import { InstitucionesAutocompleteDirective } from '../../shared/instituciones-autocomplete.directive';
 
 @Component({
-	templateUrl: 'build/pages/nueva-solicitud/nueva-solicitud.html',
+	templateUrl: 'build/solicitudes/nueva-solicitud/nueva-solicitud.component.html',
 	directives: [ InstitucionesAutocompleteDirective, FORM_DIRECTIVES ]
 })
 export class NuevaSolicitudPage {
