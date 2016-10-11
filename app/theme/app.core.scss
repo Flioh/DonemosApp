@@ -1,11 +1,11 @@
 @import "../app";
-@import "../pages/detalles-solicitud/detalles-solicitud";
-@import "../pages/lista-solicitudes/lista-solicitudes";
-@import "../pages/nueva-solicitud/nueva-solicitud";
-@import "../pages/datos-personales/datos-personales";
+@import "../solicitudes/detalles-solicitud/detalles-solicitud.component";
+@import "../solicitudes/lista-solicitudes/lista-solicitudes.component";
+@import "../solicitudes/nueva-solicitud/nueva-solicitud.component";
+@import "../preferencias-usuario/editar-preferencias/editar-preferencias.component";
 
 /* Estilos personalizados */
 
 @import "../theme/custom/forms";
 @import "../theme/custom/icons";
-@import "../directives/resumen-solicitud/resumen-solicitud";
+@import "../solicitudes/resumen-solicitud/resumen-solicitud.directive";

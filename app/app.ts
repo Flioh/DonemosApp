@@ -1,20 +1,33 @@
-import { DatosPersonalesModel } from './models/datos-personales/datos-personales';
-import { MY_CONFIG, MY_CONFIG_TOKEN } from './app-config.ts';
-import { DatosPersonalesPage } from './pages/datos-personales/datos-personales';
-import { ErrorPage } from './pages/error/error';
-import { ListaSolicitudesPage } from './pages/lista-solicitudes/lista-solicitudes';
-import { LoginService, PerfilUsuarioModel } from './providers/login/login';
-import { ConectividadService } from './providers/conectividad/conectividad';
-import { ItemMenuModel } from './models/item-menu/item-menu';
-import { LocalizacionService } from './providers/localizacion/localizacion';
-import { DatosRemotosService } from './providers/datos-remotos/datos-remotos';
-import { DatosPersonalesService } from './providers/datos-personales/datos-personales';
+// Referencias de Angular
 import { Component, enableProdMode, provide, ViewChild } from '@angular/core';
 import { disableDeprecatedForms, provideForms } from '@angular/forms';
 import { Http } from '@angular/http';
+
+// Referencias de Auth0
 import { AuthConfig, AuthHttp } from 'angular2-jwt';
+
+// Referencias de Ionic
 import { AlertController, Events, ionicBootstrap, MenuController, Nav, Platform } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
+
+// Modelos
+import { ItemMenuModel } from './shared/models/item-menu.model';
+import { PreferenciasModel } from './preferencias-usuario/preferencias.model';
+
+// Servicios
+import { ConectividadService } from './shared/services/conectividad.service';
+import { LocalizacionService } from './shared/services/localizacion.service';
+import { DatosRemotosService } from './shared/services/datos-remotos.service';
+import { DatosPersonalesService } from './shared/services/datos-personales.service';
+import { LoginService, PerfilUsuarioModel } from './shared/services/login.service';
+
+// Paginas
+import { ErrorPage } from './shared/error/error.component';
+import { ListaSolicitudesPage } from './solicitudes/lista-solicitudes/lista-solicitudes.component';
+import { EditarPreferenciasPage } from './preferencias-usuario/editar-preferencias/editar-preferencias.component';
+
+// Objeto de configuracion
+import { MY_CONFIG, MY_CONFIG_TOKEN } from './shared/app-config';
 
 @Component({
   templateUrl: 'build/app.html',
@@ -126,7 +139,7 @@ export class DonemosApp {
   public cargarOpcionesMenuPrincipal(): void {    
     this.paginasMenu.push(new ItemMenuModel('list-box', 'Lista de solicitudes', ListaSolicitudesPage, true, false));
     this.paginasMenu.push(new ItemMenuModel('checkbox', 'Requisitos para donar', ErrorPage, false, false));
-    this.paginasMenu.push(new ItemMenuModel('person', 'Configurar perfil', DatosPersonalesPage, false, false));
+    this.paginasMenu.push(new ItemMenuModel('person', 'Configurar perfil', EditarPreferenciasPage, false, false));
     this.paginasMenu.push(new ItemMenuModel('information-circle', 'Sobre nosotros', ErrorPage, false, false));
   }
 
