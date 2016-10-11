@@ -1,9 +1,8 @@
 import { Events } from 'ionic-angular';
-import { DatosRemotosService } from '../../shared/services/datos-remotos.service';
 
 export class BasePage {
 
-  constructor(public eventsCtrl: Events, public datosRemotosService: DatosRemotosService){
+  constructor(public eventsCtrl: Events){
 
   }
 
@@ -12,15 +11,10 @@ export class BasePage {
   }
 
   public iniciarTimer(nombreMetodo: string): void {
-    if(this.datosRemotosService.modoDebugActivado()) {
-      console.time(nombreMetodo);
-    }   
+
   }
 
   public detenerTimer(nombreMetodo: string): void {
-    if(this.datosRemotosService.modoDebugActivado()) {
-      console.timeEnd(nombreMetodo);
-    }   
   }
 
 }

@@ -12,13 +12,12 @@ import { StatusBar } from 'ionic-native';
 
 // Modelos
 import { ItemMenuModel } from './shared/models/item-menu.model';
-import { PreferenciasModel } from './preferencias-usuario/preferencias.model';
+import { PreferenciasUsuarioModel } from './preferencias-usuario/preferencias-usuario.model';
 
 // Servicios
 import { ConectividadService } from './shared/services/conectividad.service';
 import { LocalizacionService } from './shared/services/localizacion.service';
-import { DatosRemotosService } from './shared/services/datos-remotos.service';
-import { DatosPersonalesService } from './shared/services/datos-personales.service';
+import { DatosService } from './shared/services/datos.service';
 import { LoginService, PerfilUsuarioModel } from './shared/services/login.service';
 
 // Paginas
@@ -33,8 +32,7 @@ import { MY_CONFIG, MY_CONFIG_TOKEN } from './shared/app-config';
   templateUrl: 'build/app.html',
   providers: [ConectividadService, 
               LocalizacionService, 
-              DatosPersonalesService, 
-              DatosRemotosService, 
+              DatosService, 
               { provide: MY_CONFIG_TOKEN, useValue: MY_CONFIG },
               provide(AuthHttp, { useFactory: (http) => {
                                     return new AuthHttp(new AuthConfig({noJwtError: true}), http);
@@ -139,7 +137,7 @@ export class DonemosApp {
   public cargarOpcionesMenuPrincipal(): void {    
     this.paginasMenu.push(new ItemMenuModel('list-box', 'Lista de solicitudes', ListaSolicitudesPage, true, false));
     this.paginasMenu.push(new ItemMenuModel('checkbox', 'Requisitos para donar', ErrorPage, false, false));
-    this.paginasMenu.push(new ItemMenuModel('person', 'Configurar perfil', EditarPreferenciasPage, false, false));
+    this.paginasMenu.push(new ItemMenuModel('person', 'Configurar preferencias', EditarPreferenciasPage, false, false));
     this.paginasMenu.push(new ItemMenuModel('information-circle', 'Sobre nosotros', ErrorPage, false, false));
   }
 

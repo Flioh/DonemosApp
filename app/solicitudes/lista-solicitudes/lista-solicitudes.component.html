@@ -94,11 +94,11 @@
 
 				<!-- Toggle para usar datos personales como filtro -->
 				<ion-item *ngIf="datosUsuarioObj">
-				    <ion-label>Usar los datos de mi perfil</ion-label>
+				    <ion-label>Usar mis preferencias</ion-label>
 				    <ion-toggle red [(ngModel)]="usarDatosPersonales" (ionChange)="usarDatosUsuario()" name="usarDatosPersonales"></ion-toggle>
 				</ion-item>
 				<ion-item *ngIf="!datosUsuarioObj">
-					<p>Si desea puede configurar sus datos en <strong>Configurar perfil</strong> para luego poder utilizarlos automáticamente como filtro de búsqueda.</p>
+					<p>Si desea puede configurar sus preferencias en <strong>Configurar preferencias</strong> para luego poder utilizarlas automáticamente como filtro de búsqueda.</p>
 				</ion-item>				
 
 			</form>

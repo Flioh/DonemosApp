@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import { Observable } from 'rxjs';
 
+import { SqlStorage, Storage } from 'ionic-angular';
+
+import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 
 import { SolicitudModel } from '../../solicitudes/solicitud.model';
@@ -14,18 +16,27 @@ import { CiudadModel } from '../../shared/models/ciudad.model';
 import { ProvinciaModel } from '../../shared/models/provincia.model';
 
 @Injectable()
-export class DatosRemotosService {
+export class DatosService {
 
+  // Listados
   private listaProvincias: Array<ProvinciaModel>;
   private listaCiudades: Array<CiudadModel>;
 
   private provinciaSeleccionadaID: number;
+
+  // Preferencias del usuario
+  private storage: Storage;
+  private datosUsuarioObj: any;
+  private datosUsuarioObserver: any;
+  public preferenciasUsuario: Observable<any>;
 
   // TODO: usar las propiedades del objeto de configuracion
   private apiEndPointProvincias : string = './provincias.json';
   private apiEndPointLocalidades: string = './localidades.json';
   private apiEndPointSolicitudes: string = './solicitudes.json';
 
+  // El modo debug sirve para imprimir en consola el tiempo que demora
+  // cada funcion en ejecutarse
   private modoDebug: boolean;
 
   constructor(public http: Http) {
@@ -33,15 +44,65 @@ export class DatosRemotosService {
     // Loguea en la consola cada vez que se inicia o finaliza un método
     this.modoDebug = false;
 
-    this.listaProvincias = [];
-    this.provinciaSeleccionadaID = null;
+    // Reseteamos los listados
+    this.listaProvincias = [];    
     this.listaCiudades = [];
+
+    this.provinciaSeleccionadaID = null;
+
+    // Inicializa los datos del usuario
+    this.datosUsuarioObj = null;
+
+    // Inicializamos el observable
+    this.datosUsuarioObserver = null;
+    this.preferenciasUsuario = Observable.create(observer => {
+        this.datosUsuarioObserver = observer;
+    });
+
+    // Inicializa el objeto storage
+    if(!this.storage) {
+      this.storage = new Storage(SqlStorage);  
+    }
   }
 
   // Método que devuelve true si el modo debug esta activado
   public modoDebugActivado(): boolean {
     return this.modoDebug;
   }
+
+  // Método que obtiene los datos del usuario
+	public getPreferenciasUsuario(): Promise<any> {
+		return new Promise((resolve)=> {
+
+			if(this.datosUsuarioObj === null) {
+				// Aún no se consulto si habia o no datos, por lo que hacemos la consulta
+				this.storage.get('datosUsuarioObj').then((preferenciasUsuario) => {
+					if(!preferenciasUsuario) {
+			          // No hay datos guardados, por lo que seteamos la variable en false
+			          this.datosUsuarioObj = false;			         
+			          resolve(this.datosUsuarioObj);
+			      } else {
+			          // Inicializamos los listados con la informacion del usuario
+			          this.datosUsuarioObj = JSON.parse(preferenciasUsuario);	          
+			          resolve(this.datosUsuarioObj);          
+			      }
+	  			});
+
+			} else {
+				// Devolver los datos guardados ya sea false o el objeto con la informacion
+				resolve(this.datosUsuarioObj);
+			}			
+		});
+	}
+
+  // Guarda las preferencias del usuario
+	public setPreferenciasUsuario(preferenciasUsuario: any): Promise<any> {
+		return this.storage.set('datosUsuarioObj', JSON.stringify(preferenciasUsuario))
+				.then(() => { 
+					this.datosUsuarioObj = preferenciasUsuario;
+					this.datosUsuarioObserver.next(preferenciasUsuario);
+				});
+	}
 
   // Obtiene el listado de factores sanguineos
   public getFactoresSanguineos(): Array<FactorSanguineoModel> {

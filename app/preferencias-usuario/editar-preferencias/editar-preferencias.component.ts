@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { LoadingController, NavController, ToastController } from 'ionic-angular';
 
 // Modelo principal
-import { PreferenciasModel } from '../preferencias.model';
+import { PreferenciasUsuarioModel } from '../preferencias-usuario.model';
 
 // Modelos compartidos
 import { CiudadModel } from '../../shared/models/ciudad.model';
@@ -11,8 +11,7 @@ import { GrupoSanguineoModel } from '../../shared/models/grupo-sanguineo.model';
 import { ProvinciaModel } from '../../shared/models/provincia.model';
 
 // Servicios
-import { DatosRemotosService } from '../../shared/services/datos-remotos.service';
-import { DatosPersonalesService } from '../../shared/services/datos-personales.service';
+import { DatosService } from '../../shared/services/datos.service';
 
 @Component({
 	templateUrl: 'build/preferencias-usuario/editar-preferencias/editar-preferencias.component.html',
@@ -24,37 +23,36 @@ export class EditarPreferenciasPage {
 	private listaProvincias: Array<ProvinciaModel>;
 	private listaCiudades: Array<CiudadModel>;
 
-	private preferencias: PreferenciasModel;
+	private preferenciasUsuario: PreferenciasUsuarioModel;
 	private datosPersonalesObj: any;
 
 	private storage: Storage;
 
 	constructor(private navCtrl: NavController,
 		private loadingCtrl: LoadingController, 
-		private datosRemotosService: DatosRemotosService,
-    	private datosPersonalesService: DatosPersonalesService,
+		private datosService: DatosService,
 		private toastCtrl: ToastController) {
 
-		if(this.datosRemotosService.modoDebugActivado()) {
+		if(this.datosService.modoDebugActivado()) {
         	console.time('DatosPersonalesPage / constructor');
       	}
 
-		this.preferencias = new PreferenciasModel();
+		this.preferenciasUsuario = new PreferenciasUsuarioModel();
 		
-		this.datosPersonalesService.getDatosUsuario().then((preferencias) => {
-			if(!preferencias) {
+		this.datosService.getPreferenciasUsuario().then((preferenciasUsuario) => {
+			if(!preferenciasUsuario) {
 				// No hay datos guardados, por lo que inicializamos los listados sin setear ninguna opcion por defecto
 				this.cargarListados(false);
 
-				if(this.datosRemotosService.modoDebugActivado()) {
+				if(this.datosService.modoDebugActivado()) {
           			console.timeEnd('DatosPersonalesPage / constructor');
         		}
 			} else {
 				// Inicializamos los listados con la informacion del usuario
-				this.datosPersonalesObj = preferencias;
+				this.datosPersonalesObj = preferenciasUsuario;
 				this.cargarListados(true);
 
-				if(this.datosRemotosService.modoDebugActivado()) {
+				if(this.datosService.modoDebugActivado()) {
           			console.timeEnd('DatosPersonalesPage / constructor');
        	 		}
 			}
@@ -64,7 +62,7 @@ export class EditarPreferenciasPage {
   	// Método que inicializa los listados de la pagina
   	public cargarListados(inicializarDatos: boolean) {
 
-  		if(this.datosRemotosService.modoDebugActivado()) {
+  		if(this.datosService.modoDebugActivado()) {
         	console.time('DatosPersonalesPage / cargarListados');
         }
 
@@ -77,9 +75,9 @@ export class EditarPreferenciasPage {
   		loadingPopup.present();
 
       	// Inicializamos todos los listados
-      	this.listaFactoresSanguineos = this.datosRemotosService.getFactoresSanguineos();
-      	this.listaGruposSanguineos = this.datosRemotosService.getGruposSanguineos();
-      	this.datosRemotosService.getListaProvincias().subscribe(result => {
+      	this.listaFactoresSanguineos = this.datosService.getFactoresSanguineos();
+      	this.listaGruposSanguineos = this.datosService.getGruposSanguineos();
+      	this.datosService.getListaProvincias().subscribe(result => {
 
       		if(result && result.length) {
       			this.listaProvincias = result;
@@ -90,14 +88,14 @@ export class EditarPreferenciasPage {
       				.then((result) => {
       					loadingPopup.dismiss();
 
-      					if(this.datosRemotosService.modoDebugActivado()) {
+      					if(this.datosService.modoDebugActivado()) {
         					console.timeEnd('DatosPersonalesPage / cargarListados');
         				}
       				});
       			} else {
       				loadingPopup.dismiss();
 
-      				if(this.datosRemotosService.modoDebugActivado()) {
+      				if(this.datosService.modoDebugActivado()) {
         				console.timeEnd('DatosPersonalesPage / cargarListados');
         			}	
       			}      		
@@ -109,23 +107,23 @@ export class EditarPreferenciasPage {
     public inicializarDatosUsuario(): Promise<boolean> {
     	return new Promise((resolve) => {
     		
-    		if(this.datosRemotosService.modoDebugActivado()) {
+    		if(this.datosService.modoDebugActivado()) {
         		console.time('DatosPersonalesPage / inicializarDatosUsuario');
         	}
 
     		// Obtenemos el indice de la provincia del usuario y la seleccionamos
     		let indiceProvincia = this.getIndicePorID(this.listaProvincias, this.datosPersonalesObj.provinciaID);    		
- 			  this.preferencias.setProvincia(this.listaProvincias[indiceProvincia]);
+ 			  this.preferenciasUsuario.setProvincia(this.listaProvincias[indiceProvincia]);
 
     		// Obtenemos el indice del grupo sanguineo del usuario y lo seleccionamos
     		let indiceGrupoSanguineo = this.getIndicePorID(this.listaGruposSanguineos, this.datosPersonalesObj.grupoSanguineoID);
- 			  this.preferencias.setGrupoSanguineo(this.listaGruposSanguineos[indiceGrupoSanguineo]);
+ 			  this.preferenciasUsuario.setGrupoSanguineo(this.listaGruposSanguineos[indiceGrupoSanguineo]);
 
     		// Obtenemos el indice del factor sanguineo del usuario y lo seleccionamos
     		let indiceFactorSanguineo = this.getIndicePorID(this.listaFactoresSanguineos, this.datosPersonalesObj.factorSanguineoID);
-    		this.preferencias.setFactorSanguineo(this.listaFactoresSanguineos[indiceFactorSanguineo]);
+    		this.preferenciasUsuario.setFactorSanguineo(this.listaFactoresSanguineos[indiceFactorSanguineo]);
 
-    		this.datosRemotosService.getListaCiudadesPorProvincia(this.preferencias.getProvincia().getId())
+    		this.datosService.getListaCiudadesPorProvincia(this.preferenciasUsuario.getProvincia().getId())
 	    		.subscribe(result => {
 			    	if(result && result.length){
 
@@ -134,12 +132,12 @@ export class EditarPreferenciasPage {
 
 			    		// Seleccionamos la ciudad del usuario
 			    		let indiceCiudad = this.getIndicePorID(this.listaCiudades, this.datosPersonalesObj.ciudadID);
-			    		this.preferencias.setCiudad(this.listaCiudades[indiceCiudad]);
+			    		this.preferenciasUsuario.setCiudad(this.listaCiudades[indiceCiudad]);
 
 			    		// Resolvemos la promesa
 			    		resolve(true);
 
-			    		if(this.datosRemotosService.modoDebugActivado()) {
+			    		if(this.datosService.modoDebugActivado()) {
         					console.timeEnd('DatosPersonalesPage / inicializarDatosUsuario');
         				}
 			      	}
@@ -152,7 +150,7 @@ export class EditarPreferenciasPage {
     // Método que obtiene el indice del elemento cuyo id es el pasado como parametro
     public getIndicePorID(listado: Array<any>, id: number): number {
     	
-    	if(this.datosRemotosService.modoDebugActivado()) {
+    	if(this.datosService.modoDebugActivado()) {
     		console.time('DatosPersonalesPage / getIndicePorID');
     	}
 
@@ -161,7 +159,7 @@ export class EditarPreferenciasPage {
     			return i;
     	}
 
-    	if(this.datosRemotosService.modoDebugActivado()) {
+    	if(this.datosService.modoDebugActivado()) {
     		console.timeEnd('DatosPersonalesPage / getIndicePorID');
     	}
 
@@ -171,7 +169,7 @@ export class EditarPreferenciasPage {
   	// Método que inicializa el listado de ciudades de una provincia
   	public inicializarCiudadesDeLaProvincia(): void {
 
-  		if(this.datosRemotosService.modoDebugActivado()) {
+  		if(this.datosService.modoDebugActivado()) {
     		console.time('DatosPersonalesPage / inicializarCiudadesDeLaProvincia');
     	}
 
@@ -182,7 +180,7 @@ export class EditarPreferenciasPage {
 	    // Muestra el mensaje de cargando ciudades
 	    loadingPopup.present();
 
-	    this.datosRemotosService.getListaCiudadesPorProvincia(this.preferencias.getProvincia().getId())
+	    this.datosService.getListaCiudadesPorProvincia(this.preferenciasUsuario.getProvincia().getId())
 	    .subscribe(result => {
 	    	if(result && result.length){
 	    		this.listaCiudades = result;
@@ -190,7 +188,7 @@ export class EditarPreferenciasPage {
 	          // Oculta el mensaje de espera
 	          loadingPopup.dismiss();
 
-	          if(this.datosRemotosService.modoDebugActivado()) {
+	          if(this.datosService.modoDebugActivado()) {
     			console.timeEnd('DatosPersonalesPage / inicializarCiudadesDeLaProvincia');
     		  }
 	      }
@@ -202,18 +200,18 @@ export class EditarPreferenciasPage {
 	// Método que guarda los cambios en la base de datos local
 	public guardarCambios(): void {
 
-		if(this.datosRemotosService.modoDebugActivado()) {
+		if(this.datosService.modoDebugActivado()) {
     		console.time('DatosPersonalesPage / guardarCambios');
     	}
 
 		let nuevosDatosUsuarioObj = {
-			provinciaID : this.preferencias.getProvincia().getId(),
-			ciudadID : this.preferencias.getCiudad().getId(),
-			grupoSanguineoID : this.preferencias.getGrupoSanguineo().getId(),
-			factorSanguineoID : this.preferencias.getFactorSanguineo().getId(),
+			provinciaID : this.preferenciasUsuario.getProvincia().getId(),
+			ciudadID : this.preferenciasUsuario.getCiudad().getId(),
+			grupoSanguineoID : this.preferenciasUsuario.getGrupoSanguineo().getId(),
+			factorSanguineoID : this.preferenciasUsuario.getFactorSanguineo().getId(),
 		};
 
-		this.datosPersonalesService.setDatosUsuario(nuevosDatosUsuarioObj)
+		this.datosService.setPreferenciasUsuario(nuevosDatosUsuarioObj)
     		.then(() => {
     			let toast = this.toastCtrl.create({
     		      message: 'Los datos se actualizaron correctamente.',
@@ -224,7 +222,7 @@ export class EditarPreferenciasPage {
     		    // Mostramos el mensaje al usuario
     		    toast.present();
 
-    		    if(this.datosRemotosService.modoDebugActivado()) {
+    		    if(this.datosService.modoDebugActivado()) {
         			console.timeEnd('DatosPersonalesPage / guardarCambios');
         		}
     		});
@@ -232,7 +230,7 @@ export class EditarPreferenciasPage {
 
 	// Método usado para debug, muestra el contenido del form en tiempo real
 	get contenidoDelFormulario(): string {
-		return JSON.stringify(this.preferencias, null, 2);
+		return JSON.stringify(this.preferenciasUsuario, null, 2);
 	}
 
 }

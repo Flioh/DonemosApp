@@ -7,9 +7,8 @@ import { MY_CONFIG, MY_CONFIG_TOKEN, ApplicationConfig } from '../../shared/app-
 
 // Servicios
 import { ConectividadService } from '../../shared/services/conectividad.service';
-import { DatosPersonalesService } from '../../shared/services/datos-personales.service';
 import { LocalizacionService } from '../../shared/services/localizacion.service';
-import { DatosRemotosService } from '../../shared/services/datos-remotos.service';
+import { DatosService } from '../../shared/services/datos.service';
 import { DonacionesHelper } from '../../shared/services/donaciones.service';
 
 // Modelos
@@ -39,12 +38,11 @@ export class DetallesSolicitudPage {
               private nav: NavController, 
               private navParams: NavParams, 
               private loadingCtrl: LoadingController, 
-              private datosRemotosService: DatosRemotosService,
-              private datosPersonalesService: DatosPersonalesService,
+              private datosService: DatosService,
               private localizacionService: LocalizacionService,
               @Inject(MY_CONFIG_TOKEN) config: ApplicationConfig) {
       
-      if(this.datosRemotosService.modoDebugActivado()) {
+      if(this.datosService.modoDebugActivado()) {
         console.time('DetallesSolicitudPage / constructor');
       }
 
@@ -56,7 +54,7 @@ export class DetallesSolicitudPage {
       // Crea el mapa
       this.obteneMapaUrl(config.staticMapUrl, config.staticMapKey, 400, 400, 16);
 
-      if(this.datosRemotosService.modoDebugActivado()) {
+      if(this.datosService.modoDebugActivado()) {
         console.timeEnd('DetallesSolicitudPage / constructor');
       }
   	}
@@ -84,7 +82,7 @@ export class DetallesSolicitudPage {
     // Método que obtiene los datos del usuario
     public obtenerDatosUsuario(){
 
-      if(this.datosRemotosService.modoDebugActivado()) {
+      if(this.datosService.modoDebugActivado()) {
         console.time('DetallesSolicitudPage / obtenerDatosUsuario');
       }
 
@@ -93,9 +91,9 @@ export class DetallesSolicitudPage {
       this.compatibleConUsuario = false;
 
       // Obtenemos los datos del servicio de datos del usuario
-      this.datosPersonalesService.getDatosUsuario().then((datosUsuario) => {
-        if(datosUsuario) {
-          let tipoSanguineoUsuario = DonacionesHelper.getDescripcion(datosUsuario.grupoSanguineoID, datosUsuario.factorSanguineoID);
+      this.datosService.getPreferenciasUsuario().then((preferenciasUsuario) => {
+        if(preferenciasUsuario) {
+          let tipoSanguineoUsuario = DonacionesHelper.getDescripcion(preferenciasUsuario.grupoSanguineoID, preferenciasUsuario.factorSanguineoID);
 
           // Si es compatible mostramos un mensjae informandolo
           this.compatibleConUsuario = this.tiposSanguineosSolicitud.indexOf(tipoSanguineoUsuario) > -1;
@@ -103,7 +101,7 @@ export class DetallesSolicitudPage {
           // Resaltamos el tipo sanguineo del usuario
           this.tiposSanguineosSolicitud = this.tiposSanguineosSolicitud.replace(tipoSanguineoUsuario, '<span class="marked">' + tipoSanguineoUsuario + '</span> ');
 
-          if(this.datosRemotosService.modoDebugActivado()) {
+          if(this.datosService.modoDebugActivado()) {
             console.timeEnd('DetallesSolicitudPage / obtenerDatosUsuario');
           }
         }

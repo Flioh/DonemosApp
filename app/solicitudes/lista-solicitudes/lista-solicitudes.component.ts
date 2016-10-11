@@ -3,8 +3,7 @@ import { Component } from '@angular/core';
 
 // Servicios
 import { DonacionesHelper } from '../../shared/services/donaciones.service';
-import { DatosPersonalesService } from '../../shared/services/datos-personales.service';
-import { DatosRemotosService } from '../../shared/services/datos-remotos.service';
+import { DatosService } from '../../shared/services/datos.service';
 
 // Directivas
 import { ResumenSolicitudDirective } from '../../solicitudes/resumen-solicitud/resumen-solicitud.directive';
@@ -60,17 +59,16 @@ export class ListaSolicitudesPage extends BasePage {
               private nav: NavController, 
               private menuCtrl: MenuController,
               private loadingCtrl: LoadingController,
-              private alertCtrl: AlertController, 
-              private datosPersonalesService: DatosPersonalesService,
-              eventsCtrl: Events,
-              datosRemotosService: DatosRemotosService) 
+              private alertCtrl: AlertController,               
+              private datosService: DatosService,
+              eventsCtrl: Events) 
   {    
 
     // Inicializa la clase padre manualmente debido a un issue de angular
     // https://github.com/angular/angular/issues/5155
-    super(eventsCtrl, datosRemotosService);
+    super(eventsCtrl);
 
-    if(this.datosRemotosService.modoDebugActivado()) {
+    if(this.datosService.modoDebugActivado()) {
       console.time('ListaSolicitudesPage / constructor');
     }    
 
@@ -97,10 +95,10 @@ export class ListaSolicitudesPage extends BasePage {
 
     // Cuando cambien los datos del usuario, refrescamos el listado de solicitudes para
     // resaltar el nuevo tipo sanguineo y no el anterior
-    this.datosPersonalesService.datosUsuario.subscribe((datosUsuario) => {
+    this.datosService.preferenciasUsuario.subscribe((preferenciasUsuario) => {
 
       // Actualizamos la informacion del usuario
-      this.datosUsuarioObj = datosUsuario;
+      this.datosUsuarioObj = preferenciasUsuario;
 
       // Actualizamos la descripcion que se muestra en cada solicitud del listado
       this.actualizarDescripcionTiposSanguineos();
@@ -109,7 +107,7 @@ export class ListaSolicitudesPage extends BasePage {
     // Cargamos las ultimas solicitudes
     this.buscarSolicitudes();
 
-    if(this.datosRemotosService.modoDebugActivado()) {
+    if(this.datosService.modoDebugActivado()) {
       console.timeEnd('ListaSolicitudesPage / constructor');
     }
   }
@@ -117,7 +115,7 @@ export class ListaSolicitudesPage extends BasePage {
   // Método que obtiene las solicitudes del servidor
   public buscarSolicitudes(): void {
 
-    if(this.datosRemotosService.modoDebugActivado()) {
+    if(this.datosService.modoDebugActivado()) {
       console.time('ListaSolicitudesPage / buscarSolicitudes');
     }
 
@@ -132,14 +130,14 @@ export class ListaSolicitudesPage extends BasePage {
     loadingPopup.present();
 
 
-    this.datosPersonalesService.getDatosUsuario().then((datosUsuario) => {
-        if(datosUsuario) {          
+    this.datosService.getPreferenciasUsuario().then((preferenciasUsuario) => {
+        if(preferenciasUsuario) {          
           // Inicializamos los listados con la informacion del usuario
-          this.datosUsuarioObj = datosUsuario;
+          this.datosUsuarioObj = preferenciasUsuario;
         }
 
         // Obtenemos las solicitudes del servidor
-        this.datosRemotosService.getSolicitudes().subscribe((solicitudesObj) => { 
+        this.datosService.getSolicitudes().subscribe((solicitudesObj) => { 
           for(let i = 0; i < solicitudesObj.length; i++) {
             let solicitud = new SolicitudModel(solicitudesObj[i]);
             let descripcionTiposSanguineos = this.obtenerInformacionTiposSanguineos(solicitud);
@@ -151,7 +149,7 @@ export class ListaSolicitudesPage extends BasePage {
           // Oculta el mensaje de espera
           loadingPopup.dismiss();
 
-          if(this.datosRemotosService.modoDebugActivado()) {
+          if(this.datosService.modoDebugActivado()) {
             console.timeEnd('ListaSolicitudesPage / buscarSolicitudes');
           }
 
@@ -173,7 +171,7 @@ export class ListaSolicitudesPage extends BasePage {
   // Inicializa los listados de la pagina
   public inicializarFiltros() {
 
-    if(this.datosRemotosService.modoDebugActivado()) {
+    if(this.datosService.modoDebugActivado()) {
       console.time('ListaSolicitudesPage / inicializarFiltros');
     }
 
@@ -186,9 +184,9 @@ export class ListaSolicitudesPage extends BasePage {
       loadingPopup.present();
 
       // Inicializamos todos los listados
-      this.listaFactoresSanguineos = this.datosRemotosService.getFactoresSanguineos();
-      this.listaGruposSanguineos = this.datosRemotosService.getGruposSanguineos();
-      this.datosRemotosService.getListaProvincias().subscribe(result => {
+      this.listaFactoresSanguineos = this.datosService.getFactoresSanguineos();
+      this.listaGruposSanguineos = this.datosService.getGruposSanguineos();
+      this.datosService.getListaProvincias().subscribe(result => {
         if(result && result.length) {
           this.listaProvincias = result;
           
@@ -198,7 +196,7 @@ export class ListaSolicitudesPage extends BasePage {
           // Ocultamos el mensaje de espera
           loadingPopup.dismiss();
 
-          if(this.datosRemotosService.modoDebugActivado()) {
+          if(this.datosService.modoDebugActivado()) {
             console.timeEnd('ListaSolicitudesPage / inicializarFiltros');
           }
         } 
@@ -209,7 +207,7 @@ export class ListaSolicitudesPage extends BasePage {
   // Resetea los filtros de busqueda
   public borrarFiltros() {
 
-    if(this.datosRemotosService.modoDebugActivado()) {
+    if(this.datosService.modoDebugActivado()) {
       console.time('ListaSolicitudesPage / borrarFiltros');
     }
 
@@ -220,7 +218,7 @@ export class ListaSolicitudesPage extends BasePage {
     this.listaCiudades = null;
     this.usarDatosPersonales = false;
 
-    if(this.datosRemotosService.modoDebugActivado()) {
+    if(this.datosService.modoDebugActivado()) {
       console.timeEnd('ListaSolicitudesPage / borrarFiltros');
     }
   }
@@ -230,7 +228,7 @@ export class ListaSolicitudesPage extends BasePage {
 
     if(this.usarDatosPersonales) {
 
-      if(this.datosRemotosService.modoDebugActivado()) {
+      if(this.datosService.modoDebugActivado()) {
         console.time('ListaSolicitudesPage / usarDatosUsuario');
       }
 
@@ -246,7 +244,7 @@ export class ListaSolicitudesPage extends BasePage {
         // Ocultamos el mensaje de espera
         loadingPopup.dismiss();
 
-        if(this.datosRemotosService.modoDebugActivado()) {
+        if(this.datosService.modoDebugActivado()) {
           console.timeEnd('ListaSolicitudesPage / usarDatosUsuario');
         }
 
@@ -265,7 +263,7 @@ export class ListaSolicitudesPage extends BasePage {
   // Método que obtiene la informacion de los tipos sanguineos buscados, resaltando el del usuario
   public obtenerInformacionTiposSanguineos(unaSolicitud: SolicitudModel): string {
 
-      if(this.datosRemotosService.modoDebugActivado()) {
+      if(this.datosService.modoDebugActivado()) {
         console.time('ListaSolicitudesPage / obtenerInformacionTiposSanguineos');
       }
 
@@ -284,7 +282,7 @@ export class ListaSolicitudesPage extends BasePage {
         result = result.replace(this.tipoSanguineoUsuario, '<span class="marked">' + this.tipoSanguineoUsuario + '</span> ');
       }
 
-      if(this.datosRemotosService.modoDebugActivado()) {
+      if(this.datosService.modoDebugActivado()) {
         console.timeEnd('ListaSolicitudesPage / obtenerInformacionTiposSanguineos');
       }
 
@@ -295,7 +293,7 @@ export class ListaSolicitudesPage extends BasePage {
   public inicializarDatosUsuario(): Promise<boolean> {
     return new Promise((resolve) => {
 
-        if(this.datosRemotosService.modoDebugActivado()) {
+        if(this.datosService.modoDebugActivado()) {
           console.time('ListaSolicitudesPage / inicializarDatosUsuario');
         }
 
@@ -313,7 +311,7 @@ export class ListaSolicitudesPage extends BasePage {
 
         if(this.provinciaSeleccionada) {
 
-          this.datosRemotosService.getListaCiudadesPorProvincia(this.provinciaSeleccionada.getId())
+          this.datosService.getListaCiudadesPorProvincia(this.provinciaSeleccionada.getId())
             .subscribe(result => {
               if(result && result.length){
 
@@ -324,7 +322,7 @@ export class ListaSolicitudesPage extends BasePage {
                   let indiceCiudad = this.getIndicePorID(this.listaCiudades, this.datosUsuarioObj.ciudadID);
                   this.ciudadSeleccionada = this.listaCiudades[indiceCiudad];
 
-                  if(this.datosRemotosService.modoDebugActivado()) {
+                  if(this.datosService.modoDebugActivado()) {
                     console.timeEnd('ListaSolicitudesPage / inicializarDatosUsuario');
                   } 
 
@@ -341,7 +339,7 @@ export class ListaSolicitudesPage extends BasePage {
   // Método que obtiene el indice del elemento cuyo id es el pasado como parametro
   public getIndicePorID(listado: Array<any>, id: number): number {
 
-    if(this.datosRemotosService.modoDebugActivado()) {
+    if(this.datosService.modoDebugActivado()) {
       console.time('ListaSolicitudesPage / getIndicePorID');
     }
 
@@ -350,7 +348,7 @@ export class ListaSolicitudesPage extends BasePage {
         return i;
     }
 
-    if(this.datosRemotosService.modoDebugActivado()) {
+    if(this.datosService.modoDebugActivado()) {
       console.timeEnd('ListaSolicitudesPage / getIndicePorID');
     }
 
@@ -360,7 +358,7 @@ export class ListaSolicitudesPage extends BasePage {
   // Método que inicializa el listado de ciudades de una provincia
   public inicializarCiudadesDeLaProvincia(nombreCiudad: string): void {
 
-    if(this.datosRemotosService.modoDebugActivado()) {
+    if(this.datosService.modoDebugActivado()) {
       console.time('ListaSolicitudesPage / inicializarCiudadesDeLaProvincia');
     }
 
@@ -371,7 +369,7 @@ export class ListaSolicitudesPage extends BasePage {
     // Muestra el mensaje de cargando ciudades
     loadingPopup.present();
 
-    this.datosRemotosService.getListaCiudadesPorProvincia(this.provinciaSeleccionada.getId())
+    this.datosService.getListaCiudadesPorProvincia(this.provinciaSeleccionada.getId())
       .subscribe(result => {
         if(result && result.length){
           this.listaCiudades = result;
@@ -379,7 +377,7 @@ export class ListaSolicitudesPage extends BasePage {
           // Oculta el mensaje de espera
           loadingPopup.dismiss();
 
-          if(this.datosRemotosService.modoDebugActivado()) {
+          if(this.datosService.modoDebugActivado()) {
             console.timeEnd('ListaSolicitudesPage / inicializarCiudadesDeLaProvincia');
           }
         }
