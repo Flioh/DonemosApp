@@ -1,3 +1,4 @@
+// Referencias de Angular
 import { Directive, ElementRef, Output, EventEmitter } from '@angular/core';
 
 // Declaracion para evitar warnings de Typescript

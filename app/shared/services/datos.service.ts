@@ -1,19 +1,24 @@
-import { Injectable } from '@angular/core';
+// Referencias de angular
+import { Injectable, Inject } from '@angular/core';
 import { Http } from '@angular/http';
 
+// Referencias de Ionic
 import { SqlStorage, Storage } from 'ionic-angular';
 
+// Referencias de RxJS
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 
+// Modelos a usar
 import { SolicitudModel } from '../../solicitudes/solicitud.model';
-
 import { FactorSanguineoHelper, GrupoSanguineoHelper, FactorSanguineoEnum, GrupoSanguineoEnum  } from './donaciones.service';
-
 import { FactorSanguineoModel } from '../../shared/models/factor-sanguineo.model';
 import { GrupoSanguineoModel } from '../../shared/models/grupo-sanguineo.model';
 import { CiudadModel } from '../../shared/models/ciudad.model';
 import { ProvinciaModel } from '../../shared/models/provincia.model';
+
+// Objeto de configuracion
+import { AppConfig, ApplicationConfig } from '../../shared/app-config';
 
 @Injectable()
 export class DatosService {
@@ -30,19 +35,24 @@ export class DatosService {
   private datosUsuarioObserver: any;
   public preferenciasUsuario: Observable<any>;
 
-  // TODO: usar las propiedades del objeto de configuracion
-  private apiEndPointProvincias : string = './provincias.json';
-  private apiEndPointLocalidades: string = './localidades.json';
-  private apiEndPointSolicitudes: string = './solicitudes.json';
+  // URL de las APIs
+  private apiEndPointProvincias : string;
+  private apiEndPointLocalidades: string;
+  private apiEndPointSolicitudes: string;
 
   // El modo debug sirve para imprimir en consola el tiempo que demora
   // cada funcion en ejecutarse
   private modoDebug: boolean;
 
-  constructor(public http: Http) {
+  constructor(public http: Http, public config: AppConfig) {
 
     // Loguea en la consola cada vez que se inicia o finaliza un método
     this.modoDebug = false;
+
+    // Obtenemos las API desde el archivo de configuracion
+    this.apiEndPointLocalidades = config.apiEndPointLocalidades;
+    this.apiEndPointProvincias = config.apiEndPointProvincias;
+    this.apiEndPointSolicitudes = config.apiEndPointSolicitudes;
 
     // Reseteamos los listados
     this.listaProvincias = [];    
@@ -130,27 +140,24 @@ export class DatosService {
   public getSolicitudes(): Observable<Array<SolicitudModel>> {
 
     return this.http.get(this.apiEndPointSolicitudes)
-    .delay(1000) // Simulamos un retardo al buscar las solicitudes
-    .map(res => res.json());
-
+      .delay(1000) // Simulamos un retardo al buscar las solicitudes
+      .map(res => res.json());
   }
 
   // Obtiene el listado de provincias
   public getListaProvincias(): Observable<Array<ProvinciaModel>>{
-
     return this.http.get(this.apiEndPointProvincias)
-    .delay(1000) // Simulamos un retardo al buscar las solicitudes
-    .map(res => res.json())
-    .map(listadoProvincias => {
-      this.listaProvincias = [];
+      .delay(1000) // Simulamos un retardo al buscar las solicitudes
+      .map(res => res.json())
+      .map(listadoProvincias => {
+        this.listaProvincias = [];
 
-      for(let i=0; i<listadoProvincias.length; i++) {
-        this.listaProvincias.push(new ProvinciaModel(listadoProvincias[i].id, listadoProvincias[i].nombre));
-      }
+        for(let i=0; i<listadoProvincias.length; i++) {
+          this.listaProvincias.push(new ProvinciaModel(listadoProvincias[i].id, listadoProvincias[i].nombre));
+        }
 
-      return this.listaProvincias;
-    });
-
+        return this.listaProvincias;
+      });
   }
 
   // Obtiene el listado de ciudades de la provincia pasada como parametro
@@ -167,13 +174,13 @@ export class DatosService {
     this.provinciaSeleccionadaID = provinciaID;
 
     return this.http.get(this.apiEndPointLocalidades)
-    .delay(1000) // Simulamos un retardo al buscar las solicitudes
-    .map(res => res.json().filter(unaCiudad => unaCiudad.provincia == provinciaID))
-    .map(listadoCiudades => {
-      for(let i=0; i<listadoCiudades.length; i++) {
-        this.listaCiudades.push(new CiudadModel(listadoCiudades[i].id, listadoCiudades[i].nombre));
-      }
-      return this.listaCiudades;
-    });
+      .delay(1000) // Simulamos un retardo al buscar las solicitudes
+      .map(res => res.json().filter(unaCiudad => unaCiudad.provincia == provinciaID))
+      .map(listadoCiudades => {
+        for(let i=0; i<listadoCiudades.length; i++) {
+          this.listaCiudades.push(new CiudadModel(listadoCiudades[i].id, listadoCiudades[i].nombre));
+        }
+        return this.listaCiudades;
+      });
   }
 }

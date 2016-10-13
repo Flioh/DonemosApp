@@ -1,8 +1,11 @@
+// Referencias de Angular
 import { Component, Injectable } from '@angular/core';
 import { beforeEachProviders, beforeEach, it, describe, expect, inject } from '@angular/core/testing';
 
+// Referencias de Ionic
 import { NavController } from 'ionic-angular';
 
+// Modelo principal
 import { ItemMenuModel } from './item-menu.model';
 
 // Mock de una pagina
@@ -54,6 +57,10 @@ describe('ItemMenuModel', () => {
 		expect(menuItemModel.getEsRoot).toBeDefined();
 	}));
 
+	it('Debe tener un metodo getRequiereLogin()', inject([ItemMenuModel], (menuItemModel: ItemMenuModelMock) => {
+		expect(menuItemModel.getRequiereLogin).toBeDefined();
+	}));
+
 	
 
 
@@ -83,5 +90,9 @@ describe('ItemMenuModel', () => {
 
 	it('El metodo getEsRoot() debe devolver true', inject([ItemMenuModel], (menuItemModel: ItemMenuModelMock) => {
 		expect(menuItemModel.getEsRoot()).toBe(true);
+	}));
+
+	it('El metodo getRequiereLogin() debe devolver true', inject([ItemMenuModel], (menuItemModel: ItemMenuModelMock) => {
+		expect(menuItemModel.getRequiereLogin()).toBe(true);
 	}));
 });

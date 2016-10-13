@@ -1,5 +1,8 @@
-import { AlertController, LoadingController, NavController, Events, Storage, Platform, MenuController } from 'ionic-angular';
+// Referencias de Angular
 import { Component } from '@angular/core';
+
+// Referencias de Ionic
+import { AlertController, LoadingController, NavController, Events, Storage, Platform, MenuController } from 'ionic-angular';
 
 // Servicios
 import { DonacionesHelper } from '../../shared/services/donaciones.service';
@@ -11,7 +14,6 @@ import { ResumenSolicitudDirective } from '../../solicitudes/resumen-solicitud.d
 // Modelos
 import { SolicitudModel } from '../solicitud.model';
 import { ResumenSolicitudModel } from '../resumen-solicitud.model';
-
 import { CiudadModel } from '../../shared/models/ciudad.model';
 import { ProvinciaModel } from '../../shared/models/provincia.model';
 import { FactorSanguineoModel } from '../../shared/models/factor-sanguineo.model';

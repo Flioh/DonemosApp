@@ -1,12 +1,19 @@
+// Referencias de Angular
 import { Injectable } from '@angular/core';
 import { beforeEachProviders, beforeEach, it, describe, expect, inject } from '@angular/core/testing';
 
+// Servicios principales
 import { FactorSanguineoEnum, GrupoSanguineoEnum } from '../services/donaciones.service';
 import { FactorSanguineoHelper, GrupoSanguineoHelper, DonacionesHelper } from '../services/donaciones.service';
 
 describe('FactorSanguineoEnum', () => {
 
-	var grupoSanguineoMock = FactorSanguineoEnum;
+	// Mock a testear
+	let grupoSanguineoMock;
+
+	beforeEach(function(){
+		grupoSanguineoMock = FactorSanguineoEnum;
+	});
 
 	it('Debe existir un enumerado con los factores sanguineos', () => {
 		expect(grupoSanguineoMock).toBeDefined();
@@ -29,7 +36,12 @@ describe('FactorSanguineoEnum', () => {
 
 describe ('GrupoSanguineoEnum', () => {
 
-	var grupoSanguineoMock = GrupoSanguineoEnum;
+	// Mock a testear
+	let grupoSanguineoMock;
+
+	beforeEach(function(){
+		grupoSanguineoMock = GrupoSanguineoEnum;
+	});
 
 	it('Debe existir un enumerado con los grupos sanguineos', () => {
 		expect(grupoSanguineoMock).toBeDefined();
@@ -68,8 +80,14 @@ describe ('GrupoSanguineoEnum', () => {
 
 describe('FactorSanguineoHelperEnum', () => {
 
-	let factorSanguineoMock = FactorSanguineoEnum;
-	let factorSanguineoHelperMock = FactorSanguineoHelper;
+	// Mocks a testear
+	let factorSanguineoMock;
+	let factorSanguineoHelperMock;
+
+	beforeEach(function(){
+		factorSanguineoMock = FactorSanguineoEnum;
+		factorSanguineoHelperMock = FactorSanguineoHelper;
+	});
 
 	it('Debe estar definido', () => {
 		expect(factorSanguineoHelperMock).toBeDefined();
@@ -96,8 +114,14 @@ describe('FactorSanguineoHelperEnum', () => {
 
 describe('GrupoSanguineoHelperEnum', () => {
 
-	let grupoSanguineoMock = GrupoSanguineoEnum;
-	let grupoSanguineoHelperMock = GrupoSanguineoHelper;
+	// Mocks a testear
+	let grupoSanguineoMock;
+	let grupoSanguineoHelperMock;
+
+	beforeEach(function(){
+		grupoSanguineoMock = GrupoSanguineoEnum;
+		grupoSanguineoHelperMock = GrupoSanguineoHelper;
+	});
 
 	it('Debe estar definido', () => {
 		expect(grupoSanguineoHelperMock).toBeDefined();
@@ -117,7 +141,12 @@ describe('GrupoSanguineoHelperEnum', () => {
 
 describe('DonacionesHelper', () => {
 
-	let donacionesHelperMock = DonacionesHelper;
+	// Mock a testear
+	let donacionesHelperMock;
+
+	beforeEach(function(){
+		donacionesHelperMock = DonacionesHelper;
+	});
 
 	it('Debe estar definido', () => {
 		expect(donacionesHelperMock).toBeDefined();

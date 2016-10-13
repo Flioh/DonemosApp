@@ -1,25 +1,30 @@
+// Referecias de Angular
 import { Injectable, provide } from '@angular/core';
 import { BaseRequestOptions, Response, ResponseOptions, Http } from '@angular/http';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 import { beforeEachProviders, beforeEach, it, describe, expect, inject, async } from '@angular/core/testing';
 
+// Servicio principal
 import { DatosService } from './datos.service';
 
-/* Modelos a usar en los tests */
+// Modelos a usar en los tests
 import { SolicitudModel } from '../../solicitudes/solicitud.model';
-
 import { ProvinciaModel } from '../../shared/models/provincia.model';
 import { CiudadModel } from '../..//shared/models/ciudad.model';
 import { GrupoSanguineoModel } from '../../shared/models/grupo-sanguineo.model';
 import { FactorSanguineoModel } from '../../shared/models/factor-sanguineo.model';
-
 import { GrupoSanguineoEnum, FactorSanguineoEnum } from '../../shared/services/donaciones.service';
 import { GrupoSanguineoHelper, FactorSanguineoHelper } from '../../shared/services/donaciones.service';
 
+// Objeto de configuracion
+import { AppConfig, ApplicationConfig } from '../../shared/app-config';
+
 describe('DatosService', () => {
 
+	// Antes de cada test inicializamos el Injector con las dependencias necesarias
 	beforeEachProviders(() => [
 	  	DatosService,
+			AppConfig,
 	  	BaseRequestOptions,
 	  	MockBackend,
 
@@ -33,17 +38,11 @@ describe('DatosService', () => {
 	]);
 
 	// Mock para usar como respuesta en las llamadas a los servicios
-	let provinciasMock = [
-		{ "id" : 1, "nombre": "Provincia 1"},
-		{ "id" : 2, "nombre": "Provincia 2"},
-		{ "id" : 3, "nombre": "Provincia 3"}];
+	let provinciasMock = [{ "id" : 1, "nombre": "Provincia 1"},{ "id" : 2, "nombre": "Provincia 2"},{ "id" : 3, "nombre": "Provincia 3"}];
+	
+	let ciudadesMock = [{ "id": 1, "provinciaID": 1, "nombre": "Localidad 1"},{ "id": 2, "provinciaID": 1, "nombre": "Localidad 2"},{ "id": 3, "provinciaID": 1, "nombre": "Localidad 3"}];
 
-	let ciudadesMock = [
-		{ "id": 1, "provinciaID": 1, "nombre": "Localidad 1"},
-      	{ "id": 2, "provinciaID": 1, "nombre": "Localidad 2"},
-      	{ "id": 3, "provinciaID": 1, "nombre": "Localidad 3"}];
-
-    let solicitudesMock = [
+	let solicitudesMock = [
 		{
 			"solicitudID" : 1,
 			"usuarioID": 1,
@@ -98,19 +97,20 @@ describe('DatosService', () => {
 
 	let gruposSanguineosMock = [
 		new GrupoSanguineoModel(GrupoSanguineoEnum.Cero, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.Cero)),
-    	new GrupoSanguineoModel(GrupoSanguineoEnum.A, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.A)),
-    	new GrupoSanguineoModel(GrupoSanguineoEnum.AB, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.AB)),
-    	new GrupoSanguineoModel(GrupoSanguineoEnum.B, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.B))
+		new GrupoSanguineoModel(GrupoSanguineoEnum.A, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.A)),
+		new GrupoSanguineoModel(GrupoSanguineoEnum.AB, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.AB)),
+		new GrupoSanguineoModel(GrupoSanguineoEnum.B, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.B))
 	];
 
 	let factoresSanguineosMock = [
 		new FactorSanguineoModel(FactorSanguineoEnum.RhPositivo, FactorSanguineoHelper.getDescripcion(FactorSanguineoEnum.RhPositivo)),
-    	new FactorSanguineoModel(FactorSanguineoEnum.RhPositivo, FactorSanguineoHelper.getDescripcion(FactorSanguineoEnum.RhNegativo))
+		new FactorSanguineoModel(FactorSanguineoEnum.RhPositivo, FactorSanguineoHelper.getDescripcion(FactorSanguineoEnum.RhNegativo))
 	];
 
 	// Hacemos el mock de las respuestas de las solicitudes
 	beforeEach(inject([MockBackend], (backend: MockBackend) => {
 	  	backend.connections.subscribe((c: MockConnection) => {
+				
 	  		// Usamos la URL del request para ver que array devolver en la respuesta
 	  		if(c.request.url.indexOf("solicitud") > -1) {
 	  			// Enviamos el array de solicitudes en la respuesta

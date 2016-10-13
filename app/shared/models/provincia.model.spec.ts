@@ -1,8 +1,11 @@
+// Referencias de Angular
 import { Component, Injectable } from '@angular/core';
 import { beforeEachProviders, beforeEach, it, describe, expect, inject } from '@angular/core/testing';
 
+// Referencias de Ionic
 import { NavController } from 'ionic-angular';
 
+// Modelo principal
 import { ProvinciaModel } from './provincia.model';
 
 // Mock de la clase ProvinciaModel
@@ -44,7 +47,7 @@ describe('ProvinciaModel', () => {
 
 
 
-	// Tests para asegurar que los metodos get deuelven valores correctamente
+	// Tests para asegurar que los metodos get devuelven valores correctamente
 	// ----------------------------------------------------------------------
 	it('Debe tener un metodo getId() que devuelva el ID de la provincia correctamente', inject([ProvinciaModel], (provinciaModel: ProvinciaModelMock) => {		
 		expect(provinciaModel.getId()).toBe(1);

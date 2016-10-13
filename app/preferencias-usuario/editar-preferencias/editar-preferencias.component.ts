@@ -1,4 +1,7 @@
+// Referencias de Angular
 import { Component } from '@angular/core';
+
+// Referencias de Ionic
 import { LoadingController, NavController, ToastController } from 'ionic-angular';
 
 // Modelo principal
@@ -13,27 +16,33 @@ import { ProvinciaModel } from '../../shared/models/provincia.model';
 // Servicios
 import { DatosService } from '../../shared/services/datos.service';
 
+// Objeto de configuracion
+import { AppConfig, ApplicationConfig } from '../../shared/app-config';
+
 @Component({
 	templateUrl: 'build/preferencias-usuario/editar-preferencias/editar-preferencias.component.html',
 })
 export class EditarPreferenciasPage {
 
+	// Listados de la pagina
 	private listaGruposSanguineos: Array<GrupoSanguineoModel>;
 	private listaFactoresSanguineos: Array<FactorSanguineoModel>;
 	private listaProvincias: Array<ProvinciaModel>;
 	private listaCiudades: Array<CiudadModel>;
 
+	// Preferencias del usuario
 	private preferenciasUsuario: PreferenciasUsuarioModel;
 	private datosPersonalesObj: any;
 
 	private storage: Storage;
 
 	constructor(private navCtrl: NavController,
-		private loadingCtrl: LoadingController, 
-		private datosService: DatosService,
-		private toastCtrl: ToastController) {
+				private loadingCtrl: LoadingController, 
+				private datosService: DatosService,
+				private toastCtrl: ToastController,
+				private config: AppConfig) {
 
-		if(this.datosService.modoDebugActivado()) {
+		if(this.config.modoDebug) {
         	console.time('DatosPersonalesPage / constructor');
       	}
 
@@ -44,7 +53,7 @@ export class EditarPreferenciasPage {
 				// No hay datos guardados, por lo que inicializamos los listados sin setear ninguna opcion por defecto
 				this.cargarListados(false);
 
-				if(this.datosService.modoDebugActivado()) {
+				if(this.config.modoDebug) {
           			console.timeEnd('DatosPersonalesPage / constructor');
         		}
 			} else {
@@ -52,7 +61,7 @@ export class EditarPreferenciasPage {
 				this.datosPersonalesObj = preferenciasUsuario;
 				this.cargarListados(true);
 
-				if(this.datosService.modoDebugActivado()) {
+				if(this.config.modoDebug) {
           			console.timeEnd('DatosPersonalesPage / constructor');
        	 		}
 			}
@@ -62,7 +71,7 @@ export class EditarPreferenciasPage {
   	// Método que inicializa los listados de la pagina
   	public cargarListados(inicializarDatos: boolean) {
 
-  		if(this.datosService.modoDebugActivado()) {
+  		if(this.config.modoDebug) {
         	console.time('DatosPersonalesPage / cargarListados');
         }
 
@@ -88,14 +97,14 @@ export class EditarPreferenciasPage {
       				.then((result) => {
       					loadingPopup.dismiss();
 
-      					if(this.datosService.modoDebugActivado()) {
+      					if(this.config.modoDebug) {
         					console.timeEnd('DatosPersonalesPage / cargarListados');
         				}
       				});
       			} else {
       				loadingPopup.dismiss();
 
-      				if(this.datosService.modoDebugActivado()) {
+      				if(this.config.modoDebug) {
         				console.timeEnd('DatosPersonalesPage / cargarListados');
         			}	
       			}      		
@@ -107,7 +116,7 @@ export class EditarPreferenciasPage {
     public inicializarDatosUsuario(): Promise<boolean> {
     	return new Promise((resolve) => {
     		
-    		if(this.datosService.modoDebugActivado()) {
+    		if(this.config.modoDebug) {
         		console.time('DatosPersonalesPage / inicializarDatosUsuario');
         	}
 
@@ -137,7 +146,7 @@ export class EditarPreferenciasPage {
 			    		// Resolvemos la promesa
 			    		resolve(true);
 
-			    		if(this.datosService.modoDebugActivado()) {
+			    		if(this.config.modoDebug) {
         					console.timeEnd('DatosPersonalesPage / inicializarDatosUsuario');
         				}
 			      	}
@@ -150,7 +159,7 @@ export class EditarPreferenciasPage {
     // Método que obtiene el indice del elemento cuyo id es el pasado como parametro
     public getIndicePorID(listado: Array<any>, id: number): number {
     	
-    	if(this.datosService.modoDebugActivado()) {
+    	if(this.config.modoDebug) {
     		console.time('DatosPersonalesPage / getIndicePorID');
     	}
 
@@ -159,7 +168,7 @@ export class EditarPreferenciasPage {
     			return i;
     	}
 
-    	if(this.datosService.modoDebugActivado()) {
+    	if(this.config.modoDebug) {
     		console.timeEnd('DatosPersonalesPage / getIndicePorID');
     	}
 
@@ -169,7 +178,7 @@ export class EditarPreferenciasPage {
   	// Método que inicializa el listado de ciudades de una provincia
   	public inicializarCiudadesDeLaProvincia(): void {
 
-  		if(this.datosService.modoDebugActivado()) {
+  		if(this.config.modoDebug) {
     		console.time('DatosPersonalesPage / inicializarCiudadesDeLaProvincia');
     	}
 
@@ -188,7 +197,7 @@ export class EditarPreferenciasPage {
 	          // Oculta el mensaje de espera
 	          loadingPopup.dismiss();
 
-	          if(this.datosService.modoDebugActivado()) {
+	          if(this.config.modoDebug) {
     			console.timeEnd('DatosPersonalesPage / inicializarCiudadesDeLaProvincia');
     		  }
 	      }
@@ -200,7 +209,7 @@ export class EditarPreferenciasPage {
 	// Método que guarda los cambios en la base de datos local
 	public guardarCambios(): void {
 
-		if(this.datosService.modoDebugActivado()) {
+		if(this.config.modoDebug) {
     		console.time('DatosPersonalesPage / guardarCambios');
     	}
 
@@ -222,7 +231,7 @@ export class EditarPreferenciasPage {
     		    // Mostramos el mensaje al usuario
     		    toast.present();
 
-    		    if(this.datosService.modoDebugActivado()) {
+    		    if(this.config.modoDebug) {
         			console.timeEnd('DatosPersonalesPage / guardarCambios');
         		}
     		});

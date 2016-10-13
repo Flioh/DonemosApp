@@ -3,7 +3,7 @@ import { Component, Inject } from '@angular/core';
 import { LoadingController, NavController, NavParams, Platform } from 'ionic-angular';
 
 // Objeto de configuracion
-import { MY_CONFIG, MY_CONFIG_TOKEN, ApplicationConfig } from '../../shared/app-config';
+import { AppConfig, ApplicationConfig } from '../../shared/app-config';
 
 // Servicios
 import { ConectividadService } from '../../shared/services/conectividad.service';
@@ -40,7 +40,7 @@ export class DetallesSolicitudPage {
               private loadingCtrl: LoadingController, 
               private datosService: DatosService,
               private localizacionService: LocalizacionService,
-              @Inject(MY_CONFIG_TOKEN) config: ApplicationConfig) {
+              private config: AppConfig) {
       
       if(this.datosService.modoDebugActivado()) {
         console.time('DetallesSolicitudPage / constructor');

@@ -8,7 +8,6 @@ import { NavController } from 'ionic-angular';
 // Modelos
 import { SolicitudModel } from './solicitud.model';
 import { ResumenSolicitudModel } from '../solicitudes/resumen-solicitud.model';
-
 import { CiudadModel } from '../shared/models/ciudad.model';
 import { ProvinciaModel } from '../shared/models/provincia.model';
 import { FactorSanguineoModel } from '../shared/models/factor-sanguineo.model';

@@ -1,15 +1,14 @@
+// Referencias de Angular
 import { Injectable } from '@angular/core';
 
 @Injectable()
 export class ItemMenuModel {
 
-  constructor(
-    private nombreIcono: string, 
-    private titulo: string, 
-    private componente: any,
-    private esRoot: boolean,
-    private requiereLogin: boolean) {
-  }
+  constructor(private nombreIcono: string, 
+              private titulo: string, 
+              private componente: any,
+              private esRoot: boolean,
+              private requiereLogin: boolean) { }
 
   public getIconoIosOutline(): string {
     return 'ios-' + this.nombreIcono + '-outline';

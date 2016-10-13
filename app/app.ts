@@ -26,14 +26,14 @@ import { ListaSolicitudesPage } from './solicitudes/lista-solicitudes/lista-soli
 import { EditarPreferenciasPage } from './preferencias-usuario/editar-preferencias/editar-preferencias.component';
 
 // Objeto de configuracion
-import { MY_CONFIG, MY_CONFIG_TOKEN } from './shared/app-config';
+import { AppConfig } from './shared/app-config';
 
 @Component({
   templateUrl: 'build/app.html',
   providers: [ConectividadService, 
               LocalizacionService, 
               DatosService, 
-              { provide: MY_CONFIG_TOKEN, useValue: MY_CONFIG },
+              AppConfig,
               provide(AuthHttp, { useFactory: (http) => {
                                     return new AuthHttp(new AuthConfig({noJwtError: true}), http);
                                   }, deps: [Http]

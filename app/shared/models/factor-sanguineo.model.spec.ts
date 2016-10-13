@@ -1,7 +1,11 @@
+// Referencias de Angular
 import { Component, Injectable } from '@angular/core';
 import { beforeEachProviders, beforeEach, it, describe, expect, inject } from '@angular/core/testing';
+
+// Referencias de Ionic
 import { NavController } from 'ionic-angular';
 
+// Modelo principal
 import { FactorSanguineoModel } from './factor-sanguineo.model';
 
 // Mock de la clase FactorSanguineoModel
@@ -43,7 +47,7 @@ describe('FactorSanguineoModel', () => {
 
 
 
-	// Tests para asegurar que los metodos get deuelven valores correctamente
+	// Tests para asegurar que los metodos get devuelven valores correctamente
 	// ----------------------------------------------------------------------
 	it('Debe tener un metodo getId() que devuelva el ID del factor sanguineo correctamente', inject([FactorSanguineoModel], (factorSanguineoModel: FactorSanguineoModelMock) => {		
 		expect(factorSanguineoModel.getId()).toBe(1);

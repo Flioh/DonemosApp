@@ -1,6 +1,7 @@
+// Referencias de Angular
 import {beforeEachProviders, beforeEach, it, describe, expect, inject} from '@angular/core/testing';
 
-/* Pipe a testear */
+// Pipe a testear
 import { FormatearFechaPipe } from './formatear-fecha.pipe';
 
 describe('FormatearFechaPipe', () => {
@@ -13,7 +14,8 @@ describe('FormatearFechaPipe', () => {
 
 
 
-	/* Tests de "Ahora" */
+	// Tests de "Ahora"
+	// -------------------------------------------------------
 	it('Debe retornar "Ahora" si la fecha de la solicitud es igual a la fecha actual', () => {
 		let date = new Date();
 
@@ -33,7 +35,8 @@ describe('FormatearFechaPipe', () => {
 
 
 
-	/* Tests de "Hace ... segundos" */
+	// Tests de "Hace ... segundos"
+	// -------------------------------------------------------
 	it('Debe retornar "Hace 10 segundos" si la fecha de la solicitud es de hace 10 segundos', () => {
 		let date = new Date();
 
@@ -56,7 +59,8 @@ describe('FormatearFechaPipe', () => {
 
 
 
-	/* Tests de "Hace ... minutos" */
+	// Tests de "Hace ... minutos"
+	// -------------------------------------------------------
 	it('Debe retornar "Hace 1 minuto" si la fecha de la solicitud es de hace un minuto', () => {
 		let date = new Date();
 
@@ -80,7 +84,8 @@ describe('FormatearFechaPipe', () => {
 
 
 
-	/* Tests de "Hace ... horas" */
+	// Tests de "Hace ... horas"
+	// -------------------------------------------------------
 	it('Debe retornar "Hace 1 hora" si la fecha de la solicitud es de hace una hora', () => {
 		let date = new Date();
 
@@ -103,7 +108,8 @@ describe('FormatearFechaPipe', () => {
 
 
 
-	/* Tests de "Hace ... dias" */
+	// Tests de "Hace ... dias"
+	// -------------------------------------------------------
 	it('Debe retornar "Hace 1 dia" si la fecha de la solicitud es de hace un dia', () => {
 		let date = new Date();
 
@@ -126,7 +132,8 @@ describe('FormatearFechaPipe', () => {
 
 
 
-	/* Tests de "Hace ... semanas" */
+	// Tests de "Hace ... semanas"
+	// -------------------------------------------------------
 	it('Debe retornar "Hace 1 semana" si la fecha de la solicitud es de hace 7 dias', () => {
 		let date = new Date();
 
@@ -159,7 +166,8 @@ describe('FormatearFechaPipe', () => {
 
 
 
-	/* Tests de "Hace ... semanas" */
+	// Tests de "Hace ... meses"
+	// -------------------------------------------------------
 	it('Debe retornar "Hace 1 mes" si la fecha de la solicitud es de hace un mes', () => {
 		let date = new Date();
 

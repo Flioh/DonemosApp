@@ -1,10 +1,19 @@
-import { Storage, LocalStorage } from 'ionic-angular';
-import { AuthHttp, JwtHelper, tokenNotExpired } from 'angular2-jwt';
+// Referencias de Angular
 import { Injectable, NgZone } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
-import { Events } from 'ionic-angular';
 
-// Declaracion para evitar warnings de typescript
+// Referencias de Ionic
+import { Events, Storage, LocalStorage } from 'ionic-angular';
+
+// Referencias de JWT
+import { AuthHttp, JwtHelper, tokenNotExpired } from 'angular2-jwt';
+
+// Referencias de RxJS
+import { Observable } from 'rxjs/Rx';
+
+// Objeto de configuracion
+import { AppConfig, ApplicationConfig } from '../../shared/app-config';
+
+// Declaraciones para evitar warnings de typescript
 declare var Auth0: any;
 declare var Auth0Lock: any;
 
@@ -16,41 +25,57 @@ export interface PerfilUsuarioModel {
 @Injectable()
 export class LoginService {
 
-    private jwtHelper: JwtHelper = new JwtHelper();
-
-    private auth0 = new Auth0({clientID: '4gUa8ibKIj6T8gMUvec3AzxbpirH5rGq', domain: 'donemos.auth0.com'});
-    private lock = new Auth0Lock('4gUa8ibKIj6T8gMUvec3AzxbpirH5rGq', 'donemos.auth0.com', {
-        auth: {
-            redirect: false,
-            params: {
-                scope: 'openid offline_access',
-            }
-        },
-        allowedConnections: ['google-oauth2', 'facebook', 'twitter'],
-        socialButtonStyle: 'small',
-        rememberLastLogin: false,
-        language: 'es',
-        container: 'hiw-login-container',
-        languageDictionary: {    
-            title: "Iniciar sesión"
-        },
-        theme: {
-            // logo: 'https://example.com/assets/logo.png',
-            primaryColor: '#f32d2e'
-        } 
-    });
-
-    private local: Storage = new Storage(LocalStorage);
+    private auth0: any;
+    private lock: any;
+    private jwtHelper: JwtHelper;
     private refreshSubscription: any;
+    
+    private local: Storage;
+    
     private user: Object;
-    private zoneImpl: NgZone;
   
-    constructor(private authHttp: AuthHttp, public eventsCtrl: Events, zone: NgZone) {
-        this.zoneImpl = zone;
+    constructor(private authHttp: AuthHttp, 
+                private config: AppConfig,
+                private eventsCtrl: Events, 
+                private zoneImpl: NgZone) {
+        
+        // Inicializamos el storage
+        this.local = new Storage(LocalStorage);
+
+        this.jwtHelper = new JwtHelper();
+
+        if(typeof Auth0 === 'function' && typeof Auth0Lock === 'function') {
+            // Creamos los objetos necesarios para manejar el inicio de sesion
+            this.auth0 = new Auth0({clientID: config.clientId, domain: config.domain});
+            this.lock = new Auth0Lock(config.clientId, config.domain, {
+                auth: {
+                    redirect: false,
+                    params: {
+                        scope: 'openid offline_access',
+                    }
+                },
+                allowedConnections: ['google-oauth2', 'facebook', 'twitter'],
+                socialButtonStyle: 'small',
+                rememberLastLogin: false,
+                language: 'es',
+                container: 'hiw-login-container',
+                languageDictionary: {    
+                    title: "Iniciar sesión"
+                },
+                theme: {
+                    // logo: 'https://example.com/assets/logo.png',
+                    primaryColor: '#f32d2e'
+                } 
+            });
+        }
 
         // Buscamos si el perfil esta guardado
         this.local.get('profile').then(profile => {
+            
+            // Inicializamos los datos del usuario
             this.user = JSON.parse(profile);
+
+            // Enviamos un evento para que otros componentes sepan que el usuario inicio sesion         
             this.eventsCtrl.publish('user:login');
         }).catch(error => {
             // TODO: Manejar el error
@@ -58,33 +83,38 @@ export class LoginService {
             console.log(error);
         });
 
-        this.lock.on('authenticated', authResult => {
+        if(this.lock) {
+            // Manejamos el evento del login del usuario
+            this.lock.on('authenticated', authResult => {
 
-            // Enviamos un evento para que otros componentes sepan que el usuario inicio sesion
-            this.eventsCtrl.publish('user:login');
+                // Enviamos un evento para que otros componentes sepan que el usuario inicio sesion
+                this.eventsCtrl.publish('user:login');
 
-            this.local.set('id_token', authResult.idToken);
+                this.local.set('id_token', authResult.idToken);
 
-            // Obtenemos la informacion del perfil
-            this.lock.getProfile(authResult.idToken, (error, profile) => {
-                if (error) {
-                    // TODO: Manejar el error
-                    // ----------------------
-                    alert(error);
-                    return;
-                }
+                // Obtenemos la informacion del perfil
+                this.lock.getProfile(authResult.idToken, (error, profile) => {
+                    if (error) {
+                        // TODO: Manejar el error
+                        // ----------------------
+                        alert(error);
+                        return;
+                    }
 
-                profile.user_metadata = profile.user_metadata || {};
-                
-                // Guardamos la informacion del usuario
-                this.local.set('profile', JSON.stringify(profile));
-                this.user = profile;                
+                    profile.user_metadata = profile.user_metadata || {};
+                    
+                    // Guardamos la informacion del usuario
+                    this.local.set('profile', JSON.stringify(profile));
+                    this.user = profile;                
+                });
+
+                // Almacenamos el refresh token
+                this.local.set('refresh_token', authResult.refreshToken);
+                this.zoneImpl.run(() => this.user = authResult.profile);
             });
+        }
 
-            // Almacenamos el refresh token
-            this.local.set('refresh_token', authResult.refreshToken);
-            this.zoneImpl.run(() => this.user = authResult.profile);
-        });
+        
     }
   
     // Método que indica si el usuario esta logueado o no

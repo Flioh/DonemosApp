@@ -1,8 +1,14 @@
+// Referencias de Angular
 import { Component, Injectable } from '@angular/core';
 import { beforeEachProviders, beforeEach, it, describe, expect, inject } from '@angular/core/testing';
+
+// Referencias de Ionic
 import { NavController } from 'ionic-angular';
 
+// Modelo principal
 import { PreferenciasUsuarioModel } from './preferencias-usuario.model';
+
+// Modelos compartidos
 import { ProvinciaModel } from '../shared/models/provincia.model';
 import { CiudadModel } from '../shared/models/ciudad.model';
 import { GrupoSanguineoModel } from "../shared/models/grupo-sanguineo.model";
@@ -12,7 +18,6 @@ import { FactorSanguineoModel } from "../shared/models/factor-sanguineo.model";
 @Injectable()
 export class PreferenciasUsuarioModelMock extends PreferenciasUsuarioModel {
 	constructor(){
-
 		let preferenciasObj = 	{	"ciudad" : { 
 										"id": 208, 
 										"nombre": "Santo Tome"
@@ -87,7 +92,7 @@ describe('PreferenciasUsuarioModel', () => {
 
 
 
-	// Tests para asegurar que los metodos get deuelven valores correctamente
+	// Tests para asegurar que los metodos get devuelven valores correctamente
 	// ----------------------------------------------------------------------
 	it('Debe tener un metodo getCiudad() que devuelva la ciudad correctamente', inject([PreferenciasUsuarioModel], (datosUsuarioModel: PreferenciasUsuarioModelMock) => {		
 		let ciudad = datosUsuarioModel.getCiudad();
