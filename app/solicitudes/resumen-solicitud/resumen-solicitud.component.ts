@@ -2,18 +2,18 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
 // Servicios
-import { LocalizacionService } from '../shared/services/localizacion.service';
-import { DonacionesHelper } from '../shared/services/donaciones.service';
+import { LocalizacionService } from '../../shared/services/localizacion.service';
+import { DonacionesHelper } from '../../shared/services/donaciones.service';
 
 // Modelos
-import { ResumenSolicitudModel } from '../solicitudes/resumen-solicitud.model';
+import { ResumenSolicitudModel } from '../../solicitudes/resumen-solicitud.model';
 
 // Pipes
-import { FormatearFechaPipe } from '../shared/formatear-fecha.pipe';
+import { FormatearFechaPipe } from '../../shared/formatear-fecha.pipe';
 
 @Component({
     selector: 'resumen-solicitud',
-    templateUrl: 'build/solicitudes/resumen-solicitud.directive.html',
+    templateUrl: 'build/solicitudes/resumen-solicitud/resumen-solicitud.component.html',
     pipes: [ FormatearFechaPipe ]
 })
 export class ResumenSolicitudDirective {

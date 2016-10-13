@@ -2,9 +2,6 @@
 import { Component, Inject } from '@angular/core';
 import { LoadingController, Events, NavController, NavParams, Page, Platform } from 'ionic-angular';
 
-// Objeto de configuracion
-import { AppConfig, ApplicationConfig } from '../../shared/app-config';
-
 // Servicios
 import { ConectividadService } from '../../shared/services/conectividad.service';
 import { LocalizacionService } from '../../shared/services/localizacion.service';
@@ -17,12 +14,19 @@ import { SolicitudModel } from '../../solicitudes/solicitud.model';
 // Pipes
 import { FormatearFechaPipe } from '../../shared/formatear-fecha.pipe';
 
+// Directivas
+import { MapaEstaticoDirective } from '../../shared/mapa-estatico.directive';
+
 // Componente base
 import { BasePage } from '../../shared/base/base.component';
 
+// Objeto de configuracion
+import { AppConfig, ApplicationConfig } from '../../shared/app-config';
+
 @Component({
 	templateUrl: 'build/solicitudes/detalles-solicitud/detalles-solicitud.component.html',
-  pipes: [ FormatearFechaPipe ]
+  pipes: [ FormatearFechaPipe ],
+  directives: [ MapaEstaticoDirective ]
 })
 export class DetallesSolicitudPage extends BasePage {
 
@@ -36,6 +40,8 @@ export class DetallesSolicitudPage extends BasePage {
   private compatibleConUsuario: boolean;
 
   private storage: Storage;
+
+  private direccionCompleta: string;
 
 	constructor(private platform: Platform,
               private nav: NavController, 
@@ -57,30 +63,17 @@ export class DetallesSolicitudPage extends BasePage {
 
       this.obtenerDatosUsuario();
 
-      // Crea el mapa
-      this.obteneMapaUrl(config.staticMapUrl, config.staticMapKey, 400, 400, 16);
+      // Obtenemos la direccion de la institución
+      this.direccionCompleta = `${ this.solicitudSeleccionada.getDireccion() },${ this.solicitudSeleccionada.getCiudad().getNombre() },${ this.solicitudSeleccionada.getProvincia().getNombre() },Argentina`;
 
       this.detenerTimer('DetallesSolicitudPage / constructor');
   	}
 
-    // Método que crea la imagen del mapa
-    public obteneMapaUrl(mapUrl: string, mapKey: string, width: number, height: number, zoom: number): void {
-    
-      // Obtenemos la direccion de la institución
-      let direccion = `${ this.solicitudSeleccionada.getDireccion() },${ this.solicitudSeleccionada.getCiudad().getNombre() },${ this.solicitudSeleccionada.getProvincia().getNombre() },Argentina`;
-
-      // Generamos la url del mapa estatico
-      this.mapSrc = `${ mapUrl }?zoom=${ zoom }&size=${ width }x${ height }&markers=color:red%7C${ direccion.replace(/ /g, '+') }&key=${ mapKey }`;
-    }
-
     // Método que abre la aplicacion de GPS por defecto del usuario para guiarlo hacia la institucion
     public mostrarRuta():void {   
 
-      // Obtenemos la direccion de la institución
-      let direccion = `${ this.solicitudSeleccionada.getDireccion() },${ this.solicitudSeleccionada.getCiudad().getNombre() },${ this.solicitudSeleccionada.getProvincia().getNombre() },Argentina`;
-
       // Invocamos al servicio usando la direccion y el nombre de la institucion 
-      this.localizacionService.mostrarRuta(direccion, this.solicitudSeleccionada.getInstitucion());
+      this.localizacionService.mostrarRuta(this.direccionCompleta, this.solicitudSeleccionada.getInstitucion());
     }
 
     // Método que obtiene los datos del usuario

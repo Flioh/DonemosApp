@@ -10,7 +10,7 @@ import { DatosService } from '../../shared/services/datos.service';
 import { LoginService, PerfilUsuarioModel } from '../../shared/services/login.service';
 
 // Directivas
-import { ResumenSolicitudDirective } from '../../solicitudes/resumen-solicitud.directive';
+import { ResumenSolicitudDirective } from '../../solicitudes/resumen-solicitud/resumen-solicitud.component';
 
 // Modelos
 import { SolicitudModel } from '../solicitud.model';
