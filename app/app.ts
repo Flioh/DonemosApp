@@ -67,7 +67,7 @@ export class DonemosApp {
       // token in local storage. If there is, we should
       // schedule an initial token refresh for when the
       // token expires
-      this.loginService.startupTokenRefresh();
+      this.loginService.iniciarObtencionToken();
 
       this.inicializarEventosMenuPrincipal();
 
@@ -88,7 +88,7 @@ export class DonemosApp {
     });
 
     this.events.subscribe('page:load', () => {
-      this.habilitarMenuCorrespondiente(this.loginService.authenticated());
+      this.habilitarMenuCorrespondiente(this.loginService.estaAutenticado());
     });
   }
 
@@ -149,14 +149,14 @@ export class DonemosApp {
   // Método que devuelve la ruta de la imagen del perfil del usuario o una imagen genérica
   public getImagenPerfil() {
 
-    let perfilUsuario = this.loginService.getUser();
+    let perfilUsuario = this.loginService.getPerfilUsuario();
     return perfilUsuario && perfilUsuario.picture ? perfilUsuario.picture : '/img/perfil-usuario.png';
   }
 
   // Método que devuelve el nombre del usuario logueado o un string vacio
   public getNombrePerfil() {
 
-    let perfilUsuario = this.loginService.getUser();
+    let perfilUsuario = this.loginService.getPerfilUsuario();
     return perfilUsuario && perfilUsuario.name ? perfilUsuario.name : ''; 
   }
 }

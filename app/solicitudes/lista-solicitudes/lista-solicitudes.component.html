@@ -5,7 +5,7 @@
 			<ion-icon name="menu"></ion-icon>
 		</button>
 
-		<ion-buttons *ngIf="isIos" end>
+		<ion-buttons *ngIf="isIos && loginService.estaAutenticado()" end>
 			<button (click)="nuevaSolicitud()"><ion-icon name="add"></ion-icon></button>
 		</ion-buttons>
 	</ion-navbar>
@@ -33,7 +33,7 @@
 				(seleccionarSolicitud)="abrirDetalles($event)">		
 			</resumen-solicitud>
 
-			<button *ngIf="!isIos" class="floating-btn" red fab (click)="nuevaSolicitud()"><ion-icon name="add"></ion-icon></button>
+			<button *ngIf="!isIos && loginService.estaAutenticado()" class="floating-btn" red fab (click)="nuevaSolicitud()"><ion-icon name="add"></ion-icon></button>
 
 			<button *ngIf="hayMasSolicitudes" class="submit" red full (click)="buscarSolicitudes()">
 				Ver mas solicitudes

@@ -118,7 +118,7 @@ export class LoginService {
     }
   
     // Método que indica si el usuario esta logueado o no
-    public authenticated() {
+    public estaAutenticado() {
         // Chequea si hay un token aun no expirado
         return tokenNotExpired();
     }
@@ -152,13 +152,13 @@ export class LoginService {
                 this.user = null;
 
                 // Ya no sera necesario renovar el token
-                this.unscheduleRefresh();         
+                this.cancelarRenovacionJwt();         
             });
         }, 1000);
     }
 
     // Método que permite renovar el token cuando el mismo expire
-    public scheduleRefresh() {       
+    public programarRenovacionJwt() {       
         let source = this.authHttp.tokenStream.flatMap(
             token => {
                 // El delay es igual a la diferencia entre el tiempo de expiracion
@@ -174,13 +174,13 @@ export class LoginService {
             });
             
         this.refreshSubscription = source.subscribe(() => {
-            this.getNewJwt();
+            this.obtenerNuevoJwt();
         });
     }
 
     // Método que obtiene el JWT token e inicializa su renovación
-    public startupTokenRefresh() {
-        if (this.authenticated()) {
+    public iniciarObtencionToken() {
+        if (this.estaAutenticado()) {
             let source = this.authHttp.tokenStream.flatMap(
                 token => {
                     // Usamos el tiempo de expiracion para generar un delay 
@@ -200,14 +200,14 @@ export class LoginService {
             // Una vez que venza el delay de arriba, obtenemos un nuevo JWT
             // y programamos su renovacion
             source.subscribe(() => {
-                this.getNewJwt();
-                this.scheduleRefresh();
+                this.obtenerNuevoJwt();
+                this.programarRenovacionJwt();
             });
         }
     }
 
     // Método que resetea la subscripcion para renovar el JWT token
-    public unscheduleRefresh() {
+    public cancelarRenovacionJwt() {
         // Unsubscribe fromt the refresh
         if (this.refreshSubscription) {
             this.refreshSubscription.unsubscribe();
@@ -215,7 +215,7 @@ export class LoginService {
     }
 
     // Método que obtiene un nuevo JWT token
-    public getNewJwt() {
+    public obtenerNuevoJwt() {
         // Obtenemos un nuevo JWT desde Auth0 usando el refresh token
         // almacenado en el local storage
         this.local.get('refresh_token').then(token => {
@@ -233,7 +233,7 @@ export class LoginService {
     }
 
     // Método que devuelve informacion del usuario logueado
-    public getUser(): PerfilUsuarioModel {
+    public getPerfilUsuario(): PerfilUsuarioModel {
         return <PerfilUsuarioModel>this.user;
     }
 }

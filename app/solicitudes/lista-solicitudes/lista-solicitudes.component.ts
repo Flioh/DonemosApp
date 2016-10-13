@@ -7,6 +7,7 @@ import { AlertController, LoadingController, NavController, Events, Storage, Pla
 // Servicios
 import { DonacionesHelper } from '../../shared/services/donaciones.service';
 import { DatosService } from '../../shared/services/datos.service';
+import { LoginService, PerfilUsuarioModel } from '../../shared/services/login.service';
 
 // Directivas
 import { ResumenSolicitudDirective } from '../../solicitudes/resumen-solicitud.directive';
@@ -66,6 +67,7 @@ export class ListaSolicitudesPage extends BasePage {
               private loadingCtrl: LoadingController,
               private alertCtrl: AlertController,               
               private datosService: DatosService,
+              private loginService: LoginService,
               eventsCtrl: Events,
               config: AppConfig) 
   {    
