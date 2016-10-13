@@ -27,6 +27,6 @@ export class AppConfig {
   public domain: string =                   'donemos.auth0.com';
 
   // Otras configuraciones
-  public modoDebug: boolean =               false;
+  public modoDebug: boolean =               true;
 
 }

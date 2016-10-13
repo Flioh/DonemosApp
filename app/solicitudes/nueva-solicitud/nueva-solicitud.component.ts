@@ -3,13 +3,16 @@ import { Component, NgZone } from '@angular/core';
 import { FormBuilder, FORM_DIRECTIVES } from '@angular/forms';
 
 // Referencias de Ionic
-import { AlertController, LoadingController, NavController, Platform, MenuController } from 'ionic-angular';
+import { AlertController, Events, LoadingController, NavController, Platform, MenuController } from 'ionic-angular';
 
 // Servicios
 import { DatosService } from '../../shared/services/datos.service';
 
 // Modelos
 import { SolicitudModel } from '../solicitud.model';
+
+// Componente base
+import { BasePage } from '../../shared/base/base.component';
 
 import { CiudadModel } from '../../shared/models/ciudad.model';
 import { ProvinciaModel } from '../../shared/models/provincia.model';
@@ -19,11 +22,14 @@ import { GrupoSanguineoModel } from '../../shared/models/grupo-sanguineo.model';
 // Directivas
 import { InstitucionesAutocompleteDirective } from '../../shared/instituciones-autocomplete.directive';
 
+// Objeto de configuracion
+import { AppConfig, ApplicationConfig } from '../../shared/app-config';
+
 @Component({
 	templateUrl: 'build/solicitudes/nueva-solicitud/nueva-solicitud.component.html',
 	directives: [ InstitucionesAutocompleteDirective, FORM_DIRECTIVES ]
 })
-export class NuevaSolicitudPage {
+export class NuevaSolicitudPage extends BasePage{
 
 	// Listados usados en la pagina
 	private listaProvincias: Array<ProvinciaModel> = [];
@@ -43,11 +49,15 @@ export class NuevaSolicitudPage {
 		private formBuilder : FormBuilder, 
 		private ngZone : NgZone,
 		private loadingCtrl : LoadingController,
-		private alertCtrl : AlertController) {
+		private alertCtrl : AlertController,
+		eventsCtrl: Events,
+		config: AppConfig) {
 
-		if(this.datosService.modoDebugActivado()) {
-      		console.time('NuevaSolicitudPage / constructor');
-    	}
+		// Inicializa la clase padre manualmente debido a un issue de angular
+		// https://github.com/angular/angular/issues/5155
+		super(eventsCtrl, config);
+
+		this.iniciarTimer('NuevaSolicitudPage / constructor');
 
 		// Creamos e inicializamos el modelo
 		this.nuevaSolicitud = new SolicitudModel();
@@ -58,9 +68,7 @@ export class NuevaSolicitudPage {
 		this.inicializarGruposSanguineos();
 		this.inicializarFactoresSanguineos();
 
-		if(this.datosService.modoDebugActivado()) {
-      		console.timeEnd('NuevaSolicitudPage / constructor');
-    	}
+		this.detenerTimer('NuevaSolicitudPage / constructor');
 	}
 
 	// Método que inicializa la solicitud con los datos del usuario
@@ -74,9 +82,7 @@ export class NuevaSolicitudPage {
 	// Método que recibe la dirección del autocomplete y la ingresa en el formulario
 	private setearDireccion(informacionSobreDireccion: any) {
 
-		if(this.datosService.modoDebugActivado()) {
-      		console.time('NuevaSolicitudPage / setearDireccion');
-    	}
+		this.iniciarTimer('NuevaSolicitudPage / setearDireccion');
 
 		// Setea la institucion
 		this.nuevaSolicitud.setInstitucion(informacionSobreDireccion.getNombreInstitucion());
@@ -87,17 +93,13 @@ export class NuevaSolicitudPage {
 		// Setea la provincia y la ciudad de la institucion
 		this.actualizarProvinciaCiudad(informacionSobreDireccion.getNombreProvincia(), informacionSobreDireccion.getNombreCiudad());
 
-		if(this.datosService.modoDebugActivado()) {
-      		console.timeEnd('NuevaSolicitudPage / setearDireccion');
-    	}		
+		this.detenerTimer('NuevaSolicitudPage / setearDireccion');	
 	}
 
 	// Método que dado el nombre de una provincia, la setea como seleccionada en el formulario y actualiza el listado de ciudades
 	private actualizarProvinciaCiudad(nombreProvincia: string, nombreCiudad: string) {
 
-		if(this.datosService.modoDebugActivado()) {
-      		console.time('NuevaSolicitudPage / actualizarProvinciaCiudad');
-    	}
+		this.iniciarTimer('NuevaSolicitudPage / actualizarProvinciaCiudad');
 
 		for(let i=0; i< this.listaProvincias.length; i++) {
 
@@ -112,17 +114,13 @@ export class NuevaSolicitudPage {
 			}
 		}
 
-		if(this.datosService.modoDebugActivado()) {
-      		console.timeEnd('NuevaSolicitudPage / actualizarProvinciaCiudad');
-    	}
+		this.detenerTimer('NuevaSolicitudPage / actualizarProvinciaCiudad');
 	}
 
 	// Método que dado el nombre de una ciudad, la setea como seleccionada en el formulario
 	private actualizarCiudad(nombreCiudad: string) {
 
-		if(this.datosService.modoDebugActivado()) {
-      		console.time('NuevaSolicitudPage / actualizarCiudad');
-    	}
+		this.iniciarTimer('NuevaSolicitudPage / actualizarCiudad');
 
 		let indiceCiudad = -1; 
 		for(let i=0; i<this.listaCiudades.length; i++) {
@@ -139,9 +137,7 @@ export class NuevaSolicitudPage {
 		// Setea la ciudad en base a su ID
 		this.nuevaSolicitud.setCiudad(this.listaCiudades[indiceCiudad]);
 
-		if(this.datosService.modoDebugActivado()) {
-      		console.timeEnd('NuevaSolicitudPage / actualizarCiudad');
-    	}
+		this.detenerTimer('NuevaSolicitudPage / actualizarCiudad');
 	}
 
 	// Método que se ejecuta antes de que el usuario ingrese a la página
@@ -167,9 +163,7 @@ export class NuevaSolicitudPage {
 	// Metodo que inicializa el listado de grupos sanguineos
 	private inicializarGruposSanguineos(): void {
 
-		if(this.datosService.modoDebugActivado()) {
-      		console.time('NuevaSolicitudPage / inicializarGruposSanguineos');
-    	}
+		this.iniciarTimer('NuevaSolicitudPage / inicializarGruposSanguineos');
 
 		// Obtenemos el listado del helper
 		this.listaGruposSanguineos = this.datosService.getGruposSanguineos();
@@ -178,17 +172,13 @@ export class NuevaSolicitudPage {
 		// -------------------------------------------------------------------
 		this.nuevaSolicitud.setGrupoSanguineo(this.listaGruposSanguineos[0]);
 
-		if(this.datosService.modoDebugActivado()) {
-      		console.timeEnd('NuevaSolicitudPage / inicializarGruposSanguineos');
-    	}
+		this.detenerTimer('NuevaSolicitudPage / inicializarGruposSanguineos');
 	}
 
 	// Metodo que inicializa el listado de factores sanguineos
 	private inicializarFactoresSanguineos(): void {
 
-		if(this.datosService.modoDebugActivado()) {
-      		console.time('NuevaSolicitudPage / inicializarFactoresSanguineos');
-    	}
+		this.iniciarTimer('NuevaSolicitudPage / inicializarFactoresSanguineos');
 
 		// Obtenemos el listado del helper
 		this.listaFactoresSanguineos = this.datosService.getFactoresSanguineos();
@@ -197,17 +187,13 @@ export class NuevaSolicitudPage {
 		// -------------------------------------------------------------------
 		this.nuevaSolicitud.setFactorSanguineo(this.listaFactoresSanguineos[0]);
 
-		if(this.datosService.modoDebugActivado()) {
-      		console.timeEnd('NuevaSolicitudPage / inicializarFactoresSanguineos');
-    	}
+		this.detenerTimer('NuevaSolicitudPage / inicializarFactoresSanguineos');
 	}
 
 	// Método que inicializa el listado de provincias
 	private inicializarProvincias(): void {
 
-		if(this.datosService.modoDebugActivado()) {
-      		console.time('NuevaSolicitudPage / inicializarProvincias');
-    	}
+		this.iniciarTimer('NuevaSolicitudPage / inicializarProvincias');
 
 		// Obtenemos el listado de provincias del servidor
 		this.datosService.getListaProvincias().subscribe(result => {
@@ -223,9 +209,7 @@ export class NuevaSolicitudPage {
 				// Carga las ciudades de la provincia seleccionada
 				this.inicializarCiudadesDeLaProvincia();
 
-				if(this.datosService.modoDebugActivado()) {
-      				console.timeEnd('NuevaSolicitudPage / inicializarProvincias');
-    			}
+				this.detenerTimer('NuevaSolicitudPage / inicializarProvincias');
 
 			} else {
 					// TODO: manejar errores en las llamadas al servidor
@@ -237,9 +221,7 @@ export class NuevaSolicitudPage {
 	// Método que inicializa el listado de ciudades de una provincia
 	public inicializarCiudadesDeLaProvincia(nombreCiudad?: string): void {
 
-		if(this.datosService.modoDebugActivado()) {
-      		console.time('NuevaSolicitudPage / inicializarCiudadesDeLaProvincia');
-    	}
+		this.iniciarTimer('NuevaSolicitudPage / inicializarCiudadesDeLaProvincia');
 		
 		let provinciaId = this.nuevaSolicitud.getProvincia().getId();
 
@@ -267,9 +249,7 @@ export class NuevaSolicitudPage {
 					// Oculta el mensaje de espera
 					loadingPopup.dismiss();
 
-					if(this.datosService.modoDebugActivado()) {
-      					console.timeEnd('NuevaSolicitudPage / inicializarCiudadesDeLaProvincia');
-    				}
+					this.detenerTimer('NuevaSolicitudPage / inicializarCiudadesDeLaProvincia');
 				}
 				// TODO: manejar errores en las llamadas al servidor
 				// -------------------------------------------------			

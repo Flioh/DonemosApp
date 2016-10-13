@@ -18,8 +18,8 @@ export class ConectividadService {
  
   // Método que devuelve true si hay conexion a internet
   public hayConexion():boolean {
-    if(this.esMovil && navigator.connection){
-      return navigator.connection.type !== Connection.NONE;
+    if(this.esMovil && navigator['connection']){
+      return navigator['connection']['type'] !== Connection.NONE;
     } else {
       return navigator.onLine;      
     }
@@ -27,8 +27,8 @@ export class ConectividadService {
  
   // Método que devuelve true si no hay conexion a internet
   public noHayConexion(): boolean{
-    if(this.esMovil && navigator.connection){
-      return navigator.connection.type === Connection.NONE;
+    if(this.esMovil && navigator['connection']){
+      return navigator['connection']['type'] === Connection.NONE;
     } else {
       return !navigator.onLine;     
     }

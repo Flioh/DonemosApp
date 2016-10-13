@@ -40,14 +40,7 @@ export class DatosService {
   private apiEndPointLocalidades: string;
   private apiEndPointSolicitudes: string;
 
-  // El modo debug sirve para imprimir en consola el tiempo que demora
-  // cada funcion en ejecutarse
-  private modoDebug: boolean;
-
   constructor(public http: Http, public config: AppConfig) {
-
-    // Loguea en la consola cada vez que se inicia o finaliza un método
-    this.modoDebug = false;
 
     // Obtenemos las API desde el archivo de configuracion
     this.apiEndPointLocalidades = config.apiEndPointLocalidades;
@@ -73,11 +66,6 @@ export class DatosService {
     if(!this.storage) {
       this.storage = new Storage(SqlStorage);  
     }
-  }
-
-  // Método que devuelve true si el modo debug esta activado
-  public modoDebugActivado(): boolean {
-    return this.modoDebug;
   }
 
   // Método que obtiene los datos del usuario

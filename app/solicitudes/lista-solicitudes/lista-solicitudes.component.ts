@@ -24,6 +24,9 @@ import { BasePage } from '../../shared/base/base.component';
 import { DetallesSolicitudPage } from '../detalles-solicitud/detalles-solicitud.component';
 import { NuevaSolicitudPage } from '../nueva-solicitud/nueva-solicitud.component';
 
+// Objeto de configuracion
+import { AppConfig, ApplicationConfig } from '../../shared/app-config';
+
 @Component({
   templateUrl: 'build/solicitudes/lista-solicitudes/lista-solicitudes.component.html',
   directives: [ ResumenSolicitudDirective ]
@@ -63,16 +66,15 @@ export class ListaSolicitudesPage extends BasePage {
               private loadingCtrl: LoadingController,
               private alertCtrl: AlertController,               
               private datosService: DatosService,
-              eventsCtrl: Events) 
+              eventsCtrl: Events,
+              config: AppConfig) 
   {    
 
     // Inicializa la clase padre manualmente debido a un issue de angular
     // https://github.com/angular/angular/issues/5155
-    super(eventsCtrl);
+    super(eventsCtrl, config);
 
-    if(this.datosService.modoDebugActivado()) {
-      console.time('ListaSolicitudesPage / constructor');
-    }    
+    this.iniciarTimer('ListaSolicitudesPage / constructor');
 
     // Indica que las listas usadas en los filtros no estan cargadas aun
     this.listadosCargados = false;
@@ -109,17 +111,13 @@ export class ListaSolicitudesPage extends BasePage {
     // Cargamos las ultimas solicitudes
     this.buscarSolicitudes();
 
-    if(this.datosService.modoDebugActivado()) {
-      console.timeEnd('ListaSolicitudesPage / constructor');
-    }
+    this.detenerTimer('ListaSolicitudesPage / constructor');
   }
 
   // Método que obtiene las solicitudes del servidor
   public buscarSolicitudes(): void {
 
-    if(this.datosService.modoDebugActivado()) {
-      console.time('ListaSolicitudesPage / buscarSolicitudes');
-    }
+    this.iniciarTimer('ListaSolicitudesPage / buscarSolicitudes');
 
     // Mostramos las solicitudes
     this.seccion = 'solicitudes';
@@ -151,16 +149,16 @@ export class ListaSolicitudesPage extends BasePage {
           // Oculta el mensaje de espera
           loadingPopup.dismiss();
 
-          if(this.datosService.modoDebugActivado()) {
-            console.timeEnd('ListaSolicitudesPage / buscarSolicitudes');
-          }
-
+          this.detenerTimer('ListaSolicitudesPage / buscarSolicitudes');
         });
     });  
   }
 
   // Metodo que actualiza la descripcion de los tipos sanguineos del listado de solicitudes
   public actualizarDescripcionTiposSanguineos():void {
+
+    this.iniciarTimer('ListaSolicitudesPage / actualizarDescripcionTiposSanguineos');
+
     for(let i = 0; i < this.solicitudes.length; i++) {
       let solicitud = this.solicitudes[i].getSolicitud();
       let descripcionTiposSanguineos = this.obtenerInformacionTiposSanguineos(solicitud);
@@ -168,14 +166,14 @@ export class ListaSolicitudesPage extends BasePage {
       // Actualizamos la solicitud
       this.solicitudes[i].setDescripcionTiposSanguineos(descripcionTiposSanguineos);
     }
+
+    this.detenerTimer('ListaSolicitudesPage / actualizarDescripcionTiposSanguineos');
   }
 
   // Inicializa los listados de la pagina
   public inicializarFiltros() {
 
-    if(this.datosService.modoDebugActivado()) {
-      console.time('ListaSolicitudesPage / inicializarFiltros');
-    }
+    this.iniciarTimer('ListaSolicitudesPage / inicializarFiltros');
 
     if(!this.listadosCargados) {
 
@@ -198,9 +196,7 @@ export class ListaSolicitudesPage extends BasePage {
           // Ocultamos el mensaje de espera
           loadingPopup.dismiss();
 
-          if(this.datosService.modoDebugActivado()) {
-            console.timeEnd('ListaSolicitudesPage / inicializarFiltros');
-          }
+          this.detenerTimer('ListaSolicitudesPage / inicializarFiltros');
         } 
       });
     }
@@ -209,9 +205,7 @@ export class ListaSolicitudesPage extends BasePage {
   // Resetea los filtros de busqueda
   public borrarFiltros() {
 
-    if(this.datosService.modoDebugActivado()) {
-      console.time('ListaSolicitudesPage / borrarFiltros');
-    }
+    this.iniciarTimer('ListaSolicitudesPage / borrarFiltros');
 
     this.provinciaSeleccionada = null;
     this.ciudadSeleccionada = null;
@@ -220,9 +214,7 @@ export class ListaSolicitudesPage extends BasePage {
     this.listaCiudades = null;
     this.usarDatosPersonales = false;
 
-    if(this.datosService.modoDebugActivado()) {
-      console.timeEnd('ListaSolicitudesPage / borrarFiltros');
-    }
+    this.detenerTimer('ListaSolicitudesPage / borrarFiltros');
   }
 
   // Inicializa los filtros de busqueda con los datos del usuario
@@ -230,9 +222,7 @@ export class ListaSolicitudesPage extends BasePage {
 
     if(this.usarDatosPersonales) {
 
-      if(this.datosService.modoDebugActivado()) {
-        console.time('ListaSolicitudesPage / usarDatosUsuario');
-      }
+      this.iniciarTimer('ListaSolicitudesPage / usarDatosUsuario');
 
       let loadingPopup = this.loadingCtrl.create({
         content: 'Obteniendo datos'
@@ -246,10 +236,7 @@ export class ListaSolicitudesPage extends BasePage {
         // Ocultamos el mensaje de espera
         loadingPopup.dismiss();
 
-        if(this.datosService.modoDebugActivado()) {
-          console.timeEnd('ListaSolicitudesPage / usarDatosUsuario');
-        }
-
+        this.detenerTimer('ListaSolicitudesPage / usarDatosUsuario');
       }); 
 
     } else {
@@ -265,9 +252,7 @@ export class ListaSolicitudesPage extends BasePage {
   // Método que obtiene la informacion de los tipos sanguineos buscados, resaltando el del usuario
   public obtenerInformacionTiposSanguineos(unaSolicitud: SolicitudModel): string {
 
-      if(this.datosService.modoDebugActivado()) {
-        console.time('ListaSolicitudesPage / obtenerInformacionTiposSanguineos');
-      }
+      this.iniciarTimer('ListaSolicitudesPage / obtenerInformacionTiposSanguineos');
 
       let result = '';
       let posiblesDadores = DonacionesHelper.puedeRecibirDe(unaSolicitud.getGrupoSanguineo().getId(), 
@@ -284,9 +269,7 @@ export class ListaSolicitudesPage extends BasePage {
         result = result.replace(this.tipoSanguineoUsuario, '<span class="marked">' + this.tipoSanguineoUsuario + '</span> ');
       }
 
-      if(this.datosService.modoDebugActivado()) {
-        console.timeEnd('ListaSolicitudesPage / obtenerInformacionTiposSanguineos');
-      }
+      this.detenerTimer('ListaSolicitudesPage / obtenerInformacionTiposSanguineos');
 
       return result;
   }
@@ -295,9 +278,7 @@ export class ListaSolicitudesPage extends BasePage {
   public inicializarDatosUsuario(): Promise<boolean> {
     return new Promise((resolve) => {
 
-        if(this.datosService.modoDebugActivado()) {
-          console.time('ListaSolicitudesPage / inicializarDatosUsuario');
-        }
+        this.iniciarTimer('ListaSolicitudesPage / inicializarDatosUsuario');
 
         // Obtenemos el indice de la provincia del usuario y la seleccionamos
         let indiceProvincia = this.getIndicePorID(this.listaProvincias, this.datosUsuarioObj.provinciaID);        
@@ -324,9 +305,7 @@ export class ListaSolicitudesPage extends BasePage {
                   let indiceCiudad = this.getIndicePorID(this.listaCiudades, this.datosUsuarioObj.ciudadID);
                   this.ciudadSeleccionada = this.listaCiudades[indiceCiudad];
 
-                  if(this.datosService.modoDebugActivado()) {
-                    console.timeEnd('ListaSolicitudesPage / inicializarDatosUsuario');
-                  } 
+                  this.detenerTimer('ListaSolicitudesPage / inicializarDatosUsuario');
 
                   // Resolvemos la promesa
                   resolve(true);
@@ -341,18 +320,14 @@ export class ListaSolicitudesPage extends BasePage {
   // Método que obtiene el indice del elemento cuyo id es el pasado como parametro
   public getIndicePorID(listado: Array<any>, id: number): number {
 
-    if(this.datosService.modoDebugActivado()) {
-      console.time('ListaSolicitudesPage / getIndicePorID');
-    }
+    this.iniciarTimer('ListaSolicitudesPage / getIndicePorID');
 
     for(let i=0; i<listado.length; i++) {
       if(id === listado[i].getId())
         return i;
     }
 
-    if(this.datosService.modoDebugActivado()) {
-      console.timeEnd('ListaSolicitudesPage / getIndicePorID');
-    }
+    this.detenerTimer('ListaSolicitudesPage / getIndicePorID');
 
     return -1;
   }
@@ -360,9 +335,7 @@ export class ListaSolicitudesPage extends BasePage {
   // Método que inicializa el listado de ciudades de una provincia
   public inicializarCiudadesDeLaProvincia(nombreCiudad: string): void {
 
-    if(this.datosService.modoDebugActivado()) {
-      console.time('ListaSolicitudesPage / inicializarCiudadesDeLaProvincia');
-    }
+    this.iniciarTimer('ListaSolicitudesPage / inicializarCiudadesDeLaProvincia');
 
     let loadingPopup = this.loadingCtrl.create({
       content: 'Cargando ciudades'
@@ -379,9 +352,7 @@ export class ListaSolicitudesPage extends BasePage {
           // Oculta el mensaje de espera
           loadingPopup.dismiss();
 
-          if(this.datosService.modoDebugActivado()) {
-            console.timeEnd('ListaSolicitudesPage / inicializarCiudadesDeLaProvincia');
-          }
+          this.detenerTimer('ListaSolicitudesPage / inicializarCiudadesDeLaProvincia');
         }
         // TODO: manejar errores en las llamadas al servidor
         // -------------------------------------------------      

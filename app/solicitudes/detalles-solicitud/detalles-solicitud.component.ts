@@ -1,6 +1,6 @@
 // Referencias de Angular
 import { Component, Inject } from '@angular/core';
-import { LoadingController, NavController, NavParams, Platform } from 'ionic-angular';
+import { LoadingController, Events, NavController, NavParams, Page, Platform } from 'ionic-angular';
 
 // Objeto de configuracion
 import { AppConfig, ApplicationConfig } from '../../shared/app-config';
@@ -17,11 +17,14 @@ import { SolicitudModel } from '../../solicitudes/solicitud.model';
 // Pipes
 import { FormatearFechaPipe } from '../../shared/formatear-fecha.pipe';
 
+// Componente base
+import { BasePage } from '../../shared/base/base.component';
+
 @Component({
 	templateUrl: 'build/solicitudes/detalles-solicitud/detalles-solicitud.component.html',
   pipes: [ FormatearFechaPipe ]
 })
-export class DetallesSolicitudPage {
+export class DetallesSolicitudPage extends BasePage {
 
 	// Variables de la clase
 	private solicitudSeleccionada: SolicitudModel;
@@ -40,11 +43,14 @@ export class DetallesSolicitudPage {
               private loadingCtrl: LoadingController, 
               private datosService: DatosService,
               private localizacionService: LocalizacionService,
-              private config: AppConfig) {
+              eventsCtrl: Events,            
+              config: AppConfig) {
       
-      if(this.datosService.modoDebugActivado()) {
-        console.time('DetallesSolicitudPage / constructor');
-      }
+      // Inicializa la clase padre manualmente debido a un issue de angular
+      // https://github.com/angular/angular/issues/5155
+      super(eventsCtrl, config);
+
+      this.iniciarTimer('DetallesSolicitudPage / constructor');
 
   		// Obtenemos la solicitud seleccionada a traves de navParams
   		this.solicitudSeleccionada = navParams.get('unaSolicitud');
@@ -54,9 +60,7 @@ export class DetallesSolicitudPage {
       // Crea el mapa
       this.obteneMapaUrl(config.staticMapUrl, config.staticMapKey, 400, 400, 16);
 
-      if(this.datosService.modoDebugActivado()) {
-        console.timeEnd('DetallesSolicitudPage / constructor');
-      }
+      this.detenerTimer('DetallesSolicitudPage / constructor');
   	}
 
     // Método que crea la imagen del mapa
@@ -82,9 +86,7 @@ export class DetallesSolicitudPage {
     // Método que obtiene los datos del usuario
     public obtenerDatosUsuario(){
 
-      if(this.datosService.modoDebugActivado()) {
-        console.time('DetallesSolicitudPage / obtenerDatosUsuario');
-      }
+      this.iniciarTimer('DetallesSolicitudPage / obtenerDatosUsuario');
 
       this.tiposSanguineosSolicitud = DonacionesHelper.puedeRecibirDe(this.solicitudSeleccionada.getGrupoSanguineo().getId(), 
                                                                       this.solicitudSeleccionada.getFactorSanguineo().getId()).join(' ');
@@ -101,9 +103,7 @@ export class DetallesSolicitudPage {
           // Resaltamos el tipo sanguineo del usuario
           this.tiposSanguineosSolicitud = this.tiposSanguineosSolicitud.replace(tipoSanguineoUsuario, '<span class="marked">' + tipoSanguineoUsuario + '</span> ');
 
-          if(this.datosService.modoDebugActivado()) {
-            console.timeEnd('DetallesSolicitudPage / obtenerDatosUsuario');
-          }
+          this.detenerTimer('DetallesSolicitudPage / obtenerDatosUsuario');
         }
       });
     }
