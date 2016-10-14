@@ -70,27 +70,16 @@ export class DatosService {
 
   // Método que obtiene los datos del usuario
 	public getPreferenciasUsuario(): Promise<any> {
-		return new Promise((resolve)=> {
-
-			if(this.datosUsuarioObj === null) {
-				// Aún no se consulto si habia o no datos, por lo que hacemos la consulta
-				this.storage.get('datosUsuarioObj').then((preferenciasUsuario) => {
+		return this.storage.get('datosUsuarioObj').then((preferenciasUsuario) => {
 					if(!preferenciasUsuario) {
 			          // No hay datos guardados, por lo que seteamos la variable en false
-			          this.datosUsuarioObj = false;			         
-			          resolve(this.datosUsuarioObj);
+			          this.datosUsuarioObj = false;       
 			      } else {
 			          // Inicializamos los listados con la informacion del usuario
-			          this.datosUsuarioObj = JSON.parse(preferenciasUsuario);	          
-			          resolve(this.datosUsuarioObj);          
+			          this.datosUsuarioObj = JSON.parse(preferenciasUsuario);	                 
 			      }
-	  			});
-
-			} else {
-				// Devolver los datos guardados ya sea false o el objeto con la informacion
-				resolve(this.datosUsuarioObj);
-			}			
-		});
+            return this.datosUsuarioObj;
+      });
 	}
 
   // Guarda las preferencias del usuario
@@ -98,6 +87,8 @@ export class DatosService {
 		return this.storage.set('datosUsuarioObj', JSON.stringify(preferenciasUsuario))
 				.then(() => { 
 					this.datosUsuarioObj = preferenciasUsuario;
+
+          // Avisamos a los subscriptores que los datos fueron actualizados
 					this.datosUsuarioObserver.next(preferenciasUsuario);
 				});
 	}
@@ -126,20 +117,20 @@ export class DatosService {
 
   // Obtiene el listado de solicitudes
   public getSolicitudes(): Observable<Array<SolicitudModel>> {
-
     return this.http.get(this.apiEndPointSolicitudes)
-      .delay(1000) // Simulamos un retardo al buscar las solicitudes
+      .delay(500) // Simulamos un retardo al buscar las solicitudes
       .map(res => res.json());
   }
 
   // Obtiene el listado de provincias
   public getListaProvincias(): Observable<Array<ProvinciaModel>>{
     return this.http.get(this.apiEndPointProvincias)
-      .delay(1000) // Simulamos un retardo al buscar las solicitudes
+      .delay(500) // Simulamos un retardo al buscar las solicitudes
       .map(res => res.json())
       .map(listadoProvincias => {
         this.listaProvincias = [];
 
+        // Creamos el listado de provincias usando el modelo ProvinciaModel
         for(let i=0; i<listadoProvincias.length; i++) {
           this.listaProvincias.push(new ProvinciaModel(listadoProvincias[i].id, listadoProvincias[i].nombre));
         }
@@ -165,6 +156,8 @@ export class DatosService {
       .delay(1000) // Simulamos un retardo al buscar las solicitudes
       .map(res => res.json().filter(unaCiudad => unaCiudad.provincia == provinciaID))
       .map(listadoCiudades => {
+
+        // Creamos el listado de ciudades usando el modelo CiudadModel
         for(let i=0; i<listadoCiudades.length; i++) {
           this.listaCiudades.push(new CiudadModel(listadoCiudades[i].id, listadoCiudades[i].nombre));
         }
