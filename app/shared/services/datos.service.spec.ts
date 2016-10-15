@@ -13,11 +13,12 @@ import { ProvinciaModel } from '../../shared/models/provincia.model';
 import { CiudadModel } from '../..//shared/models/ciudad.model';
 import { GrupoSanguineoModel } from '../../shared/models/grupo-sanguineo.model';
 import { FactorSanguineoModel } from '../../shared/models/factor-sanguineo.model';
-import { GrupoSanguineoEnum, FactorSanguineoEnum } from '../../shared/services/donaciones.service';
-import { GrupoSanguineoHelper, FactorSanguineoHelper } from '../../shared/services/donaciones.service';
+import { GrupoSanguineoEnum, FactorSanguineoEnum, DonacionesService } from '../../shared/services/donaciones.service';
 
 // Objeto de configuracion
 import { AppConfig, ApplicationConfig } from '../../shared/app-config';
+
+let donacionesServiceHelper = new DonacionesService();
 
 describe('DatosService', () => {
 
@@ -25,6 +26,7 @@ describe('DatosService', () => {
 	beforeEachProviders(() => [
 	  	DatosService,
 			AppConfig,
+			DonacionesService,
 	  	BaseRequestOptions,
 	  	MockBackend,
 
@@ -50,8 +52,8 @@ describe('DatosService', () => {
 			"estaVigente" : true,
 			"provincia" : new ProvinciaModel(1, "Provincia 1"),
 			"ciudad" : new CiudadModel(1, "Ciudad 1"),
-			"grupoSanguineo" : new GrupoSanguineoModel(GrupoSanguineoEnum.A, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.A)),
-			"factorSanguineo" : new FactorSanguineoModel(FactorSanguineoEnum.RhPositivo, FactorSanguineoHelper.getDescripcion(FactorSanguineoEnum.RhPositivo)),
+			"grupoSanguineo" : new GrupoSanguineoModel(GrupoSanguineoEnum.A, donacionesServiceHelper.getDescripcionGrupoSanguineo(GrupoSanguineoEnum.A)),
+			"factorSanguineo" : new FactorSanguineoModel(FactorSanguineoEnum.RhPositivo, donacionesServiceHelper.getDescripcionFactorSanguineo(FactorSanguineoEnum.RhPositivo)),
 			"nombrePaciente": "Nombre Apellido",
 			"cantidadDadores" : 5,
 			"institucion" : "Sanatorio Mayo",
@@ -67,8 +69,8 @@ describe('DatosService', () => {
 			"estaVigente" : true,
 			"provincia" : new ProvinciaModel(1, "Provincia 1"),
 			"ciudad" : new CiudadModel(1, "Ciudad 1"),
-			"grupoSanguineo" : new GrupoSanguineoModel(GrupoSanguineoEnum.A, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.A)),
-			"factorSanguineo" : new FactorSanguineoModel(FactorSanguineoEnum.RhPositivo, FactorSanguineoHelper.getDescripcion(FactorSanguineoEnum.RhPositivo)),
+			"grupoSanguineo" : new GrupoSanguineoModel(GrupoSanguineoEnum.A, donacionesServiceHelper.getDescripcionGrupoSanguineo(GrupoSanguineoEnum.A)),
+			"factorSanguineo" : new FactorSanguineoModel(FactorSanguineoEnum.RhPositivo, donacionesServiceHelper.getDescripcionFactorSanguineo(FactorSanguineoEnum.RhPositivo)),
 			"cantidadDadores" : 3,
 			"nombrePaciente": "Nombre Apellido",
 			"institucion" : "Sanatorio Mayo",
@@ -84,8 +86,8 @@ describe('DatosService', () => {
 			"estaVigente" : true,
 			"provincia" : new ProvinciaModel(1, "Provincia 1"),
 			"ciudad" : new CiudadModel(1, "Ciudad 1"),
-			"grupoSanguineo" : new GrupoSanguineoModel(GrupoSanguineoEnum.A, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.A)),
-			"factorSanguineo" : new FactorSanguineoModel(FactorSanguineoEnum.RhPositivo, FactorSanguineoHelper.getDescripcion(FactorSanguineoEnum.RhPositivo)),
+			"grupoSanguineo" : new GrupoSanguineoModel(GrupoSanguineoEnum.A, donacionesServiceHelper.getDescripcionGrupoSanguineo(GrupoSanguineoEnum.A)),
+			"factorSanguineo" : new FactorSanguineoModel(FactorSanguineoEnum.RhPositivo, donacionesServiceHelper.getDescripcionFactorSanguineo(FactorSanguineoEnum.RhPositivo)),
 			"cantidadDadores" : 2,
 			"nombrePaciente": "Nombre Apellido",
 			"institucion" : "Sanatorio Mayo",
@@ -96,15 +98,15 @@ describe('DatosService', () => {
 		}];
 
 	let gruposSanguineosMock = [
-		new GrupoSanguineoModel(GrupoSanguineoEnum.Cero, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.Cero)),
-		new GrupoSanguineoModel(GrupoSanguineoEnum.A, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.A)),
-		new GrupoSanguineoModel(GrupoSanguineoEnum.AB, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.AB)),
-		new GrupoSanguineoModel(GrupoSanguineoEnum.B, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.B))
+		new GrupoSanguineoModel(GrupoSanguineoEnum.Cero, donacionesServiceHelper.getDescripcionGrupoSanguineo(GrupoSanguineoEnum.Cero)),
+		new GrupoSanguineoModel(GrupoSanguineoEnum.A, donacionesServiceHelper.getDescripcionGrupoSanguineo(GrupoSanguineoEnum.A)),
+		new GrupoSanguineoModel(GrupoSanguineoEnum.AB, donacionesServiceHelper.getDescripcionGrupoSanguineo(GrupoSanguineoEnum.AB)),
+		new GrupoSanguineoModel(GrupoSanguineoEnum.B, donacionesServiceHelper.getDescripcionGrupoSanguineo(GrupoSanguineoEnum.B))
 	];
 
 	let factoresSanguineosMock = [
-		new FactorSanguineoModel(FactorSanguineoEnum.RhPositivo, FactorSanguineoHelper.getDescripcion(FactorSanguineoEnum.RhPositivo)),
-		new FactorSanguineoModel(FactorSanguineoEnum.RhPositivo, FactorSanguineoHelper.getDescripcion(FactorSanguineoEnum.RhNegativo))
+		new FactorSanguineoModel(FactorSanguineoEnum.RhPositivo, donacionesServiceHelper.getDescripcionFactorSanguineo(FactorSanguineoEnum.RhPositivo)),
+		new FactorSanguineoModel(FactorSanguineoEnum.RhPositivo, donacionesServiceHelper.getDescripcionFactorSanguineo(FactorSanguineoEnum.RhNegativo))
 	];
 
 	// Hacemos el mock de las respuestas de las solicitudes

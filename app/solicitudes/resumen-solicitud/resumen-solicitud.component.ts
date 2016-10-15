@@ -3,7 +3,6 @@ import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from 
 
 // Servicios
 import { LocalizacionService } from '../../shared/services/localizacion.service';
-import { DonacionesHelper } from '../../shared/services/donaciones.service';
 
 // Modelos
 import { ResumenSolicitudModel } from '../../solicitudes/resumen-solicitud.model';

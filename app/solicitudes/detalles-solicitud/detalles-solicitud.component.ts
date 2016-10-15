@@ -6,7 +6,7 @@ import { LoadingController, Events, NavController, NavParams, Page, Platform } f
 import { ConectividadService } from '../../shared/services/conectividad.service';
 import { LocalizacionService } from '../../shared/services/localizacion.service';
 import { DatosService } from '../../shared/services/datos.service';
-import { DonacionesHelper } from '../../shared/services/donaciones.service';
+import { DonacionesService } from '../../shared/services/donaciones.service';
 
 // Modelos
 import { SolicitudModel } from '../../solicitudes/solicitud.model';
@@ -49,6 +49,7 @@ export class DetallesSolicitudPage extends BasePage {
               private loadingCtrl: LoadingController, 
               private datosService: DatosService,
               private localizacionService: LocalizacionService,
+              private donacionesService: DonacionesService,
               eventsCtrl: Events,            
               config: AppConfig) {
       
@@ -81,14 +82,14 @@ export class DetallesSolicitudPage extends BasePage {
 
       this.iniciarTimer('DetallesSolicitudPage / obtenerDatosUsuario');
 
-      this.tiposSanguineosSolicitud = DonacionesHelper.puedeRecibirDe(this.solicitudSeleccionada.getGrupoSanguineo().getId(), 
+      this.tiposSanguineosSolicitud = this.donacionesService.puedeRecibirDe(this.solicitudSeleccionada.getGrupoSanguineo().getId(), 
                                                                       this.solicitudSeleccionada.getFactorSanguineo().getId()).join(' ');
       this.compatibleConUsuario = false;
 
       // Obtenemos los datos del servicio de datos del usuario
       this.datosService.getPreferenciasUsuario().then((preferenciasUsuario) => {
         if(preferenciasUsuario) {
-          let tipoSanguineoUsuario = DonacionesHelper.getDescripcion(preferenciasUsuario.grupoSanguineoID, preferenciasUsuario.factorSanguineoID);
+          let tipoSanguineoUsuario = this.donacionesService.getDescripcionCompleta(preferenciasUsuario.grupoSanguineoID, preferenciasUsuario.factorSanguineoID);
 
           // Si es compatible mostramos un mensjae informandolo
           this.compatibleConUsuario = this.tiposSanguineosSolicitud.indexOf(tipoSanguineoUsuario) > -1;

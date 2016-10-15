@@ -11,7 +11,7 @@ import 'rxjs/add/operator/map';
 
 // Modelos a usar
 import { SolicitudModel } from '../../solicitudes/solicitud.model';
-import { FactorSanguineoHelper, GrupoSanguineoHelper, FactorSanguineoEnum, GrupoSanguineoEnum  } from './donaciones.service';
+import { FactorSanguineoEnum, GrupoSanguineoEnum, DonacionesService } from './donaciones.service';
 import { FactorSanguineoModel } from '../../shared/models/factor-sanguineo.model';
 import { GrupoSanguineoModel } from '../../shared/models/grupo-sanguineo.model';
 import { CiudadModel } from '../../shared/models/ciudad.model';
@@ -38,7 +38,9 @@ export class DatosService {
   private apiEndPointLocalidades: string;
   private apiEndPointSolicitudes: string;
 
-  constructor(public http: Http, public config: AppConfig) {
+  constructor(public http: Http, 
+              public donacionesService: DonacionesService,
+              public config: AppConfig) {
 
     // Obtenemos las API desde el archivo de configuracion
     this.apiEndPointLocalidades = config.apiEndPointLocalidades;
@@ -93,8 +95,8 @@ export class DatosService {
   public getFactoresSanguineos(): Array<FactorSanguineoModel> {
     let listaFactoresSanguineos = [];
 
-    listaFactoresSanguineos.push(new FactorSanguineoModel(FactorSanguineoEnum.RhPositivo, FactorSanguineoHelper.getDescripcion(FactorSanguineoEnum.RhPositivo)));
-    listaFactoresSanguineos.push(new FactorSanguineoModel(FactorSanguineoEnum.RhNegativo, FactorSanguineoHelper.getDescripcion(FactorSanguineoEnum.RhNegativo)));
+    listaFactoresSanguineos.push(new FactorSanguineoModel(FactorSanguineoEnum.RhPositivo, this.donacionesService.getDescripcionFactorSanguineo(FactorSanguineoEnum.RhPositivo)));
+    listaFactoresSanguineos.push(new FactorSanguineoModel(FactorSanguineoEnum.RhNegativo, this.donacionesService.getDescripcionFactorSanguineo(FactorSanguineoEnum.RhNegativo)));
 
     return listaFactoresSanguineos;
   }
@@ -103,10 +105,10 @@ export class DatosService {
   public getGruposSanguineos(): Array<GrupoSanguineoModel> {
     let listaGruposSanguineos = [];
 
-    listaGruposSanguineos.push(new GrupoSanguineoModel(GrupoSanguineoEnum.Cero, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.Cero)));
-    listaGruposSanguineos.push(new GrupoSanguineoModel(GrupoSanguineoEnum.A, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.A)));
-    listaGruposSanguineos.push(new GrupoSanguineoModel(GrupoSanguineoEnum.AB, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.AB)));
-    listaGruposSanguineos.push(new GrupoSanguineoModel(GrupoSanguineoEnum.B, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.B)));
+    listaGruposSanguineos.push(new GrupoSanguineoModel(GrupoSanguineoEnum.Cero, this.donacionesService.getDescripcionGrupoSanguineo(GrupoSanguineoEnum.Cero)));
+    listaGruposSanguineos.push(new GrupoSanguineoModel(GrupoSanguineoEnum.A, this.donacionesService.getDescripcionGrupoSanguineo(GrupoSanguineoEnum.A)));
+    listaGruposSanguineos.push(new GrupoSanguineoModel(GrupoSanguineoEnum.AB, this.donacionesService.getDescripcionGrupoSanguineo(GrupoSanguineoEnum.AB)));
+    listaGruposSanguineos.push(new GrupoSanguineoModel(GrupoSanguineoEnum.B, this.donacionesService.getDescripcionGrupoSanguineo(GrupoSanguineoEnum.B)));
 
     return listaGruposSanguineos;
   }

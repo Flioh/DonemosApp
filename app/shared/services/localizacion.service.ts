@@ -61,14 +61,11 @@ export class LocalizacionService {
   }
 
 	// Método que abre la aplicacion de GPS por defecto del usuario para guiarlo hacia la institucion
-  public mostrarRuta(direccion: string, nombreInstitucion: string): void {            
-
+  public mostrarRuta(direccion: string, nombreInstitucion: string) {            
     // Primero obtenemos las coordenadas
-    this.obtenerCoordenadas(direccion, nombreInstitucion).then((coordenadas) => {
-
+    return this.obtenerCoordenadas(direccion, nombreInstitucion).then((coordenadas) => {
       // Mostramos el lugar en la aplicacion que corresponda
       this.abrirAplicacionDeMapas(coordenadas, nombreInstitucion);
-
     });
   }
 }

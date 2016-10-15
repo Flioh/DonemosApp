@@ -14,9 +14,11 @@ import { FactorSanguineoModel } from '../shared/models/factor-sanguineo.model';
 import { GrupoSanguineoModel } from '../shared/models/grupo-sanguineo.model';
 
 // Servicios
-import { DonacionesHelper } from '../shared/services/donaciones.service';
-import { GrupoSanguineoHelper, FactorSanguineoHelper } from '../shared/services/donaciones.service';
+import { DonacionesService } from '../shared/services/donaciones.service';
 import { FactorSanguineoEnum, GrupoSanguineoEnum } from '../shared/services/donaciones.service';
+
+// Servicio usado para crear los mocks
+let donacionesService = new DonacionesService();
 
 // Mock de una pagina
 @Component({
@@ -38,8 +40,8 @@ export class ResumenSolicitudModelMock extends ResumenSolicitudModel {
 			"estaVigente" : true,
 			"provincia" : new ProvinciaModel(1, "Provincia 1"),
 			"ciudad" : new CiudadModel(1, "Ciudad 1"),
-			"grupoSanguineo" : new GrupoSanguineoModel(GrupoSanguineoEnum.A, GrupoSanguineoHelper.getDescripcion(GrupoSanguineoEnum.A)),
-			"factorSanguineo" : new FactorSanguineoModel(FactorSanguineoEnum.RhPositivo, FactorSanguineoHelper.getDescripcion(FactorSanguineoEnum.RhPositivo)),
+			"grupoSanguineo" : new GrupoSanguineoModel(GrupoSanguineoEnum.A, donacionesService.getDescripcionGrupoSanguineo(GrupoSanguineoEnum.A)),
+			"factorSanguineo" : new FactorSanguineoModel(FactorSanguineoEnum.RhPositivo, donacionesService.getDescripcionFactorSanguineo(FactorSanguineoEnum.RhPositivo)),
 			"nombrePaciente": "Nombre Apellido",
 			"cantidadDadores" : 7,
 			"institucion" : "Sanatorio Mayo",
@@ -51,7 +53,7 @@ export class ResumenSolicitudModelMock extends ResumenSolicitudModel {
 
 		let nuevaSolicitud = new SolicitudModel(datosSolicitudMock);
 
-		super(nuevaSolicitud, DonacionesHelper.puedeRecibirDe(nuevaSolicitud.getGrupoSanguineo().getId(), 
+		super(nuevaSolicitud, donacionesService.puedeRecibirDe(nuevaSolicitud.getGrupoSanguineo().getId(), 
                                                 			  nuevaSolicitud.getFactorSanguineo().getId()).join(' '));
 	}
 }
@@ -65,16 +67,16 @@ describe('SolicitudItem Model', () => {
 
 	// Tests para asegurar que los metodos necesarios estan definidos
 	// --------------------------------------------------------------
-	it('Debe tener un metodo getSolicitud()', inject([ResumenSolicitudModel], (ResumenSolicitudModel: ResumenSolicitudModelMock) => {
-		expect(ResumenSolicitudModel.getSolicitud).toBeDefined();
+	it('Debe tener un metodo getSolicitud()', inject([ResumenSolicitudModel], (resumenSolicitudModel: ResumenSolicitudModelMock) => {
+		expect(resumenSolicitudModel.getSolicitud).toBeDefined();
 	}));
 
-	it('Debe tener un metodo getDescripcionTiposSanguineos()', inject([ResumenSolicitudModel], (ResumenSolicitudModel: ResumenSolicitudModelMock) => {
-		expect(ResumenSolicitudModel.getDescripcionTiposSanguineos).toBeDefined();
+	it('Debe tener un metodo getDescripcionTiposSanguineos()', inject([ResumenSolicitudModel], (resumenSolicitudModel: ResumenSolicitudModelMock) => {
+		expect(resumenSolicitudModel.getDescripcionTiposSanguineos).toBeDefined();
 	}));
 
-	it('Debe tener un metodo setDescripcionTiposSanguineos()', inject([ResumenSolicitudModel], (ResumenSolicitudModel: ResumenSolicitudModelMock) => {
-		expect(ResumenSolicitudModel.setDescripcionTiposSanguineos).toBeDefined();
+	it('Debe tener un metodo setDescripcionTiposSanguineos()', inject([ResumenSolicitudModel], (resumenSolicitudModel: ResumenSolicitudModelMock) => {
+		expect(resumenSolicitudModel.setDescripcionTiposSanguineos).toBeDefined();
 	}));
 
 	
@@ -83,20 +85,30 @@ describe('SolicitudItem Model', () => {
 
 	// Tests para asegurar que los metodos devuelven los valores correctamente
 	// -----------------------------------------------------------------------
-	it('El metodo getSolicitud() debe devolver una solicitud', inject([ResumenSolicitudModel], (ResumenSolicitudModel: ResumenSolicitudModelMock) => {
-		let solicitudObtenida = ResumenSolicitudModel.getSolicitud();
+	it('El metodo getSolicitud() debe devolver una solicitud', inject([ResumenSolicitudModel], (resumenSolicitudModel: ResumenSolicitudModelMock) => {
+		let solicitudObtenida = resumenSolicitudModel.getSolicitud();
 
 		let propiedadesSolicitudObtenida = JSON.stringify(Object.keys(solicitudObtenida).sort());
 	    let propiedadesSolicitudCreada = JSON.stringify(Object.keys(new SolicitudModel()).sort());
 	    expect(propiedadesSolicitudObtenida).toBe(propiedadesSolicitudCreada);
 	}));
 
-	it('El metodo getDescripcionTiposSanguineos() debe devolver un string con la descripcion de los tipos sanguineos buscados', inject([ResumenSolicitudModel], (ResumenSolicitudModel: ResumenSolicitudModelMock) => {
-		let solicitudObtenida = ResumenSolicitudModel.getSolicitud();
-		let descripcionTiposSanguineosObtenida = ResumenSolicitudModel.getDescripcionTiposSanguineos();
-		let descripcionTiposSanguineosCreada = DonacionesHelper.puedeRecibirDe(solicitudObtenida.getGrupoSanguineo().getId(), 
+	it('El metodo getDescripcionTiposSanguineos() debe devolver un string con la descripcion de los tipos sanguineos buscados', inject([ResumenSolicitudModel], (resumenSolicitudModel: ResumenSolicitudModelMock) => {
+		let solicitudObtenida = resumenSolicitudModel.getSolicitud();
+		let descripcionTiposSanguineosObtenida = resumenSolicitudModel.getDescripcionTiposSanguineos();
+		let descripcionTiposSanguineosCreada = donacionesService.puedeRecibirDe(solicitudObtenida.getGrupoSanguineo().getId(), 
                                                 			  				   solicitudObtenida.getFactorSanguineo().getId()).join(' ');
 
 		expect(descripcionTiposSanguineosObtenida).toBe(descripcionTiposSanguineosCreada);
+	}));
+
+	it('El metodo getDescripcionTiposSanguineos() debe devolver un string con la descripcion de los tipos sanguineos buscados', inject([ResumenSolicitudModel], (resumenSolicitudModel: ResumenSolicitudModelMock) => {
+		let solicitudObtenida = resumenSolicitudModel.getSolicitud();
+		let descripcionTiposSanguineosCreada = donacionesService.puedeRecibirDe(solicitudObtenida.getGrupoSanguineo().getId(), solicitudObtenida.getFactorSanguineo().getId()).join(' ');
+		expect(descripcionTiposSanguineosCreada).toBe(resumenSolicitudModel.getDescripcionTiposSanguineos());
+
+		let nuevaDescripcionTiposSanguineos = donacionesService.puedeRecibirDe(GrupoSanguineoEnum.B, FactorSanguineoEnum.RhNegativo).join(' ');
+		resumenSolicitudModel.setDescripcionTiposSanguineos(nuevaDescripcionTiposSanguineos);
+		expect(nuevaDescripcionTiposSanguineos).toBe(resumenSolicitudModel.getDescripcionTiposSanguineos());
 	}));
 });

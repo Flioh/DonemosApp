@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
 import { AlertController, LoadingController, NavController, Events, Storage, Platform, MenuController } from 'ionic-angular';
 
 // Servicios
-import { DonacionesHelper } from '../../shared/services/donaciones.service';
+import { DonacionesService } from '../../shared/services/donaciones.service';
 import { DatosService } from '../../shared/services/datos.service';
 import { LoginService, PerfilUsuarioModel } from '../../shared/services/login.service';
 
@@ -68,6 +68,7 @@ export class ListaSolicitudesPage extends BasePage {
               private alertCtrl: AlertController,               
               private datosService: DatosService,
               private loginService: LoginService,
+              private donacionesService: DonacionesService,
               eventsCtrl: Events,
               config: AppConfig) 
   {    
@@ -257,7 +258,7 @@ export class ListaSolicitudesPage extends BasePage {
       this.iniciarTimer('ListaSolicitudesPage / obtenerInformacionTiposSanguineos');
 
       let result = '';
-      let posiblesDadores = DonacionesHelper.puedeRecibirDe(unaSolicitud.getGrupoSanguineo().getId(), 
+      let posiblesDadores = this.donacionesService.puedeRecibirDe(unaSolicitud.getGrupoSanguineo().getId(), 
                                                              unaSolicitud.getFactorSanguineo().getId());
 
       // Obtenems un string con todos los tipos sanguineos buscados
@@ -265,7 +266,7 @@ export class ListaSolicitudesPage extends BasePage {
 
       if(this.datosUsuarioObj) {
         // Obtenemos el tipo sanguineo del usuario
-        this.tipoSanguineoUsuario = DonacionesHelper.getDescripcion(this.datosUsuarioObj.grupoSanguineoID, this.datosUsuarioObj.factorSanguineoID);
+        this.tipoSanguineoUsuario = this.donacionesService.getDescripcionCompleta(this.datosUsuarioObj.grupoSanguineoID, this.datosUsuarioObj.factorSanguineoID);
 
         // Resaltamos el tipo sanguineo del usuario
         result = result.replace(this.tipoSanguineoUsuario, '<span class="marked">' + this.tipoSanguineoUsuario + '</span> ');

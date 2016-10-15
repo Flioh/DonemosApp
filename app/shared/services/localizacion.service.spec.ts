@@ -193,5 +193,33 @@ describe('LocalizacionService', () => {
     expect(window.open).toHaveBeenCalledWith('geo:0,0?q=' + coordenadas + '(' + encodeURI(nombreLugar) + ')', '_system');
   });
 
+  it('Debe tener un metodo mostrarRuta() que obtiene las coordenadas y abre la aplicacion de mapas', () => {
+    let coordenadas = '-31.6404232,-60.70327520000001';
+    let direccion = 'Riobamba 6951';
+    let nombreLugar = 'Casa';
+
+    // Hacemos que el mock use la plataforma android
+    let androidPlatform = (<any>new PlatformMock());
+    androidPlatform.setPlatform('android');
+    localizacionServiceMock = new LocalizacionService(androidPlatform);
+
+    // Hacemos un mock de la llamada al metodo obtenerCoordenadas()
+    var obtenerCoordenadasSpy = spyOn(localizacionServiceMock, 'obtenerCoordenadas');
+    obtenerCoordenadasSpy.and.callFake(function(){
+      return new Promise((resolve) => {
+        resolve(coordenadas);
+      });
+    });
+
+    // Hacemos un mock de la llamada al metodo abrirAplicacionDeMapas()
+    var abrirAplicacionMapasSpy = spyOn(localizacionServiceMock, 'abrirAplicacionDeMapas');
+
+    // Llamamos al método a testear
+    localizacionServiceMock.mostrarRuta(direccion, nombreLugar).then(() => {
+      expect(localizacionServiceMock.obtenerCoordenadas).toHaveBeenCalled();
+      expect(localizacionServiceMock.abrirAplicacionDeMapas).toHaveBeenCalled();
+    });
+  });
+
   
 });

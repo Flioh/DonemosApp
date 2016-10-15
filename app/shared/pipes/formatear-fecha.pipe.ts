@@ -9,11 +9,6 @@ export class FormatearFechaPipe implements PipeTransform {
 
   transform(value: Date, args?: any[]) {
 
-    // Si es un string lo convertimos en un Date
-    if(typeof value === 'string') {
-      value = new Date(value.toString());
-    }
-
     if(value instanceof Date) {
 
       let resultado: string;
