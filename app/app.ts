@@ -21,7 +21,7 @@ import { DatosService } from './shared/services/datos.service';
 import { LoginService, PerfilUsuarioModel } from './shared/services/login.service';
 
 // Paginas
-import { ErrorPage } from './shared/error/error.component';
+import { ErrorPage } from './shared/components/error/error.component';
 import { ListaSolicitudesPage } from './solicitudes/lista-solicitudes/lista-solicitudes.component';
 import { EditarPreferenciasPage } from './preferencias-usuario/editar-preferencias/editar-preferencias.component';
 

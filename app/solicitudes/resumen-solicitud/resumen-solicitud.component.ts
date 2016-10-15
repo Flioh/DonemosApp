@@ -9,7 +9,7 @@ import { DonacionesHelper } from '../../shared/services/donaciones.service';
 import { ResumenSolicitudModel } from '../../solicitudes/resumen-solicitud.model';
 
 // Pipes
-import { FormatearFechaPipe } from '../../shared/formatear-fecha.pipe';
+import { FormatearFechaPipe } from '../../shared/pipes/formatear-fecha.pipe';
 
 @Component({
     selector: 'resumen-solicitud',

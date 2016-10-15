@@ -21,7 +21,7 @@ import { FactorSanguineoModel } from '../../shared/models/factor-sanguineo.model
 import { GrupoSanguineoModel } from '../../shared/models/grupo-sanguineo.model';
 
 // Paginas y componente base
-import { BasePage } from '../../shared/base/base.component';
+import { BasePage } from '../../shared/components/base/base.component';
 import { DetallesSolicitudPage } from '../detalles-solicitud/detalles-solicitud.component';
 import { NuevaSolicitudPage } from '../nueva-solicitud/nueva-solicitud.component';
 

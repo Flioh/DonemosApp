@@ -2,7 +2,7 @@
 import { Directive, ElementRef, Input, EventEmitter, OnInit } from '@angular/core';
 
 // Objeto de configuracion
-import { AppConfig, ApplicationConfig } from './app-config';
+import { AppConfig, ApplicationConfig } from '../app-config';
 
 @Directive({ 
     selector: '[mapaEstatico]' 

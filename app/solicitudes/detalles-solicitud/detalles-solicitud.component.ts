@@ -12,13 +12,13 @@ import { DonacionesHelper } from '../../shared/services/donaciones.service';
 import { SolicitudModel } from '../../solicitudes/solicitud.model';
 
 // Pipes
-import { FormatearFechaPipe } from '../../shared/formatear-fecha.pipe';
+import { FormatearFechaPipe } from '../../shared/pipes/formatear-fecha.pipe';
 
 // Directivas
-import { MapaEstaticoDirective } from '../../shared/mapa-estatico.directive';
+import { MapaEstaticoDirective } from '../../shared/directives/mapa-estatico.directive';
 
 // Componente base
-import { BasePage } from '../../shared/base/base.component';
+import { BasePage } from '../../shared/components/base/base.component';
 
 // Objeto de configuracion
 import { AppConfig, ApplicationConfig } from '../../shared/app-config';

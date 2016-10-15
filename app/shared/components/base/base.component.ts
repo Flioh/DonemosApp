@@ -2,7 +2,7 @@
 import { Events } from 'ionic-angular';
 
 // Objeto de configuracion
-import { AppConfig, ApplicationConfig } from '../../shared/app-config';
+import { AppConfig, ApplicationConfig } from '../../app-config';
 
 export class BasePage {
 

@@ -12,7 +12,7 @@ import { DatosService } from '../../shared/services/datos.service';
 import { SolicitudModel } from '../solicitud.model';
 
 // Componente base
-import { BasePage } from '../../shared/base/base.component';
+import { BasePage } from '../../shared/components/base/base.component';
 
 import { CiudadModel } from '../../shared/models/ciudad.model';
 import { ProvinciaModel } from '../../shared/models/provincia.model';
@@ -20,7 +20,7 @@ import { FactorSanguineoModel } from '../../shared/models/factor-sanguineo.model
 import { GrupoSanguineoModel } from '../../shared/models/grupo-sanguineo.model';
 
 // Directivas
-import { InstitucionesAutocompleteDirective } from '../../shared/instituciones-autocomplete.directive';
+import { InstitucionesAutocompleteDirective } from '../../shared/directives/instituciones-autocomplete.directive';
 
 // Objeto de configuracion
 import { AppConfig, ApplicationConfig } from '../../shared/app-config';
