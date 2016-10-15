@@ -19,6 +19,7 @@ export class AppConfig {
   public apiEndPointSolicitudes: string =	  './solicitudes.json';
 
   // Google maps
+  public autocompleteKey: string =          'AIzaSyA5BOCKPPOLj3DZaJXmCzmUkHE-aUV4Rnc';
   public staticMapUrl: string =             'https://maps.googleapis.com/maps/api/staticmap';
   public staticMapKey: string =             'AIzaSyCW_Mlb8DXkLE4ga5YreODfY6ECo5kTiw8';
   public alto: number =                     400;

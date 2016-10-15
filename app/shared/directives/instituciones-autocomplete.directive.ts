@@ -10,9 +10,6 @@ declare var google: any;
 export class InstitucionesAutocompleteDirective {
     @Output() seleccionarInstitucion = new EventEmitter();
 
-    // TODO: obtener la API del objeto CONFIG
-	private apiKey: string;
-
 	private autocomplete: any;
 	private datosDireccion: any = {};
     
