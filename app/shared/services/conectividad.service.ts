@@ -18,6 +18,7 @@ export class ConectividadService {
  
   // Método que devuelve true si hay conexion a internet
   public hayConexion():boolean {
+    debugger;
     if(this.esMovil && navigator['connection']){
       return navigator['connection']['type'] !== Connection.NONE;
     } else {
