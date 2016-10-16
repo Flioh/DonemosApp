@@ -17,6 +17,7 @@ import { PreferenciasUsuarioModel } from './preferencias-usuario/preferencias-us
 // Servicios
 import { ConectividadService } from './shared/services/conectividad.service';
 import { LocalizacionService } from './shared/services/localizacion.service';
+import { DonacionesService } from './shared/services/donaciones.service';
 import { DatosService } from './shared/services/datos.service';
 import { LoginService, PerfilUsuarioModel } from './shared/services/login.service';
 
@@ -32,7 +33,8 @@ import { AppConfig } from './shared/app-config';
   templateUrl: 'build/app.html',
   providers: [ConectividadService, 
               LocalizacionService, 
-              DatosService, 
+              DatosService,
+              DonacionesService,
               AppConfig,
               provide(AuthHttp, { useFactory: (http) => {
                                     return new AuthHttp(new AuthConfig({noJwtError: true}), http);

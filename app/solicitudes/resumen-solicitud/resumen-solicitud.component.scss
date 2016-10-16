@@ -15,6 +15,10 @@ resumen-solicitud {
 		width: 100%;
 	}
 
+	resumen-solicitud ion-card:first-child {
+    	margin-top: 0px;
+	}
+
 	ion-card ion-item.item:first-child {
 	    color: #fff;
 	    background-color: #f32d2e;
