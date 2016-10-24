@@ -19,18 +19,18 @@ export class AppConfig {
   public apiEndPointSolicitudes: string =	  './solicitudes.json';
 
   // Google maps
-  public autocompleteKey: string =          'AIzaSyA5BOCKPPOLj3DZaJXmCzmUkHE-aUV4Rnc';
+  public autocompleteKey: string =          '';
   public staticMapUrl: string =             'https://maps.googleapis.com/maps/api/staticmap';
-  public staticMapKey: string =             'AIzaSyCW_Mlb8DXkLE4ga5YreODfY6ECo5kTiw8';
+  public staticMapKey: string =             '';
   public alto: number =                     400;
   public largo: number =                    400;
   public zoom: number =                     16;
 
   // Auth0
-  public clientId: string =                 '4gUa8ibKIj6T8gMUvec3AzxbpirH5rGq';
-  public domain: string =                   'donemos.auth0.com';
+  public clientId: string =                 '';
+  public domain: string =                   '';
 
   // Otras configuraciones
-  public modoDebug: boolean =               true;
+  public modoDebug: boolean =               false;
 
 }
