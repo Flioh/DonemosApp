@@ -267,7 +267,7 @@ export class ListaSolicitudesPage {
   // Método que obtiene el indice del elemento cuyo id es el pasado como parametro
   public getIndicePorID(listado: Array<any>, id: number): number {
     for(let i=0; i<listado.length; i++) {
-      if(id === listado[i].getId())
+      if(id === listado[i].id)
         return i;
     }
     return -1;
