@@ -12,6 +12,8 @@ import { DonemosApp } from './app.component';
 import { DatosService } from '../shared/services/datos.service';
 import { DonacionesService } from '../shared/services/donaciones.service';
 import { LocalizacionService } from '../shared/services/localizacion.service';
+import { ConectividadService } from '../shared/services/conectividad.service';
+
 import { AppConfig } from '../shared/app-config';
 
 // Paginas y componentes
@@ -63,6 +65,11 @@ import { FormatearFechaPipe } from '../shared/pipes/formatear-fecha.pipe';
     EditarPreferenciasPage,
     ErrorPage
   ],
-  providers: [ DatosService, DonacionesService, LocalizacionService, Storage, AppConfig ]
+  providers: [  DatosService, 
+                DonacionesService, 
+                LocalizacionService, 
+                ConectividadService, 
+                Storage, 
+                AppConfig ]
 })
 export class AppModule {}
