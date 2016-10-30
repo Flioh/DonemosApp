@@ -1,0 +1,21 @@
+<ion-menu [content]="content" side="right" persistent="true" >
+  <ion-content>
+
+    <ion-row>
+      <ion-col id="hiw-login-container" width-100>
+      </ion-col>
+    </ion-row>
+
+    <!-- Main navigation links-->
+    <ion-list no-lines class="main-menu">
+      <button menuClose ion-item detail-none *ngFor="let pagina of paginasMenu" (click)="abrirPagina(pagina)">
+        <ion-icon ios="{{pagina.getIconoIosOutline()}}" md="{{pagina.getIconoAndroid()}}" item-left></ion-icon>
+        {{ pagina.titulo }}
+      </button>
+
+    </ion-list>
+
+  </ion-content>
+</ion-menu>
+
+<ion-nav id="nav" [root]="rootPage" #content swipe-back-enabled="false"></ion-nav>

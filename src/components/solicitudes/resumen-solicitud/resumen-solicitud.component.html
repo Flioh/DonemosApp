@@ -1,0 +1,51 @@
+<ion-card>
+
+	<ion-item class="solicitud">
+		<ion-avatar class="card-icon" item-left>
+			<ion-icon class="big" color="rojoOscuro" name="water"></ion-icon>
+		</ion-avatar>
+
+		<h2> 
+          <span>{{ solicitudItemModel.solicitud.cantidadDadores === 1 ? 'Se necesita ' : 'Se necesitan ' }}</span>
+          <strong *ngIf="solicitudItemModel.solicitud.cantidadDadores">
+          	{{ solicitudItemModel.solicitud.cantidadDadores }}
+          </strong>
+          <span>{{ solicitudItemModel.solicitud.cantidadDadores === 1 ? ' dador' : ' dadores' }}</span>
+        </h2>  
+
+		<h2 [innerHTML]="solicitudItemModel.descripcionTiposSanguineos"></h2>
+	</ion-item>
+
+	<button ion-fab color="blanco" (click)="mostrarRuta()" class="top-middle">
+		<ion-icon color="rojo" name="pin"></ion-icon>
+	</button>
+
+	<ion-card-content class="detalle-solicitud">
+		<ion-row>
+			<ion-col>
+				<ion-icon name="pin"></ion-icon>
+				{{ solicitudItemModel.solicitud.ciudad.nombre }}, {{ solicitudItemModel.solicitud.provincia.nombre}}
+			</ion-col>			
+		</ion-row>
+		<ion-row>
+			<ion-col width-60>
+				<ion-icon name="home"></ion-icon>
+				{{ solicitudItemModel.solicitud.institucion }}
+			</ion-col>
+			<ion-col width-40>
+				<ion-icon name="time"></ion-icon>
+				{{ solicitudItemModel.solicitud.horaDesde }} - {{ solicitudItemModel.solicitud.horaHasta }}
+			</ion-col>
+		</ion-row>	
+		<ion-row>
+			<ion-col width-60>
+				<ion-note>
+					{{ solicitudItemModel.solicitud.fechaCreacion | formatearFecha }}
+				</ion-note>
+			</ion-col>
+			<ion-col tappable width-40 (click)="verDetalles()">
+				VER MÁS >
+			</ion-col>
+		</ion-row>
+	</ion-card-content>
+</ion-card>

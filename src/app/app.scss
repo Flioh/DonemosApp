@@ -1,0 +1,130 @@
+// Hoja de Estilos
+// 01 - Forms
+// 02 - Iconos
+
+
+// 01 - Forms
+// --------------------------------------------------
+
+span.mensaje-error {
+	color: $form_colorTextoValidacion;
+    font-size: 1.3rem;
+    padding: 10px 16px;
+    display: block;
+}
+
+p {
+	white-space: pre-line;
+}
+
+button[type='submit'],
+button.submit {
+	margin-top: 50px;
+
+}
+
+ion-item.half-size {
+	max-width: 49%;
+	display: inline-block;
+}
+
+button.alert-radio-button[aria-checked="true"] {
+	background-color: $rojoClaro;
+}
+
+/* Estilos para los forms en iOS*/
+body.ios form {
+
+	ion-item .item-inner {
+	    border-bottom: none;
+	}
+
+	ion-label {
+	    margin-left: 10px;
+	}
+
+	ion-input, 
+	ion-textarea,
+	ion-select,
+	ion-item.item-datetime .input-wrapper {
+		background-color: ios_colorFondoCampo
+	}
+
+	ion-input, 
+	ion-textarea {	    
+	    padding: 0px 10px;
+	} 
+
+	ion-select {
+		padding: 8px 10px;
+	}
+
+	/* Fix para el componente datetime */
+	ion-item.item-datetime .input-wrapper {
+    	margin-top: 25px;
+	}
+
+	ion-item.ng-invalid.ng-touched ion-input,
+	ion-select.ng-invalid.ng-touched,
+	ion-item.ng-invalid.ng-touched ion-textarea
+	ion-item.ng-touched.item-datetime.input-has-value .input-wrapper {
+        background-color: $ios-colorMensajeError;
+	}
+
+	ion-item.ng-touched.ng-valid ion-input,
+	ion-item ion-select.ng-touched.ng-valid,
+	ion-item.ng-touched.ng-valid ion-textarea,
+	ion-item.ng-touched.item-datetime.input-has-value .input-wrapper {
+        background-color: $ios-colorMensajeExito;
+	}
+}
+
+/* Estilos para los forms en Android */
+body.md form {
+
+	/* Fix para bug en el label al poner el foco en el campo */
+	ion-label[floating],
+	ion-label[stacked] {
+		color: $form_colorTexto;
+	}
+
+	/* Fix para mostrar la validacion en azul cuando el input tiene el cursor */
+	ion-item.submitted.input-has-focus .item-inner,
+	ion-item:not(.submitted).input-has-focus .item-inner {
+		border-bottom: 2px solid $android_colorFocus !important;
+	}
+
+}
+
+// 02 - Iconos
+// --------------------------------------------------
+
+ion-icon.ion-logo-facebook.menu-icon {
+    background-color: $color_facebook;
+    color: $blanco;
+    border-radius: 50%;
+    height: 60px;
+    width: 60px;
+    padding: 10px;
+    font-size: 3em;
+}
+
+ion-icon.ion-logo-twitter.menu-icon {
+    background-color: $color_twitter;
+    color: $blanco;
+    border-radius: 50%;
+    height: 60px;
+    width: 60px;
+    padding: 10px;
+    font-size: 3em;
+}
+
+ion-icon.ion-logo-googleplus.menu-icon {
+    background-color: $color_googlePlus;
+    color: $blanco;
+    border-radius: 50%;
+    height: 60px;
+    width: 60px;
+    padding: 10px;
+    font-size: 3em;
+}

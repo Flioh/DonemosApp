@@ -1,0 +1,108 @@
+// Ionic Variables and Theming. For more info, please see:
+// http://ionicframework.com/docs/v2/theming/
+@import "ionic.globals";
+
+
+// Shared Variables
+// --------------------------------------------------
+// To customize the look and feel of this app, you can override
+// the Sass variables found in Ionic's source scss files.
+// To view all the possible Ionic variables, see:
+// http://ionicframework.com/docs/v2/theming/overriding-ionic-variables/
+
+// Colores principales de la aplicacion
+$rojo : 	              #f32d2e;
+$rojoOscuro :           #e00d0e;
+$rojoClaro:	            #f4484b;
+$blanco: 	              #ffffff;
+$verde:		              #7ad596;
+$gris:                  #666666;
+
+// Colores a usar en los formularios
+$form_colorTexto:            #999;
+$form_colorTextoValidacion:  #7f7f7f;
+
+$ios-colorTexto:        #d2d2d2;
+$ios_colorFondoCampo:   #f2f2f2;
+$ios-colorMensajeError: rgba(245, 61, 61, 0.25);
+$ios-colorMensajeExito: rgba(50, 219, 100, 0.25);
+
+$android_colorFocus 	: #387ef5;
+
+$color_facebook:        #3b5998;
+$color_twitter:         #53a3ff;
+$color_googlePlus:      #d34836;
+
+
+// Named Color Variables
+// --------------------------------------------------
+// Named colors makes it easy to reuse colors on various components.
+// It's highly recommended to change the default colors
+// to match your app's branding. Ionic uses a Sass map of
+// colors so you can add, rename and remove colors as needed.
+// The "primary" color is the only required color in the map.
+
+$colors: (
+  // Colores por defecto de Ionic
+  primary:    #387ef5,
+  secondary:  #32db64,
+  danger:     #f53d3d,
+  light:      #f4f4f4,
+  dark:       #222,
+  favorite:   #69BB7B,
+  
+  // Colores personalizados
+  rojo:       $rojo,
+  rojoClaro:  $rojoClaro,
+  rojoOscuro: $rojoOscuro,
+  blanco:     $blanco,
+  verde:      $verde,
+  gris:       $gris
+);
+
+
+// App iOS Variables
+// --------------------------------------------------
+// iOS only Sass variables can go here
+
+$alert-ios-button-text-color: $blanco;
+$alert-ios-button-background-color: $rojoClaro;
+$alert-ios-button-background-color-activated: $rojoOscuro;
+
+
+// App Material Design Variables
+// --------------------------------------------------
+// Material Design only Sass variables can go here
+
+$alert-md-button-text-color: $blanco;
+$alert-md-button-background-color: $rojoClaro;
+$alert-md-button-background-color-activated: $rojoOscuro;
+
+
+
+// App Windows Variables
+// --------------------------------------------------
+// Windows only Sass variables can go here
+
+$alert-wp-button-text-color: $blanco;
+$alert-wp-button-background-color: $rojoClaro;
+$alert-wp-button-background-color-activated: $rojoOscuro;
+
+
+// App Theme
+// --------------------------------------------------
+// Ionic apps can have different themes applied, which can
+// then be future customized. This import comes last
+// so that the above variables are used and Ionic's
+// default are overridden.
+
+@import "ionic.theme.default";
+
+
+// Ionicons
+// --------------------------------------------------
+// The premium icon font for Ionic. For more info, please see:
+// http://ionicframework.com/docs/v2/ionicons/
+
+$ionicons-font-path: "../assets/fonts";
+@import "ionicons";

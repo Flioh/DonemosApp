@@ -1,0 +1,100 @@
+detalles-solicitud-page {
+
+	ion-item.header > div.item-inner {
+		padding: 0;
+	}
+
+	ion-item.header ion-label {
+		margin: 0;
+	}
+
+	ion-item.header {
+    	display: inline-block;
+	    background-color: $rojoClaro;
+	    color: $blanco;
+	    margin: 0 0 20px;
+	    padding: 5px 10px 20px;
+	    width: 100%;
+	    text-align: center;
+	    border: none;
+	}
+
+	ion-item.header  h3 {
+	    font-size: 1.4em;
+	    margin-top: 20px;
+	    padding-bottom: 10px;
+	}
+
+
+	ion-item.header  h2 {
+	    font-size: 2.2em;
+    	white-space: pre-line;
+	    font-weight: 100;
+	    margin-bottom: 10px;
+	}
+
+	ion-item.header  span.fecha {
+	    font-size: 1.2em;
+	    font-weight: 600;
+	    display: block;
+    	margin-top: 15px;
+	}
+
+	span.marked {
+	    font-weight:900;
+	}
+
+	ion-icon[item-left] {
+		font-size: 2em;
+	    margin-left: 0;
+	    position: absolute;
+	    top: 0;
+	    left: 30px;
+    }
+
+	ion-item.detail-item.item h2 {
+	    font-size: 1.1em;
+	    font-weight: 600;
+	    color: $rojoClaro;
+	}
+
+	ion-item.detail-item.item p {
+	    font-size: 1.1em;
+	    white-space: pre-line;
+	    margin-right: 20px;
+	}
+
+	ion-item.detail-item.item p span.marked{
+	    color: $verde;
+	    font-weight: 900;
+	}
+
+	ion-item.detail-item.item span {
+	    color: $verde;
+	    font-size: 1.1em;
+	    font-weight: 500;
+	}
+
+	ion-item.detail-item.item a {
+	    color: $rojo;
+	    text-decoration: none;
+	    font-size: 1.2em;
+	    font-weight: 400;
+	}
+
+	div.map-container {
+		position: relative;
+		display: inline-block;
+	    height: 300px;
+	    width: 100%;
+	    margin: 20px 0;
+	}
+
+	div#overlay {
+		height: 300px;
+	    width: 100%;
+	    position: absolute;
+	    bottom: 0;
+	    z-index: 9999;
+	}
+}
