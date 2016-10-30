@@ -1,6 +1,7 @@
 // Hoja de Estilos
 // 01 - Forms
 // 02 - Iconos
+// 03 - Login 
 
 
 // 01 - Forms
@@ -127,4 +128,77 @@ ion-icon.ion-logo-googleplus.menu-icon {
     width: 60px;
     padding: 10px;
     font-size: 3em;
+}
+
+// 03 - Login
+// --------------------------------------------------
+
+div.social-container {
+	padding: 20px 0;
+    border-bottom: 1px solid black;
+}
+
+.social-title {
+	text-align: center;	
+
+	h4 {
+		margin-top: 0;
+	}
+}
+.social-links {
+	margin: 0px;
+	padding: 0 10px;
+	text-align: center;
+
+}
+
+ion-list.main-menu {
+	margin-top: 20px;
+}
+
+ion-row.profile img {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    margin-top: 20px;
+}
+
+ion-row.profile {
+	background-color: $rojo;
+	color: $blanco;
+    text-align: center;
+}
+
+/* Auth0 styles */
+.auth0-lock.auth0-lock .auth0-lock-widget {
+    width: 100%;
+}
+
+.auth0-lock.auth0-lock .auth0-lock-content {
+	padding: 20px 10px;
+}
+
+ion-col#hiw-login-container {
+    padding: 0;
+    border-bottom: 1px solid #222;
+}
+
+.auth0-lock.auth0-lock .auth0-lock-header-bg .auth0-lock-header-bg-solid {
+	opacity: 0;
+}
+
+.auth0-lock.auth0-lock .auth0-lock-header {
+	padding: 24px 14px 0px 14px;
+}
+
+.auth0-lock.auth0-lock .auth0-lock-social-button:not(.auth0-lock-social-big-button) {
+	width: 55px;
+	height: 55px;
+	border-radius: 50%;
+	margin: 0 10px;
+}
+
+.auth0-lock.auth0-lock .auth0-lock-social-button:not(.auth0-lock-social-big-button) .auth0-lock-social-button-icon {
+	width: 55px;
+	height: 55px;
 }

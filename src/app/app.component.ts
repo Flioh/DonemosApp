@@ -13,6 +13,8 @@ import { ErrorPage } from '../shared/components/error/error.component';
 // Modelos
 import { ItemMenuModel } from '../shared/models/item-menu.model';
 
+// Servicios
+import { LoginService } from '../shared/services/login.service';
 
 @Component({
   templateUrl: 'app.html'
@@ -24,7 +26,11 @@ export class DonemosApp {
   public rootPage: any = ListaSolicitudesPage;
   public paginasMenu: Array<ItemMenuModel> = [];
 
-  constructor(public platform: Platform, public menuCtrl: MenuController) {
+  public estaLogueado: boolean;
+
+  constructor(public platform: Platform, 
+              public menuCtrl: MenuController,
+              public login: LoginService) {
     this.inicializarApp();
   }
 
@@ -36,6 +42,10 @@ export class DonemosApp {
       Splashscreen.hide();
 
       this.cargarOpcionesMenuPrincipal(); 
+
+      // Muestra las opciones de login
+      this.login.login();
+
     });
   }
 

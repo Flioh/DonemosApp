@@ -1,8 +1,15 @@
 <ion-menu [content]="content" side="right" persistent="true" >
   <ion-content>
 
-    <ion-row>
+    <ion-row *ngIf="!login.authenticated()">
       <ion-col id="hiw-login-container" width-100>
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="login.authenticated()" class="profile">
+      <ion-col width-100>
+        <img [src]="login.user?.picture">
+        <h3>{{ login.user?.name }}</h3>
       </ion-col>
     </ion-row>
 

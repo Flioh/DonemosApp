@@ -1,9 +1,13 @@
 // Referencias de Angular
 import { NgModule } from '@angular/core';
+import { Http } from '@angular/http';
 
 // Referencias de Ionic
 import { IonicApp, IonicModule } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
+
+// Referencias de Auth0
+import { AuthConfig, AuthHttp } from 'angular2-jwt';
 
 // App
 import { DonemosApp } from './app.component';
@@ -13,6 +17,8 @@ import { DatosService } from '../shared/services/datos.service';
 import { DonacionesService } from '../shared/services/donaciones.service';
 import { LocalizacionService } from '../shared/services/localizacion.service';
 import { ConectividadService } from '../shared/services/conectividad.service';
+
+import { LoginService } from '../shared/services/login.service';
 
 import { AppConfig } from '../shared/app-config';
 
@@ -30,6 +36,17 @@ import { InstitucionesAutocompleteDirective } from '../shared/directives/institu
 
 // Pipes
 import { FormatearFechaPipe } from '../shared/pipes/formatear-fecha.pipe';
+
+// Creamos una instancia del Storage para usar en el provider de Auth0
+let storage: Storage = new Storage();
+
+// Redefinimos el tokenGetter de Auth0
+export function getAuthHttp(http) {
+  return new AuthHttp(new AuthConfig({
+    globalHeaders: [{'Accept': 'application/json'}],
+    tokenGetter: (() => storage.get('id_token'))
+  }), http);
+}
 
 @NgModule({
   declarations: [
@@ -70,6 +87,12 @@ import { FormatearFechaPipe } from '../shared/pipes/formatear-fecha.pipe';
                 LocalizacionService, 
                 ConectividadService, 
                 Storage, 
-                AppConfig ]
+                AppConfig,
+                LoginService,
+                {
+                    provide: AuthHttp,
+                    useFactory: getAuthHttp,
+                    deps: [Http]
+                } ]
 })
 export class AppModule {}
