@@ -140,6 +140,7 @@ export class ListaSolicitudesPage {
 
       // Actualizamos la solicitud
       this.solicitudes[i].descripcionTiposSanguineos = descripcionTiposSanguineos;
+      this.solicitudes[i].esCompatibleConUsuario = this.esCompatibleConUsuario(this.solicitudes[i].solicitud);
     }
   }
 
