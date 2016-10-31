@@ -1,10 +1,25 @@
 // Hoja de Estilos
-// 01 - Forms
-// 02 - Iconos
-// 03 - Login 
+// 01 - Generales
+// 02 - Forms
+// 03 - Iconos
+// 04 - Login 
 
 
-// 01 - Forms
+// 01 - Generales
+// --------------------------------------------------
+
+ion-title.title-md img.logo {
+    max-width: 180px;
+    margin: 6px 0 2px;
+}
+
+ion-title.title-ios img.logo {
+    max-width: 150px;
+    margin: 6px 0 2px;
+}
+
+
+// 02 - Forms
 // --------------------------------------------------
 
 span.mensaje-error {
@@ -30,7 +45,7 @@ ion-item.half-size {
 }
 
 button.alert-radio-button[aria-checked="true"] {
-	background-color: $rojoClaro;
+	background-color: $principal;
 }
 
 /* Estilos para los forms en iOS*/
@@ -97,7 +112,7 @@ body.md form {
 
 }
 
-// 02 - Iconos
+// 03 - Iconos
 // --------------------------------------------------
 
 ion-icon.ion-logo-facebook.menu-icon {
@@ -164,7 +179,7 @@ ion-row.profile img {
 }
 
 ion-row.profile {
-	background-color: $rojo;
+	background-color: $principal;
 	color: $blanco;
     text-align: center;
 }

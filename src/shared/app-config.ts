@@ -27,8 +27,8 @@ export class AppConfig {
   public zoom: number =                     16;
 
   // Auth0
-  public clientId: string =                 'DY8adElNXTxdjzEpdWl3E6VL6XkuYog1';
-  public domain: string =                   'donemos.auth0.com';
+  public authClientId: string =                 'DY8adElNXTxdjzEpdWl3E6VL6XkuYog1';
+  public authDomain: string =                   'donemos.auth0.com';
 
   // Otras configuraciones
   public modoDebug: boolean =               true;

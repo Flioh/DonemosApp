@@ -1,3 +1,4 @@
+import { Config } from 'ionic-angular/umd';
 // Referencias de Angular
 import { Injectable, NgZone } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
@@ -7,6 +8,9 @@ import { Storage } from '@ionic/storage';
 
 // Referencias de Auth0
 import { AuthHttp, JwtHelper, tokenNotExpired } from 'angular2-jwt';
+
+// Archivo de configuracion
+import { AppConfig } from '../app-config';
 
 // Interfaz usada para mostrar los datos del perfil del usuario
 export interface PerfilUsuarioModel {
@@ -27,17 +31,20 @@ export class LoginService {
 
   private storage: Storage;
   
-  private refreshSubscription: any;
-  public user: Object;
+  private renovarSubscripcion: any;
+  public user: PerfilUsuarioModel;
   private idToken: string;
   
-  constructor(private authHttp: AuthHttp, public zoneImpl: NgZone) {
+  constructor(private authHttp: AuthHttp, 
+              public zoneImpl: NgZone,
+              public config: AppConfig) {
 
     this.storage = new Storage();
 
+    // Inicializamos las variables de Auth0
     this.jwtHelper = new JwtHelper();
-    this.auth0 = new Auth0({clientID: 'DY8adElNXTxdjzEpdWl3E6VL6XkuYog1', domain: 'donemos.auth0.com' });
-    this.lock = new Auth0Lock('DY8adElNXTxdjzEpdWl3E6VL6XkuYog1', 'donemos.auth0.com', {
+    this.auth0 = new Auth0({clientID: this.config.authClientId, domain: this.config.authDomain });
+    this.lock = new Auth0Lock(this.config.authClientId, this.config.authDomain, {
       auth: {
             redirect: false,
             params: {
@@ -53,146 +60,177 @@ export class LoginService {
             title: "Iniciar sesión"
         },
         theme: {
-            // logo: 'https://example.com/assets/logo.png',
+            logo: 'assets/images/logo_negro.png',
             primaryColor: '#f32d2e'
         } 
     });
 
+    // Manejamos el evento de autenticacion de Auth0 
     this.lock.on('authenticated', authResult => {
-      this.storage.set('id_token', authResult.idToken);
-      this.idToken = authResult.idToken;
+      this.manejarLoginUsuario(authResult);
+    });
+  }
 
-      // Fetch profile information
-      this.lock.getProfile(authResult.idToken, (error, profile) => {
+  // Método que se ejecuta cuando el usuario inicia sesion usando el Lock
+  private manejarLoginUsuario(resultadoAuth: any) {
+      // Guardamos el token para usarlo luego
+      this.storage.set('id_token', resultadoAuth.idToken);
+      this.idToken = resultadoAuth.idToken;
+
+      // Obtenemos la informacion del perfil del usuario
+      this.lock.getProfile(resultadoAuth.idToken, (error, profile) => {
         if (error) {
-          // Handle error
+          // TODO: manejar error
+          // -------------------
           alert(error);
           return;
         }
 
+        // Guardamos el perfil del usuario
         profile.user_metadata = profile.user_metadata || {};
         this.storage.set('profile', JSON.stringify(profile));
         this.user = profile;
-      
         console.log(this.user);
-
       });
 
+      // Ocultamos las opciones de login
       this.lock.hide();
 
-      this.storage.set('refresh_token', authResult.refreshToken);
+      // Guardamos el token que usaremos para renovar el JWT
+      this.storage.set('refresh_token', resultadoAuth.refreshToken);
 
-      this.zoneImpl.run(() => this.user = authResult.profile);
+      // Actualizamos los datos del usuario
+      this.zoneImpl.run(() => this.user = resultadoAuth.profile);
       
-      // Schedule a token refresh
-      this.scheduleRefresh();
-
-    });
+      // Agendamos una renovacion del token
+      this.programarRenovacionToken();
   }
 
-  public loadExistingData() {
-    // Check if there is a profile saved in local storage
+  // Método que busca en el storage si hay datos del perfil del usuario y del token
+  public cargarInformacionUsuario() {
+    // Buscamos si hay datos del usuario guardados en el storage
     this.storage.get('profile').then(profile => {
       this.user = JSON.parse(profile);
     }).catch(error => {
       console.log(error);
     });
 
+    // Buscamos tambien si hay un token guardado
     this.storage.get('id_token').then(token => {
       this.idToken = token;
     });
   }
 
-  public authenticated() { 
+  // Método que verfica si el usuario esta logueado o no
+  public estaLogueado() { 
     return tokenNotExpired('id_token', this.idToken);
   }
   
-  public login() {
-    // Show the Auth0 Lock widget
+  // Metodo que inicializa las opciones de login
+  public inicializarLogin() {
+
+    // Primero verificamos si no hay informacion del usuario
+    this.cargarInformacionUsuario();
+
+    // Mostramos el Lock de Auth0
     this.lock.show();
   }
   
+  // Método que desloguea al usuario
   public logout() {
+
+    // Borramos los datos del storage
     this.storage.remove('profile');
     this.storage.remove('id_token');
     this.idToken = null;
     this.storage.remove('refresh_token');
+
+    // Reseteamos la informacion del usuario
     this.zoneImpl.run(() => this.user = null);
-    // Unschedule the token refresh
-    this.unscheduleRefresh();
+
+    // No renovaremos mas el token 
+    this.desuscribirRenovacionToken();
   }
   
-  public scheduleRefresh() {
-    // If the user is authenticated, use the token stream
-    // provided by angular2-jwt and flatMap the token
-
+  // Método que programa una renovacion del token
+  public programarRenovacionToken() {
     let source = Observable.of(this.idToken).flatMap(
       token => {
-        // The delay to generate in this case is the difference
-        // between the expiry time and the issued at time
+        // El delay a generar es la diferencia entre el tiempo de expiracion
+        // y el tiempo en el que el token fue provisto
         let jwtIat = this.jwtHelper.decodeToken(token).iat;
         let jwtExp = this.jwtHelper.decodeToken(token).exp;
         let iat = new Date(0);
         let exp = new Date(0);
         
+        console.log('IAT: ' + iat);
+        console.log('ECP: ' + exp);
+
         let delay = (exp.setUTCSeconds(jwtExp) - iat.setUTCSeconds(jwtIat));
         
         return Observable.interval(delay);
       });
      
-    this.refreshSubscription = source.subscribe(() => {
+    this.renovarSubscripcion = source.subscribe(() => {
       this.getNewJwt();
     });
   }
   
-  public startupTokenRefresh() {
+  // Método que inicializa el proceso de renovacion del token
+  public inicializarRenovacionToken() {
     // If the user is authenticated, use the token stream
     // provided by angular2-jwt and flatMap the token
-    if (this.authenticated()) {
+    if (this.estaLogueado()) {
       let source = Observable.of(this.idToken).flatMap(
         token => {
-          // Get the expiry time to generate
-          // a delay in milliseconds
+          // Usamos el tiempo de expiracion para generar un
+          // delay en milisegundos
           let now: number = new Date().valueOf();
           let jwtExp: number = this.jwtHelper.decodeToken(token).exp;
           let exp: Date = new Date(0);
           exp.setUTCSeconds(jwtExp);
           let delay: number = exp.valueOf() - now;
-          
-          // Use the delay in a timer to
-          // run the refresh at the proper time
+
+          // Usamos el delay para generar la renovacion
+          // en el momento adecuado
           return Observable.timer(delay);
         });
-      
-       // Once the delay time from above is
-       // reached, get a new JWT and schedule
-       // additional refreshes
+
+       // Una vez que se cumple el tiempo previsto, obtenemos un nuevo
+       // token y programamos su renovacion
        source.subscribe(() => {
          this.getNewJwt();
-         this.scheduleRefresh();
+         this.programarRenovacionToken();
        });
     }
   }
   
-  public unscheduleRefresh() {
+  // Método que evita la renovacion del token
+  public desuscribirRenovacionToken() {
     // Unsubscribe fromt the refresh
-    if (this.refreshSubscription) {
-      this.refreshSubscription.unsubscribe();
+    if (this.renovarSubscripcion) {
+      this.renovarSubscripcion.unsubscribe();
     }
   }
   
+  // Método que obtiene un nuevo token
   public getNewJwt() {
-    // Get a new JWT from Auth0 using the refresh token saved
-    // in local storage
+    // Obtenemos un nuevo JWT from Auth0 usando el refresh_token
     this.storage.get('refresh_token').then(token => {
       this.auth0.refreshToken(token, (err, delegationRequest) => {
         if (err) {
+          // TODO: manejar error
+          // --------------------
           alert(err);
         }
+
+        // Guardamos el nuevo token en el storage
         this.storage.set('id_token', delegationRequest.id_token);
         this.idToken = delegationRequest.id_token;
       });
     }).catch(error => {
+      // TODO: manejar error
+      // --------------------
       console.log(error);
     });
     

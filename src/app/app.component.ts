@@ -30,7 +30,7 @@ export class DonemosApp {
 
   constructor(public platform: Platform, 
               public menuCtrl: MenuController,
-              public login: LoginService) {
+              public loginService: LoginService) {
     this.inicializarApp();
   }
 
@@ -44,7 +44,7 @@ export class DonemosApp {
       this.cargarOpcionesMenuPrincipal(); 
 
       // Muestra las opciones de login
-      this.login.login();
+      this.loginService.inicializarLogin();
 
     });
   }

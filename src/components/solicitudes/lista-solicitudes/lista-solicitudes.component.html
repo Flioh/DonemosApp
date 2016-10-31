@@ -1,6 +1,6 @@
 <ion-header no-shadow>
-	<ion-navbar color="rojo">
-		<ion-title>Donemos</ion-title>
+	<ion-navbar color="principal">
+		<ion-title><img class="logo" src="assets/images/logo_principal_blanco.png" alt=""></ion-title>
 		<button ion-button menuToggle="right" end>
 			<ion-icon name="menu"></ion-icon>
 		</button>
@@ -11,7 +11,7 @@
 	</ion-navbar>
 
 	<ion-toolbar>
-		<ion-segment color="rojo" [(ngModel)]="seccion">
+		<ion-segment color="principal" [(ngModel)]="seccion">
 			<ion-segment-button value="solicitudes">
 				Solicitudes
 			</ion-segment-button>
@@ -34,12 +34,12 @@
 			</resumen-solicitud>
 
 			<ion-fab *ngIf="!isIos">
-				<button ion-fab class="floating-btn" color="rojo" fab (click)="nuevaSolicitud()"><ion-icon name="add"></ion-icon></button>
+				<button ion-fab class="floating-btn" color="principal" fab (click)="nuevaSolicitud()"><ion-icon name="add"></ion-icon></button>
 			</ion-fab>
 
 			
 
-			<button *ngIf="hayMasSolicitudes" class="submit" color="rojo" full (click)="buscarSolicitudes()">
+			<button *ngIf="hayMasSolicitudes" class="submit" color="principal" full (click)="buscarSolicitudes()">
 				Ver mas solicitudes
 			</button>
 		</div>
@@ -99,7 +99,7 @@
 				<!-- Toggle para usar datos personales como filtro -->
 				<ion-item *ngIf="datosUsuarioObj">
 				    <ion-label>Usar mis preferencias</ion-label>
-				    <ion-toggle color="rojo" [(ngModel)]="usarDatosPersonales" (ionChange)="usarDatosUsuario()" name="usarDatosPersonales"></ion-toggle>
+				    <ion-toggle color="principal" [(ngModel)]="usarDatosPersonales" (ionChange)="usarDatosUsuario()" name="usarDatosPersonales"></ion-toggle>
 				</ion-item>
 				<ion-item text-wrap *ngIf="!datosUsuarioObj">
 					<p>Si desea puede configurar sus preferencias en <strong>Configurar preferencias</strong> para luego poder utilizarlas automáticamente como filtro de búsqueda.</p>
@@ -111,7 +111,7 @@
 				Borrar
 			</button>
 
-			<button ion-button class="btn-inline btn-primary" (click)="buscarSolicitudes()" color="rojo" full>
+			<button ion-button class="btn-inline btn-primary" (click)="buscarSolicitudes()" color="principal" full>
 				Buscar Solicitudes
 			</button>
 				

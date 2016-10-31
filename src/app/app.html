@@ -1,22 +1,22 @@
 <ion-menu [content]="content" side="right" persistent="true" >
   <ion-content>
 
-    <ion-row *ngIf="!login.authenticated()">
+    <ion-row [hidden]="loginService.estaLogueado()">
       <ion-col id="hiw-login-container" width-100>
       </ion-col>
     </ion-row>
 
-    <ion-row *ngIf="login.authenticated()" class="profile">
+    <ion-row [hidden]="!loginService.estaLogueado()" class="profile">
       <ion-col width-100>
-        <img [src]="login.user?.picture">
-        <h3>{{ login.user?.name }}</h3>
+        <img *ngIf="loginService.user?.picture" [src]="loginService.user?.picture">
+        <h3>{{ loginService.user?.name }}</h3>
       </ion-col>
     </ion-row>
 
     <!-- Main navigation links-->
     <ion-list no-lines class="main-menu">
       <button menuClose ion-item detail-none *ngFor="let pagina of paginasMenu" (click)="abrirPagina(pagina)">
-        <ion-icon ios="{{pagina.getIconoIosOutline()}}" md="{{pagina.getIconoAndroid()}}" item-left></ion-icon>
+        <ion-icon color="principal" ios="{{pagina.getIconoIosOutline()}}" md="{{pagina.getIconoAndroid()}}" item-left></ion-icon>
         {{ pagina.titulo }}
       </button>
 

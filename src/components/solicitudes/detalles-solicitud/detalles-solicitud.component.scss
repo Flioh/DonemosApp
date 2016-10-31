@@ -10,7 +10,7 @@ detalles-solicitud-page {
 
 	ion-item.header {
     	display: inline-block;
-	    background-color: $rojoClaro;
+	    background-color: $principalClaro;
 	    color: $blanco;
 	    margin: 0 0 20px;
 	    padding: 5px 10px 20px;
@@ -55,7 +55,7 @@ detalles-solicitud-page {
 	ion-item.detail-item.item h2 {
 	    font-size: 1.1em;
 	    font-weight: 600;
-	    color: $rojoClaro;
+	    color: $principal;
 	}
 
 	ion-item.detail-item.item p {
@@ -76,7 +76,7 @@ detalles-solicitud-page {
 	}
 
 	ion-item.detail-item.item a {
-	    color: $rojo;
+	    color: $principal;
 	    text-decoration: none;
 	    font-size: 1.2em;
 	    font-weight: 400;

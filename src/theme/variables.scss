@@ -11,12 +11,13 @@
 // http://ionicframework.com/docs/v2/theming/overriding-ionic-variables/
 
 // Colores principales de la aplicacion
-$rojo : 	              #f32d2e;
-$rojoOscuro :           #e00d0e;
-$rojoClaro:	            #f4484b;
+$principal : 	          #df3839;
+$principalOscuro :           #e00d0e;
+$principalClaro:	      #f4484b;
 $blanco: 	              #ffffff;
 $verde:		              #7ad596;
 $gris:                  #666666;
+$negro:                 #222222;
 
 // Colores a usar en los formularios
 $form_colorTexto:            #999;
@@ -52,12 +53,13 @@ $colors: (
   favorite:   #69BB7B,
   
   // Colores personalizados
-  rojo:       $rojo,
-  rojoClaro:  $rojoClaro,
-  rojoOscuro: $rojoOscuro,
+  principal:  $principal,
+  principalClaro:  $principalClaro,
+  rojoOscuro: $principalOscuro,
   blanco:     $blanco,
   verde:      $verde,
-  gris:       $gris
+  gris:       $gris,
+  negro:      $negro
 );
 
 
@@ -66,8 +68,8 @@ $colors: (
 // iOS only Sass variables can go here
 
 $alert-ios-button-text-color: $blanco;
-$alert-ios-button-background-color: $rojoClaro;
-$alert-ios-button-background-color-activated: $rojoOscuro;
+$alert-ios-button-background-color: $principal;
+$alert-ios-button-background-color-activated: $principalOscuro;
 
 
 // App Material Design Variables
@@ -75,8 +77,8 @@ $alert-ios-button-background-color-activated: $rojoOscuro;
 // Material Design only Sass variables can go here
 
 $alert-md-button-text-color: $blanco;
-$alert-md-button-background-color: $rojoClaro;
-$alert-md-button-background-color-activated: $rojoOscuro;
+$alert-md-button-background-color: $principal;
+$alert-md-button-background-color-activated: $principalOscuro;
 
 
 
@@ -85,8 +87,8 @@ $alert-md-button-background-color-activated: $rojoOscuro;
 // Windows only Sass variables can go here
 
 $alert-wp-button-text-color: $blanco;
-$alert-wp-button-background-color: $rojoClaro;
-$alert-wp-button-background-color-activated: $rojoOscuro;
+$alert-wp-button-background-color: $principal;
+$alert-wp-button-background-color-activated: $principalOscuro;
 
 
 // App Theme
