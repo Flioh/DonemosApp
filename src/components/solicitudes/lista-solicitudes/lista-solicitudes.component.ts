@@ -96,8 +96,6 @@ export class ListaSolicitudesPage {
     this.buscarSolicitudes();
   }
 
-  
-
   // Método que obtiene las solicitudes del servidor
   public buscarSolicitudes(): void {
 
@@ -123,9 +121,10 @@ export class ListaSolicitudesPage {
           for(let i = 0; i < solicitudesObj.length; i++) {
             let solicitud = new SolicitudModel(solicitudesObj[i]);
             let descripcionTiposSanguineos = this.obtenerInformacionTiposSanguineos(solicitud);
+            let esCompatible = this.esCompatibleConUsuario(solicitud);
 
             // Creamos una instancia del modelo que posee tanto la solicitud como su encabezado
-            this.solicitudes.push(new ResumenSolicitudModel(solicitud, descripcionTiposSanguineos));
+            this.solicitudes.push(new ResumenSolicitudModel(solicitud, descripcionTiposSanguineos, esCompatible));
           }
 
           // Oculta el mensaje de espera
@@ -224,6 +223,21 @@ export class ListaSolicitudesPage {
         result = result.replace(this.tipoSanguineoUsuario, '<span class="marked">' + this.tipoSanguineoUsuario + '</span> ');
       }
       return result;
+  }
+
+  // Método que determina si el usuario es compatible con una solicitud dada
+  public esCompatibleConUsuario(unaSolicitud: SolicitudModel): boolean{
+    if(this.datosUsuarioObj) {
+        
+        // Obtenemos cuales son los tipos compatibles con esta solicitud
+        let posiblesDadores = this.donacionesService.puedeRecibirDe(unaSolicitud.grupoSanguineo.id, unaSolicitud.factorSanguineo.id);
+
+        // Obtenemos el tipo sanguineo del usuario
+        this.tipoSanguineoUsuario = this.donacionesService.getDescripcionCompleta(this.datosUsuarioObj.grupoSanguineoID, this.datosUsuarioObj.factorSanguineoID);
+
+        return posiblesDadores.join(' ').indexOf(this.tipoSanguineoUsuario) > -1;
+      }
+      return false;
   }
 
   // Método que inicializa el formulario con los datos del usuario

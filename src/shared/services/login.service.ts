@@ -104,7 +104,7 @@ export class LoginService {
       this.zoneImpl.run(
         () =>  {
           this.user = resultadoAuth.profile;
-          this.eventCtrl.publish('login:usuario', true);
+          this.eventCtrl.publish('login:usuario');
       });
       
       // Agendamos una renovacion del token
@@ -151,7 +151,11 @@ export class LoginService {
     this.storage.remove('refresh_token');
 
     // Reseteamos la informacion del usuario
-    this.zoneImpl.run(() => this.user = null);
+    this.zoneImpl.run(
+      () => {
+        this.user = null;
+        this.eventCtrl.publish('logout:usuario');
+    });
 
     // No renovaremos mas el token 
     this.desuscribirRenovacionToken();

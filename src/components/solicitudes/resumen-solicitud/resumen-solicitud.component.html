@@ -1,10 +1,7 @@
 <ion-card>
 
-	<ion-item class="solicitud">
-		<ion-avatar class="card-icon" item-left>
-			<ion-icon class="big" color="rojoOscuro" name="water"></ion-icon>
-		</ion-avatar>
-
+	<!-- Layout para cuando es compatible -->
+	<ion-item [class.compatible]="solicitudItemModel.esCompatibleConUsuario" class="encabezado">
 		<h2> 
           <span>{{ solicitudItemModel.solicitud.cantidadDadores === 1 ? 'Se necesita ' : 'Se necesitan ' }}</span>
           <strong *ngIf="solicitudItemModel.solicitud.cantidadDadores">
@@ -13,7 +10,8 @@
           <span>{{ solicitudItemModel.solicitud.cantidadDadores === 1 ? ' dador' : ' dadores' }}</span>
         </h2>  
 
-		<h2 [innerHTML]="solicitudItemModel.descripcionTiposSanguineos"></h2>
+		<h2 class="desc-tipos-sanguineos" [innerHTML]="solicitudItemModel.descripcionTiposSanguineos"></h2>
+		<ion-icon  class="icono-compatibilidad" name="checkmark-circle-outline" color="principalOscuro" *ngIf="solicitudItemModel.esCompatibleConUsuario"></ion-icon>
 	</ion-item>
 
 	<button ion-fab color="blanco" (click)="mostrarRuta()" class="top-middle">

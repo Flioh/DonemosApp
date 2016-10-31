@@ -43,30 +43,42 @@ export class DonemosApp {
       StatusBar.styleDefault();
       Splashscreen.hide();
 
+      // Iniciamos los principales componentes de la app
       this.cargarOpcionesMenuPrincipal(); 
-
-      // Muestra las opciones de login
-      this.loginService.inicializarLogin();
-
-      this.eventCtrl.subscribe('login:usuario', () => {
-        console.log('Usuario logueado');
-        this.menuCtrl.close();
-        this.changeDetectorCtrl.detectChanges();
-      });
-
+      this.inicializarLogin();
     });
   }
+
+  // Método que inicializa las opciones de login y sus eventos
+  public inicializarLogin(): void {
+    // Muestra las opciones de login
+    this.loginService.inicializarLogin();
+
+    this.eventCtrl.subscribe('login:usuario', () => {
+      // Cerramos el menu
+      this.menuCtrl.close();
+      
+      // Forzamos a Angular a que detecte los cambios en
+      // la imagen y el nombre del usuario
+      this.changeDetectorCtrl.detectChanges();
+    });
+  } 
 
   // Método que inicializa el menú principal
   public cargarOpcionesMenuPrincipal(): void {    
     this.paginasMenu.push(new ItemMenuModel('list-box', 'Lista de solicitudes', ListaSolicitudesPage, true, false));
     this.paginasMenu.push(new ItemMenuModel('checkbox', 'Requisitos para donar', ErrorPage, false, false));
     this.paginasMenu.push(new ItemMenuModel('person', 'Configurar preferencias', EditarPreferenciasPage, false, false));
+    this.paginasMenu.push(new ItemMenuModel('exit', 'Salir', null, false, false));
     this.paginasMenu.push(new ItemMenuModel('information-circle', 'Sobre nosotros', ErrorPage, false, false));
   }
 
   // Método que abre la pagina pasada como parametro
   public abrirPagina(pagina: ItemMenuModel) {
+
+    if(!pagina.componente) {
+      this.loginService.logout();
+    }
 
     if(pagina.esRoot) {
       this.nav.popToRoot().then(() => {

@@ -1,12 +1,14 @@
 resumen-solicitud {
 
-	ion-item ion-icon {
-		font-size: 3.2rem;
-	}
+	// Tamaños de fuente
+	$encabezado_textoPrincipal: 			1.6rem;
+	$encabezado_textoSecundario:			1.4rem;
+	$encabezado_textoSecundarioResaltado:	1.8rem;
+	$encabezado_tamanioIconoCompatibilidad: 2.0rem;
 
-	ion-avatar {
-		margin: 0 !important;
-	}
+	$detalle_textoPrincipal:				1.3rem;
+	$detalle_textoHora:						1.3rem;
+	$detalle_textoLink:						1.3rem;
 
 	ion-card,
 	ion-card.card-md,
@@ -20,9 +22,39 @@ resumen-solicitud {
     	margin-top: 0px;
 	}
 
-	ion-card ion-item.item:first-child {
-	    color: $blanco;
+	ion-item.encabezado h2 {
+		color: $blanco;
+		font-size: $encabezado_textoSecundario;
+	}
+
+	ion-card ion-item.encabezado.compatible {
 	    background-color: $principal;
+
+		h2.desc-tipos-sanguineos,
+		ion-icon.icono-compatibilidad {
+			display: inline-block;
+		}
+
+		ion-icon.icono-compatibilidad {
+			font-size: $encabezado_tamanioIconoCompatibilidad;
+		}
+	}
+
+	ion-card ion-item.encabezado:not(.compatible) {
+	    background-color: $negro;
+
+		h2:last-child {
+    		color: $grisClaro;
+		}
+	}
+
+	ion-item.encabezado .marked {
+		font-weight: bold;
+		font-size: $encabezado_textoSecundarioResaltado;
+	}
+
+	ion-item.encabezado h2:first-child {
+    	font-size: $encabezado_textoPrincipal;
 	}
 
 	button.top-middle {
@@ -33,25 +65,20 @@ resumen-solicitud {
 	}
 
 	.detalle-solicitud {
-		font-size: 1.2rem !important;
+		font-size: $detalle_textoPrincipal;
+		color: $negro; 
 	}
 
-	.detalle-solicitud ion-row:not(:last-child),
-	 {
-    	color: $gris;    	
+	.detalle-solicitud ion-row:last-child ion-col:first-child,
+	{
+    	color: $grisClaro;
+		font-size: $detalle_textoHora;  	
 	}
 
-	.marked {
-		font-weight: bold;
-		font-size: 1.8rem;
-	}
-
-	.solicitud h2 {
-		color: $blanco;
-		font-size: 1.4rem;
-	}
-
-	.solicitud h2:nth-child(1) {
-    	font-size: 1.6rem;
+	.detalle-solicitud ion-row:last-child ion-col:last-child,
+	{
+    	color: $principal;
+		font-size: $detalle_textoLink;
+		font-weight: 500;    	
 	}
 }

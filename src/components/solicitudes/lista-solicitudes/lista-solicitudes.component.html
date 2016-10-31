@@ -1,6 +1,6 @@
 <ion-header no-shadow>
-	<ion-navbar color="principal">
-		<ion-title><img class="logo" src="assets/images/logo_principal_blanco.png" alt=""></ion-title>
+	<ion-navbar color="negro">
+		<ion-title><img class="logo" src="assets/images/logo_principal.png" alt=""></ion-title>
 		<button ion-button menuToggle="right" end>
 			<ion-icon name="menu"></ion-icon>
 		</button>
@@ -11,7 +11,7 @@
 	</ion-navbar>
 
 	<ion-toolbar>
-		<ion-segment color="principal" [(ngModel)]="seccion">
+		<ion-segment color="blanco" [(ngModel)]="seccion">
 			<ion-segment-button value="solicitudes">
 				Solicitudes
 			</ion-segment-button>
@@ -34,7 +34,7 @@
 			</resumen-solicitud>
 
 			<ion-fab *ngIf="!isIos">
-				<button ion-fab class="floating-btn" color="principal" fab (click)="nuevaSolicitud()"><ion-icon name="add"></ion-icon></button>
+				<button ion-fab class="floating-btn" color="negro" fab (click)="nuevaSolicitud()"><ion-icon name="add"></ion-icon></button>
 			</ion-fab>
 
 			
@@ -99,7 +99,7 @@
 				<!-- Toggle para usar datos personales como filtro -->
 				<ion-item *ngIf="datosUsuarioObj">
 				    <ion-label>Usar mis preferencias</ion-label>
-				    <ion-toggle color="principal" [(ngModel)]="usarDatosPersonales" (ionChange)="usarDatosUsuario()" name="usarDatosPersonales"></ion-toggle>
+				    <ion-toggle color="negro" [(ngModel)]="usarDatosPersonales" (ionChange)="usarDatosUsuario()" name="usarDatosPersonales"></ion-toggle>
 				</ion-item>
 				<ion-item text-wrap *ngIf="!datosUsuarioObj">
 					<p>Si desea puede configurar sus preferencias en <strong>Configurar preferencias</strong> para luego poder utilizarlas automáticamente como filtro de búsqueda.</p>
@@ -107,7 +107,7 @@
 
 			</form>
 
-			<button ion-button class="btn-inline btn-secondary reset" color="gris" full (click)="borrarFiltros()">
+			<button ion-button class="btn-inline btn-secondary reset" color="grisOscuro" full (click)="borrarFiltros()">
 				Borrar
 			</button>
 

@@ -11,13 +11,20 @@
 // http://ionicframework.com/docs/v2/theming/overriding-ionic-variables/
 
 // Colores principales de la aplicacion
-$principal : 	          #df3839;
-$principalOscuro :           #e00d0e;
+$principal : 	          #f3595c;
+$principalOscuro :      #b64446;
+
+// Revisar si se usa
 $principalClaro:	      #f4484b;
+
+$principalFondo:        #ececec;
 $blanco: 	              #ffffff;
 $verde:		              #7ad596;
-$gris:                  #666666;
+
 $negro:                 #222222;
+$grisOscuro:            #2d2d2d;
+$grisClaro:             #b2b2b2;
+
 
 // Colores a usar en los formularios
 $form_colorTexto:            #999;
@@ -53,15 +60,21 @@ $colors: (
   favorite:   #69BB7B,
   
   // Colores personalizados
-  principal:  $principal,
-  principalClaro:  $principalClaro,
-  rojoOscuro: $principalOscuro,
-  blanco:     $blanco,
-  verde:      $verde,
-  gris:       $gris,
-  negro:      $negro
+  principal:        $principal,
+  principalClaro:   $principalClaro,
+  principalOscuro:  $principalOscuro,
+  principalFondo:   $principalFondo,
+  blanco:           $blanco,
+  verde:            $verde,
+  grisClaro:        $grisClaro,
+  grisOscuro:       $grisOscuro,
+  negro:            $negro
 );
 
+// Variables generales
+$background-color:        $principalFondo;
+$toolbar-background:      $grisOscuro;
+$toolbar-inactive-color:  $grisClaro;
 
 // App iOS Variables
 // --------------------------------------------------
@@ -70,6 +83,8 @@ $colors: (
 $alert-ios-button-text-color: $blanco;
 $alert-ios-button-background-color: $principal;
 $alert-ios-button-background-color-activated: $principalOscuro;
+$card-ios-background-color: $blanco;
+$card-ios-border-radius: 5px;
 
 
 // App Material Design Variables
@@ -79,7 +94,8 @@ $alert-ios-button-background-color-activated: $principalOscuro;
 $alert-md-button-text-color: $blanco;
 $alert-md-button-background-color: $principal;
 $alert-md-button-background-color-activated: $principalOscuro;
-
+$card-md-background-color: $blanco;
+$card-md-border-radius: 5px;
 
 
 // App Windows Variables
@@ -89,6 +105,8 @@ $alert-md-button-background-color-activated: $principalOscuro;
 $alert-wp-button-text-color: $blanco;
 $alert-wp-button-background-color: $principal;
 $alert-wp-button-background-color-activated: $principalOscuro;
+$card-wp-background-color: $blanco;
+$card-wp-border-radius: 5px;
 
 
 // App Theme

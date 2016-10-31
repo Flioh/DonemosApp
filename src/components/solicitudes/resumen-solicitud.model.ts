@@ -8,5 +8,6 @@ import { SolicitudModel } from './solicitud.model';
 export class ResumenSolicitudModel {
 
   constructor(public solicitud: SolicitudModel, 
-              public descripcionTiposSanguineos: string) { }
+              public descripcionTiposSanguineos: string,
+              public esCompatibleConUsuario: boolean) { }
 }
