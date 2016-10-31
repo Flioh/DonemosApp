@@ -15,10 +15,14 @@
 
     <!-- Main navigation links-->
     <ion-list no-lines class="main-menu">
-      <button menuClose ion-item detail-none *ngFor="let pagina of paginasMenu" (click)="abrirPagina(pagina)">
-        <ion-icon color="principal" ios="{{pagina.getIconoIosOutline()}}" md="{{pagina.getIconoAndroid()}}" item-left></ion-icon>
-        {{ pagina.titulo }}
-      </button>
+      <template ngFor let-pagina [ngForOf]="paginasMenu">
+
+        <button menuClose ion-item detail-none *ngIf="!pagina.requiereLogin || pagina.requiereLogin && loginService.estaLogueado()" (click)="abrirPagina(pagina)">
+          <ion-icon color="principal" ios="{{pagina.getIconoIosOutline()}}" md="{{pagina.getIconoAndroid()}}" item-left></ion-icon>
+          {{ pagina.titulo }}
+        </button>
+
+      </template>
 
     </ion-list>
 

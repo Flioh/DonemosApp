@@ -54,40 +54,53 @@ export class DonemosApp {
     // Muestra las opciones de login
     this.loginService.inicializarLogin();
 
-    this.eventCtrl.subscribe('login:usuario', () => {
-      // Cerramos el menu
-      this.menuCtrl.close();
-      
-      // Forzamos a Angular a que detecte los cambios en
-      // la imagen y el nombre del usuario
-      this.changeDetectorCtrl.detectChanges();
+    this.eventCtrl.subscribe('login:usuario', () => {      
+      this.actualizarMenuPrincipal(true);
     });
-  } 
+
+    this.eventCtrl.subscribe('logout:usuario', () => {
+      this.actualizarMenuPrincipal(false);
+    });
+  }
+
+  // Método que actualiza el menu principal segun si esta logueado o no el usuario
+  private actualizarMenuPrincipal(estaLogueado: boolean): void {
+    
+    // Cerramos el menu
+    this.menuCtrl.close();
+
+    if(!estaLogueado) {
+      // Muestra nuevamente las opciones del login
+      this.loginService.inicializarLogin();
+    }
+
+    // Forzamos a Angular a que detecte los cambios en el menu
+    this.changeDetectorCtrl.detectChanges();
+  }
 
   // Método que inicializa el menú principal
   public cargarOpcionesMenuPrincipal(): void {    
     this.paginasMenu.push(new ItemMenuModel('list-box', 'Lista de solicitudes', ListaSolicitudesPage, true, false));
+    this.paginasMenu.push(new ItemMenuModel('bookmarks', 'Mis solicitudes', ErrorPage, false, true));
     this.paginasMenu.push(new ItemMenuModel('checkbox', 'Requisitos para donar', ErrorPage, false, false));
-    this.paginasMenu.push(new ItemMenuModel('person', 'Configurar preferencias', EditarPreferenciasPage, false, false));
-    this.paginasMenu.push(new ItemMenuModel('exit', 'Salir', null, false, false));
+    this.paginasMenu.push(new ItemMenuModel('settings', 'Configurar preferencias', EditarPreferenciasPage, false, false));
+    this.paginasMenu.push(new ItemMenuModel('exit', 'Salir', null, false, true));
     this.paginasMenu.push(new ItemMenuModel('information-circle', 'Sobre nosotros', ErrorPage, false, false));
   }
 
   // Método que abre la pagina pasada como parametro
   public abrirPagina(pagina: ItemMenuModel) {
 
+    this.menuCtrl.close();
+
     if(!pagina.componente) {
       this.loginService.logout();
-    }
-
-    if(pagina.esRoot) {
-      this.nav.popToRoot().then(() => {
-        this.menuCtrl.close();
-      });
     } else {
-      this.nav.push(pagina.componente).then(() => {
-        this.menuCtrl.close();
-      });
+      if(pagina.esRoot) {
+        this.nav.setRoot(pagina.componente);
+      } else {
+        this.nav.push(pagina.componente);
+      }
     }
   }
 }
