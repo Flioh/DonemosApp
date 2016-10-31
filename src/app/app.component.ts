@@ -1,8 +1,8 @@
 // Referencias de Angular
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
 
 // Referencias de Ionic
-import { Nav, Platform, MenuController } from 'ionic-angular';
+import { Nav, Platform, MenuController, Events } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 
 // Paginas
@@ -30,7 +30,9 @@ export class DonemosApp {
 
   constructor(public platform: Platform, 
               public menuCtrl: MenuController,
-              public loginService: LoginService) {
+              public loginService: LoginService,
+              public eventCtrl: Events,
+              public changeDetectorCtrl: ChangeDetectorRef) {
     this.inicializarApp();
   }
 
@@ -45,6 +47,12 @@ export class DonemosApp {
 
       // Muestra las opciones de login
       this.loginService.inicializarLogin();
+
+      this.eventCtrl.subscribe('login:usuario', () => {
+        console.log('Usuario logueado');
+        this.menuCtrl.close();
+        this.changeDetectorCtrl.detectChanges();
+      });
 
     });
   }

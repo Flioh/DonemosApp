@@ -1,9 +1,9 @@
-import { Config } from 'ionic-angular/umd';
 // Referencias de Angular
 import { Injectable, NgZone } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 
 // Referencias de Ionic
+import { Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
 // Referencias de Auth0
@@ -37,7 +37,8 @@ export class LoginService {
   
   constructor(private authHttp: AuthHttp, 
               public zoneImpl: NgZone,
-              public config: AppConfig) {
+              public config: AppConfig,
+              private eventCtrl: Events) {
 
     this.storage = new Storage();
 
@@ -100,7 +101,11 @@ export class LoginService {
       this.storage.set('refresh_token', resultadoAuth.refreshToken);
 
       // Actualizamos los datos del usuario
-      this.zoneImpl.run(() => this.user = resultadoAuth.profile);
+      this.zoneImpl.run(
+        () =>  {
+          this.user = resultadoAuth.profile;
+          this.eventCtrl.publish('login:usuario', true);
+      });
       
       // Agendamos una renovacion del token
       this.programarRenovacionToken();
