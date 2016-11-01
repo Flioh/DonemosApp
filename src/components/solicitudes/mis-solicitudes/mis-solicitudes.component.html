@@ -1,0 +1,28 @@
+<ion-header>
+	<ion-navbar color="negro">
+		<ion-title>Mis Solicitudes</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+    <ion-list>
+        <ion-item-sliding *ngFor="let solicitud of solicitudes">
+            <ion-item [class.solicitud-activa]="estaActiva(solicitud)">
+                <ion-avatar item-left>
+                    <ion-icon name="water"></ion-icon>
+                </ion-avatar>
+                <h2>{{ solicitud.nombrePaciente }}</h2>
+                <p>{{ solicitud.institucion }}</p>
+            </ion-item>
+            <ion-item-options side="right">
+                <button (click)="editarSolicitud(solicitud)" ion-button color="grisClaro">
+                    Editar
+                </button>
+                <button (click)="verDetalles(solicitud)" ion-button color="principal">
+                    Ver Detalles
+                </button>
+            </ion-item-options>
+        </ion-item-sliding>
+    </ion-list>
+</ion-content>

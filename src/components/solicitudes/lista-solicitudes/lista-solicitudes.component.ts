@@ -221,7 +221,7 @@ export class ListaSolicitudesPage {
         this.tipoSanguineoUsuario = this.donacionesService.getDescripcionCompleta(this.datosUsuarioObj.grupoSanguineoID, this.datosUsuarioObj.factorSanguineoID);
 
         // Resaltamos el tipo sanguineo del usuario
-        result = result.replace(this.tipoSanguineoUsuario, '<span class="marked">' + this.tipoSanguineoUsuario + '</span> ');
+        result = result.replace(' ' + this.tipoSanguineoUsuario + ' ', ' <span class="marked">' + this.tipoSanguineoUsuario + '</span> ');
       }
       return result;
   }

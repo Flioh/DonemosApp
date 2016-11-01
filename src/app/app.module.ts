@@ -24,6 +24,7 @@ import { AppConfig } from '../shared/app-config';
 
 // Paginas y componentes
 import { ListaSolicitudesPage } from '../components/solicitudes/lista-solicitudes/lista-solicitudes.component';
+import { MisSolicitudesPage } from '../components/solicitudes/mis-solicitudes/mis-solicitudes.component';
 import { DetallesSolicitudPage } from '../components/solicitudes/detalles-solicitud/detalles-solicitud.component';
 import { NuevaSolicitudPage } from '../components/solicitudes/nueva-solicitud/nueva-solicitud.component';
 import { ResumenSolicitudComponent } from '../components/solicitudes/resumen-solicitud/resumen-solicitud.component';
@@ -54,6 +55,7 @@ export function getAuthHttp(http) {
 
     // Paginas
     ListaSolicitudesPage,
+    MisSolicitudesPage,
     DetallesSolicitudPage,
     ResumenSolicitudComponent,
     NuevaSolicitudPage,
@@ -76,6 +78,7 @@ export function getAuthHttp(http) {
 
     // Paginas
     ListaSolicitudesPage,
+    MisSolicitudesPage,
     DetallesSolicitudPage,
     ResumenSolicitudComponent,
     NuevaSolicitudPage,

@@ -33,4 +33,6 @@ export class AppConfig {
   // Otras configuraciones
   public modoDebug: boolean =               true;
 
+  public mesesParaOcultarSolicitud =        1;
+
 }

@@ -145,7 +145,7 @@
 	{ 
 		"solicitudID" : 6,
 		"usuarioID": 5,
-		"fechaCreacion": "10/7/2016",
+		"fechaCreacion": "9/13/2016",
 		"estaVigente" : true,
 		"cantidadDadores" : 3,		
 		"provincia" : {
@@ -174,7 +174,7 @@
 	{ 
 		"solicitudID" : 7,
 		"usuarioID": 6,
-		"fechaCreacion": "08/16/2016",
+		"fechaCreacion": "07/27/2016",
 		"estaVigente" : true,
 		"cantidadDadores" : 3,		
 		"provincia" : {
@@ -203,7 +203,7 @@
 	{ 
 		"solicitudID" : 8,
 		"usuarioID": 6,
-		"fechaCreacion": "09/29/2016",
+		"fechaCreacion": "06/29/2016",
 		"estaVigente" : true,
 		"cantidadDadores" : 2,		
 		"provincia" : {

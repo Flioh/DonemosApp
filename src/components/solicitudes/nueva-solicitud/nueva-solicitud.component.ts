@@ -3,7 +3,7 @@ import { Component, NgZone } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 
 // Referencias de Ionic
-import { AlertController, LoadingController, NavController, Platform, MenuController } from 'ionic-angular';
+import { AlertController, LoadingController, NavController, Platform, MenuController, NavParams } from 'ionic-angular';
 
 // Servicios
 import { DatosService } from '../../../shared/services/datos.service';
@@ -39,25 +39,17 @@ export class NuevaSolicitudPage {
 		private formBuilder : FormBuilder, 
 		private ngZone : NgZone,
 		private loadingCtrl : LoadingController,
-		private alertCtrl : AlertController) {
+		private alertCtrl : AlertController,
+		private paramsCtrl: NavParams) {
 
-		// Creamos e inicializamos el modelo
-		this.nuevaSolicitud = new SolicitudModel();
-		this.inicializarSolicitud();
-
+		// Obtenemos la solicitud existente pasada como parametro o creamos una nueva insatancia
+		this.nuevaSolicitud = this.paramsCtrl.get('unaSolicitud') || new SolicitudModel();
+		
 		// Inicializa los listados de la pagina
 		this.inicializarProvincias();
 		this.inicializarGruposSanguineos();
 		this.inicializarFactoresSanguineos();
 	}
-
-	// Método que inicializa la solicitud con los datos del usuario
-	private inicializarSolicitud() {
-
-		// TODO: setar la propiedad usuarioID de la nueva solicitud
-		// --------------------------------------------------------
-		// this.nuevaSolicitud.setUsuarioID(usuarioID);
-	}	
 
 	// Método que recibe la dirección del autocomplete y la ingresa en el formulario
 	public setearDireccion(informacionSobreDireccion: any) {

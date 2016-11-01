@@ -7,6 +7,7 @@ import { StatusBar, Splashscreen } from 'ionic-native';
 
 // Paginas
 import { ListaSolicitudesPage } from '../components/solicitudes/lista-solicitudes/lista-solicitudes.component';
+import { MisSolicitudesPage } from '../components/solicitudes/mis-solicitudes/mis-solicitudes.component';
 import { EditarPreferenciasPage } from '../components/preferencias-usuario/editar-preferencias/editar-preferencias.component';
 import { ErrorPage } from '../shared/components/error/error.component';
 
@@ -81,7 +82,7 @@ export class DonemosApp {
   // Método que inicializa el menú principal
   public cargarOpcionesMenuPrincipal(): void {    
     this.paginasMenu.push(new ItemMenuModel('list-box', 'Lista de solicitudes', ListaSolicitudesPage, true, false));
-    this.paginasMenu.push(new ItemMenuModel('bookmarks', 'Mis solicitudes', ErrorPage, false, true));
+    this.paginasMenu.push(new ItemMenuModel('bookmarks', 'Mis solicitudes', MisSolicitudesPage, false, true));
     this.paginasMenu.push(new ItemMenuModel('checkbox', 'Requisitos para donar', ErrorPage, false, false));
     this.paginasMenu.push(new ItemMenuModel('settings', 'Configurar preferencias', EditarPreferenciasPage, false, false));
     this.paginasMenu.push(new ItemMenuModel('exit', 'Salir', null, false, true));
@@ -94,6 +95,7 @@ export class DonemosApp {
     this.menuCtrl.close();
 
     if(!pagina.componente) {
+      // Si no tiene un componente, entonces es la opcion de logout
       this.loginService.logout();
     } else {
       if(pagina.esRoot) {
