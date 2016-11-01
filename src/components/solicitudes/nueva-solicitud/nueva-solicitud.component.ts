@@ -30,6 +30,8 @@ export class NuevaSolicitudPage {
 	// Modelo a utilizar en el formulario
 	public nuevaSolicitud: SolicitudModel;
 
+	private mostrarAdvertenciaAlSalir: boolean;
+
 	private submitted: boolean = false;
 
 	// Propiedad que permite determinar si estamos creando una nueva solicitud
@@ -108,22 +110,43 @@ export class NuevaSolicitudPage {
 
 	// Método que se ejecuta antes de que el usuario ingrese a la página
 	ionViewDidEnter() {
-	  	// TODO: Antes de ingresar, verificar si hay información no guardada
-	  	// -----------------------------------------------------------------
-
-		// Deshabilitamos el menu lateral
-		//this.menuCtrl.enable(false, 'unauthenticated');
-
-	  	// Obtiene el input dentro del elemento ion-input
-	  	//let autocompleteInput = document.getElementById('autocomplete').childNodes[1];
-	  	// Inicializar el autocomplete
-	  	//this.autocompleteService.initializeAutocomplete(autocompleteInput);
+		this.mostrarAdvertenciaAlSalir = true;
 	}
 
 	// Método que se ejecuta antes de que el usuario salga de la página
-	ionViewWillLeave() {
-	  // TODO: Antes de salir de la pantalla, guardar cualquier cambio que no se haya guardado
-	  // --------------------------------------------------------------------------------------
+	ionViewCanLeave() {
+		if(this.mostrarAdvertenciaAlSalir) {
+			let popupAdvertencia = this.alertCtrl.create({
+				title: 'Salir',
+				message: '¿Está seguro que desea salir? Los cambios que haya hecho se perderán.',
+				buttons: [{
+						text: 'Salir',
+						handler: () => {
+							popupAdvertencia.dismiss().then(() => {
+								this.volverAtras();
+							});			
+						}
+					},
+					{
+						text: 'Permanecer',
+						handler: () => {
+												
+						}
+					}]
+			});
+
+			// Mostramos el popup
+			popupAdvertencia.present();
+
+			// Devolvemos false para evitar que se cierre la pagina
+			return false;
+		}
+  	}
+
+	// Método que vuelve a la pantalla anterior
+	private volverAtras() {
+		this.mostrarAdvertenciaAlSalir = false;
+		this.navCtrl.pop();
 	}
 
 	// Metodo que inicializa el listado de grupos sanguineos
@@ -195,27 +218,26 @@ export class NuevaSolicitudPage {
 
 		// Muestra el mensaje de cargando ciudades
 		loadingPopup.present();
-		this.datosService.getListaCiudadesPorProvincia(provinciaId)
-			.subscribe(result => {
-				if(result && result.length){
-					this.listaCiudades = result;
-						if(nombreCiudad) {
-							// Si recibimos el nombre de la ciudad (autocomplete), seleccionamos esa ciudad
-							this.actualizarCiudad(nombreCiudad);
-						} else {
-							// TODO: usar geolocalizacion para cargar por defecto la provincia del usuario
-							// ---------------------------------------------------------------------------
+		this.datosService.getListaCiudadesPorProvincia(provinciaId).subscribe(result => {
+			if(result && result.length){
+				this.listaCiudades = result;
+					if(nombreCiudad) {
+						// Si recibimos el nombre de la ciudad (autocomplete), seleccionamos esa ciudad
+						this.actualizarCiudad(nombreCiudad);
+					} else {
+						// TODO: usar geolocalizacion para cargar por defecto la provincia del usuario
+						// ---------------------------------------------------------------------------
 
-							// Setea la ciudad en base a su ID
-							this.nuevaSolicitud.ciudad = this.listaCiudades[0];	
-						}
-
-						// Oculta el mensaje de espera
-						loadingPopup.dismiss();
+						// Setea la ciudad en base a su ID
+						this.nuevaSolicitud.ciudad = this.listaCiudades[0];	
 					}
-					// TODO: manejar errores en las llamadas al servidor
-					// -------------------------------------------------			
-				});
+
+					// Oculta el mensaje de espera
+					loadingPopup.dismiss();
+				}
+				// TODO: manejar errores en las llamadas al servidor
+				// -------------------------------------------------			
+			});
 	}
 
 	// Método que obtiene el indice del elemento cuyo id es el pasado como parametro

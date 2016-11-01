@@ -1,8 +1,8 @@
 // Referencias de Angular
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 
 // Referencias de Ionic
-import { AlertController, LoadingController, NavController, Platform } from 'ionic-angular';
+import { AlertController, LoadingController, NavController, Platform, List } from 'ionic-angular';
 
 // Servicios
 import { DonacionesService } from '../../../shared/services/donaciones.service';
@@ -24,6 +24,7 @@ import { AppConfig } from '../../../shared/app-config';
   templateUrl: 'mis-solicitudes.component.html'
 })
 export class MisSolicitudesPage {
+  @ViewChild(List) list: List;
 
   private solicitudes: Array<EncabezadoSolicitudModel>;
 
@@ -91,15 +92,29 @@ export class MisSolicitudesPage {
 
   // Método que abre la pagina de edicion de la solicitud
   public editarSolicitud(unaSolicitud: SolicitudModel): void {
-      this.navCtrl.push(NuevaSolicitudPage, 
-                        { 'unaSolicitud' : unaSolicitud },
-                        { animate: true, direction: 'forward' });
+  
+    // Abrimos la pagina de edicion de la solicitud
+    this.navCtrl.push(NuevaSolicitudPage, 
+                      { 'unaSolicitud' : unaSolicitud },
+                      { animate: true, direction: 'forward' })
+                
+                .then(() => {
+                  // Volvemos todos los items a su posicion original
+                  this.list.closeSlidingItems();
+                });
   }
 
   // Método que abre la pagina de detalles de la solicitud
   public verDetalles(unaSolicitud: SolicitudModel): void {
-      this.navCtrl.push(DetallesSolicitudPage, 
-                        { 'unaSolicitud' : unaSolicitud },
-                        { animate: true, direction: 'forward' });
+
+    // Abrimos la pagina de detalles de la solicitud
+    this.navCtrl.push(DetallesSolicitudPage, 
+                      { 'unaSolicitud' : unaSolicitud },
+                      { animate: true, direction: 'forward' })
+                      
+                .then(() => {
+                  // Volvemos todos los items a su posicion original
+                  this.list.closeSlidingItems();
+                });;
   }
 }
