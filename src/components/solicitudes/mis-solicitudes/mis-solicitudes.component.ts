@@ -2,7 +2,7 @@
 import { Component } from '@angular/core';
 
 // Referencias de Ionic
-import { AlertController, Config, LoadingController, NavController, Platform } from 'ionic-angular';
+import { AlertController, LoadingController, NavController, Platform } from 'ionic-angular';
 
 // Servicios
 import { DonacionesService } from '../../../shared/services/donaciones.service';
@@ -10,6 +10,7 @@ import { DatosService } from '../../../shared/services/datos.service';
 
 // Modelos
 import { SolicitudModel } from '../solicitud.model';
+import { EncabezadoSolicitudModel } from '../encabezado-solicitud.model';
 
 // Paginas y componente base
 import { DetallesSolicitudPage } from '../detalles-solicitud/detalles-solicitud.component';
@@ -24,7 +25,7 @@ import { AppConfig } from '../../../shared/app-config';
 })
 export class MisSolicitudesPage {
 
-  private solicitudes: Array<SolicitudModel>;
+  private solicitudes: Array<EncabezadoSolicitudModel>;
 
   constructor(private platform: Platform,
               private navCtrl: NavController, 
@@ -55,7 +56,8 @@ export class MisSolicitudesPage {
     this.datosService.getSolicitudes().subscribe((solicitudesObj) => { 
         for(let i = 0; i < solicitudesObj.length; i++) {
             let solicitud = new SolicitudModel(solicitudesObj[i]);
-            this.solicitudes.push(solicitud);
+            let estaActiva = this.estaActiva(solicitud);
+            this.solicitudes.push(new EncabezadoSolicitudModel(solicitud, estaActiva));
         }
 
         // Oculta el mensaje de espera

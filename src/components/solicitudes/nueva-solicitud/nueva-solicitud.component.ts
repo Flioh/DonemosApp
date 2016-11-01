@@ -32,6 +32,10 @@ export class NuevaSolicitudPage {
 
 	private submitted: boolean = false;
 
+	// Propiedad que permite determinar si estamos creando una nueva solicitud
+	// o modificando una ya existente
+	public modoEdicion: boolean;
+
 	constructor(private datosService: DatosService,
 		private platform: Platform,
 		private menuCtrl: MenuController,
@@ -42,8 +46,13 @@ export class NuevaSolicitudPage {
 		private alertCtrl : AlertController,
 		private paramsCtrl: NavParams) {
 
+		let solicitudRecibida = this.paramsCtrl.get('unaSolicitud');
+
+		// Establecemos el modo de la pantalla
+		this.modoEdicion = solicitudRecibida ? true : false;
+
 		// Obtenemos la solicitud existente pasada como parametro o creamos una nueva insatancia
-		this.nuevaSolicitud = this.paramsCtrl.get('unaSolicitud') || new SolicitudModel();
+		this.nuevaSolicitud = solicitudRecibida || new SolicitudModel();
 		
 		// Inicializa los listados de la pagina
 		this.inicializarProvincias();
@@ -122,9 +131,14 @@ export class NuevaSolicitudPage {
 		// Obtenemos el listado del helper
 		this.listaGruposSanguineos = this.datosService.getGruposSanguineos();
 
-		// TODO: asignar el que hayan configurado en la pagina de preferencias
-		// -------------------------------------------------------------------
-		this.nuevaSolicitud.grupoSanguineo = this.listaGruposSanguineos[0];
+		let indiceGrupoSanguineo = 0;
+
+		// Buscamos el indice del objeto dentro del listado para que se seleccione correctamente
+		if(this.nuevaSolicitud.grupoSanguineo.id) {
+			indiceGrupoSanguineo = this.getIndicePorID(this.listaGruposSanguineos, this.nuevaSolicitud.grupoSanguineo.id);
+		}
+
+		this.nuevaSolicitud.grupoSanguineo = this.listaGruposSanguineos[indiceGrupoSanguineo];
 	}
 
 	// Metodo que inicializa el listado de factores sanguineos
@@ -132,9 +146,14 @@ export class NuevaSolicitudPage {
 		// Obtenemos el listado del helper
 		this.listaFactoresSanguineos = this.datosService.getFactoresSanguineos();
 
-		// TODO: asignar el que hayan configurado en la pagina de preferencias
-		// -------------------------------------------------------------------
-		this.nuevaSolicitud.factorSanguineo = this.listaFactoresSanguineos[0];
+		let indiceFactorSanguineo = 0;
+
+		// Buscamos el indice del objeto dentro del listado para que se seleccione correctamente
+		if(this.nuevaSolicitud.factorSanguineo.id) {
+			indiceFactorSanguineo = this.getIndicePorID(this.listaFactoresSanguineos, this.nuevaSolicitud.factorSanguineo.id);
+		}
+
+		this.nuevaSolicitud.factorSanguineo = this.listaFactoresSanguineos[indiceFactorSanguineo];
 	}
 
 	// Método que inicializa el listado de provincias
@@ -147,11 +166,18 @@ export class NuevaSolicitudPage {
 				this.listaProvincias = result;
 
 				// TODO: usar geolocalizacion para cargar por defecto la provincia del usuario
-				// ---------------------------------------------------------------------------
-				this.nuevaSolicitud.provincia = this.listaProvincias[0];
+				// ---------------------------------------------------------------------------				
+				let indiceProvincia = 0;
+
+				if(this.nuevaSolicitud.provincia.id) {
+					indiceProvincia = this.getIndicePorID(this.listaProvincias, this.nuevaSolicitud.provincia.id);
+				}
+
+				// Asignamos el objeto del listado para que se muestre correctamente
+				this.nuevaSolicitud.provincia = this.listaProvincias[indiceProvincia];
 
 				// Carga las ciudades de la provincia seleccionada
-				this.inicializarCiudadesDeLaProvincia();
+				this.inicializarCiudadesDeLaProvincia(this.nuevaSolicitud.ciudad.nombre);
 			} else {
 					// TODO: manejar errores en las llamadas al servidor
 					// -------------------------------------------------
@@ -170,26 +196,37 @@ export class NuevaSolicitudPage {
 		// Muestra el mensaje de cargando ciudades
 		loadingPopup.present();
 		this.datosService.getListaCiudadesPorProvincia(provinciaId)
-		.subscribe(result => {
-			if(result && result.length){
-				this.listaCiudades = result;
-					if(nombreCiudad) {
-						// Si recibimos el nombre de la ciudad (autocomplete), seleccionamos esa ciudad
-						this.actualizarCiudad(nombreCiudad);
-					} else {
-						// TODO: usar geolocalizacion para cargar por defecto la provincia del usuario
-						// ---------------------------------------------------------------------------
+			.subscribe(result => {
+				if(result && result.length){
+					this.listaCiudades = result;
+						if(nombreCiudad) {
+							// Si recibimos el nombre de la ciudad (autocomplete), seleccionamos esa ciudad
+							this.actualizarCiudad(nombreCiudad);
+						} else {
+							// TODO: usar geolocalizacion para cargar por defecto la provincia del usuario
+							// ---------------------------------------------------------------------------
 
-						// Setea la ciudad en base a su ID
-						this.nuevaSolicitud.ciudad = this.listaCiudades[0];	
+							// Setea la ciudad en base a su ID
+							this.nuevaSolicitud.ciudad = this.listaCiudades[0];	
+						}
+
+						// Oculta el mensaje de espera
+						loadingPopup.dismiss();
 					}
+					// TODO: manejar errores en las llamadas al servidor
+					// -------------------------------------------------			
+				});
+	}
 
-					// Oculta el mensaje de espera
-					loadingPopup.dismiss();
-				}
-				// TODO: manejar errores en las llamadas al servidor
-				// -------------------------------------------------			
-			});
+	// Método que obtiene el indice del elemento cuyo id es el pasado como parametro
+	public getIndicePorID(listado: Array<any>, id: number): number {
+
+		for(let i=0; i<listado.length; i++) {
+		if(id === listado[i].id)
+			return i;
+		}
+
+		return -1;
 	}
 
 	// Método que crea la nueva solicitud con la información ingresada en el formulario

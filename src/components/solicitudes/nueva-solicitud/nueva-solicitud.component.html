@@ -1,6 +1,6 @@
 <ion-header no-shadow>
 	<ion-navbar color="negro">
-		<ion-title>Nueva Solicitud</ion-title>
+		<ion-title>{{ modoEdicion ? 'Editar Solicitud' : 'Nueva Solicitud' }}</ion-title>
 	</ion-navbar>
 </ion-header>
 
@@ -139,7 +139,9 @@
 
 
 
-			<button ion-button [disabled]="!nuevaSolicitudForm.form.valid" type="submit" color="principal" full>Crear Solicitud</button>
+			<button ion-button [disabled]="!nuevaSolicitudForm.form.valid" type="submit" color="principal" full>
+				{{ modoEdicion ? 'Guardar cambios' : 'Crear solicitud' }}
+			</button>
 
 
 

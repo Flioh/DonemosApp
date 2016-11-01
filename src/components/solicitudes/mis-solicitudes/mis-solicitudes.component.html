@@ -7,19 +7,20 @@
 <ion-content padding>
 
     <ion-list>
-        <ion-item-sliding *ngFor="let solicitud of solicitudes">
-            <ion-item [class.solicitud-activa]="estaActiva(solicitud)">
+        <ion-item-sliding *ngFor="let tituloSolicitud of solicitudes">
+            <ion-item [class.solicitud-activa]="tituloSolicitud.estaActiva">
                 <ion-avatar item-left>
                     <ion-icon name="water"></ion-icon>
                 </ion-avatar>
-                <h2>{{ solicitud.nombrePaciente }}</h2>
-                <p>{{ solicitud.institucion }}</p>
+                <h2>{{ tituloSolicitud.solicitud.nombrePaciente }}</h2>
+                <h3>{{ tituloSolicitud.solicitud.institucion  }}</h3>
+                <p>{{ tituloSolicitud.solicitud.fechaCreacion | formatearFecha }}</p>
             </ion-item>
             <ion-item-options side="right">
-                <button (click)="editarSolicitud(solicitud)" ion-button color="grisClaro">
+                <button (click)="editarSolicitud(tituloSolicitud.solicitud)" ion-button color="grisClaro">
                     Editar
                 </button>
-                <button (click)="verDetalles(solicitud)" ion-button color="principal">
+                <button (click)="verDetalles(tituloSolicitud.solicitud)" ion-button color="principal">
                     Ver Detalles
                 </button>
             </ion-item-options>

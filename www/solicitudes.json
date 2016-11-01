@@ -10,8 +10,8 @@
 			"nombre": "Santa Fe"	
 		},
 		"ciudad" : { 
-			"id": 207, 
-			"nombre": "Santa Fe"
+			"id": 202, 
+			"nombre": "San Cristóbal"
 		},
 		"grupoSanguineo" : {
 			"id": 2, 
@@ -67,8 +67,8 @@
 			"nombre": "Santa Fe"	
 		},
 		"ciudad" : { 
-			"id": 207, 
-			"nombre": "Santa Fe"
+			"id": 205, 
+			"nombre": "San Jorge"
 		},
 		"grupoSanguineo" : {
 			"id": 1, 
@@ -124,8 +124,8 @@
 			"nombre": "Santa Fe"	
 		},
 		"ciudad" : { 
-			"id": 207, 
-			"nombre": "Santa Fe"
+			"id": 209, 
+			"nombre": "Sauce Viejo"
 		},
 		"grupoSanguineo" : {
 			"id": 1, 
