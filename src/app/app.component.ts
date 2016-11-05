@@ -2,7 +2,7 @@
 import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
 
 // Referencias de Ionic
-import { Nav, Platform, MenuController, Events } from 'ionic-angular';
+import { Events, MenuController, Nav, Platform } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 
 // Paginas
@@ -10,12 +10,14 @@ import { ListaSolicitudesPage } from '../components/solicitudes/lista-solicitude
 import { MisSolicitudesPage } from '../components/solicitudes/mis-solicitudes/mis-solicitudes.component';
 import { EditarPreferenciasPage } from '../components/preferencias-usuario/editar-preferencias/editar-preferencias.component';
 import { ErrorPage } from '../shared/components/error/error.component';
+import { IntroPage } from '../shared/components/intro/intro.component';
 
 // Modelos
 import { ItemMenuModel } from '../shared/models/item-menu.model';
 
 // Servicios
 import { LoginService } from '../shared/services/login.service';
+import { DatosService } from '../shared/services/datos.service';
 
 @Component({
   templateUrl: 'app.html'
@@ -24,7 +26,8 @@ export class DonemosApp {
   @ViewChild(Nav) nav: Nav;
 
   // Iniciamos la app mostrando el listado de solicitudes
-  public rootPage: any = ListaSolicitudesPage;
+  public rootPage: any;
+
   public paginasMenu: Array<ItemMenuModel> = [];
 
   public estaLogueado: boolean;
@@ -32,6 +35,7 @@ export class DonemosApp {
   constructor(public platform: Platform, 
               public menuCtrl: MenuController,
               public loginService: LoginService,
+              public datosService: DatosService,
               public eventCtrl: Events,
               public changeDetectorCtrl: ChangeDetectorRef) {
     this.inicializarApp();
@@ -47,7 +51,19 @@ export class DonemosApp {
       // Iniciamos los principales componentes de la app
       this.cargarOpcionesMenuPrincipal(); 
       this.inicializarLogin();
+      this.cargarPantallaPrincipal();
     });
+  }
+
+  // Método que carga la pantalla principal segun se deba mostrar la introduccion o no
+  public cargarPantallaPrincipal() {
+    this.datosService.getMostrarIntro().then(mostrarIntro => {
+      if(mostrarIntro) {
+        this.rootPage = IntroPage;
+      } else {
+        this.rootPage = ListaSolicitudesPage;
+      }
+    })
   }
 
   // Método que inicializa las opciones de login y sus eventos

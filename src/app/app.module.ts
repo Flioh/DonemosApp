@@ -30,6 +30,7 @@ import { NuevaSolicitudPage } from '../components/solicitudes/nueva-solicitud/nu
 import { ResumenSolicitudComponent } from '../components/solicitudes/resumen-solicitud/resumen-solicitud.component';
 import { EditarPreferenciasPage } from '../components/preferencias-usuario/editar-preferencias/editar-preferencias.component';
 import { ErrorPage } from '../shared/components/error/error.component';
+import { IntroPage } from '../shared/components/intro/intro.component';
 
 // Directivas
 import { MapaEstaticoDirective } from '../shared/directives/mapa-estatico.directive';
@@ -60,6 +61,7 @@ export function getAuthHttp(http) {
     ResumenSolicitudComponent,
     NuevaSolicitudPage,
     EditarPreferenciasPage,
+    IntroPage,
     ErrorPage,
 
     // Pipes
@@ -83,6 +85,7 @@ export function getAuthHttp(http) {
     ResumenSolicitudComponent,
     NuevaSolicitudPage,
     EditarPreferenciasPage,
+    IntroPage,
     ErrorPage
   ],
   providers: [  DatosService, 

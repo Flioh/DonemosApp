@@ -1,0 +1,16 @@
+intro-page {
+    .swiper-slide img {
+        height: 100%;
+
+    }
+
+    button.disable-hover.button.button-md.button-default.button-default-md,
+    button.disable-hover.button.button-ios.button-default.button-default-ios  {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 65px;
+        width: 120px;
+        margin: auto;
+    }
+}
