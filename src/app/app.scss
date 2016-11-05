@@ -5,17 +5,78 @@
 // 04 - Login 
 
 
+ion-app.md {
+	font-family: "Hind", "Roboto", "Helvetica Neue", sans-serif;
+	font-weight: 400;
+
+	h1, 
+	h2, 
+	h3, 
+	button.ion-button,
+	.button-inner,
+	ion-segment-button.segment-button,
+	ion-col.ver-detalles {
+		font-family: "Montserrat", "Roboto", "Helvetica Neue", sans-serif;
+		font-weight: 700;
+	} 
+
+	h2, h3 {
+		font-weight: 400;
+	} 
+}
+
+ion-app.ios {
+	font-family: "Hind", -apple-system, "Helvetica Neue", "Roboto", sans-serif;
+	font-weight: 400;
+
+	h1, 
+	h2, 
+	h3, 
+	button.ion-button,
+	.button-inner,
+	ion-segment-button.segment-button,
+	ion-col.ver-detalles {
+		font-family: "Montserrat", -apple-system, "Helvetica Neue", "Roboto", sans-serif;
+		font-weight: 700;
+	}
+
+	h2, h3 {
+		font-weight: 400;
+	} 
+}
+ 
+
+
 // 01 - Generales
 // --------------------------------------------------
 
 ion-title.title-md img.logo {
     max-width: 180px;
-    margin: 6px 0 2px;
+    vertical-align: middle;
 }
 
 ion-title.title-ios img.logo {
     max-width: 150px;
-    margin: 6px 0 2px;
+	vertical-align: middle;
+}
+
+.mensaje-conexion ion-label,
+.mensaje-conexion ion-label a {
+    color: $blanco;
+}
+
+.mensaje-conexion ion-label {
+    padding: 10px 16px;
+	margin: 0;
+}
+
+button.alert-button {
+	min-width: 80px;
+}
+
+.alert-md .alert-button .button-inner,
+.alert-ios .alert-button .button-inner, {
+	justify-content: center;
 }
 
 
@@ -46,6 +107,10 @@ ion-item.half-size {
 
 button.alert-radio-button[aria-checked="true"] {
 	background-color: $principal;
+}
+
+button .button-inner > div {
+    font-weight: 400;
 }
 
 /* Estilos para los forms en iOS*/
@@ -150,7 +215,6 @@ ion-icon.ion-logo-googleplus.menu-icon {
 
 div.social-container {
 	padding: 20px 0;
-    border-bottom: 1px solid black;
 }
 
 .social-title {
@@ -195,7 +259,6 @@ ion-row.profile {
 
 ion-col#hiw-login-container {
     padding: 0;
-    border-bottom: 1px solid #222;
 }
 
 .auth0-lock.auth0-lock .auth0-lock-header-bg .auth0-lock-header-bg-solid {
@@ -204,6 +267,17 @@ ion-col#hiw-login-container {
 
 .auth0-lock.auth0-lock .auth0-lock-header {
 	padding: 24px 14px 0px 14px;
+	border-radius: 0;
+}
+
+.auth0-lock.auth0-lock .auth0-lock-header,
+.auth0-lock-view-content {
+	background-color: $principal;
+}
+
+.auth0-lock-name {
+	color: $blanco;
+	font-weight: 500;
 }
 
 .auth0-lock.auth0-lock .auth0-lock-social-button:not(.auth0-lock-social-big-button) {

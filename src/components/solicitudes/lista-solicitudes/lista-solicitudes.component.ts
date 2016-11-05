@@ -1,5 +1,5 @@
 // Referencias de Angular
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 
 // Referencias de Ionic
 import { AlertController, LoadingController, NavController, Platform, MenuController } from 'ionic-angular';
@@ -7,6 +7,7 @@ import { AlertController, LoadingController, NavController, Platform, MenuContro
 // Servicios
 import { DonacionesService } from '../../../shared/services/donaciones.service';
 import { DatosService } from '../../../shared/services/datos.service';
+import { ConectividadService } from '../../../shared/services/conectividad.service';
 
 // Modelos
 import { SolicitudModel } from '../solicitud.model';
@@ -58,6 +59,8 @@ export class ListaSolicitudesPage {
               private loadingCtrl: LoadingController,
               private alertCtrl: AlertController,               
               private datosService: DatosService,
+              private ngZoneCtrl: NgZone,
+              private conectividadService: ConectividadService,
               private donacionesService: DonacionesService) 
   {    
     // Indica que las listas usadas en los filtros no estan cargadas aun

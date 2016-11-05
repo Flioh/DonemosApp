@@ -6,9 +6,9 @@ resumen-solicitud {
 	$encabezado_textoSecundarioResaltado:	1.8rem;
 	$encabezado_tamanioIconoCompatibilidad: 2.0rem;
 
-	$detalle_textoPrincipal:				1.3rem;
-	$detalle_textoHora:						1.3rem;
-	$detalle_textoLink:						1.3rem;
+	$detalle_textoPrincipal:				1.5rem;
+	$detalle_textoHora:						1.5rem;
+	$detalle_textoLink:						1.5rem;
 
 	ion-card,
 	ion-card.card-md,
@@ -22,35 +22,40 @@ resumen-solicitud {
     	margin-top: 0px;
 	}
 
-	ion-item.encabezado h2 {
+	ion-item.encabezado h2, ion-item.encabezado h3 {
 		color: $blanco;
+	}
+
+	ion-item.encabezado h2 {
 		font-size: $encabezado_textoSecundario;
 	}
 
 	ion-card ion-item.encabezado.compatible {
 	    background-color: $principal;
 
-		h2.desc-tipos-sanguineos,
+		h3.desc-tipos-sanguineos,
 		ion-icon.icono-compatibilidad {
 			display: inline-block;
 		}
 
 		ion-icon.icono-compatibilidad {
 			font-size: $encabezado_tamanioIconoCompatibilidad;
+			line-height: 1;
+			position: relative;
+			top: 3px;
 		}
 	}
 
 	ion-card ion-item.encabezado:not(.compatible) {
 	    background-color: $negro;
 
-		h2:last-child {
+		h3:last-child {
     		color: $grisClaro;
 		}
 	}
 
 	ion-item.encabezado .marked {
 		font-weight: bold;
-		font-size: $encabezado_textoSecundarioResaltado;
 	}
 
 	ion-item.encabezado h2:first-child {
@@ -69,9 +74,23 @@ resumen-solicitud {
 		color: $negro; 
 	}
 
+	.detalle-solicitud ion-icon {
+		width: 20px;
+    	top: 2px;
+	    position: relative;
+	}
+
+	.detalle-solicitud ion-icon.home {
+		top: 1px;
+	}
+
+	.detalle-solicitud ion-icon.pin {
+		left: 2px;
+	}
+
 	.detalle-solicitud ion-row:last-child ion-col:first-child,
 	{
-    	color: $grisClaro;
+    	color: $gris;
 		font-size: $detalle_textoHora;  	
 	}
 

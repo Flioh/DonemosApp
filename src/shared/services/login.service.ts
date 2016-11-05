@@ -61,7 +61,7 @@ export class LoginService {
             title: "Iniciar sesión"
         },
         theme: {
-            logo: 'assets/images/logo_negro.png',
+            logo: 'assets/images/logo_blanco.png',
             primaryColor: '#f32d2e'
         } 
     });

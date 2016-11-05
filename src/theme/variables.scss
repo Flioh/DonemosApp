@@ -23,11 +23,12 @@ $verde:		              #7ad596;
 
 $negro:                 #222222;
 $grisOscuro:            #2d2d2d;
+$gris:                  #777777;
 $grisClaro:             #b2b2b2;
 
 
 // Colores a usar en los formularios
-$form_colorTexto:            #999;
+$form_colorTexto:            $gris;
 $form_colorTextoValidacion:  #7f7f7f;
 
 $ios-colorTexto:        #d2d2d2;
@@ -67,12 +68,13 @@ $colors: (
   blanco:           $blanco,
   verde:            $verde,
   grisClaro:        $grisClaro,
+  gris:             $gris,
   grisOscuro:       $grisOscuro,
   negro:            $negro
 );
 
 // Variables generales
-$background-color:        $principalFondo;
+//$background-color:        $principalFondo;
 $toolbar-background:      $grisOscuro;
 $toolbar-inactive-color:  $grisClaro;
 

@@ -26,7 +26,7 @@ import { AppConfig } from '../../../shared/app-config';
 export class MisSolicitudesPage {
   @ViewChild(List) list: List;
 
-  private solicitudes: Array<EncabezadoSolicitudModel>;
+  public solicitudes: Array<EncabezadoSolicitudModel>;
 
   constructor(private platform: Platform,
               private navCtrl: NavController, 
@@ -116,5 +116,19 @@ export class MisSolicitudesPage {
                   // Volvemos todos los items a su posicion original
                   this.list.closeSlidingItems();
                 });;
+  }
+
+  // Método que muestra ayuda sobre las funciones de la página
+  public mostrarAyuda() {
+    let alert = this.alertCtrl.create({
+      title: 'Mis Solicitudes',
+      message: `A continuación se muestran las solicitudes que creaste. Para editar o ver los detalles detalles
+            desliza la solicitud hacia la izquierda. Las solicitudes que poseen el ícono en gris es porque
+            ya no estan activas (debido a que fueron creadas hace más de un mes). Puedes activarlas nuevamente
+            deslizando la solicitud y presionando <strong>Editar</strong>`,
+      buttons: ['Ok']
+    });
+
+    alert.present();
   }
 }

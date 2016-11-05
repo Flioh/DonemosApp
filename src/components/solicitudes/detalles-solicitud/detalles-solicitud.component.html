@@ -33,18 +33,18 @@
 
       <ion-item class="detail-item">
         <ion-avatar item-left>
-          <ion-icon color="negro" name="water" item-left></ion-icon>
+          <ion-icon color="principal" name="water" item-left></ion-icon>
         </ion-avatar>
         <h2>Puede recibir de</h2>
         <p [innerHTML]="tiposSanguineosSolicitud"></p>
-        <span *ngIf="compatibleConUsuario"><ion-icon name="checkmark"></ion-icon> Podés donar</span>
+        <span *ngIf="compatibleConUsuario"><ion-icon name="checkmark-circle-outline"></ion-icon> Podés donar</span>
       </ion-item>
 
 
 
       <ion-item class="detail-item">
         <ion-avatar item-left>
-          <ion-icon color="negro" name="pin" item-left></ion-icon>
+          <ion-icon color="principal" name="pin" item-left></ion-icon>
         </ion-avatar>
         <h2>Localidad</h2>
         <p>{{ solicitudSeleccionada.ciudad.nombre }}, {{ solicitudSeleccionada.provincia.nombre }}</p>
@@ -54,23 +54,23 @@
 
       <ion-item class="detail-item">
         <ion-avatar item-left>
-          <ion-icon color="negro" name="home" item-left></ion-icon>
+          <ion-icon color="principal" name="home" item-left></ion-icon>
         </ion-avatar>
         <h2>Lugar y dirección</h2>
         <p>{{ solicitudSeleccionada.institucion }}</p>
         <p>{{ solicitudSeleccionada.direccion }}</p>
-        <a (click)="mostrarRuta()">¿Cómo llego?</a>
+        <a color="principal" class="ver-detalles" (click)="mostrarRuta()">¿CÓMO LLEGO?  <ion-icon name="arrow-forward"></ion-icon></a>
       </ion-item>
 
 
       <!-- Mapa estatico mostrando la ubicacion de la institucion -->
-      <img mapaEstatico [direccion]='direccionCompleta'>
+      <img mapaEstatico [direccion]='direccionCompleta' [content]="content">
       
 
 
       <ion-item class="detail-item">
         <ion-avatar item-left>
-          <ion-icon color="negro" name="time" item-left></ion-icon>
+          <ion-icon color="principal" name="time" item-left></ion-icon>
         </ion-avatar>
         <h2>Horario de Donación</h2>
         <p>{{ solicitudSeleccionada.horaDesde }} - {{ solicitudSeleccionada.horaHasta }}</p>
@@ -80,7 +80,7 @@
 
       <ion-item class="detail-item">
         <ion-avatar item-left>
-          <ion-icon color="negro" name="person" item-left></ion-icon>
+          <ion-icon color="principal" name="person" item-left></ion-icon>
         </ion-avatar>
         <h2>Nombre del Paciente</h2>
         <p>{{ solicitudSeleccionada.nombrePaciente }}</p>
@@ -90,7 +90,7 @@
 
       <ion-item *ngIf="solicitudSeleccionada.cantidadDadores" class="detail-item">
         <ion-avatar item-left>
-          <ion-icon color="negro" name="people" item-left></ion-icon>
+          <ion-icon color="principal" name="people" item-left></ion-icon>
         </ion-avatar>
         <h2>Dadores necesitados</h2>
         <p>{{ solicitudSeleccionada.cantidadDadores }}</p>
@@ -100,7 +100,7 @@
 
       <ion-item *ngIf="solicitudSeleccionada.datosAdicionales" class="detail-item">
         <ion-avatar item-left>
-          <ion-icon color="negro" name="information-circle" item-left></ion-icon>
+          <ion-icon color="principal" name="information-circle" item-left></ion-icon>
         </ion-avatar>
         <h2>Datos adicionales</h2>
         <p>{{ solicitudSeleccionada.datosAdicionales }}</p>

@@ -1,14 +1,20 @@
 <ion-header>
 	<ion-navbar color="negro">
 		<ion-title>Mis Solicitudes</ion-title>
+        
+        <ion-buttons end>
+            <button ion-button icon-only (click)="mostrarAyuda()"><ion-icon name="help-circle"></ion-icon></button>
+        </ion-buttons>
+
 	</ion-navbar>
+
 </ion-header>
 
 <ion-content padding>
 
     <ion-list>
         <ion-item-sliding *ngFor="let tituloSolicitud of solicitudes">
-            <ion-item [class.solicitud-activa]="tituloSolicitud.estaActiva">
+            <ion-item text-wrap [class.solicitud-activa]="tituloSolicitud.estaActiva">
                 <ion-avatar item-left>
                     <ion-icon name="water"></ion-icon>
                 </ion-avatar>
@@ -21,7 +27,7 @@
                     Editar
                 </button>
                 <button (click)="verDetalles(tituloSolicitud.solicitud)" ion-button color="principal">
-                    Ver Detalles
+                    Ver
                 </button>
             </ion-item-options>
         </ion-item-sliding>

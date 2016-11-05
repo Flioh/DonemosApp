@@ -1,8 +1,8 @@
 // Referencias de Angular
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 
 // Referencias de Ionic
-import { LoadingController, Events, NavController, NavParams, Platform } from 'ionic-angular';
+import { LoadingController, Events, NavController, NavParams, Platform, Content } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
 // Servicios
@@ -18,6 +18,7 @@ import { SolicitudModel } from '../../solicitudes/solicitud.model';
 	templateUrl: 'detalles-solicitud.component.html'
 })
 export class DetallesSolicitudPage {
+  @ViewChild(Content) content: Content;
 
 	// Variables de la clase
 	public solicitudSeleccionada: SolicitudModel;

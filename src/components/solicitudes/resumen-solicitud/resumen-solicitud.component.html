@@ -10,7 +10,7 @@
           <span>{{ solicitudItemModel.solicitud.cantidadDadores === 1 ? ' dador' : ' dadores' }}</span>
         </h2>  
 
-		<h2 class="desc-tipos-sanguineos" [innerHTML]="solicitudItemModel.descripcionTiposSanguineos"></h2>
+		<h3 class="desc-tipos-sanguineos" [innerHTML]="solicitudItemModel.descripcionTiposSanguineos"></h3>
 		<ion-icon  class="icono-compatibilidad" name="checkmark-circle-outline" color="principalOscuro" *ngIf="solicitudItemModel.esCompatibleConUsuario"></ion-icon>
 	</ion-item>
 
@@ -41,8 +41,8 @@
 					{{ solicitudItemModel.solicitud.fechaCreacion | formatearFecha }}
 				</ion-note>
 			</ion-col>
-			<ion-col tappable width-40 (click)="verDetalles()">
-				VER MÁS >
+			<ion-col class="ver-detalles" tappable width-40 (click)="verDetalles()">
+				VER MÁS <ion-icon name="arrow-forward"></ion-icon>
 			</ion-col>
 		</ion-row>
 	</ion-card-content>

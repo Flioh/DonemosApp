@@ -1,8 +1,9 @@
+import { RequisitosPage } from '../components/donaciones/requisitos/requisitos.component';
 // Referencias de Angular
 import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
 
 // Referencias de Ionic
-import { Events, MenuController, Nav, Platform } from 'ionic-angular';
+import { Events, MenuController, Nav, Platform, ToastController } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 
 // Paginas
@@ -18,6 +19,7 @@ import { ItemMenuModel } from '../shared/models/item-menu.model';
 // Servicios
 import { LoginService } from '../shared/services/login.service';
 import { DatosService } from '../shared/services/datos.service';
+import { ConectividadService } from '../shared/services/conectividad.service';
 
 @Component({
   templateUrl: 'app.html'
@@ -32,11 +34,15 @@ export class DonemosApp {
 
   public estaLogueado: boolean;
 
+  public hayConexion: boolean;
+
   constructor(public platform: Platform, 
               public menuCtrl: MenuController,
               public loginService: LoginService,
               public datosService: DatosService,
+              public conectividadService: ConectividadService,
               public eventCtrl: Events,
+              private toastCtrl: ToastController,
               public changeDetectorCtrl: ChangeDetectorRef) {
     this.inicializarApp();
   }
@@ -50,7 +56,9 @@ export class DonemosApp {
 
       // Iniciamos los principales componentes de la app
       this.cargarOpcionesMenuPrincipal(); 
+      
       this.inicializarLogin();
+      this.inicializarEventosConexion();
       this.cargarPantallaPrincipal();
     });
   }
@@ -64,6 +72,30 @@ export class DonemosApp {
         this.rootPage = ListaSolicitudesPage;
       }
     })
+  }
+
+  // Método que inicializa los eventos de conexion y desconexion a internet
+  public inicializarEventosConexion() {
+
+    // Chequeamos si hay conexion o no
+    this.hayConexion = this.conectividadService.hayConexion();
+
+    // Método que se ejecuta al conectarse a internet
+    let onOnline = () => {
+ 
+      setTimeout(() => {
+        this.conectividadService.actualizarEstadoConexion(true);
+      }, 2000);
+ 
+    };
+
+    // Método que se ejecuta al desconectarse a internet
+    let onOffline = () => {
+      this.conectividadService.actualizarEstadoConexion(false);
+    };
+
+    document.addEventListener('online', onOnline, false);
+    document.addEventListener('offline', onOffline, false);
   }
 
   // Método que inicializa las opciones de login y sus eventos
@@ -99,11 +131,12 @@ export class DonemosApp {
   public cargarOpcionesMenuPrincipal(): void {    
     this.paginasMenu.push(new ItemMenuModel('list-box', 'Lista de solicitudes', ListaSolicitudesPage, true, false));
     this.paginasMenu.push(new ItemMenuModel('bookmarks', 'Mis solicitudes', MisSolicitudesPage, false, true));
-    this.paginasMenu.push(new ItemMenuModel('checkbox', 'Requisitos para donar', ErrorPage, false, false));
+    this.paginasMenu.push(new ItemMenuModel('checkbox', 'Requisitos para donar', RequisitosPage, false, false));
     this.paginasMenu.push(new ItemMenuModel('settings', 'Configurar preferencias', EditarPreferenciasPage, false, false));
     this.paginasMenu.push(new ItemMenuModel('bulb', 'Mostrar tutorial', IntroPage, false, false));
-    this.paginasMenu.push(new ItemMenuModel('exit', 'Salir', null, false, true));
+    
     this.paginasMenu.push(new ItemMenuModel('information-circle', 'Sobre nosotros', ErrorPage, false, false));
+    this.paginasMenu.push(new ItemMenuModel('exit', 'Salir', null, false, true));
   }
 
   // Método que abre la pagina pasada como parametro

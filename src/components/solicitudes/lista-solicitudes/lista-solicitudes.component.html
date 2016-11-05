@@ -22,9 +22,11 @@
 		</ion-segment>
 	</ion-toolbar>
 
+	
+
 </ion-header>
 
-<ion-content padding>
+<ion-content [class.fondo-oscuro]="seccion === 'solicitudes'" padding>
 
 	<div [ngSwitch]="seccion">
 		<div *ngSwitchCase="'solicitudes'">
