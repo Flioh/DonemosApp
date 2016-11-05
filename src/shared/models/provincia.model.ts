@@ -4,10 +4,10 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class ProvinciaModel {
 
-	public id: number;
+	public id: string;
 	public nombre: string;
 
-	constructor(id?: number, nombre?: string) {
+	constructor(id?: string, nombre?: string) {
 		// Inicializamos el modelo con el objeto pasado como parametro
 		this.id = id ? id : null;
 		this.nombre = nombre ? nombre : null;

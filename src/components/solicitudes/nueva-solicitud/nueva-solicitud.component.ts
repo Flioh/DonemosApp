@@ -193,7 +193,7 @@ export class NuevaSolicitudPage {
 				let indiceProvincia = 0;
 
 				if(this.nuevaSolicitud.provincia.id) {
-					indiceProvincia = this.getIndicePorID(this.listaProvincias, this.nuevaSolicitud.provincia.id);
+					indiceProvincia = this.getIndiceProvinciaPorID(this.listaProvincias, this.nuevaSolicitud.provincia.id);
 				}
 
 				// Asignamos el objeto del listado para que se muestre correctamente
@@ -251,9 +251,29 @@ export class NuevaSolicitudPage {
 		return -1;
 	}
 
+	// Método que obtiene el indice del elemento cuyo id es el pasado como parametro
+	public getIndiceProvinciaPorID(listado: Array<any>, id: string): number {
+
+		for(let i=0; i<listado.length; i++) {
+		if(id === listado[i].id)
+			return i;
+		}
+
+		return -1;
+	}
+
 	// Método que crea la nueva solicitud con la información ingresada en el formulario
 	public guardarCambios(): void {
 		this.submitted = true;
+
+		// Nos aseguramos que la cantidad sea un numero
+		this.nuevaSolicitud.cantidadDadores = +this.nuevaSolicitud.cantidadDadores;
+
+		this.datosService.guardarSolicitud(this.nuevaSolicitud)
+			.subscribe(
+          		data => { debugger; },
+          		err => { debugger; },
+          		() => console.log('Done'));
 	}
 
 	// Método usado para debug, muestra el contenido del form en tiempo real

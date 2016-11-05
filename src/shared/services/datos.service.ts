@@ -1,6 +1,7 @@
 // Referencias de angular
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
+import { AuthHttp } from 'angular2-jwt';
 
 // Referencias de Ionic
 import { Storage } from '@ionic/storage';
@@ -40,6 +41,7 @@ export class DatosService {
   constructor(public http: Http, 
               public donacionesService: DonacionesService,
               public storage: Storage,
+              public authHttp: AuthHttp,
               public config: AppConfig) {
 
     // Obtenemos las API desde el archivo de configuracion
@@ -86,6 +88,18 @@ export class DatosService {
 				});
 	}
 
+  // Método que devuelve true si el usuario vio la introduccion
+  public getMostrarIntro() {
+    return this.storage.get('mostrarIntro').then(mostrarIntro => {
+      return mostrarIntro === null || mostrarIntro === true ? true : false;
+    })
+  }
+
+  // Método que setea si la introduccion se debe mostrar o no
+  public setMostrarIntro(mostrarIntro: boolean) {
+    return this.storage.set('mostrarIntro', mostrarIntro);
+  }
+
   // Obtiene el listado de factores sanguineos
   public getFactoresSanguineos(): Array<FactorSanguineoModel> {
     let listaFactoresSanguineos = [];
@@ -110,15 +124,20 @@ export class DatosService {
 
   // Obtiene el listado de solicitudes
   public getSolicitudes(): Observable<Array<SolicitudModel>> {
-    return this.http.get(this.apiEndPointSolicitudes)
+    return this.http.get('./solicitudes.json')
       .delay(500) // Simulamos un retardo al buscar las solicitudes
       .map(res => res.json());
+  }
+
+  // Método que guarda una solicitud en la base de datos
+  public guardarSolicitud(unaSolicitud: SolicitudModel) {
+    return this.http.post(this.apiEndPointSolicitudes, JSON.stringify(unaSolicitud))
+                    .map(res => res.json());
   }
 
   // Obtiene el listado de provincias
   public getListaProvincias(): Observable<Array<ProvinciaModel>>{
     return this.http.get(this.apiEndPointProvincias)
-      .delay(500) // Simulamos un retardo al buscar las solicitudes
       .map(res => res.json())
       .map(listadoProvincias => {
         this.listaProvincias = [];
@@ -133,12 +152,11 @@ export class DatosService {
   }
 
   // Obtiene el listado de ciudades de la provincia pasada como parametro
-  public getListaCiudadesPorProvincia(provinciaID: number): Observable<Array<CiudadModel>>{
+  public getListaCiudadesPorProvincia(provinciaID: string): Observable<Array<CiudadModel>>{
 
     this.listaCiudades = [];
 
-    return this.http.get(this.apiEndPointLocalidades)
-      .delay(1000) // Simulamos un retardo al buscar las solicitudes
+    return this.http.get(`${this.apiEndPointLocalidades}/${provinciaID}`)
       .map(res => res.json().filter(unaCiudad => unaCiudad.provincia == provinciaID))
       .map(listadoCiudades => {
 

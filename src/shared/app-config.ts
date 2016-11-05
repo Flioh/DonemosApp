@@ -14,9 +14,13 @@ export interface ApplicationConfig {
 export class AppConfig {
 
   // Endpoints
-  public apiEndPointProvincias: string =	  './provincias.json';
-  public apiEndPointLocalidades: string = 	'./localidades.json';
-  public apiEndPointSolicitudes: string =	  './solicitudes.json';
+  // public apiEndPointProvincias: string =	  './provincias.json';
+  // public apiEndPointLocalidades: string = 	'./localidades.json';
+  // public apiEndPointSolicitudes: string =	  './solicitudes.json';
+
+  public apiEndPointProvincias: string =	  'http://localhost:8080/provincia';
+  public apiEndPointLocalidades: string = 	'http://localhost:8080/localidad';
+  public apiEndPointSolicitudes: string =	  'http://localhost:8080/solicitud';
 
   // Google maps
   public autocompleteKey: string =          'AIzaSyCK3zLNXPwaGq3DlPV48fFUlFGjV_eIk4o';

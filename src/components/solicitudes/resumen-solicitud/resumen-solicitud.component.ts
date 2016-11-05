@@ -6,7 +6,6 @@ import { LocalizacionService } from '../../../shared/services/localizacion.servi
 
 // Modelos
 import { ResumenSolicitudModel } from '../../solicitudes/resumen-solicitud.model';
-import { SolicitudModel } from '../solicitud.model';
 
 @Component({
     selector: 'resumen-solicitud',
