@@ -1,5 +1,5 @@
 // Referencias de Angular
-import { Directive, ViewChild, ElementRef, Input, OnInit } from '@angular/core';
+import { Directive, ElementRef, Input, OnInit } from '@angular/core';
 
 // Referencias de Ionic
 import { Content } from 'ionic-angular';

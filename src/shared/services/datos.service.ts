@@ -124,7 +124,7 @@ export class DatosService {
 
   // Obtiene el listado de solicitudes
   public getSolicitudes(): Observable<Array<SolicitudModel>> {
-    return this.http.get('./solicitudes.json')
+    return this.http.get(this.config.apiEndPointSolicitudes)
       .delay(500) // Simulamos un retardo al buscar las solicitudes
       .map(res => res.json());
   }
