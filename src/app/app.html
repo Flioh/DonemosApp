@@ -6,9 +6,9 @@
       </ion-col>
     </ion-row>
 
-    <ion-row [hidden]="ocultarPerfil" class="profile">
+    <ion-row [hidden]="ocultarPerfil" [class.profile]="loginService.user?.picture_large || loginService.user?.picture">
       <ion-col width-100>
-        <img [src]="loginService.user?.picture || 'assets/images/logo_blanco.png'">
+        <img [src]="loginService.user?.picture_large || loginService.user?.picture || 'assets/images/logo_blanco.png'">
         <h3>{{ loginService.user?.name }}</h3>
       </ion-col>
     </ion-row>

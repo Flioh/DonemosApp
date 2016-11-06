@@ -52,7 +52,7 @@ export class LoginService {
                 scope: 'openid offline_access',
             }
         },
-        allowedConnections: ['google-oauth2', 'facebook', 'twitter'],
+        allowedConnections: ['google-oauth2', 'facebook'],
         socialButtonStyle: 'small',
         rememberLastLogin: false,
         language: 'es',
