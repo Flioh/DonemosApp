@@ -4,6 +4,8 @@
 // 03 - Iconos
 // 04 - Login 
 
+// 01 - Generales
+// --------------------------------------------------
 
 ion-app.md {
 	font-family: "Hind", "Roboto", "Helvetica Neue", sans-serif;
@@ -45,11 +47,6 @@ ion-app.ios {
 	} 
 }
  
-
-
-// 01 - Generales
-// --------------------------------------------------
-
 ion-title.title-md img.logo {
     max-width: 180px;
     vertical-align: middle;
@@ -58,16 +55,6 @@ ion-title.title-md img.logo {
 ion-title.title-ios img.logo {
     max-width: 150px;
 	vertical-align: middle;
-}
-
-.mensaje-conexion ion-label,
-.mensaje-conexion ion-label a {
-    color: $blanco;
-}
-
-.mensaje-conexion ion-label {
-    padding: 10px 16px;
-	margin: 0;
 }
 
 button.alert-button {
@@ -248,7 +235,20 @@ ion-row.profile {
     text-align: center;
 }
 
-/* Auth0 styles */
+// Menu cuando no hay conexion
+ion-row.menu-logo {
+    text-align: center;
+	color: $blanco;
+    background-color: #f3595c;
+}
+
+ion-row.menu-logo img {
+    max-width: 100px;
+    margin-top: 25px;
+}
+// Fin Menu cuando no hay conexion
+
+// Estilos de Auth0
 .auth0-lock.auth0-lock .auth0-lock-widget {
     width: 100%;
 }
@@ -291,3 +291,4 @@ ion-col#hiw-login-container {
 	width: 55px;
 	height: 55px;
 }
+// Fin Estilos de Auth0

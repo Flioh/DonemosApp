@@ -15,19 +15,11 @@ export class ConectividadService {
  
   private esMovil: boolean;
 
-  public conexion: Observable<boolean>;
-  public conexionObserver: any;
-
   constructor(private platform: Platform,
               public eventsCtrl: Events) {
+
+    // Detectamos si es un movil
     this.esMovil = this.platform.is('ios') || this.platform.is('android');
-
-    // Creamos el observable
-    this.conexionObserver = null;
-    this.conexion = Observable.create(observer => {
-        this.conexionObserver = observer;
-    });
-
   }
  
   // Método que devuelve true si hay conexion a internet
@@ -47,10 +39,4 @@ export class ConectividadService {
       return !navigator.onLine;     
     }
   }
-
-  // Método que actualiza el estado de la conexion y notifica a todos los subscriptores
-  public actualizarEstadoConexion(hayConexion: boolean) {
-    this.conexionObserver.next(hayConexion);
-  }
-  
 }

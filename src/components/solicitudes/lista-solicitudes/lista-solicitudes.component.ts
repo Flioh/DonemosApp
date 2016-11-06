@@ -2,7 +2,7 @@
 import { Component, NgZone } from '@angular/core';
 
 // Referencias de Ionic
-import { AlertController, LoadingController, NavController, Platform, MenuController } from 'ionic-angular';
+import { AlertController, LoadingController, NavController, Platform, MenuController, Events } from 'ionic-angular';
 
 // Servicios
 import { DonacionesService } from '../../../shared/services/donaciones.service';
@@ -60,16 +60,18 @@ export class ListaSolicitudesPage {
               private alertCtrl: AlertController,               
               private datosService: DatosService,
               private ngZoneCtrl: NgZone,
+              private eventsCtrl: Events,
               private conectividadService: ConectividadService,
               private donacionesService: DonacionesService) 
   {    
     // Indica que las listas usadas en los filtros no estan cargadas aun
     this.listadosCargados = false;
 
-    // Inicializa la lista de solicitudes
-    this.solicitudes = [];
-
+    // Determinamos si es ios o no para ocultar/mostrar el boton flotante
     this.isIos = this.platform.is('ios');
+
+    // Inicializamos eventos de la conexion
+    this.inicializarEventosConexion()
 
     // Por defecto no usa los datos personales
     this.usarDatosPersonales = false;
@@ -96,7 +98,18 @@ export class ListaSolicitudesPage {
     });
 
     // Cargamos las ultimas solicitudes
-    this.buscarSolicitudes();
+    if(this.conectividadService.hayConexion()) {
+      this.buscarSolicitudes();
+    }
+  }
+
+  // Método que se ejecutan al haber cambios en el estado de la conexion
+  public inicializarEventosConexion() {
+    this.eventsCtrl.subscribe('conexion:conectado', () => {
+
+      // Si el usuario vuelve a tener conexion a internet, buscamos nuevamente las solicitudes
+      this.buscarSolicitudes();
+    });
   }
 
   // Método que obtiene las solicitudes del servidor
@@ -105,13 +118,15 @@ export class ListaSolicitudesPage {
     // Mostramos las solicitudes
     this.seccion = 'solicitudes';
 
+    // Inicializamos el listado d solicitudes
+    this.solicitudes = [];
+
     let loadingPopup = this.loadingCtrl.create({
       content: 'Cargando solicitudes'
     });
 
     // Muestra el mensaje de cargando ciudades
     loadingPopup.present();
-
 
     this.datosService.getPreferenciasUsuario().then((preferenciasUsuario) => {
         if(preferenciasUsuario) {          

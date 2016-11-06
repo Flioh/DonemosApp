@@ -1,15 +1,22 @@
 <ion-menu [content]="content" side="right" persistent="true" >
   <ion-content>
 
-    <ion-row [hidden]="loginService.estaLogueado()">
+    <ion-row [hidden]="!(hayConexion && !loginService.estaLogueado())">
       <ion-col id="hiw-login-container" width-100>
       </ion-col>
     </ion-row>
 
-    <ion-row [hidden]="!loginService.estaLogueado()" class="profile">
+    <ion-row [hidden]="!(hayConexion && loginService.estaLogueado())" class="profile">
       <ion-col width-100>
-        <img *ngIf="loginService.user?.picture" [src]="loginService.user?.picture">
+        <img *ngIf="loginService.user?.picture" [src]="loginService.user?.picture || assets/images/logo_blanco.png">
         <h3>{{ loginService.user?.name }}</h3>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="menu-logo" [hidden]="hayConexion">
+      <ion-col width-100>
+        <img src="assets/images/logo_blanco.png">
+        <h3>Donemos</h3>
       </ion-col>
     </ion-row>
 
@@ -17,7 +24,7 @@
     <ion-list no-lines class="main-menu">
       <template ngFor let-pagina [ngForOf]="paginasMenu">
 
-        <button menuClose ion-item detail-none *ngIf="!pagina.requiereLogin || pagina.requiereLogin && loginService.estaLogueado()" (click)="abrirPagina(pagina)">
+        <button menuClose ion-item detail-none (click)="abrirPagina(pagina)">
           <ion-icon color="principal" ios="{{pagina.getIconoIosOutline()}}" md="{{pagina.getIconoAndroid()}}" item-left></ion-icon>
           {{ pagina.titulo }}
         </button>
