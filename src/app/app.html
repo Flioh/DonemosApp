@@ -1,19 +1,19 @@
 <ion-menu [content]="content" side="right" persistent="true" >
   <ion-content>
 
-    <ion-row [hidden]="!(hayConexion && !loginService.estaLogueado())">
+    <ion-row [hidden]="ocultarLogin">
       <ion-col id="hiw-login-container" width-100>
       </ion-col>
     </ion-row>
 
-    <ion-row [hidden]="!(hayConexion && loginService.estaLogueado())" class="profile">
+    <ion-row [hidden]="ocultarPerfil" class="profile">
       <ion-col width-100>
-        <img *ngIf="loginService.user?.picture" [src]="loginService.user?.picture || assets/images/logo_blanco.png">
+        <img [src]="loginService.user?.picture || 'assets/images/logo_blanco.png'">
         <h3>{{ loginService.user?.name }}</h3>
       </ion-col>
     </ion-row>
 
-    <ion-row class="menu-logo" [hidden]="hayConexion">
+    <ion-row [hidden]="ocultarLogo" class="menu-logo" [hidden]="hayConexion">
       <ion-col width-100>
         <img src="assets/images/logo_blanco.png">
         <h3>Donemos</h3>

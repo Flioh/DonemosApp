@@ -2,7 +2,7 @@
 import { Component, ViewChild } from '@angular/core';
 
 // Referencias de Ionic
-import { AlertController, LoadingController, NavController, Platform, List } from 'ionic-angular';
+import { AlertController, LoadingController, NavController, Events, Platform, List } from 'ionic-angular';
 
 // Servicios
 import { DonacionesService } from '../../../shared/services/donaciones.service';
@@ -31,7 +31,8 @@ export class MisSolicitudesPage {
   constructor(private platform: Platform,
               private navCtrl: NavController, 
               private loadingCtrl: LoadingController,
-              private alertCtrl: AlertController,               
+              private alertCtrl: AlertController,
+              private eventsCtrl: Events,           
               private datosService: DatosService,
               private donacionesService: DonacionesService,
               private config: AppConfig) 
@@ -43,8 +44,18 @@ export class MisSolicitudesPage {
     this.buscarSolicitudes();
   }
 
+  // Método que se ejecutan al haber cambios en el estado de la conexion
+  public inicializarEventosConexion() {
+    this.eventsCtrl.subscribe('conexion:conectado', () => {
+
+      // Si el usuario vuelve a tener conexion a internet, buscamos nuevamente las solicitudes
+      this.buscarSolicitudes();
+    });
+  }
+
   // Método que obtiene las solicitudes del servidor
   public buscarSolicitudes(): void {
+    this.solicitudes = [];
 
     let loadingPopup = this.loadingCtrl.create({
       content: 'Cargando solicitudes'

@@ -112,31 +112,25 @@ export class LoginService {
   }
 
   // Método que busca en el storage si hay datos del perfil del usuario y del token
-  public cargarInformacionUsuario() {
-    // Buscamos si hay datos del usuario guardados en el storage
-    this.storage.get('profile').then(profile => {
-      this.user = JSON.parse(profile);
-    }).catch(error => {
-      console.log(error);
-    });
-
-    // Buscamos tambien si hay un token guardado
-    this.storage.get('id_token').then(token => {
-      this.idToken = token;
-    });
+  public cargarInformacionUsuario(): Promise<boolean> {
+    return Promise.all([this.storage.get('profile'), this.storage.get('id_token')])
+                  .then((resultados) => {
+                    this.user = JSON.parse(resultados[0]);
+                    this.idToken = resultados[1];
+                  })
+                  .catch(error => { 
+                    console.log(error);
+                  }
+          );
   }
 
   // Método que verfica si el usuario esta logueado o no
-  public estaLogueado() { 
+  public estaLogueado() {
     return tokenNotExpired('id_token', this.idToken);
   }
   
   // Metodo que inicializa las opciones de login
   public inicializarLogin() {
-
-    // Primero verificamos si no hay informacion del usuario
-    this.cargarInformacionUsuario();
-
     // Mostramos el Lock de Auth0
     this.lock.show();
   }
@@ -171,16 +165,12 @@ export class LoginService {
         let jwtExp = this.jwtHelper.decodeToken(token).exp;
         let iat = new Date(0);
         let exp = new Date(0);
-        
-        console.log('IAT: ' + iat);
-        console.log('ECP: ' + exp);
-
         let delay = (exp.setUTCSeconds(jwtExp) - iat.setUTCSeconds(jwtIat));
-        
         return Observable.interval(delay);
       });
      
     this.renovarSubscripcion = source.subscribe(() => {
+      debugger;
       this.getNewJwt();
     });
   }
@@ -192,6 +182,7 @@ export class LoginService {
     if (this.estaLogueado()) {
       let source = Observable.of(this.idToken).flatMap(
         token => {
+
           // Usamos el tiempo de expiracion para generar un
           // delay en milisegundos
           let now: number = new Date().valueOf();
@@ -208,6 +199,7 @@ export class LoginService {
        // Una vez que se cumple el tiempo previsto, obtenemos un nuevo
        // token y programamos su renovacion
        source.subscribe(() => {
+         debugger;
          this.getNewJwt();
          this.programarRenovacionToken();
        });

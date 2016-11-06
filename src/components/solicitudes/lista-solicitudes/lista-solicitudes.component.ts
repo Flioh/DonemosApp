@@ -109,6 +109,9 @@ export class ListaSolicitudesPage {
 
       // Si el usuario vuelve a tener conexion a internet, buscamos nuevamente las solicitudes
       this.buscarSolicitudes();
+
+      // Forzamos a que se carguen nuevamente los listados
+      this.listadosCargados = false;
     });
   }
 

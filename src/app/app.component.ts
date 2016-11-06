@@ -32,11 +32,17 @@ export class DonemosApp {
 
   public paginasMenu: Array<ItemMenuModel> = [];
 
-  public estaLogueado: boolean;
+  // Variables usadas para determinar que mostrar en el menu principal de
+  // acuerdo a la conexion del usuario y si esta logueado o no
+  public ocultarLogin: boolean;
+  public ocultarPerfil: boolean;
+  public ocultarLogo: boolean;
 
   public hayConexion: boolean;
   private mostrarNotificacionConexion: boolean;
   private mostrarNotificacionSinConexion: boolean;
+
+  public estaLogueado: boolean;
 
   constructor(public platform: Platform, 
               public menuCtrl: MenuController,
@@ -60,14 +66,14 @@ export class DonemosApp {
       this.mostrarNotificacionConexion = false;
       this.mostrarNotificacionSinConexion = true;
       
-      this.inicializarEventosGlobalesConexion();
-      this.inicializarEventosParticularesConexion();
-      
-      // Iniciamos los principales componentes de la app
-      this.inicializarLogin();
-      this.cargarOpcionesMenuPrincipal(); 
-
-      this.cargarPantallaPrincipal();
+      // Cargamos la informacion del usuario primero
+      this.loginService.cargarInformacionUsuario().then(() => {
+        this.inicializarEventosGlobalesConexion();
+        this.inicializarEventosParticularesConexion();
+        this.inicializarEventosLogin();
+        this.actualizarMenuPrincipal(); 
+        this.cargarPantallaPrincipal();
+      });
     });
   }
 
@@ -87,23 +93,21 @@ export class DonemosApp {
     // El usuario ahora tiene conexion a internet
     this.eventCtrl.subscribe('conexion:conectado', () => {
       this.hayConexion = this.conectividadService.hayConexion();
-      this.inicializarLogin();
-      this.cargarOpcionesMenuPrincipal();
+      this.actualizarMenuPrincipal();
     });
 
     // El usuario no tiene conexion a internet
     this.eventCtrl.subscribe('conexion:desconectado', () => {
       this.hayConexion = this.conectividadService.hayConexion();
-      this.cargarOpcionesMenuPrincipal();
+      this.actualizarMenuPrincipal();
     });
   }
-
 
   // Método que inicializa los eventos de conexion y desconexion a internet de toda la app
   public inicializarEventosGlobalesConexion() {
 
     // Chequeamos si hay conexion o no
-    this.hayConexion = this.conectividadService.hayConexion();
+    this.hayConexion = this.conectividadService.hayConexion();    
 
     // Método que se ejecuta al conectarse a internet
     let onOnline = () => {
@@ -160,7 +164,7 @@ export class DonemosApp {
   // Método que muestra un mensaje cuando el usuario se queda sin conexion
   public mostrarMensajeConConexion(){
     let toast = this.toastCtrl.create({
-      message: 'Tienes conexión nuevamente. Ahora si podrás acceder a todo el contenido de la aplicación.',
+      message: '<strong>Tienes conexión nuevamente</strong>. Ahora si podrás acceder a todo el contenido de la aplicación.',
       showCloseButton: true,
       closeButtonText: 'Ok',
       position: 'bottom'
@@ -173,30 +177,42 @@ export class DonemosApp {
     toast.present();
   }
 
-  // Método que inicializa las opciones de login y sus eventos
-  public inicializarLogin(): void {
+  // Método que inicializa los eventos relacionados al login
+  public inicializarEventosLogin() {
 
-    if(this.hayConexion) {
-      // Muestra las opciones de login
-      this.loginService.inicializarLogin();
-    }
-    
-    this.eventCtrl.subscribe('login:usuario', () => {      
-      this.actualizarMenuPrincipal(true);
+    this.estaLogueado = this.loginService.estaLogueado();    
+    this.actualizarMenuPrincipal();
+
+    this.eventCtrl.subscribe('login:usuario', () => {
+      this.estaLogueado = this.loginService.estaLogueado();    
+      this.actualizarMenuPrincipal();
     });
 
     this.eventCtrl.subscribe('logout:usuario', () => {
-      this.actualizarMenuPrincipal(false);
+      this.estaLogueado = this.loginService.estaLogueado();
+      this.actualizarMenuPrincipal();
     });
   }
 
   // Método que actualiza el menu principal segun si esta logueado o no el usuario
-  private actualizarMenuPrincipal(estaLogueado: boolean): void {
+  private actualizarMenuPrincipal(): void {
     
     // Cerramos el menu
     this.menuCtrl.close();
 
-    if(!estaLogueado) {
+    if(!this.hayConexion) {
+      this.ocultarLogin = true;
+      this.ocultarPerfil = true;
+      this.ocultarLogo = false;
+    } else if(this.estaLogueado) {
+      this.ocultarLogin = true;
+      this.ocultarPerfil = false;
+      this.ocultarLogo = true;
+    } else {
+      this.ocultarLogin = false;
+      this.ocultarPerfil = true;
+      this.ocultarLogo = true;
+
       // Muestra nuevamente las opciones del login
       this.loginService.inicializarLogin();
     }
@@ -215,16 +231,19 @@ export class DonemosApp {
 
     this.paginasMenu.push(new ItemMenuModel('list-box', 'Lista de solicitudes', ListaSolicitudesPage, true, false));
 
-    if(this.hayConexion && this.loginService.estaLogueado())
+    if(this.hayConexion && this.estaLogueado)
       this.paginasMenu.push(new ItemMenuModel('bookmarks', 'Mis solicitudes', MisSolicitudesPage, false, true));
     
     this.paginasMenu.push(new ItemMenuModel('checkbox', 'Requisitos para donar', RequisitosPage, false, false));
-    this.paginasMenu.push(new ItemMenuModel('settings', 'Configurar preferencias', EditarPreferenciasPage, false, false));
+    
+    if(this.hayConexion)
+      this.paginasMenu.push(new ItemMenuModel('settings', 'Configurar preferencias', EditarPreferenciasPage, false, false));
+    
     this.paginasMenu.push(new ItemMenuModel('bulb', 'Mostrar tutorial', IntroPage, false, false));
     
     this.paginasMenu.push(new ItemMenuModel('information-circle', 'Sobre nosotros', ErrorPage, false, false));
     
-    if(this.hayConexion && this.loginService.estaLogueado())
+    if(this.hayConexion && this.estaLogueado)
       this.paginasMenu.push(new ItemMenuModel('exit', 'Salir', null, false, true));
   }
 
