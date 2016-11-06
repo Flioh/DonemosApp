@@ -1,9 +1,6 @@
 // Referencias de Angular
 import { Injectable } from '@angular/core';
 
-// Referencias de Observables
-import { Observable } from 'rxjs/Observable';
-
 // Referencias de Angular
 import { Platform, Events } from 'ionic-angular';
 

@@ -15,6 +15,7 @@ import { AppConfig } from '../app-config';
 // Interfaz usada para mostrar los datos del perfil del usuario
 export interface PerfilUsuarioModel {
     picture: string;
+    picture_large: string;
     name: string;
 }
 
