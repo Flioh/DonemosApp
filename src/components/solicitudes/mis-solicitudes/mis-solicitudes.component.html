@@ -23,6 +23,9 @@
                 <p>{{ tituloSolicitud.solicitud.fechaCreacion | formatearFecha }}</p>
             </ion-item>
             <ion-item-options side="right">
+								<button (click)="eliminarSolicitud(tituloSolicitud.solicitud)" ion-button color="danger">
+									Eliminar
+								</button>
                 <button (click)="editarSolicitud(tituloSolicitud.solicitud)" ion-button color="grisClaro">
                     Editar
                 </button>

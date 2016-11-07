@@ -114,6 +114,17 @@ export class MisSolicitudesPage {
                   this.list.closeSlidingItems();
                 });
   }
+  
+  // Método que solicita la eliminación de la solicitud.
+  public eliminarSolicitud(unaSolicitud: SolicitudModel): void {
+    this.datosService.eliminarSolicitud(unaSolicitud).subscribe(res => {
+      if (res.ok) {
+        // TODO: Confirm, remove from displayed list
+      } else {
+        // TODO: Error
+      }
+    });
+  }
 
   // Método que abre la pagina de detalles de la solicitud
   public verDetalles(unaSolicitud: SolicitudModel): void {

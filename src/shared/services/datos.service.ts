@@ -142,6 +142,12 @@ export class DatosService {
         .map(res => res.json());
     }
   }
+  
+  // Método que elimina una solicitud en la base de datos
+  public eliminarSolicitud(unaSolicitud: SolicitudModel) {
+    return this.authHttp.delete(`${this.apiEndPointSolicitudes}/${unaSolicitud.solicitudID}`);
+    
+  }
 
   // Obtiene el listado de provincias
   public getListaProvincias(): Observable<Array<ProvinciaModel>>{
