@@ -117,6 +117,7 @@ export class MisSolicitudesPage {
   
   // Método que solicita la eliminación de la solicitud.
   public eliminarSolicitud(unaSolicitud: SolicitudModel): void {
+    // TODO: Mostrar dialogo de confirmación primero?
     this.datosService.eliminarSolicitud(unaSolicitud).subscribe(res => {
       if (res.ok) {
         // TODO: Confirm, remove from displayed list
