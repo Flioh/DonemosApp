@@ -269,7 +269,8 @@ export class NuevaSolicitudPage {
 		// Nos aseguramos que la cantidad sea un numero
 		this.nuevaSolicitud.cantidadDadores = +this.nuevaSolicitud.cantidadDadores;
 
-		this.datosService.guardarSolicitud(this.nuevaSolicitud)
+		let id = this.modoEdicion ? this.nuevaSolicitud.solicitudID : null;
+		this.datosService.guardarSolicitud(this.nuevaSolicitud,id)
 			.subscribe(
           		data => { console.log('saved'); },
           		err => { debugger; },
