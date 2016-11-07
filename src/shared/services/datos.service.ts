@@ -131,8 +131,10 @@ export class DatosService {
 
   // Método que guarda una solicitud en la base de datos
   public guardarSolicitud(unaSolicitud: SolicitudModel) {
-    return this.http.post(this.apiEndPointSolicitudes, JSON.stringify(unaSolicitud))
-                    .map(res => res.json());
+    return this.authHttp.post(this.apiEndPointSolicitudes, JSON.stringify(unaSolicitud))
+                    .map(res => {
+                       return res.json();
+                    });
   }
 
   // Obtiene el listado de provincias

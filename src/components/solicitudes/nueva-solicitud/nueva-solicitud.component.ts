@@ -271,7 +271,7 @@ export class NuevaSolicitudPage {
 
 		this.datosService.guardarSolicitud(this.nuevaSolicitud)
 			.subscribe(
-          		data => { debugger; },
+          		data => { console.log('saved'); },
           		err => { debugger; },
           		() => console.log('Done'));
 	}
