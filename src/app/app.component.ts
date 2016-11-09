@@ -59,7 +59,7 @@ export class DonemosApp {
     this.platform.ready().then(() => {
       
       // En este punto los plugins ya estan cargados y listos
-      StatusBar.styleDefault();
+      StatusBar.backgroundColorByName('black');
       Splashscreen.hide();
 
       // Variables que usamos para no mostrar varios mensajes al cambiar el estado de la conexion
