@@ -130,9 +130,23 @@ export class DatosService {
   }
 
   // Método que guarda una solicitud en la base de datos
-  public guardarSolicitud(unaSolicitud: SolicitudModel) {
-    return this.http.post(this.apiEndPointSolicitudes, JSON.stringify(unaSolicitud))
-                    .map(res => res.json());
+  public guardarSolicitud(unaSolicitud: SolicitudModel, solicitudId?: number) {
+    
+    if (solicitudId) {
+      return this.authHttp.put(`${this.apiEndPointSolicitudes}/${solicitudId}`,
+        JSON.stringify(unaSolicitud))
+        .map(res => res.json());
+    } else {
+      return this.authHttp.post(this.apiEndPointSolicitudes,
+        JSON.stringify(unaSolicitud))
+        .map(res => res.json());
+    }
+  }
+  
+  // Método que elimina una solicitud en la base de datos
+  public eliminarSolicitud(unaSolicitud: SolicitudModel) {
+    return this.authHttp.delete(`${this.apiEndPointSolicitudes}/${unaSolicitud.solicitudID}`);
+    
   }
 
   // Obtiene el listado de provincias

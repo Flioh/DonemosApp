@@ -98,4 +98,5 @@
     <variable name="XWALK_MULTIPLEAPK" value="true"/>
   </plugin>
   <icon src="resources/android/icon/drawable-xhdpi-icon.png"/>
+  <allow-navigation href="http://192.168.1.5:8100"/>
 </widget>
