@@ -32,6 +32,7 @@ import { EditarPreferenciasPage } from '../components/preferencias-usuario/edita
 import { RequisitosPage } from '../components/donaciones/requisitos/requisitos.component';
 import { ErrorPage } from '../shared/components/error/error.component';
 import { IntroPage } from '../shared/components/intro/intro.component';
+import { DropdownPage } from '../shared/components/dropdown/dropdown.component';
 
 
 // Directivas
@@ -65,6 +66,7 @@ export function getAuthHttp(http) {
     EditarPreferenciasPage,
     RequisitosPage,
     IntroPage,
+    DropdownPage,
     ErrorPage,
 
     // Pipes
@@ -90,6 +92,7 @@ export function getAuthHttp(http) {
     EditarPreferenciasPage,
     RequisitosPage,
     IntroPage,
+    DropdownPage,
     ErrorPage
   ],
   providers: [  DatosService, 

@@ -53,25 +53,17 @@
 
 
 				<!-- Provincia  -->
-				<ion-item>
-					<ion-label floating>Provincia</ion-label>
-					<ion-select [(ngModel)]="provinciaSeleccionada" okText="Aceptar" cancelText="Cancelar" name="provincia" #provincia="ngModel" (ionChange)="inicializarCiudadesDeLaProvincia()">
-						<ion-option *ngFor="let provincia of listaProvincias" [value]="provincia">
-							{{provincia.nombre}}
-						</ion-option>
-					</ion-select>
+				<ion-item (click)="abrirModalProvincias()">
+					<ion-label stacked>Provincia</ion-label>
+					<ion-input disabled [value]="this.provinciaSeleccionada?.nombre"> </ion-input>	
 				</ion-item>
 
 
 
 				<!-- Ciudad  -->
-				<ion-item>
-					<ion-label floating>Ciudad</ion-label>
-					<ion-select [(ngModel)]="ciudadSeleccionada" okText="Aceptar" cancelText="Cancelar" name="ciudad" #ciudad="ngModel">
-						<ion-option *ngFor="let ciudad of listaCiudades" [value]="ciudad">
-							{{ciudad.nombre}}
-						</ion-option>
-					</ion-select>
+				<ion-item (click)="abrirModalCiudades()">
+					<ion-label stacked>Ciudad</ion-label>
+					<ion-input disabled [value]="this.ciudadSeleccionada?.nombre"> </ion-input>	
 				</ion-item>
 
 
@@ -97,6 +89,7 @@
 						</ion-option>
 					</ion-select>
 				</ion-item>
+
 
 
 				<!-- Toggle para usar datos personales como filtro -->

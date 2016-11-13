@@ -2,7 +2,7 @@
 import { Component, NgZone } from '@angular/core';
 
 // Referencias de Ionic
-import { AlertController, LoadingController, NavController, Platform, MenuController, Events } from 'ionic-angular';
+import { AlertController, LoadingController, NavController, Platform, MenuController, Events, ModalController } from 'ionic-angular';
 
 // Servicios
 import { DonacionesService } from '../../../shared/services/donaciones.service';
@@ -20,6 +20,7 @@ import { GrupoSanguineoModel } from '../../../shared/models/grupo-sanguineo.mode
 // Paginas y componente base
 import { DetallesSolicitudPage } from '../detalles-solicitud/detalles-solicitud.component';
 import { NuevaSolicitudPage } from '../nueva-solicitud/nueva-solicitud.component';
+import { DropdownPage } from '../../../shared/components/dropdown/dropdown.component';
 
 @Component({
   selector: 'lista-solicitudes-page',
@@ -57,7 +58,8 @@ export class ListaSolicitudesPage {
               private nav: NavController, 
               private menuCtrl: MenuController,
               private loadingCtrl: LoadingController,
-              private alertCtrl: AlertController,               
+              private alertCtrl: AlertController,
+              private modalCtrl: ModalController,
               private datosService: DatosService,
               private ngZoneCtrl: NgZone,
               private eventsCtrl: Events,
@@ -310,7 +312,10 @@ export class ListaSolicitudesPage {
   }
 
   // Método que inicializa el listado de ciudades de una provincia
-  public inicializarCiudadesDeLaProvincia(nombreCiudad: string): void {
+  public inicializarCiudadesDeLaProvincia(): void {
+
+    this.ciudadSeleccionada = null;
+
     let loadingPopup = this.loadingCtrl.create({
       content: 'Cargando ciudades'
     });
@@ -342,6 +347,55 @@ export class ListaSolicitudesPage {
   // Método que lleva a la pantalla de creación de solicitudes
   public nuevaSolicitud(): void {
     this.nav.push(NuevaSolicitudPage, {}, { animate: true, direction: 'forward' });
+  }
+
+  public abrirModalProvincias() {
+    // Creamos el componente
+    let provinciaModal = this.modalCtrl.create(DropdownPage, { titulo: 'Seleccionar Provincia',
+                                                               listaOpciones: this.listaProvincias });
+    
+    provinciaModal.onDidDismiss(opcionSeleccionada => {
+
+      if(opcionSeleccionada) {
+        this.provinciaSeleccionada = opcionSeleccionada;
+        this.inicializarCiudadesDeLaProvincia();
+      }
+    });
+
+    provinciaModal.present();
+  }
+
+  public abrirModalCiudades() {
+    
+    if(!this.provinciaSeleccionada) {
+      let popupAdvertencia = this.alertCtrl.create({
+        title: 'Error',
+        message: 'Debe seleccionar una provincia antes de seleccionar una ciudad.',
+        buttons: [
+          {
+            text: 'Ok',
+            handler: () => {
+                        
+            }
+          }]
+      });
+
+      // Mostramos el popup
+      popupAdvertencia.present();
+      return;
+    }
+
+    // Creamos el componente
+    let ciudadesModal = this.modalCtrl.create(DropdownPage, { titulo: 'Seleccionar Localidad',
+                                                              listaOpciones: this.listaCiudades });
+    
+    ciudadesModal.onDidDismiss(opcionSeleccionada => {
+      if(opcionSeleccionada) {
+        this.ciudadSeleccionada = opcionSeleccionada;
+       }
+    });
+
+    ciudadesModal.present();
   }
 
 }
