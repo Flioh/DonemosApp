@@ -2,7 +2,7 @@
 import { Component } from '@angular/core';
 
 // Referencias de Ionic
-import { LoadingController, NavController, ToastController } from 'ionic-angular';
+import { LoadingController, NavController, ToastController, NavParams } from 'ionic-angular';
 
 // Modelo principal
 import { PreferenciasUsuarioModel } from '../preferencias-usuario.model';
@@ -15,6 +15,9 @@ import { ProvinciaModel } from '../../../shared/models/provincia.model';
 
 // Servicios
 import { DatosService } from '../../../shared/services/datos.service';
+
+// Paginas y componentes
+import { ListaSolicitudesPage } from '../../solicitudes/lista-solicitudes/lista-solicitudes.component';
 
 @Component({
 	selector:'editar-preferencias-page',
@@ -32,10 +35,16 @@ export class EditarPreferenciasPage {
 	public preferenciasUsuario: PreferenciasUsuarioModel;
 	private datosPersonalesObj: any;
 
+	public esRoot: boolean;
+
 	constructor(private navCtrl: NavController,
 				private loadingCtrl: LoadingController, 
 				private datosService: DatosService,
+				private paramsCtrl: NavParams,
 				private toastCtrl: ToastController) {
+
+		// Identificamos si la pagina se abrio como root o mediante un push
+		this.esRoot = this.paramsCtrl.get('esRoot') || false;
 
 		this.preferenciasUsuario = new PreferenciasUsuarioModel();
 		
@@ -157,18 +166,26 @@ export class EditarPreferenciasPage {
 			grupoSanguineoID : this.preferenciasUsuario.grupoSanguineo.id,
 			factorSanguineoID : this.preferenciasUsuario.factorSanguineo.id,
 		};
-
 		this.datosService.setPreferenciasUsuario(nuevosDatosUsuarioObj)
     		.then(() => {
-    			let toast = this.toastCtrl.create({
-    		      message: 'Los datos se actualizaron correctamente.',
-    		      position: 'bottom',
-    		      duration: 3000
-    		    });
+    			if(this.esRoot) {
+    				this.mostrarListado();
+    			} else {
+    				let toast = this.toastCtrl.create({
+	    		      message: 'Los datos se actualizaron correctamente.',
+	    		      position: 'bottom',
+	    		      duration: 3000
+	    		    });
 
-    		    // Mostramos el mensaje al usuario
-    		    toast.present();
+	    		    // Mostramos el mensaje al usuario
+	    		    toast.present();
+    			}
     		});
+	}
+
+	// Método que lleva al usuario al menu principal
+	public mostrarListado(): void {
+		this.navCtrl.setRoot(ListaSolicitudesPage);
 	}
 
 	// Método usado para debug, muestra el contenido del form en tiempo real

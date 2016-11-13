@@ -84,7 +84,8 @@ export class DatosService {
 					this.datosUsuarioObj = preferenciasUsuario;
 
           // Avisamos a los subscriptores que los datos fueron actualizados
-					this.datosUsuarioObserver.next(preferenciasUsuario);
+					if(this.datosUsuarioObserver)
+            this.datosUsuarioObserver.next(preferenciasUsuario);
 				});
 	}
 

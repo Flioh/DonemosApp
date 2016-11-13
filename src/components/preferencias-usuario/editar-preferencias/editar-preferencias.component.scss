@@ -1,3 +1,15 @@
-preferencias-usuario-page {
+editar-preferencias-page {
 
+	.btn-inline {
+		margin-top: 50px;
+		display: inline-block;
+	}
+
+	.btn-inline.btn-secondary {
+		width: 29%;
+	}
+
+	.btn-inline.btn-primary {
+		width: 69%;
+	}
 }

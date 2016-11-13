@@ -67,7 +67,14 @@
 
 		</form>
 
-		<button ion-button (click)="guardarCambios()" class="submit" color="principal" full>
+		<button ion-button *ngIf="esRoot" (click)="mostrarListado()" class="btn-inline btn-secondary " color="grisOscuro" full>
+			Omitir
+		</button>
+		<button ion-button *ngIf="esRoot" (click)="guardarCambios()" class="btn-inline btn-primary " color="principal" full>
+			Guardar datos
+		</button>
+
+		<button ion-button *ngIf="!esRoot" (click)="guardarCambios()" color="principal" full>
 			Guardar datos
 		</button>
 	</ion-list>

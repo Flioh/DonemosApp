@@ -4,13 +4,16 @@ intro-page {
 
     }
 
-    button.disable-hover.button.button-md.button-default.button-default-md,
-    button.disable-hover.button.button-ios.button-default.button-default-ios  {
+    .button-container {
         position: absolute;
         left: 0;
         right: 0;
         bottom: 65px;
-        width: 120px;
+        min-width: 120px;
         margin: auto;
+    }
+
+    .button-container button {
+        display: inline-block;
     }
 }
