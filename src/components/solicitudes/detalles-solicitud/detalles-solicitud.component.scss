@@ -8,6 +8,11 @@ detalles-solicitud-page {
 		margin: 0;
 	}
 
+	.item-md .item-button,
+	.item-ios .item-button {
+		height: 3.6rem;
+	}
+
 	ion-item.header {
     	display: inline-block;
 	    background-color: $principalClaro;
@@ -56,6 +61,10 @@ detalles-solicitud-page {
 	    left: 30px;
     }
 
+    ion-list.detail-list {
+    	margin-bottom: 0;
+    }
+
 	ion-item.detail-item.item h2 {
 	    font-size: 1.1em;
 	    font-weight: 600;
@@ -98,5 +107,20 @@ detalles-solicitud-page {
 	    position: absolute;
 	    bottom: 0;
 	    z-index: 9999;
+	}
+
+	p.nota {
+		color: $gris;
+	}
+
+	ion-item.informacion {
+		color: $gris;
+	}
+
+	ion-item.informacion {
+		display: block;
+	    padding: 1.5rem;
+	    background-color: $grisMuyClaro;
+	    margin-top: 0.75rem;
 	}
 }

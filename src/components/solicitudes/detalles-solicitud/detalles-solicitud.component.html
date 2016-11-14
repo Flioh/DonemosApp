@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content>    
-    <ion-list no-lines>
+    <ion-list no-lines class="detail-list">
 
 
       <ion-item class="header">
@@ -83,7 +83,9 @@
           <ion-icon color="principal" name="person" item-left></ion-icon>
         </ion-avatar>
         <h2>Nombre del Paciente</h2>
-        <p>{{ solicitudSeleccionada.nombrePaciente }}</p>
+        <p *ngIf="mostrarNombrePaciente">{{ solicitudSeleccionada.nombrePaciente }}</p>
+        <a *ngIf="!mostrarNombrePaciente" color="principal" class="ver-detalles" (click)="mostrarDatos()">Mostrar nombre <ion-icon name="arrow-forward"></ion-icon></a>
+        <p class="nota">Es necesario que recuerdes el nombre porque te lo pedirán cuando acudas a donar.</p>
       </ion-item>
 
 
@@ -106,6 +108,17 @@
         <p>{{ solicitudSeleccionada.datosAdicionales }}</p>
       </ion-item>
 
+
+      <ion-item>
+        <button ion-button full color="principal" (click)="verRequisitos()">Ver requisitos para donar</button>
+      </ion-item>
+
+      <ion-item class="informacion">
+        <h2>¡Doná medula, lo llevas en la sangre!</h2>
+        <p>
+          ¿Sabías que con la misma donación te podés dar de alta en el Registro Nacional de Donantes de CPH? Tus células madre podrían salvarle la vida a alguien en cualquier parte del mundo. <strong>Pedí más información cuando vayas a donar.</strong>
+        </p>
+      </ion-item>
 
 
     </ion-list>

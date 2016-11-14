@@ -10,6 +10,8 @@ import { LocalizacionService } from '../../../shared/services/localizacion.servi
 import { DatosService } from '../../../shared/services/datos.service';
 import { DonacionesService } from '../../../shared/services/donaciones.service';
 
+import { RequisitosPage } from '../../donaciones/requisitos/requisitos.component';
+
 // Modelos
 import { SolicitudModel } from '../../solicitudes/solicitud.model';
 
@@ -26,6 +28,8 @@ export class DetallesSolicitudPage {
   public compatibleConUsuario: boolean;
   public direccionCompleta: string;
 
+  public mostrarNombrePaciente: boolean;
+
 	constructor(private platform: Platform,
               private nav: NavController, 
               private navParams: NavParams, 
@@ -38,6 +42,8 @@ export class DetallesSolicitudPage {
   		// Obtenemos la solicitud seleccionada a traves de navParams
   		this.solicitudSeleccionada = navParams.get('unaSolicitud');
 
+      this.mostrarNombrePaciente = false;
+
       this.obtenerDatosUsuario();
 
       // Obtenemos la direccion de la institución
@@ -49,6 +55,11 @@ export class DetallesSolicitudPage {
 
       // Invocamos al servicio usando la direccion y el nombre de la institucion 
       this.localizacionService.mostrarRuta(this.direccionCompleta, this.solicitudSeleccionada.institucion);
+    }
+
+    // Método que muestra los datos personales del paciente
+    public mostrarDatos(){
+      this.mostrarNombrePaciente = true;
     }
 
     // Método que obtiene los datos del usuario
@@ -69,4 +80,11 @@ export class DetallesSolicitudPage {
         }
       });
     }
+
+    // Método que muestra los requisitos para poder donar
+    public verRequisitos() {
+      this.nav.push(RequisitosPage);
+    }
+
+
   }

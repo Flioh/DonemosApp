@@ -267,39 +267,45 @@ export class ListaSolicitudesPage {
   // Método que inicializa el formulario con los datos del usuario
   public inicializarDatosUsuario(): Promise<boolean> {
     return new Promise((resolve) => {
-        // Obtenemos el indice de la provincia del usuario y la seleccionamos
-        let indiceProvincia = this.getIndicePorID(this.listaProvincias, this.datosUsuarioObj.provinciaID);        
-        this.provinciaSeleccionada = this.listaProvincias[indiceProvincia];
 
+      if(this.datosUsuarioObj.provinciaID) {
+        // Obtenemos el indice de la provincia del usuario y la seleccionamos
+        let indiceProvincia = this.getIndiceProvinciaPorID(this.listaProvincias, this.datosUsuarioObj.provinciaID);        
+        this.provinciaSeleccionada = this.listaProvincias[indiceProvincia];
+      }
+
+      if(this.datosUsuarioObj.grupoSanguineoID) {
         // Obtenemos el indice del grupo sanguineo del usuario y lo seleccionamos
         let indiceGrupoSanguineo = this.getIndicePorID(this.listaGruposSanguineos, this.datosUsuarioObj.grupoSanguineoID);
         this.grupoSanguineoSeleccionado = this.listaGruposSanguineos[indiceGrupoSanguineo];
-
+      }
+      
+      if(this.datosUsuarioObj.factorSanguineoID) {
         // Obtenemos el indice del factor sanguineo del usuario y lo seleccionamos
         let indiceFactorSanguineo = this.getIndicePorID(this.listaFactoresSanguineos, this.datosUsuarioObj.factorSanguineoID);
         this.factorSanguineoSeleccionado = this.listaFactoresSanguineos[indiceFactorSanguineo];
+      }
 
-        if(this.provinciaSeleccionada) {
+      if(this.datosUsuarioObj.provinciaID && this.datosUsuarioObj.ciudadID) {
 
-          this.datosService.getListaCiudadesPorProvincia(this.provinciaSeleccionada.id)
-            .subscribe(result => {
-              if(result && result.length){
+        this.datosService.getListaCiudadesPorProvincia(this.provinciaSeleccionada.id).subscribe(result => {
+          if(result && result.length){
 
-                  // Obtenemos el listado de ciudades
-                  this.listaCiudades = result;
+            // Obtenemos el listado de ciudades
+            this.listaCiudades = result;
 
-                  // Seleccionamos la ciudad del usuario
-                  let indiceCiudad = this.getIndicePorID(this.listaCiudades, this.datosUsuarioObj.ciudadID);
-                  this.ciudadSeleccionada = this.listaCiudades[indiceCiudad];
+            // Seleccionamos la ciudad del usuario
+            let indiceCiudad = this.getIndicePorID(this.listaCiudades, this.datosUsuarioObj.ciudadID);
+            this.ciudadSeleccionada = this.listaCiudades[indiceCiudad];
 
-                  // Resolvemos la promesa
-                  resolve(true);
-                }
-                  // TODO: manejar errores en las llamadas al servidor
-                  // -------------------------------------------------      
-                });
-        }
-      });
+            // Resolvemos la promesa
+            resolve(true);
+          }
+          // TODO: manejar errores en las llamadas al servidor
+          // -------------------------------------------------      
+        });
+      }
+    });
   }
 
   // Método que obtiene el indice del elemento cuyo id es el pasado como parametro
@@ -308,6 +314,17 @@ export class ListaSolicitudesPage {
       if(id === listado[i].id)
         return i;
     }
+    return -1;
+  }
+
+  // Método que obtiene el indice del elemento cuyo id es el pasado como parametro
+  public getIndiceProvinciaPorID(listado: Array<any>, id: string): number {
+
+    for(let i=0; i<listado.length; i++) {
+      if(id === listado[i].id)
+        return i;
+    }
+
     return -1;
   }
 
@@ -349,25 +366,29 @@ export class ListaSolicitudesPage {
     this.nav.push(NuevaSolicitudPage, {}, { animate: true, direction: 'forward' });
   }
 
+  // Método que muestra un listado de provincias
   public abrirModalProvincias() {
     // Creamos el componente
-    let provinciaModal = this.modalCtrl.create(DropdownPage, { titulo: 'Seleccionar Provincia',
-                                                               listaOpciones: this.listaProvincias });
+    let provinciaModal = this.modalCtrl.create(DropdownPage, { titulo: 'Seleccionar Provincia', listaOpciones: this.listaProvincias });
     
     provinciaModal.onDidDismiss(opcionSeleccionada => {
 
       if(opcionSeleccionada) {
+        // Si el usuario selecciono alguna de las opciones
         this.provinciaSeleccionada = opcionSeleccionada;
         this.inicializarCiudadesDeLaProvincia();
       }
     });
 
+    // Mostramos el modal
     provinciaModal.present();
   }
 
+  // Método que muestra un listado de ciudades
   public abrirModalCiudades() {
     
     if(!this.provinciaSeleccionada) {
+      // Si no hay ninguna provincia seleccionada, mostramos un error
       let popupAdvertencia = this.alertCtrl.create({
         title: 'Error',
         message: 'Debe seleccionar una provincia antes de seleccionar una ciudad.',
@@ -386,15 +407,16 @@ export class ListaSolicitudesPage {
     }
 
     // Creamos el componente
-    let ciudadesModal = this.modalCtrl.create(DropdownPage, { titulo: 'Seleccionar Localidad',
-                                                              listaOpciones: this.listaCiudades });
+    let ciudadesModal = this.modalCtrl.create(DropdownPage, { titulo: 'Seleccionar Localidad', listaOpciones: this.listaCiudades });
     
     ciudadesModal.onDidDismiss(opcionSeleccionada => {
       if(opcionSeleccionada) {
+        // Si el usuario selecciono alguna de las opciones
         this.ciudadSeleccionada = opcionSeleccionada;
        }
     });
 
+    // Mostramos el modal
     ciudadesModal.present();
   }
 

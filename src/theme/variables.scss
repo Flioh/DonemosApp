@@ -26,6 +26,8 @@ $grisOscuro:            #2d2d2d;
 $gris:                  #777777;
 $grisClaro:             #b2b2b2;
 
+$grisMuyClaro:          #efefef;
+
 
 // Colores a usar en los formularios
 $form_colorTexto:            $gris;
@@ -67,6 +69,7 @@ $colors: (
   principalFondo:   $principalFondo,
   blanco:           $blanco,
   verde:            $verde,
+  grisMuyClaro:     $grisMuyClaro,
   grisClaro:        $grisClaro,
   gris:             $gris,
   grisOscuro:       $grisOscuro,
