@@ -268,25 +268,23 @@ export class ListaSolicitudesPage {
   public inicializarDatosUsuario(): Promise<boolean> {
     return new Promise((resolve) => {
 
-      if(this.datosUsuarioObj.provinciaID) {
-        // Obtenemos el indice de la provincia del usuario y la seleccionamos
-        let indiceProvincia = this.getIndiceProvinciaPorID(this.listaProvincias, this.datosUsuarioObj.provinciaID);        
-        this.provinciaSeleccionada = this.listaProvincias[indiceProvincia];
-      }
-
       if(this.datosUsuarioObj.grupoSanguineoID) {
         // Obtenemos el indice del grupo sanguineo del usuario y lo seleccionamos
         let indiceGrupoSanguineo = this.getIndicePorID(this.listaGruposSanguineos, this.datosUsuarioObj.grupoSanguineoID);
         this.grupoSanguineoSeleccionado = this.listaGruposSanguineos[indiceGrupoSanguineo];
       }
-      
+
       if(this.datosUsuarioObj.factorSanguineoID) {
         // Obtenemos el indice del factor sanguineo del usuario y lo seleccionamos
         let indiceFactorSanguineo = this.getIndicePorID(this.listaFactoresSanguineos, this.datosUsuarioObj.factorSanguineoID);
         this.factorSanguineoSeleccionado = this.listaFactoresSanguineos[indiceFactorSanguineo];
       }
 
-      if(this.datosUsuarioObj.provinciaID && this.datosUsuarioObj.ciudadID) {
+      if(this.datosUsuarioObj.provinciaID) {
+
+        // Obtenemos el indice de la provincia del usuario y la seleccionamos
+        let indiceProvincia = this.getIndiceProvinciaPorID(this.listaProvincias, this.datosUsuarioObj.provinciaID);        
+        this.provinciaSeleccionada = this.listaProvincias[indiceProvincia];
 
         this.datosService.getListaCiudadesPorProvincia(this.provinciaSeleccionada.id).subscribe(result => {
           if(result && result.length){
@@ -294,9 +292,11 @@ export class ListaSolicitudesPage {
             // Obtenemos el listado de ciudades
             this.listaCiudades = result;
 
-            // Seleccionamos la ciudad del usuario
-            let indiceCiudad = this.getIndicePorID(this.listaCiudades, this.datosUsuarioObj.ciudadID);
-            this.ciudadSeleccionada = this.listaCiudades[indiceCiudad];
+            if(this.datosUsuarioObj.ciudadID) {
+              // Si el usuario guardo la ciudad, la seleccionamos
+              let indiceCiudad = this.getIndicePorID(this.listaCiudades, this.datosUsuarioObj.ciudadID);
+              this.ciudadSeleccionada = this.listaCiudades[indiceCiudad];
+            }
 
             // Resolvemos la promesa
             resolve(true);
@@ -304,6 +304,9 @@ export class ListaSolicitudesPage {
           // TODO: manejar errores en las llamadas al servidor
           // -------------------------------------------------      
         });
+      } else {
+        // No hay datos de la provincia guardados, por lo que resolvemos la promesa
+        resolve(true);
       }
     });
   }
