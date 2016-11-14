@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 
 // Modelos
-import { CiudadModel } from '../../shared/models/ciudad.model';
+import { LocalidadModel } from '../../shared/models/localidad.model';
 import { ProvinciaModel } from '../../shared/models/provincia.model';
 import { FactorSanguineoModel } from '../../shared/models/factor-sanguineo.model';
 import { GrupoSanguineoModel } from '../../shared/models/grupo-sanguineo.model';
@@ -15,7 +15,7 @@ export class SolicitudModel {
   public fechaCreacion: Date;
   public estaVigente: boolean;
   public provincia: ProvinciaModel;
-  public ciudad: CiudadModel;
+  public localidad: LocalidadModel;
   public nombrePaciente: string;
   public grupoSanguineo: GrupoSanguineoModel;
   public factorSanguineo: FactorSanguineoModel;
@@ -32,7 +32,7 @@ export class SolicitudModel {
       this.estaVigente = obj && obj.estaVigente ? obj.estaVigente : true;
       this.fechaCreacion = obj && obj.fechaCreacion ? obj.fechaCreacion : new Date();
       this.provincia = obj && obj.provincia ? new ProvinciaModel(obj.provincia.id, obj.provincia.nombre) : new ProvinciaModel();
-      this.ciudad = obj && obj.ciudad ? new CiudadModel(obj.ciudad.id, obj.ciudad.nombre) : new CiudadModel();
+      this.localidad = obj && obj.localidad ? new LocalidadModel(obj.localidad.id, obj.localidad.nombre) : new LocalidadModel();
       this.nombrePaciente = obj && obj.nombrePaciente ? obj.nombrePaciente : null;
       this.grupoSanguineo = obj && obj.grupoSanguineo ? new GrupoSanguineoModel(obj.grupoSanguineo.id, obj.grupoSanguineo.nombre) : new GrupoSanguineoModel();
       this.factorSanguineo = obj && obj.factorSanguineo ? new FactorSanguineoModel(obj.factorSanguineo.id, obj.factorSanguineo.nombre) : new FactorSanguineoModel();

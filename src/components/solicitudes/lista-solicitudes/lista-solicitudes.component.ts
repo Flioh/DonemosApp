@@ -12,7 +12,7 @@ import { ConectividadService } from '../../../shared/services/conectividad.servi
 // Modelos
 import { SolicitudModel } from '../solicitud.model';
 import { ResumenSolicitudModel } from '../resumen-solicitud.model';
-import { CiudadModel } from '../../../shared/models/ciudad.model';
+import { LocalidadModel } from '../../../shared/models/localidad.model';
 import { ProvinciaModel } from '../../../shared/models/provincia.model';
 import { FactorSanguineoModel } from '../../../shared/models/factor-sanguineo.model';
 import { GrupoSanguineoModel } from '../../../shared/models/grupo-sanguineo.model';
@@ -34,12 +34,12 @@ export class ListaSolicitudesPage {
   private grupoSanguineoSeleccionado: GrupoSanguineoModel;
   private factorSanguineoSeleccionado: FactorSanguineoModel;
   private provinciaSeleccionada: ProvinciaModel;
-  private ciudadSeleccionada: CiudadModel;
+  private localidadSeleccionada: LocalidadModel;
 
   private listaGruposSanguineos: Array<GrupoSanguineoModel>;
   private listaFactoresSanguineos: Array<FactorSanguineoModel>;
   private listaProvincias: Array<ProvinciaModel>;
-  private listaCiudades: Array<CiudadModel>;
+  private listaLocalidades: Array<LocalidadModel>;
 
   private listadosCargados: boolean;
 
@@ -85,7 +85,7 @@ export class ListaSolicitudesPage {
     // Inicializa los filtros de busqueda
     this.grupoSanguineoSeleccionado = null;
     this.factorSanguineoSeleccionado = null;
-    this.ciudadSeleccionada = null;
+    this.localidadSeleccionada = null;
     this.provinciaSeleccionada = null;
 
     // Cuando cambien los datos del usuario, refrescamos el listado de solicitudes para
@@ -130,7 +130,7 @@ export class ListaSolicitudesPage {
       content: 'Cargando solicitudes'
     });
 
-    // Muestra el mensaje de cargando ciudades
+    // Muestra el mensaje de cargando localidades
     loadingPopup.present();
 
     this.datosService.getPreferenciasUsuario().then((preferenciasUsuario) => {
@@ -197,10 +197,10 @@ export class ListaSolicitudesPage {
   // Resetea los filtros de busqueda
   public borrarFiltros() {
     this.provinciaSeleccionada = null;
-    this.ciudadSeleccionada = null;
+    this.localidadSeleccionada = null;
     this.grupoSanguineoSeleccionado = null;
     this.factorSanguineoSeleccionado = null;
-    this.listaCiudades = null;
+    this.listaLocalidades = null;
     this.usarDatosPersonales = false;
   }
 
@@ -223,9 +223,9 @@ export class ListaSolicitudesPage {
 
     } else {
       // Limpiamos el formulario
-      this.listaCiudades = null;
+      this.listaLocalidades = null;
       this.provinciaSeleccionada = null;
-      this.ciudadSeleccionada = null;
+      this.localidadSeleccionada = null;
       this.grupoSanguineoSeleccionado = null;
       this.factorSanguineoSeleccionado = null;
     }
@@ -286,16 +286,16 @@ export class ListaSolicitudesPage {
         let indiceProvincia = this.getIndiceProvinciaPorID(this.listaProvincias, this.datosUsuarioObj.provinciaID);        
         this.provinciaSeleccionada = this.listaProvincias[indiceProvincia];
 
-        this.datosService.getListaCiudadesPorProvincia(this.provinciaSeleccionada.id).subscribe(result => {
+        this.datosService.getListaLocalidadesPorProvincia(this.provinciaSeleccionada.id).subscribe(result => {
           if(result && result.length){
 
-            // Obtenemos el listado de ciudades
-            this.listaCiudades = result;
+            // Obtenemos el listado de localidades
+            this.listaLocalidades = result;
 
-            if(this.datosUsuarioObj.ciudadID) {
-              // Si el usuario guardo la ciudad, la seleccionamos
-              let indiceCiudad = this.getIndicePorID(this.listaCiudades, this.datosUsuarioObj.ciudadID);
-              this.ciudadSeleccionada = this.listaCiudades[indiceCiudad];
+            if(this.datosUsuarioObj.localidadID) {
+              // Si el usuario guardo la localidad, la seleccionamos
+              let indiceLocalidad = this.getIndicePorID(this.listaLocalidades, this.datosUsuarioObj.localidadID);
+              this.localidadSeleccionada = this.listaLocalidades[indiceLocalidad];
             }
 
             // Resolvemos la promesa
@@ -331,22 +331,22 @@ export class ListaSolicitudesPage {
     return -1;
   }
 
-  // Método que inicializa el listado de ciudades de una provincia
-  public inicializarCiudadesDeLaProvincia(): void {
+  // Método que inicializa el listado de localidades de una provincia
+  public inicializarLocalidadesDeLaProvincia(): void {
 
-    this.ciudadSeleccionada = null;
+    this.localidadSeleccionada = null;
 
     let loadingPopup = this.loadingCtrl.create({
-      content: 'Cargando ciudades'
+      content: 'Cargando localidades'
     });
 
-    // Muestra el mensaje de cargando ciudades
+    // Muestra el mensaje de cargando localidades
     loadingPopup.present();
 
-    this.datosService.getListaCiudadesPorProvincia(this.provinciaSeleccionada.id)
+    this.datosService.getListaLocalidadesPorProvincia(this.provinciaSeleccionada.id)
       .subscribe(result => {
         if(result && result.length){
-          this.listaCiudades = result;
+          this.listaLocalidades = result;
 
           // Oculta el mensaje de espera
           loadingPopup.dismiss();
@@ -379,7 +379,7 @@ export class ListaSolicitudesPage {
       if(opcionSeleccionada) {
         // Si el usuario selecciono alguna de las opciones
         this.provinciaSeleccionada = opcionSeleccionada;
-        this.inicializarCiudadesDeLaProvincia();
+        this.inicializarLocalidadesDeLaProvincia();
       }
     });
 
@@ -387,14 +387,14 @@ export class ListaSolicitudesPage {
     provinciaModal.present();
   }
 
-  // Método que muestra un listado de ciudades
-  public abrirModalCiudades() {
+  // Método que muestra un listado de localidades
+  public abrirModalLocalidades() {
     
     if(!this.provinciaSeleccionada) {
       // Si no hay ninguna provincia seleccionada, mostramos un error
       let popupAdvertencia = this.alertCtrl.create({
         title: 'Error',
-        message: 'Debe seleccionar una provincia antes de seleccionar una ciudad.',
+        message: 'Debe seleccionar una provincia antes de seleccionar una localidad.',
         buttons: [
           {
             text: 'Ok',
@@ -410,17 +410,17 @@ export class ListaSolicitudesPage {
     }
 
     // Creamos el componente
-    let ciudadesModal = this.modalCtrl.create(DropdownPage, { titulo: 'Seleccionar Localidad', listaOpciones: this.listaCiudades });
+    let localidadesModal = this.modalCtrl.create(DropdownPage, { titulo: 'Seleccionar Localidad', listaOpciones: this.listaLocalidades });
     
-    ciudadesModal.onDidDismiss(opcionSeleccionada => {
+    localidadesModal.onDidDismiss(opcionSeleccionada => {
       if(opcionSeleccionada) {
         // Si el usuario selecciono alguna de las opciones
-        this.ciudadSeleccionada = opcionSeleccionada;
+        this.localidadSeleccionada = opcionSeleccionada;
        }
     });
 
     // Mostramos el modal
-    ciudadesModal.present();
+    localidadesModal.present();
   }
 
 }

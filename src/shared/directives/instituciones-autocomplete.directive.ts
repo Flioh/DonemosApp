@@ -78,7 +78,7 @@ export class InstitucionesAutocompleteDirective {
 
 		let numeroCalle = this.datosDireccion.street_number ? this.datosDireccion.street_number : '',
 		    nombreCalle = this.datosDireccion.route ? this.datosDireccion.route : '',
-		    nombreCiudad = this.datosDireccion.locality ? this.datosDireccion.locality : '',
+		    nombreLocalidad = this.datosDireccion.locality ? this.datosDireccion.locality : '',
 		    codigoPais = this.datosDireccion.country ? this.datosDireccion.country : '',
 		    nombreProvincia = this.datosDireccion.administrative_area_level_1 ? this.datosDireccion.administrative_area_level_1 : '',
 		    codigoPostal = this.datosDireccion.postal_code ? this.datosDireccion.postal_code : '',
@@ -101,8 +101,8 @@ export class InstitucionesAutocompleteDirective {
 			getDireccion: function(): string {
 				return nombreCalle + ' ' + numeroCalle;
 			},
-			getNombreCiudad: function(): string {
-				return nombreCiudad;
+			getNombreLocalidad: function(): string {
+				return nombreLocalidad;
 			},
 			getNombreProvincia: function(): string {
 				return nombreProvincia;

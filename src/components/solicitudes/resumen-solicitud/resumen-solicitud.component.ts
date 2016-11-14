@@ -30,7 +30,7 @@ export class ResumenSolicitudComponent {
         let solicitud = this.solicitudItemModel.solicitud;
 
         // Obtenemos la direccion de la institución
-        let direccion = `${ solicitud.direccion },${ solicitud.ciudad.nombre },${ solicitud.provincia.nombre },Argentina`;
+        let direccion = `${ solicitud.direccion },${ solicitud.localidad.nombre }, ${ solicitud.provincia.nombre }, Argentina`;
 
         // Invocamos al servicio usando la direccion y el nombre de la institucion 
         this.localizacionService.mostrarRuta(direccion, solicitud.institucion);

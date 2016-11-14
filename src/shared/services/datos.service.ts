@@ -15,7 +15,7 @@ import { SolicitudModel } from '../../components/solicitudes/solicitud.model';
 import { FactorSanguineoEnum, GrupoSanguineoEnum, DonacionesService } from './donaciones.service';
 import { FactorSanguineoModel } from '../../shared/models/factor-sanguineo.model';
 import { GrupoSanguineoModel } from '../../shared/models/grupo-sanguineo.model';
-import { CiudadModel } from '../../shared/models/ciudad.model';
+import { LocalidadModel } from '../../shared/models/localidad.model';
 import { ProvinciaModel } from '../../shared/models/provincia.model';
 
 // Objeto de configuracion
@@ -26,7 +26,7 @@ export class DatosService {
 
   // Listados
   private listaProvincias: Array<ProvinciaModel>;
-  private listaCiudades: Array<CiudadModel>;
+  private listaLocalidades: Array<LocalidadModel>;
 
   // Preferencias del usuario
   private datosUsuarioObj: any;
@@ -51,7 +51,7 @@ export class DatosService {
 
     // Reseteamos los listados
     this.listaProvincias = [];    
-    this.listaCiudades = [];
+    this.listaLocalidades = [];
 
     // Inicializa los datos del usuario
     this.datosUsuarioObj = null;
@@ -126,13 +126,12 @@ export class DatosService {
   // Obtiene el listado de solicitudes
   public getSolicitudes(): Observable<Array<SolicitudModel>> {
     return this.http.get(this.config.apiEndPointSolicitudes)
-      .delay(500) // Simulamos un retardo al buscar las solicitudes
       .map(res => res.json());
   }
 
   // Método que guarda una solicitud en la base de datos
   public guardarSolicitud(unaSolicitud: SolicitudModel, solicitudId?: number) {
-    
+    debugger;
     if (solicitudId) {
       return this.authHttp.put(`${this.apiEndPointSolicitudes}/${solicitudId}`,
         JSON.stringify(unaSolicitud))
@@ -166,20 +165,20 @@ export class DatosService {
       });
   }
 
-  // Obtiene el listado de ciudades de la provincia pasada como parametro
-  public getListaCiudadesPorProvincia(provinciaID: string): Observable<Array<CiudadModel>>{
+  // Obtiene el listado de localidades de la provincia pasada como parametro
+  public getListaLocalidadesPorProvincia(provinciaID: string): Observable<Array<LocalidadModel>>{
 
-    this.listaCiudades = [];
+    this.listaLocalidades = [];
 
     return this.http.get(`${this.apiEndPointLocalidades}/${provinciaID}`)
-      .map(res => res.json().filter(unaCiudad => unaCiudad.provincia == provinciaID))
-      .map(listadoCiudades => {
+      .map(res => res.json().filter(unaLocalidad => unaLocalidad.provincia == provinciaID))
+      .map(listadoLocalidades => {
 
-        // Creamos el listado de ciudades usando el modelo CiudadModel
-        for(let i=0; i<listadoCiudades.length; i++) {
-          this.listaCiudades.push(new CiudadModel(listadoCiudades[i].id, listadoCiudades[i].nombre));
+        // Creamos el listado de localidades usando el modelo LocalidadModel
+        for(let i=0; i<listadoLocalidades.length; i++) {
+          this.listaLocalidades.push(new LocalidadModel(listadoLocalidades[i].id, listadoLocalidades[i].nombre));
         }
-        return this.listaCiudades;
+        return this.listaLocalidades;
       });
   }
 }

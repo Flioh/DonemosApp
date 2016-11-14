@@ -8,7 +8,7 @@ import { LoadingController, NavController, ToastController, NavParams, ModalCont
 import { PreferenciasUsuarioModel } from '../preferencias-usuario.model';
 
 // Modelos compartidos
-import { CiudadModel } from '../../../shared/models/ciudad.model';
+import { LocalidadModel } from '../../../shared/models/localidad.model';
 import { FactorSanguineoModel } from '../../../shared/models/factor-sanguineo.model';
 import { GrupoSanguineoModel } from '../../../shared/models/grupo-sanguineo.model';
 import { ProvinciaModel } from '../../../shared/models/provincia.model';
@@ -30,7 +30,7 @@ export class EditarPreferenciasPage {
 	public listaGruposSanguineos: Array<GrupoSanguineoModel>;
 	public listaFactoresSanguineos: Array<FactorSanguineoModel>;
 	public listaProvincias: Array<ProvinciaModel>;
-	public listaCiudades: Array<CiudadModel>;
+	public listaLocalidades: Array<LocalidadModel>;
 
 	// Preferencias del usuario
 	public preferenciasUsuario: PreferenciasUsuarioModel;
@@ -108,15 +108,15 @@ export class EditarPreferenciasPage {
     			let indiceProvincia = this.getIndiceProvinciaPorID(this.listaProvincias, this.datosPersonalesObj.provinciaID);    		
     			this.preferenciasUsuario.provincia = this.listaProvincias[indiceProvincia];
 
-    			// Obtenemos el listado de ciudades en base a la provincia seleccionada
-    			this.datosService.getListaCiudadesPorProvincia(this.preferenciasUsuario.provincia.id).subscribe(result => {
+    			// Obtenemos el listado de localidades en base a la provincia seleccionada
+    			this.datosService.getListaLocalidadesPorProvincia(this.preferenciasUsuario.provincia.id).subscribe(result => {
 			    	if(result && result.length){
-			    		this.listaCiudades = result;
+			    		this.listaLocalidades = result;
 
 			    		if(this.datosPersonalesObj.ciudadID) {
-			    			// Si el usuario guardo la ciudad, la seleccionamos
-			    			let indiceCiudad = this.getIndicePorID(this.listaCiudades, this.datosPersonalesObj.ciudadID);
-			    			this.preferenciasUsuario.ciudad = this.listaCiudades[indiceCiudad];
+			    			// Si el usuario guardo la localidad, la seleccionamos
+			    			let indiceLocalidad = this.getIndicePorID(this.listaLocalidades, this.datosPersonalesObj.ciudadID);
+			    			this.preferenciasUsuario.localidad = this.listaLocalidades[indiceLocalidad];
 			    		}
 			    		
 			    		// Resolvemos la promesa
@@ -150,18 +150,18 @@ export class EditarPreferenciasPage {
     	return -1;
     }
 
-  	// Método que inicializa el listado de ciudades de una provincia
-  	public inicializarCiudadesDeLaProvincia(): void {
+  	// Método que inicializa el listado de localidades de una provincia
+  	public inicializarLocalidadesDeLaProvincia(): void {
   		let loadingPopup = this.loadingCtrl.create({
-  			content: 'Cargando ciudades'
+  			content: 'Cargando localidades'
   		});
 
-	    // Muestra el mensaje de cargando ciudades
+	    // Muestra el mensaje de cargando localidades
 	    loadingPopup.present();
 
-	    this.datosService.getListaCiudadesPorProvincia(this.preferenciasUsuario.provincia.id).subscribe(result => {
+	    this.datosService.getListaLocalidadesPorProvincia(this.preferenciasUsuario.provincia.id).subscribe(result => {
 	    	if(result && result.length){
-	    		this.listaCiudades = result;
+	    		this.listaLocalidades = result;
 
 	          // Oculta el mensaje de espera
 	          loadingPopup.dismiss();
@@ -175,7 +175,7 @@ export class EditarPreferenciasPage {
 	public guardarCambios(): void {
 		let nuevosDatosUsuarioObj = {
 			provinciaID : this.preferenciasUsuario.provincia ? this.preferenciasUsuario.provincia.id : null,
-			ciudadID : this.preferenciasUsuario.ciudad ? this.preferenciasUsuario.ciudad.id : null,
+			ciudadID : this.preferenciasUsuario.localidad ? this.preferenciasUsuario.localidad.id : null,
 			grupoSanguineoID : this.preferenciasUsuario.grupoSanguineo ? this.preferenciasUsuario.grupoSanguineo.id : null,
 			factorSanguineoID : this.preferenciasUsuario.factorSanguineo ? this.preferenciasUsuario.factorSanguineo.id : null,
 		};
@@ -218,7 +218,7 @@ export class EditarPreferenciasPage {
 			if(opcionSeleccionada) {
 				// Si el usuario selecciono alguna de las opciones
 				this.preferenciasUsuario.provincia = opcionSeleccionada;
-				this.inicializarCiudadesDeLaProvincia();
+				this.inicializarLocalidadesDeLaProvincia();
 			}
 		});
 
@@ -226,14 +226,14 @@ export class EditarPreferenciasPage {
 		provinciaModal.present();
 	}
 
-	// Método que muestra un listado de ciudades
-	public abrirModalCiudades() {
+	// Método que muestra un listado de localidades
+	public abrirModalLocalidades() {
 
 		if(!this.preferenciasUsuario.provincia) {
 			// Si no hay ninguna provincia seleccionada, mostramos un error
 			let popupAdvertencia = this.alertCtrl.create({
 				title: 'Error',
-				message: 'Debe seleccionar una provincia antes de seleccionar una ciudad.',
+				message: 'Debe seleccionar una provincia antes de seleccionar una localidad.',
 				buttons: [
 				{
 					text: 'Ok',
@@ -249,12 +249,12 @@ export class EditarPreferenciasPage {
 		}
 
 		// Creamos el componente
-		let ciudadesModal = this.modalCtrl.create(DropdownPage, { titulo: 'Seleccionar Localidad', listaOpciones: this.listaCiudades });
+		let ciudadesModal = this.modalCtrl.create(DropdownPage, { titulo: 'Seleccionar Localidad', listaOpciones: this.listaLocalidades });
 
 		ciudadesModal.onDidDismiss(opcionSeleccionada => {
 			if(opcionSeleccionada) {
 				// Si el usuario selecciono alguna de las opciones
-				this.preferenciasUsuario.ciudad = opcionSeleccionada;
+				this.preferenciasUsuario.localidad = opcionSeleccionada;
 			}
 		});
 

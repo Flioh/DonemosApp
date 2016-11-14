@@ -10,7 +10,7 @@ import { DatosService } from '../../../shared/services/datos.service';
 
 // Modelos
 import { SolicitudModel } from '../solicitud.model';
-import { CiudadModel } from '../../../shared/models/ciudad.model';
+import { LocalidadModel } from '../../../shared/models/localidad.model';
 import { ProvinciaModel } from '../../../shared/models/provincia.model';
 import { FactorSanguineoModel } from '../../../shared/models/factor-sanguineo.model';
 import { GrupoSanguineoModel } from '../../../shared/models/grupo-sanguineo.model';
@@ -23,7 +23,7 @@ export class NuevaSolicitudPage {
 
 	// Listados usados en la pagina
 	public listaProvincias: Array<ProvinciaModel> = [];
-	public listaCiudades: Array<CiudadModel> = [];
+	public listaLocalidades: Array<LocalidadModel> = [];
 	public listaGruposSanguineos: Array<GrupoSanguineoModel> = [];
 	public listaFactoresSanguineos: Array<FactorSanguineoModel> = [];
 
@@ -70,12 +70,12 @@ export class NuevaSolicitudPage {
 		// Setea la direccion de la institucion
 		this.nuevaSolicitud.direccion = informacionSobreDireccion.getDireccion();
 
-		// Setea la provincia y la ciudad de la institucion
-		this.actualizarProvinciaCiudad(informacionSobreDireccion.getNombreProvincia(), informacionSobreDireccion.getNombreCiudad());
+		// Setea la provincia y la localidad de la institucion
+		this.actualizarProvinciaLocalidad(informacionSobreDireccion.getNombreProvincia(), informacionSobreDireccion.getNombreLocalidad());
 	}
 
-	// Método que dado el nombre de una provincia, la setea como seleccionada en el formulario y actualiza el listado de ciudades
-	private actualizarProvinciaCiudad(nombreProvincia: string, nombreCiudad: string) {
+	// Método que dado el nombre de una provincia, la setea como seleccionada en el formulario y actualiza el listado de localidades
+	private actualizarProvinciaLocalidad(nombreProvincia: string, nombreLocalidad: string) {
 		for(let i=0; i< this.listaProvincias.length; i++) {
 
 			// Buscamos la provincia por el nombre
@@ -84,28 +84,28 @@ export class NuevaSolicitudPage {
 				// Seleccionamos esta provincia
 				this.nuevaSolicitud.provincia = this.listaProvincias[i];
 
-				// Inicializamos las ciudades de la provincia seleccionada
-				this.inicializarCiudadesDeLaProvincia(nombreCiudad);
+				// Inicializamos las localidades de la provincia seleccionada
+				this.inicializarLocalidadesDeLaProvincia(nombreLocalidad);
 			}
 		}
 	}
 
-	// Método que dado el nombre de una ciudad, la setea como seleccionada en el formulario
-	private actualizarCiudad(nombreCiudad: string) {
-		let indiceCiudad = -1; 
-		for(let i=0; i<this.listaCiudades.length; i++) {
+	// Método que dado el nombre de una localidad, la setea como seleccionada en el formulario
+	private actualizarLocalidad(nombreLocalidad: string) {
+		let indiceLocalidad = -1; 
+		for(let i=0; i<this.listaLocalidades.length; i++) {
 
-			// Buscamos la ciudad por su nombre
-			if(this.listaCiudades[i].nombre.toLowerCase() === nombreCiudad.toLowerCase()) {
-				indiceCiudad = i;
+			// Buscamos la localidad por su nombre
+			if(this.listaLocalidades[i].nombre.toLowerCase() === nombreLocalidad.toLowerCase()) {
+				indiceLocalidad = i;
 			}
 		}
 
-		// Seleccionamos la ciudad pasada como parametro o la primera en su defecto
-		indiceCiudad = indiceCiudad > -1 ? indiceCiudad : 0;
+		// Seleccionamos la localidad pasada como parametro o la primera en su defecto
+		indiceLocalidad = indiceLocalidad > -1 ? indiceLocalidad : 0;
 
-		// Setea la ciudad en base a su ID
-		this.nuevaSolicitud.ciudad = this.listaCiudades[indiceCiudad];
+		// Setea la localidad en base a su ID
+		this.nuevaSolicitud.localidad = this.listaLocalidades[indiceLocalidad];
 	}
 
 	// Método que se ejecuta antes de que el usuario ingrese a la página
@@ -199,8 +199,8 @@ export class NuevaSolicitudPage {
 				// Asignamos el objeto del listado para que se muestre correctamente
 				this.nuevaSolicitud.provincia = this.listaProvincias[indiceProvincia];
 
-				// Carga las ciudades de la provincia seleccionada
-				this.inicializarCiudadesDeLaProvincia(this.nuevaSolicitud.ciudad.nombre);
+				// Carga las localidades de la provincia seleccionada
+				this.inicializarLocalidadesDeLaProvincia(this.nuevaSolicitud.localidad.nombre);
 			} else {
 					// TODO: manejar errores en las llamadas al servidor
 					// -------------------------------------------------
@@ -208,28 +208,28 @@ export class NuevaSolicitudPage {
 			});
 	}
 
-	// Método que inicializa el listado de ciudades de una provincia
-	public inicializarCiudadesDeLaProvincia(nombreCiudad?: string): void {
+	// Método que inicializa el listado de localidades de una provincia
+	public inicializarLocalidadesDeLaProvincia(nombreLocalidad?: string): void {
 		let provinciaId = this.nuevaSolicitud.provincia.id;
 
 		let loadingPopup = this.loadingCtrl.create({
-			content: 'Cargando ciudades'
+			content: 'Cargando localidades'
 		});
 
-		// Muestra el mensaje de cargando ciudades
+		// Muestra el mensaje de cargando localidades
 		loadingPopup.present();
-		this.datosService.getListaCiudadesPorProvincia(provinciaId).subscribe(result => {
+		this.datosService.getListaLocalidadesPorProvincia(provinciaId).subscribe(result => {
 			if(result && result.length){
-				this.listaCiudades = result;
-					if(nombreCiudad) {
-						// Si recibimos el nombre de la ciudad (autocomplete), seleccionamos esa ciudad
-						this.actualizarCiudad(nombreCiudad);
+				this.listaLocalidades = result;
+					if(nombreLocalidad) {
+						// Si recibimos el nombre de la localidad (autocomplete), seleccionamos esa localidad
+						this.actualizarLocalidad(nombreLocalidad);
 					} else {
 						// TODO: usar geolocalizacion para cargar por defecto la provincia del usuario
 						// ---------------------------------------------------------------------------
 
-						// Setea la ciudad en base a su ID
-						this.nuevaSolicitud.ciudad = this.listaCiudades[0];	
+						// Setea la localidad en base a su ID
+						this.nuevaSolicitud.localidad = this.listaLocalidades[0];	
 					}
 
 					// Oculta el mensaje de espera

@@ -47,7 +47,7 @@ export class DetallesSolicitudPage {
       this.obtenerDatosUsuario();
 
       // Obtenemos la direccion de la institución
-      this.direccionCompleta = `${ this.solicitudSeleccionada.direccion },${ this.solicitudSeleccionada.ciudad.nombre },${ this.solicitudSeleccionada.provincia.nombre },Argentina`;
+      this.direccionCompleta = `${ this.solicitudSeleccionada.direccion },${ this.solicitudSeleccionada.localidad.nombre },${ this.solicitudSeleccionada.provincia.nombre },Argentina`;
   	}
 
     // Método que abre la aplicacion de GPS por defecto del usuario para guiarlo hacia la institucion
