@@ -3,7 +3,7 @@ import { Component, NgZone } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 
 // Referencias de Ionic
-import { AlertController, LoadingController, NavController, Platform, MenuController, NavParams } from 'ionic-angular';
+import { AlertController, LoadingController, NavController, Platform, MenuController, NavParams, ModalController } from 'ionic-angular';
 
 // Servicios
 import { DatosService } from '../../../shared/services/datos.service';
@@ -14,6 +14,9 @@ import { LocalidadModel } from '../../../shared/models/localidad.model';
 import { ProvinciaModel } from '../../../shared/models/provincia.model';
 import { FactorSanguineoModel } from '../../../shared/models/factor-sanguineo.model';
 import { GrupoSanguineoModel } from '../../../shared/models/grupo-sanguineo.model';
+
+// Paginas y comonentes
+import { DropdownPage } from '../../../shared/components/dropdown/dropdown.component';
 
 @Component({
 	selector: 'nueva-solicitud-page',
@@ -32,6 +35,9 @@ export class NuevaSolicitudPage {
 
 	private mostrarAdvertenciaAlSalir: boolean;
 
+	public mostrarErrorProvincia: boolean;
+	public mostrarErrorLocalidad: boolean;
+
 	private submitted: boolean = false;
 
 	// Propiedad que permite determinar si estamos creando una nueva solicitud
@@ -41,7 +47,8 @@ export class NuevaSolicitudPage {
 	constructor(private datosService: DatosService,
 		private platform: Platform,
 		private menuCtrl: MenuController,
-		private navCtrl: NavController, 
+		private modalCtrl: ModalController,
+		private navCtrl: NavController,
 		private formBuilder : FormBuilder, 
 		private ngZone : NgZone,
 		private loadingCtrl : LoadingController,
@@ -56,6 +63,9 @@ export class NuevaSolicitudPage {
 		// Obtenemos la solicitud existente pasada como parametro o creamos una nueva insatancia
 		this.nuevaSolicitud = solicitudRecibida || new SolicitudModel();
 		
+		this.mostrarErrorLocalidad = false;
+		this.mostrarErrorProvincia = false;
+
 		// Inicializa los listados de la pagina
 		this.inicializarProvincias();
 		this.inicializarGruposSanguineos();
@@ -190,17 +200,19 @@ export class NuevaSolicitudPage {
 
 				// TODO: usar geolocalizacion para cargar por defecto la provincia del usuario
 				// ---------------------------------------------------------------------------				
-				let indiceProvincia = 0;
+				let indiceProvincia;
 
 				if(this.nuevaSolicitud.provincia.id) {
 					indiceProvincia = this.getIndiceProvinciaPorID(this.listaProvincias, this.nuevaSolicitud.provincia.id);
 				}
 
-				// Asignamos el objeto del listado para que se muestre correctamente
-				this.nuevaSolicitud.provincia = this.listaProvincias[indiceProvincia];
+				if(indiceProvincia){
+					// Asignamos el objeto del listado para que se muestre correctamente
+					this.nuevaSolicitud.provincia = this.listaProvincias[indiceProvincia];
 
-				// Carga las localidades de la provincia seleccionada
-				this.inicializarLocalidadesDeLaProvincia(this.nuevaSolicitud.localidad.nombre);
+					// Carga las localidades de la provincia seleccionada
+					this.inicializarLocalidadesDeLaProvincia(this.nuevaSolicitud.localidad.nombre);
+				}
 			} else {
 					// TODO: manejar errores en las llamadas al servidor
 					// -------------------------------------------------
@@ -229,7 +241,7 @@ export class NuevaSolicitudPage {
 						// ---------------------------------------------------------------------------
 
 						// Setea la localidad en base a su ID
-						this.nuevaSolicitud.localidad = this.listaLocalidades[0];	
+						//this.nuevaSolicitud.localidad = this.listaLocalidades[0];	
 					}
 
 					// Oculta el mensaje de espera
@@ -280,5 +292,73 @@ export class NuevaSolicitudPage {
 	// Método usado para debug, muestra el contenido del form en tiempo real
 	get contenidoDelFormulario(): string {
 		return JSON.stringify(this.nuevaSolicitud, null, 2);
+	}
+
+	// Método que muestra un listado de provincias
+	public abrirModalProvincias() {
+		// Creamos el componente
+		let provinciaModal = this.modalCtrl.create(DropdownPage, { titulo: 'Seleccionar Provincia', listaOpciones: this.listaProvincias });
+
+		provinciaModal.onDidDismiss(opcionSeleccionada => {
+
+			if(opcionSeleccionada) {
+				// Si el usuario selecciono alguna de las opciones
+				this.nuevaSolicitud.provincia = opcionSeleccionada;
+
+				// Ocultamos el mensaje de error
+				this.mostrarErrorProvincia = false;
+
+				this.inicializarLocalidadesDeLaProvincia();
+
+			} else if(!this.nuevaSolicitud.provincia.id) {
+				// Si no selecciono ninguna provincia y no habia ninguna seleccionada de antes, mostramos el error
+				this.mostrarErrorProvincia = true;
+			}
+		});
+
+		// Mostramos el modal
+		provinciaModal.present();
+	}
+
+	// Método que muestra un listado de localidades
+	public abrirModalLocalidades() {
+
+		if(!this.nuevaSolicitud.provincia || !this.nuevaSolicitud.provincia.id) {
+			// Si no hay ninguna provincia seleccionada, mostramos un error
+			let popupAdvertencia = this.alertCtrl.create({
+				title: 'Error',
+				message: 'Debe seleccionar una provincia antes de seleccionar una localidad.',
+				buttons: [
+				{
+					text: 'Ok',
+					handler: () => {
+
+					}
+				}]
+			});
+
+			// Mostramos el popup
+			popupAdvertencia.present();
+			return;
+		}
+
+		// Creamos el componente
+		let localidadesModal = this.modalCtrl.create(DropdownPage, { titulo: 'Seleccionar Localidad', listaOpciones: this.listaLocalidades });
+
+		localidadesModal.onDidDismiss(opcionSeleccionada => {
+			if(opcionSeleccionada) {
+				// Si el usuario selecciono alguna de las opciones
+				this.nuevaSolicitud.localidad = opcionSeleccionada;
+
+				// Ocultamos el mensaje de error
+				this.mostrarErrorLocalidad = false;
+			} else if(!this.nuevaSolicitud.localidad.id) {
+				// Si no selecciono ninguna localidad y no habia ninguna seleccionada de antes, mostramos el error
+				this.mostrarErrorLocalidad = true;
+			}
+		});
+
+		// Mostramos el modal
+		localidadesModal.present();
 	}
 }
