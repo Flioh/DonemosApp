@@ -34,7 +34,6 @@ import { ErrorPage } from '../shared/components/error/error.component';
 import { IntroPage } from '../shared/components/intro/intro.component';
 import { DropdownPage } from '../shared/components/dropdown/dropdown.component';
 
-
 // Directivas
 import { MapaEstaticoDirective } from '../shared/directives/mapa-estatico.directive';
 import { InstitucionesAutocompleteDirective } from '../shared/directives/instituciones-autocomplete.directive';

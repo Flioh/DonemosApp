@@ -79,8 +79,16 @@ export class MisSolicitudesPage {
 
   // Método que obtiene la informacion de los tipos sanguineos buscados, resaltando el del usuario
   public obtenerInformacionTiposSanguineos(unaSolicitud: SolicitudModel): string {
-      let posiblesDadores = this.donacionesService.puedeRecibirDe(unaSolicitud.grupoSanguineo.id, unaSolicitud.factorSanguineo.id);
-      return posiblesDadores.join(' ');
+
+    let tiposSanguineosBuscados = [];
+
+    for(let i=0; i<unaSolicitud.tiposSanguineos.length; i++) {
+      let grupoSanguineo = unaSolicitud.tiposSanguineos[i].grupoSanguineo;
+      let factorSanguineo = unaSolicitud.tiposSanguineos[i].factorSanguineo;
+      tiposSanguineosBuscados.push(this.donacionesService.getDescripcionCompleta(grupoSanguineo, factorSanguineo));
+    }
+    
+    return tiposSanguineosBuscados.join(' ');
   }
 
   // Método que determina si una solicitud esta activa o no segun su fecha de creación

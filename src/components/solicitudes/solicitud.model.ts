@@ -4,8 +4,6 @@ import { Injectable } from '@angular/core';
 // Modelos
 import { LocalidadModel } from '../../shared/models/localidad.model';
 import { ProvinciaModel } from '../../shared/models/provincia.model';
-import { FactorSanguineoModel } from '../../shared/models/factor-sanguineo.model';
-import { GrupoSanguineoModel } from '../../shared/models/grupo-sanguineo.model';
 
 @Injectable()
 export class SolicitudModel {
@@ -17,8 +15,7 @@ export class SolicitudModel {
   public provincia: ProvinciaModel;
   public localidad: LocalidadModel;
   public nombrePaciente: string;
-  public grupoSanguineo: GrupoSanguineoModel;
-  public factorSanguineo: FactorSanguineoModel;
+  public tiposSanguineos: Array<{ grupoSanguineo: number, factorSanguineo: number}>;
   public cantidadDadores: number;
   public institucion: string;
   public direccion: string;
@@ -34,8 +31,7 @@ export class SolicitudModel {
       this.provincia = obj && obj.provincia ? new ProvinciaModel(obj.provincia.id, obj.provincia.nombre) : new ProvinciaModel();
       this.localidad = obj && obj.localidad ? new LocalidadModel(obj.localidad.id, obj.localidad.nombre) : new LocalidadModel();
       this.nombrePaciente = obj && obj.nombrePaciente ? obj.nombrePaciente : null;
-      this.grupoSanguineo = obj && obj.grupoSanguineo ? new GrupoSanguineoModel(obj.grupoSanguineo.id, obj.grupoSanguineo.nombre) : new GrupoSanguineoModel();
-      this.factorSanguineo = obj && obj.factorSanguineo ? new FactorSanguineoModel(obj.factorSanguineo.id, obj.factorSanguineo.nombre) : new FactorSanguineoModel();
+      this.tiposSanguineos = obj && obj.tiposSanguineos ? obj.tiposSanguineos : null;
       this.cantidadDadores = obj && obj.cantidadDadores ? obj.cantidadDadores : null;
       this.institucion = obj && obj.institucion ? obj.institucion : null;
       this.direccion = obj && obj.direccion ? obj.direccion : null;

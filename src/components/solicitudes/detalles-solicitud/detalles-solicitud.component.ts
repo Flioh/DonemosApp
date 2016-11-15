@@ -64,7 +64,16 @@ export class DetallesSolicitudPage {
 
     // Método que obtiene los datos del usuario
     public obtenerDatosUsuario() {
-      this.tiposSanguineosSolicitud = this.donacionesService.puedeRecibirDe(this.solicitudSeleccionada.grupoSanguineo.id, this.solicitudSeleccionada.factorSanguineo.id).join(' ');
+
+      let tiposSanguineosBuscados = [];
+
+      for(let i=0; i<this.solicitudSeleccionada.tiposSanguineos.length; i++) {
+        let grupoSanguineo = this.solicitudSeleccionada.tiposSanguineos[i].grupoSanguineo;
+        let factorSanguineo = this.solicitudSeleccionada.tiposSanguineos[i].factorSanguineo;
+        tiposSanguineosBuscados.push(this.donacionesService.getDescripcionCompleta(grupoSanguineo, factorSanguineo));
+      }
+
+      this.tiposSanguineosSolicitud = tiposSanguineosBuscados.join(' ');
       this.compatibleConUsuario = false;
 
       // Obtenemos los datos del servicio de datos del usuario

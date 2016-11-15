@@ -7,13 +7,12 @@ import { AlertController, LoadingController, NavController, Platform, MenuContro
 
 // Servicios
 import { DatosService } from '../../../shared/services/datos.service';
+import { DonacionesService } from '../../../shared/services/donaciones.service';
 
 // Modelos
 import { SolicitudModel } from '../solicitud.model';
 import { LocalidadModel } from '../../../shared/models/localidad.model';
 import { ProvinciaModel } from '../../../shared/models/provincia.model';
-import { FactorSanguineoModel } from '../../../shared/models/factor-sanguineo.model';
-import { GrupoSanguineoModel } from '../../../shared/models/grupo-sanguineo.model';
 
 // Paginas y comonentes
 import { DropdownPage } from '../../../shared/components/dropdown/dropdown.component';
@@ -27,13 +26,16 @@ export class NuevaSolicitudPage {
 	// Listados usados en la pagina
 	public listaProvincias: Array<ProvinciaModel> = [];
 	public listaLocalidades: Array<LocalidadModel> = [];
-	public listaGruposSanguineos: Array<GrupoSanguineoModel> = [];
-	public listaFactoresSanguineos: Array<FactorSanguineoModel> = [];
+	public listaGruposSanguineos: Array<{ id: number, nombre: string }> = [];
+	public listaFactoresSanguineos: Array<{ id: number, nombre: string }> = [];
 
 	// Modelo a utilizar en el formulario
 	public nuevaSolicitud: SolicitudModel;
 
 	private mostrarAdvertenciaAlSalir: boolean;
+
+	// Matriz con los tipos sanguineos solicitados
+	public tiposSanguineos: Array<Array<{ nombre: string, seleccionado: boolean }>>;
 
 	public mostrarErrorProvincia: boolean;
 	public mostrarErrorLocalidad: boolean;
@@ -45,6 +47,7 @@ export class NuevaSolicitudPage {
 	public modoEdicion: boolean;
 
 	constructor(private datosService: DatosService,
+		private donacionesService: DonacionesService,
 		private platform: Platform,
 		private menuCtrl: MenuController,
 		private modalCtrl: ModalController,
@@ -67,9 +70,44 @@ export class NuevaSolicitudPage {
 		this.mostrarErrorProvincia = false;
 
 		// Inicializa los listados de la pagina
-		this.inicializarProvincias();
-		this.inicializarGruposSanguineos();
-		this.inicializarFactoresSanguineos();
+		this.inicializarListado();
+		this.inicializarTiposSanguineos();
+	}
+
+	// Método que inicializa el estado de los botones de tipos sanguineos
+	private inicializarTiposSanguineos(): void{
+		
+		// En la primer fila se muestran todos los positivos, en la segunda todos los negativos
+		this.tiposSanguineos = new Array(2);
+		for(let i=0; i<this.tiposSanguineos.length; i++) {
+	
+			// En cada columna se muestra un grupo sanguineo: 0 A B AB			
+			this.tiposSanguineos[i] = new Array(4);
+			for(let j=0; j<this.tiposSanguineos[i].length; j++) {
+				this.tiposSanguineos[i][j] = {
+					nombre : this.donacionesService.getDescripcionCompleta(j, i),
+					seleccionado : false
+				}
+			}
+		}
+
+		if(this.nuevaSolicitud.tiposSanguineos){
+			// Si estamos editando, preseleccionamos los tipos de la solicitud
+			for(let i=0; i< this.nuevaSolicitud.tiposSanguineos.length; i++) {
+				let grupoSanguineoId = this.nuevaSolicitud.tiposSanguineos[i].grupoSanguineo;
+				let factorSanguineoId = this.nuevaSolicitud.tiposSanguineos[i].factorSanguineo;
+				this.tiposSanguineos[factorSanguineoId][grupoSanguineoId] = {
+						nombre : this.donacionesService.getDescripcionCompleta(grupoSanguineoId, factorSanguineoId),
+						seleccionado : true
+					};
+			}
+		}
+
+	}
+
+	// Método que cambia el estado al presionar el boton correspondiente a un tipo sanguineo
+	public toggleTipoSanguineo(tipoSanguineo: {nombre: string, seleccionado: boolean}): void {
+		tipoSanguineo.seleccionado = !tipoSanguineo.seleccionado;
 	}
 
 	// Método que recibe la dirección del autocomplete y la ingresa en el formulario
@@ -159,38 +197,15 @@ export class NuevaSolicitudPage {
 		this.navCtrl.pop();
 	}
 
-	// Metodo que inicializa el listado de grupos sanguineos
-	private inicializarGruposSanguineos(): void {
-		// Obtenemos el listado del helper
+	// Método que inicializa los listados de la página
+	private inicializarListado(): void {
+
+		// Inicializamos el listado de grupos sanguineos
 		this.listaGruposSanguineos = this.datosService.getGruposSanguineos();
-
-		let indiceGrupoSanguineo = 0;
-
-		// Buscamos el indice del objeto dentro del listado para que se seleccione correctamente
-		if(this.nuevaSolicitud.grupoSanguineo.id) {
-			indiceGrupoSanguineo = this.getIndicePorID(this.listaGruposSanguineos, this.nuevaSolicitud.grupoSanguineo.id);
-		}
-
-		this.nuevaSolicitud.grupoSanguineo = this.listaGruposSanguineos[indiceGrupoSanguineo];
-	}
-
-	// Metodo que inicializa el listado de factores sanguineos
-	private inicializarFactoresSanguineos(): void {
-		// Obtenemos el listado del helper
+		
+		// Inicializamos el listado de factores sanguineos
 		this.listaFactoresSanguineos = this.datosService.getFactoresSanguineos();
 
-		let indiceFactorSanguineo = 0;
-
-		// Buscamos el indice del objeto dentro del listado para que se seleccione correctamente
-		if(this.nuevaSolicitud.factorSanguineo.id) {
-			indiceFactorSanguineo = this.getIndicePorID(this.listaFactoresSanguineos, this.nuevaSolicitud.factorSanguineo.id);
-		}
-
-		this.nuevaSolicitud.factorSanguineo = this.listaFactoresSanguineos[indiceFactorSanguineo];
-	}
-
-	// Método que inicializa el listado de provincias
-	private inicializarProvincias(): void {
 		// Obtenemos el listado de provincias del servidor
 		this.datosService.getListaProvincias().subscribe(result => {
 			if(result && result.length) {
@@ -203,7 +218,7 @@ export class NuevaSolicitudPage {
 				let indiceProvincia;
 
 				if(this.nuevaSolicitud.provincia.id) {
-					indiceProvincia = this.getIndiceProvinciaPorID(this.listaProvincias, this.nuevaSolicitud.provincia.id);
+					indiceProvincia = this.getIndicePorID(this.listaProvincias, this.nuevaSolicitud.provincia.id);
 				}
 
 				if(indiceProvincia){
@@ -253,18 +268,7 @@ export class NuevaSolicitudPage {
 	}
 
 	// Método que obtiene el indice del elemento cuyo id es el pasado como parametro
-	public getIndicePorID(listado: Array<any>, id: number): number {
-
-		for(let i=0; i<listado.length; i++) {
-		if(id === listado[i].id)
-			return i;
-		}
-
-		return -1;
-	}
-
-	// Método que obtiene el indice del elemento cuyo id es el pasado como parametro
-	public getIndiceProvinciaPorID(listado: Array<any>, id: string): number {
+	public getIndicePorID(listado: Array<any>, id: string): number {
 
 		for(let i=0; i<listado.length; i++) {
 		if(id === listado[i].id)
@@ -281,12 +285,30 @@ export class NuevaSolicitudPage {
 		// Nos aseguramos que la cantidad sea un numero
 		this.nuevaSolicitud.cantidadDadores = +this.nuevaSolicitud.cantidadDadores;
 
-		let id = this.modoEdicion ? this.nuevaSolicitud.solicitudID : null;
-		this.datosService.guardarSolicitud(this.nuevaSolicitud,id)
+		// Seteamos los tipos sanguineos solicitados en la solicitud
+		this.nuevaSolicitud.tiposSanguineos = [];
+
+		// Las filas representan los factores sanguineos
+		for(let i=0; i<this.tiposSanguineos.length; i++) {
+	
+			// Las columnas representan los grupos sanguineos
+			for(let j=0; j<this.tiposSanguineos[i].length; j++) {
+
+				if(this.tiposSanguineos[i][j].seleccionado) {
+					this.nuevaSolicitud.tiposSanguineos.push({
+						grupoSanguineo: j,
+						factorSanguineo: i
+					});
+				}
+			}
+		}
+
+		let solicitudId = this.modoEdicion ? this.nuevaSolicitud.solicitudID : null;
+
+		this.datosService.guardarSolicitud(this.nuevaSolicitud, solicitudId)
 			.subscribe(
           		data => { console.log('saved'); },
-          		err => { debugger; },
-          		() => console.log('Done'));
+          		err => { debugger; });
 	}
 
 	// Método usado para debug, muestra el contenido del form en tiempo real

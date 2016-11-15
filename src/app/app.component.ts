@@ -164,7 +164,7 @@ export class DonemosApp {
   // Método que muestra un mensaje cuando el usuario se queda sin conexion
   public mostrarMensajeConConexion(){
     let toast = this.toastCtrl.create({
-      message: '<strong>Tienes conexión nuevamente</strong>. Ahora si podrás acceder a todo el contenido de la aplicación.',
+      message: 'Tienes conexión nuevamente. Ahora si podrás acceder a todo el contenido de la aplicación.',
       showCloseButton: true,
       closeButtonText: 'Ok',
       position: 'bottom'

@@ -13,8 +13,6 @@ import 'rxjs/add/operator/map';
 // Modelos a usar
 import { SolicitudModel } from '../../components/solicitudes/solicitud.model';
 import { FactorSanguineoEnum, GrupoSanguineoEnum, DonacionesService } from './donaciones.service';
-import { FactorSanguineoModel } from '../../shared/models/factor-sanguineo.model';
-import { GrupoSanguineoModel } from '../../shared/models/grupo-sanguineo.model';
 import { LocalidadModel } from '../../shared/models/localidad.model';
 import { ProvinciaModel } from '../../shared/models/provincia.model';
 
@@ -102,23 +100,42 @@ export class DatosService {
   }
 
   // Obtiene el listado de factores sanguineos
-  public getFactoresSanguineos(): Array<FactorSanguineoModel> {
+  public getFactoresSanguineos(): Array<{ id: number, nombre: string }> {
     let listaFactoresSanguineos = [];
 
-    listaFactoresSanguineos.push(new FactorSanguineoModel(FactorSanguineoEnum.RhPositivo, this.donacionesService.getDescripcionFactorSanguineo(FactorSanguineoEnum.RhPositivo)));
-    listaFactoresSanguineos.push(new FactorSanguineoModel(FactorSanguineoEnum.RhNegativo, this.donacionesService.getDescripcionFactorSanguineo(FactorSanguineoEnum.RhNegativo)));
+    listaFactoresSanguineos.push({ 
+        id: FactorSanguineoEnum.RhPositivo, 
+        nombre : this.donacionesService.getDescripcionFactorSanguineo(FactorSanguineoEnum.RhPositivo) 
+    });
+
+    listaFactoresSanguineos.push({
+      id : FactorSanguineoEnum.RhNegativo, 
+      nombre: this.donacionesService.getDescripcionFactorSanguineo(FactorSanguineoEnum.RhNegativo)
+    });
 
     return listaFactoresSanguineos;
   }
 
   // Obtiene el listado de grupos sanguineos
-  public getGruposSanguineos(): Array<GrupoSanguineoModel> {
+  public getGruposSanguineos(): Array<{ id: number, nombre: string }> {
     let listaGruposSanguineos = [];
 
-    listaGruposSanguineos.push(new GrupoSanguineoModel(GrupoSanguineoEnum.Cero, this.donacionesService.getDescripcionGrupoSanguineo(GrupoSanguineoEnum.Cero)));
-    listaGruposSanguineos.push(new GrupoSanguineoModel(GrupoSanguineoEnum.A, this.donacionesService.getDescripcionGrupoSanguineo(GrupoSanguineoEnum.A)));
-    listaGruposSanguineos.push(new GrupoSanguineoModel(GrupoSanguineoEnum.AB, this.donacionesService.getDescripcionGrupoSanguineo(GrupoSanguineoEnum.AB)));
-    listaGruposSanguineos.push(new GrupoSanguineoModel(GrupoSanguineoEnum.B, this.donacionesService.getDescripcionGrupoSanguineo(GrupoSanguineoEnum.B)));
+    listaGruposSanguineos.push({ 
+      id: GrupoSanguineoEnum.O, 
+      nombre: this.donacionesService.getDescripcionGrupoSanguineo(GrupoSanguineoEnum.O) 
+    });
+    listaGruposSanguineos.push({ 
+      id: GrupoSanguineoEnum.A, 
+      nombre: this.donacionesService.getDescripcionGrupoSanguineo(GrupoSanguineoEnum.A) 
+    });
+    listaGruposSanguineos.push({ 
+      id: GrupoSanguineoEnum.AB,
+      nombre: this.donacionesService.getDescripcionGrupoSanguineo(GrupoSanguineoEnum.AB) 
+     });
+    listaGruposSanguineos.push({ 
+      id: GrupoSanguineoEnum.B, 
+      nombre: this.donacionesService.getDescripcionGrupoSanguineo(GrupoSanguineoEnum.B) 
+    });
 
     return listaGruposSanguineos;
   }
@@ -131,7 +148,6 @@ export class DatosService {
 
   // Método que guarda una solicitud en la base de datos
   public guardarSolicitud(unaSolicitud: SolicitudModel, solicitudId?: number) {
-    debugger;
     if (solicitudId) {
       return this.authHttp.put(`${this.apiEndPointSolicitudes}/${solicitudId}`,
         JSON.stringify(unaSolicitud))

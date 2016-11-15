@@ -101,7 +101,7 @@ button .button-inner > div {
 }
 
 /* Estilos para los forms en iOS*/
-body.ios form {
+ion-app.ios form {
 
 	ion-item .item-inner {
 	    border-bottom: none;
@@ -148,18 +148,36 @@ body.ios form {
 }
 
 /* Estilos para los forms en Android */
-body.md form {
+ion-app.md form {
 
 	/* Fix para bug en el label al poner el foco en el campo */
 	ion-label[floating],
 	ion-label[stacked] {
-		color: $form_colorTexto;
+		color: $form_colorTexto !important;
 	}
 
 	/* Fix para mostrar la validacion en azul cuando el input tiene el cursor */
 	ion-item.submitted.input-has-focus .item-inner,
 	ion-item:not(.submitted).input-has-focus .item-inner {
-		border-bottom: 2px solid $android_colorFocus !important;
+		border-bottom: 1px solid $android_colorFocus !important;
+	}
+
+	ion-item.tipo-sanguineo-label .item-inner,
+	ion-item.tipo-sanguineo-detalle.primera-fila .item-inner, {
+	    border-bottom: 0 !important;
+	}
+
+	ion-item.tipo-sanguineo-detalle.segunda-fila ion-label.label-md {
+	    margin-top: 0;
+	}
+
+	ion-item.tipo-sanguineo-detalle.primera-fila ion-label.label-md {
+	    margin-top: 0;
+	    margin-bottom: 0;
+	}
+
+	ion-item.tipo-sanguineo-detalle button {
+	    width: 20%;
 	}
 
 }

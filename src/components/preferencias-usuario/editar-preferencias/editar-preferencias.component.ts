@@ -9,8 +9,6 @@ import { PreferenciasUsuarioModel } from '../preferencias-usuario.model';
 
 // Modelos compartidos
 import { LocalidadModel } from '../../../shared/models/localidad.model';
-import { FactorSanguineoModel } from '../../../shared/models/factor-sanguineo.model';
-import { GrupoSanguineoModel } from '../../../shared/models/grupo-sanguineo.model';
 import { ProvinciaModel } from '../../../shared/models/provincia.model';
 
 // Servicios
@@ -27,14 +25,14 @@ import { DropdownPage } from '../../../shared/components/dropdown/dropdown.compo
 export class EditarPreferenciasPage {
 
 	// Listados de la pagina
-	public listaGruposSanguineos: Array<GrupoSanguineoModel>;
-	public listaFactoresSanguineos: Array<FactorSanguineoModel>;
+	public listaGruposSanguineos: Array<{ id: number, nombre: string }>;
+	public listaFactoresSanguineos: Array<{ id: number, nombre: string }>;
 	public listaProvincias: Array<ProvinciaModel>;
 	public listaLocalidades: Array<LocalidadModel>;
 
 	// Preferencias del usuario
 	public preferenciasUsuario: PreferenciasUsuarioModel;
-	private datosPersonalesObj: any;
+	private datosUsuarioObj: any;
 
 	public esRoot: boolean;
 
@@ -76,7 +74,7 @@ export class EditarPreferenciasPage {
       			// Si hay datos guardados, los usamos para inicializar los listados
       			this.datosService.getPreferenciasUsuario().then((preferenciasUsuario) => { 
       				// Guardamos los datos del usuario
-      				this.datosPersonalesObj = preferenciasUsuario;
+      				this.datosUsuarioObj = preferenciasUsuario;
       			}).then(() => {
       				this.inicializarDatosUsuario().then((result) => {
       					loadingPopup.dismiss();
@@ -90,22 +88,16 @@ export class EditarPreferenciasPage {
     public inicializarDatosUsuario(): Promise<boolean> {
     	return new Promise((resolve) => {
     		
-    		if(this.datosPersonalesObj.grupoSanguineoID) {
-    			// Obtenemos el indice del grupo sanguineo del usuario y lo seleccionamos
-    			let indiceGrupoSanguineo = this.getIndicePorID(this.listaGruposSanguineos, this.datosPersonalesObj.grupoSanguineoID);
-    			this.preferenciasUsuario.grupoSanguineo = this.listaGruposSanguineos[indiceGrupoSanguineo];
-    		}
+    		// Obtenemos el indice del grupo sanguineo del usuario y lo seleccionamos
+    		this.preferenciasUsuario.grupoSanguineo = this.datosUsuarioObj.grupoSanguineoID;
     		
-    		if(this.datosPersonalesObj.factorSanguineoID){
-    			// Obtenemos el indice del factor sanguineo del usuario y lo seleccionamos
-    			let indiceFactorSanguineo = this.getIndicePorID(this.listaFactoresSanguineos, this.datosPersonalesObj.factorSanguineoID);
-    			this.preferenciasUsuario.factorSanguineo = this.listaFactoresSanguineos[indiceFactorSanguineo];
-    		}
+    		// Obtenemos el indice del factor sanguineo del usuario y lo seleccionamos
+    		this.preferenciasUsuario.factorSanguineo = this.datosUsuarioObj.factorSanguineoID 
 
-    		if(this.datosPersonalesObj.provinciaID) {
+    		if(this.datosUsuarioObj.provinciaID) {
 
     			// Obtenemos el indice de la provincia del usuario y la seleccionamos
-    			let indiceProvincia = this.getIndiceProvinciaPorID(this.listaProvincias, this.datosPersonalesObj.provinciaID);    		
+    			let indiceProvincia = this.getIndicePorID(this.listaProvincias, this.datosUsuarioObj.provinciaID);    		
     			this.preferenciasUsuario.provincia = this.listaProvincias[indiceProvincia];
 
     			// Obtenemos el listado de localidades en base a la provincia seleccionada
@@ -113,9 +105,9 @@ export class EditarPreferenciasPage {
 			    	if(result && result.length){
 			    		this.listaLocalidades = result;
 
-			    		if(this.datosPersonalesObj.ciudadID) {
+			    		if(this.datosUsuarioObj.localidadID) {
 			    			// Si el usuario guardo la localidad, la seleccionamos
-			    			let indiceLocalidad = this.getIndicePorID(this.listaLocalidades, this.datosPersonalesObj.ciudadID);
+			    			let indiceLocalidad = this.getIndicePorID(this.listaLocalidades, this.datosUsuarioObj.localidadID);
 			    			this.preferenciasUsuario.localidad = this.listaLocalidades[indiceLocalidad];
 			    		}
 			    		
@@ -133,16 +125,7 @@ export class EditarPreferenciasPage {
     }
 
     // Método que obtiene el indice del elemento cuyo id es el pasado como parametro
-    public getIndicePorID(listado: Array<any>, id: number): number {
-    	for(let i=0; i<listado.length; i++) {
-    		if(id === listado[i].id)
-    			return i;
-    	}
-    	return -1;
-    }
-
-    // Método que obtiene el indice del elemento cuyo id es el pasado como parametro
-    public getIndiceProvinciaPorID(listado: Array<any>, id: string): number {
+    public getIndicePorID(listado: Array<any>, id: string): number {
     	for(let i=0; i<listado.length; i++) {
     		if(id === listado[i].id)
     			return i;
@@ -175,9 +158,9 @@ export class EditarPreferenciasPage {
 	public guardarCambios(): void {
 		let nuevosDatosUsuarioObj = {
 			provinciaID : this.preferenciasUsuario.provincia ? this.preferenciasUsuario.provincia.id : null,
-			ciudadID : this.preferenciasUsuario.localidad ? this.preferenciasUsuario.localidad.id : null,
-			grupoSanguineoID : this.preferenciasUsuario.grupoSanguineo ? this.preferenciasUsuario.grupoSanguineo.id : null,
-			factorSanguineoID : this.preferenciasUsuario.factorSanguineo ? this.preferenciasUsuario.factorSanguineo.id : null,
+			localidadID : this.preferenciasUsuario.localidad ? this.preferenciasUsuario.localidad.id : null,
+			grupoSanguineoID : this.preferenciasUsuario.grupoSanguineo,
+			factorSanguineoID : this.preferenciasUsuario.factorSanguineo,
 		};
 
 		// Guardamos los datos

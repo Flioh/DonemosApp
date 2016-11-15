@@ -89,27 +89,23 @@
 			</span>
 
 
-
-			<!-- Grupo sanguineo  -->
-			<ion-item>
-				<ion-label stacked>Grupo sanguineo</ion-label>
-				<ion-select [(ngModel)]="nuevaSolicitud.grupoSanguineo" okText="Aceptar" cancelText="Cancelar" required name="grupo" #grupo="ngModel">
-					<ion-option *ngFor="let grupo of listaGruposSanguineos" [value]="grupo">
-						{{grupo.nombre}}
-					</ion-option>
-				</ion-select>
+			<!-- Tipo sanguineo  -->
+			<ion-item class="tipo-sanguineo-label">
+				<ion-label stacked>Tipos Sanguineos que se necesitan</ion-label>
 			</ion-item>
+			<ion-item class="tipo-sanguineo-detalle primera-fila">
+				
+				<template ngFor let-tipoSanguineo [ngForOf]="tiposSanguineos[0]">
+					<button type="button" ion-button [color]="tipoSanguineo.seleccionado ? 'principal' : 'grisClaro'" (click)="toggleTipoSanguineo(tipoSanguineo)">{{ tipoSanguineo.nombre }}</button>
+				</template>
 
-
-
-			<!-- Factor sanguineo  -->
-			<ion-item>
-				<ion-label stacked>Factor sanguineo</ion-label>
-				<ion-select [(ngModel)]="nuevaSolicitud.factorSanguineo" okText="Aceptar" cancelText="Cancelar" required name="factor" #factor="ngModel">
-					<ion-option *ngFor="let factor of listaFactoresSanguineos" [value]="factor">
-						{{factor.nombre}}
-					</ion-option>
-				</ion-select>
+			</ion-item>
+			<ion-item class="tipo-sanguineo-detalle segunda-fila">
+				
+				<template ngFor let-tipoSanguineo [ngForOf]="tiposSanguineos[1]">
+					<button type="button" ion-button [color]="tipoSanguineo.seleccionado ? 'principal' : 'grisClaro'" (click)="toggleTipoSanguineo(tipoSanguineo)">{{ tipoSanguineo.nombre }}</button>
+				</template>
+				
 			</ion-item>
 
 
@@ -125,7 +121,7 @@
 			<!-- Datos adicionales  -->
 			<ion-item>
 				<ion-label stacked>Datos adicionales</ion-label>
-				<ion-textarea rows="6" [(ngModel)]="nuevaSolicitud.datosAdicionales" name="datosAdicionales" placeholder="Ejemplo: Se necesitan dadores para mi papá/mamá/... El horario que figura es de Lunes a Viernes, los sábados también se puede donar pero sólo por la mañana..."></ion-textarea>
+				<ion-textarea rows="6" [(ngModel)]="nuevaSolicitud.datosAdicionales" name="datosAdicionales" placeholder="Aquí puedes agregar cualquier dato que consideres importante..."></ion-textarea>
 			</ion-item>
 
 

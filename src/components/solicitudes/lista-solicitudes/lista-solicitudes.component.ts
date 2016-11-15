@@ -14,8 +14,6 @@ import { SolicitudModel } from '../solicitud.model';
 import { ResumenSolicitudModel } from '../resumen-solicitud.model';
 import { LocalidadModel } from '../../../shared/models/localidad.model';
 import { ProvinciaModel } from '../../../shared/models/provincia.model';
-import { FactorSanguineoModel } from '../../../shared/models/factor-sanguineo.model';
-import { GrupoSanguineoModel } from '../../../shared/models/grupo-sanguineo.model';
 
 // Paginas y componente base
 import { DetallesSolicitudPage } from '../detalles-solicitud/detalles-solicitud.component';
@@ -31,13 +29,13 @@ export class ListaSolicitudesPage {
   private solicitudes: Array<ResumenSolicitudModel>;
 
   // Filtros de busqueda
-  private grupoSanguineoSeleccionado: GrupoSanguineoModel;
-  private factorSanguineoSeleccionado: FactorSanguineoModel;
+  private grupoSanguineoSeleccionado: number;
+  private factorSanguineoSeleccionado: number;
   private provinciaSeleccionada: ProvinciaModel;
   private localidadSeleccionada: LocalidadModel;
 
-  private listaGruposSanguineos: Array<GrupoSanguineoModel>;
-  private listaFactoresSanguineos: Array<FactorSanguineoModel>;
+  private listaGruposSanguineos: Array<{ id: number, nombre: string }>;
+  private listaFactoresSanguineos: Array<{ id: number, nombre: string }>;
   private listaProvincias: Array<ProvinciaModel>;
   private listaLocalidades: Array<LocalidadModel>;
 
@@ -233,11 +231,16 @@ export class ListaSolicitudesPage {
 
   // Método que obtiene la informacion de los tipos sanguineos buscados, resaltando el del usuario
   public obtenerInformacionTiposSanguineos(unaSolicitud: SolicitudModel): string {
-      let result = '';
-      let posiblesDadores = this.donacionesService.puedeRecibirDe(unaSolicitud.grupoSanguineo.id, unaSolicitud.factorSanguineo.id);
+      let result = '', tiposSanguineosBuscados = [];
+
+      for(let i=0; i<unaSolicitud.tiposSanguineos.length; i++) {
+        let grupoSanguineo = unaSolicitud.tiposSanguineos[i].grupoSanguineo;
+        let factorSanguineo = unaSolicitud.tiposSanguineos[i].factorSanguineo;
+        tiposSanguineosBuscados.push(this.donacionesService.getDescripcionCompleta(grupoSanguineo, factorSanguineo));
+      }
 
       // Obtenems un string con todos los tipos sanguineos buscados
-      result = posiblesDadores.join(' ');
+      result = tiposSanguineosBuscados.join(' ');
 
       if(this.datosUsuarioObj) {
         // Obtenemos el tipo sanguineo del usuario
@@ -251,15 +254,20 @@ export class ListaSolicitudesPage {
 
   // Método que determina si el usuario es compatible con una solicitud dada
   public esCompatibleConUsuario(unaSolicitud: SolicitudModel): boolean{
-    if(this.datosUsuarioObj) {
-        
-        // Obtenemos cuales son los tipos compatibles con esta solicitud
-        let posiblesDadores = this.donacionesService.puedeRecibirDe(unaSolicitud.grupoSanguineo.id, unaSolicitud.factorSanguineo.id);
+      if(this.datosUsuarioObj) {
+
+        let tiposSanguineosBuscados = [];
+
+        for(let i=0; i<unaSolicitud.tiposSanguineos.length; i++) {
+          let grupoSanguineo = unaSolicitud.tiposSanguineos[i].grupoSanguineo;
+          let factorSanguineo = unaSolicitud.tiposSanguineos[i].factorSanguineo;
+          tiposSanguineosBuscados.push(this.donacionesService.getDescripcionCompleta(grupoSanguineo, factorSanguineo));
+        }
 
         // Obtenemos el tipo sanguineo del usuario
         this.tipoSanguineoUsuario = this.donacionesService.getDescripcionCompleta(this.datosUsuarioObj.grupoSanguineoID, this.datosUsuarioObj.factorSanguineoID);
 
-        return posiblesDadores.join(' ').indexOf(this.tipoSanguineoUsuario) > -1;
+        return tiposSanguineosBuscados.join(' ').indexOf(this.tipoSanguineoUsuario) > -1;
       }
       return false;
   }
@@ -268,22 +276,16 @@ export class ListaSolicitudesPage {
   public inicializarDatosUsuario(): Promise<boolean> {
     return new Promise((resolve) => {
 
-      if(this.datosUsuarioObj.grupoSanguineoID) {
-        // Obtenemos el indice del grupo sanguineo del usuario y lo seleccionamos
-        let indiceGrupoSanguineo = this.getIndicePorID(this.listaGruposSanguineos, this.datosUsuarioObj.grupoSanguineoID);
-        this.grupoSanguineoSeleccionado = this.listaGruposSanguineos[indiceGrupoSanguineo];
-      }
+      // Obtenemos el indice del grupo sanguineo del usuario y lo seleccionamos
+      this.grupoSanguineoSeleccionado = this.datosUsuarioObj.grupoSanguineoID;
 
-      if(this.datosUsuarioObj.factorSanguineoID) {
-        // Obtenemos el indice del factor sanguineo del usuario y lo seleccionamos
-        let indiceFactorSanguineo = this.getIndicePorID(this.listaFactoresSanguineos, this.datosUsuarioObj.factorSanguineoID);
-        this.factorSanguineoSeleccionado = this.listaFactoresSanguineos[indiceFactorSanguineo];
-      }
+      // Obtenemos el indice del factor sanguineo del usuario y lo seleccionamos
+      this.factorSanguineoSeleccionado = this.datosUsuarioObj.factorSanguineoID;
 
       if(this.datosUsuarioObj.provinciaID) {
 
         // Obtenemos el indice de la provincia del usuario y la seleccionamos
-        let indiceProvincia = this.getIndiceProvinciaPorID(this.listaProvincias, this.datosUsuarioObj.provinciaID);        
+        let indiceProvincia = this.getIndicePorID(this.listaProvincias, this.datosUsuarioObj.provinciaID);        
         this.provinciaSeleccionada = this.listaProvincias[indiceProvincia];
 
         this.datosService.getListaLocalidadesPorProvincia(this.provinciaSeleccionada.id).subscribe(result => {
@@ -312,16 +314,7 @@ export class ListaSolicitudesPage {
   }
 
   // Método que obtiene el indice del elemento cuyo id es el pasado como parametro
-  public getIndicePorID(listado: Array<any>, id: number): number {
-    for(let i=0; i<listado.length; i++) {
-      if(id === listado[i].id)
-        return i;
-    }
-    return -1;
-  }
-
-  // Método que obtiene el indice del elemento cuyo id es el pasado como parametro
-  public getIndiceProvinciaPorID(listado: Array<any>, id: string): number {
+  public getIndicePorID(listado: Array<any>, id: string): number {
 
     for(let i=0; i<listado.length; i++) {
       if(id === listado[i].id)
