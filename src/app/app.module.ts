@@ -30,8 +30,9 @@ import { NuevaSolicitudPage } from '../components/solicitudes/nueva-solicitud/nu
 import { ResumenSolicitudComponent } from '../components/solicitudes/resumen-solicitud/resumen-solicitud.component';
 import { EditarPreferenciasPage } from '../components/preferencias-usuario/editar-preferencias/editar-preferencias.component';
 import { RequisitosPage } from '../components/donaciones/requisitos/requisitos.component';
+import { SobreNosotrosPage } from '../components/flioh/sobre-nosotros/sobre-nosotros.component';
 import { ErrorPage } from '../shared/components/error/error.component';
-import { IntroPage } from '../shared/components/intro/intro.component';
+import { TutorialPage } from '../shared/components/tutorial/tutorial.component';
 import { DropdownPage } from '../shared/components/dropdown/dropdown.component';
 
 // Directivas
@@ -64,7 +65,8 @@ export function getAuthHttp(http) {
     NuevaSolicitudPage,
     EditarPreferenciasPage,
     RequisitosPage,
-    IntroPage,
+    SobreNosotrosPage,
+    TutorialPage,
     DropdownPage,
     ErrorPage,
 
@@ -90,7 +92,8 @@ export function getAuthHttp(http) {
     NuevaSolicitudPage,
     EditarPreferenciasPage,
     RequisitosPage,
-    IntroPage,
+    SobreNosotrosPage,
+    TutorialPage,
     DropdownPage,
     ErrorPage
   ],

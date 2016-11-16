@@ -12,12 +12,13 @@ import { EditarPreferenciasPage } from '../../../components/preferencias-usuario
 import { DatosService } from '../../services/datos.service';
 
 @Component({
-  selector:'intro-page',
-  templateUrl: 'intro.component.html',
+  selector:'tutorial-page',
+  templateUrl: 'tutorial.component.html',
 })
-export class IntroPage {
+export class TutorialPage {
 
     public opcionesSlider: any;
+    public mostrarBotonesConfiguracion: boolean;
 
     constructor(public navCtrl: NavController,
                 public datosService: DatosService,
@@ -25,6 +26,19 @@ export class IntroPage {
         this.opcionesSlider = {
             pager: true
         };
+
+        this.mostrarBotonesConfiguracion = true;
+
+        // Si el usuario ya cargo las preferencias, no mostramos los botones de configuracion
+        this.datosService.getPreferenciasUsuario().then(preferenciasUsuario => {
+          if(preferenciasUsuario) {
+            this.mostrarBotonesConfiguracion = false;
+          }
+        });
+    }
+
+    public volver() {
+      this.navCtrl.pop();
     }
 
     // Método que muestra el listado de solicitudes

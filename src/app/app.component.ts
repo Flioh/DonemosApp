@@ -10,8 +10,9 @@ import { StatusBar, Splashscreen } from 'ionic-native';
 import { ListaSolicitudesPage } from '../components/solicitudes/lista-solicitudes/lista-solicitudes.component';
 import { MisSolicitudesPage } from '../components/solicitudes/mis-solicitudes/mis-solicitudes.component';
 import { EditarPreferenciasPage } from '../components/preferencias-usuario/editar-preferencias/editar-preferencias.component';
+import { SobreNosotrosPage } from '../components/flioh/sobre-nosotros/sobre-nosotros.component';
 import { ErrorPage } from '../shared/components/error/error.component';
-import { IntroPage } from '../shared/components/intro/intro.component';
+import { TutorialPage } from '../shared/components/tutorial/tutorial.component';
 
 // Modelos
 import { ItemMenuModel } from '../shared/models/item-menu.model';
@@ -79,9 +80,9 @@ export class DonemosApp {
 
   // Método que carga la pantalla principal segun se deba mostrar la introduccion o no
   public cargarPantallaPrincipal() {
-    this.datosService.getMostrarIntro().then(mostrarIntro => {
-      if(mostrarIntro) {
-        this.rootPage = IntroPage;
+    this.datosService.getMostrarIntro().then(mostrarTutorial => {
+      if(mostrarTutorial) {
+        this.rootPage = TutorialPage;
       } else {
         this.rootPage = ListaSolicitudesPage;
       }
@@ -239,9 +240,9 @@ export class DonemosApp {
     if(this.hayConexion)
       this.paginasMenu.push(new ItemMenuModel('settings', 'Configurar preferencias', EditarPreferenciasPage, false, false));
     
-    this.paginasMenu.push(new ItemMenuModel('bulb', 'Mostrar tutorial', IntroPage, false, false));
+    this.paginasMenu.push(new ItemMenuModel('bulb', 'Mostrar tutorial', TutorialPage, false, false));
     
-    this.paginasMenu.push(new ItemMenuModel('information-circle', 'Sobre nosotros', ErrorPage, false, false));
+    this.paginasMenu.push(new ItemMenuModel('information-circle', 'Sobre nosotros', SobreNosotrosPage, false, false));
     
     if(this.hayConexion && this.estaLogueado)
       this.paginasMenu.push(new ItemMenuModel('exit', 'Salir', null, false, true));

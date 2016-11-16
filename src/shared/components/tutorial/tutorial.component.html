@@ -11,8 +11,10 @@
   <ion-slide>
     <img src="assets/images/slide4.png">
     <div class="button-container">
-      <button (click)="verListaSolicitudes()" color="principal" ion-button>Omitir</button>
-      <button (click)="inicializarPreferencias()" color="blanco" ion-button>Configurar</button>
+      <button *ngIf="mostrarBotonesConfiguracion" (click)="verListaSolicitudes()" color="principal" ion-button>Omitir</button>
+      <button *ngIf="mostrarBotonesConfiguracion" (click)="inicializarPreferencias()" color="blanco" ion-button>Configurar</button>
+
+      <button *ngIf="!mostrarBotonesConfiguracion" (click)="volver()" color="blanco" ion-button>Volver</button>
     </div>
   </ion-slide>
 </ion-slides>
