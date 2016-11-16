@@ -18,6 +18,7 @@ import { ProvinciaModel } from '../../../shared/models/provincia.model';
 // Paginas y componente base
 import { DetallesSolicitudPage } from '../detalles-solicitud/detalles-solicitud.component';
 import { NuevaSolicitudPage } from '../nueva-solicitud/nueva-solicitud.component';
+import { ListaBancosSangrePage } from '../../donaciones/bancos-sangre/lista-bancos-sangre.component';
 import { DropdownPage } from '../../../shared/components/dropdown/dropdown.component';
 
 @Component({
@@ -360,6 +361,11 @@ export class ListaSolicitudesPage {
   // Método que lleva a la pantalla de creación de solicitudes
   public nuevaSolicitud(): void {
     this.nav.push(NuevaSolicitudPage, {}, { animate: true, direction: 'forward' });
+  }
+
+  // Método que muestra el listado de bancos de sangre
+  public mostrarListaBancosSangre() {
+    this.nav.push(ListaBancosSangrePage);
   }
 
   // Método que muestra un listado de provincias

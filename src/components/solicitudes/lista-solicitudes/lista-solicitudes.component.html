@@ -29,7 +29,43 @@
 <ion-content [class.fondo-oscuro]="seccion === 'solicitudes'" padding>
 
 	<div [ngSwitch]="seccion">
+
+		<!-- Seccion de solicitudes -->
 		<div *ngSwitchCase="'solicitudes'">
+
+
+			<!-- Bancos de sangre -->
+			<ion-card class="resumen-banco-sangre">
+
+				<!-- Layout para cuando es compatible -->
+				<ion-item text-wrap class="encabezado">
+					<h2> 
+						<strong>Siempre</strong>
+						<span> se necesitan dadores</span>
+					</h2>
+					<h3 class="desc-tipos-sanguineos">De todo tipo.</h3>
+					<ion-icon  class="icono-compatibilidad" name="checkmark-circle-outline" color="principalOscuro"></ion-icon>
+				</ion-item>
+
+				<ion-card-content class="detalle-solicitud">
+					<ion-row>
+						<ion-col>
+							Si sólo <strong>1 de cada 20 argentinos</strong> donasen voluntariamente, se cubriría toda la demanda necesaria.
+						</ion-col>			
+					</ion-row>
+					<ion-row>
+						<ion-col width-25>
+						</ion-col>
+						<ion-col class="ver-detalles" tappable width-75 (click)="mostrarListaBancosSangre()">
+							VER DONDE DONAR <ion-icon name="arrow-forward"></ion-icon>
+						</ion-col>
+					</ion-row>
+				</ion-card-content>
+			</ion-card>
+
+
+
+
 			<!-- Creamos una lista de solicitudes usando el componente solicitud-item -->
 			<resumen-solicitud *ngFor="let solicitudItemModel of solicitudes" 
 				[solicitudItemModel]="solicitudItemModel"
@@ -40,13 +76,12 @@
 				<button ion-fab class="floating-btn" color="principal" fab (click)="nuevaSolicitud()"><ion-icon name="add"></ion-icon></button>
 			</ion-fab>
 
-			
-
 			<button *ngIf="hayMasSolicitudes" class="submit" color="principal" full (click)="buscarSolicitudes()">
 				Ver mas solicitudes
 			</button>
 		</div>
 			
+		<!-- Seccion de filtros de busqueda -->
 		<ion-list *ngSwitchCase="'filtros'">
 			<form #filtros="ngForm">
 

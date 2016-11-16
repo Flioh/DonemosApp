@@ -1,4 +1,3 @@
-import { RequisitosPage } from '../components/donaciones/requisitos/requisitos.component';
 // Referencias de Angular
 import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
 
@@ -9,7 +8,9 @@ import { StatusBar, Splashscreen } from 'ionic-native';
 // Paginas
 import { ListaSolicitudesPage } from '../components/solicitudes/lista-solicitudes/lista-solicitudes.component';
 import { MisSolicitudesPage } from '../components/solicitudes/mis-solicitudes/mis-solicitudes.component';
+import { ListaBancosSangrePage } from '../components/donaciones/bancos-sangre/lista-bancos-sangre.component';
 import { EditarPreferenciasPage } from '../components/preferencias-usuario/editar-preferencias/editar-preferencias.component';
+import { RequisitosPage } from '../components/donaciones/requisitos/requisitos.component';
 import { SobreNosotrosPage } from '../components/flioh/sobre-nosotros/sobre-nosotros.component';
 import { ErrorPage } from '../shared/components/error/error.component';
 import { TutorialPage } from '../shared/components/tutorial/tutorial.component';
@@ -231,6 +232,8 @@ export class DonemosApp {
     this.paginasMenu = [];
 
     this.paginasMenu.push(new ItemMenuModel('list-box', 'Lista de solicitudes', ListaSolicitudesPage, true, false));
+
+    this.paginasMenu.push(new ItemMenuModel('heart', 'Bancos de Sangre', ListaBancosSangrePage, true, false));
 
     if(this.hayConexion && this.estaLogueado)
       this.paginasMenu.push(new ItemMenuModel('bookmarks', 'Mis solicitudes', MisSolicitudesPage, false, true));
