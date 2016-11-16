@@ -17,6 +17,7 @@ export interface PerfilUsuarioModel {
     picture: string;
     picture_large: string;
     name: string;
+    user_metadata: any;
 }
 
 // Avoid name not found warnings
@@ -88,11 +89,18 @@ export class LoginService {
           return;
         }
 
-        // Guardamos el perfil del usuario
         profile.user_metadata = profile.user_metadata || {};
-        this.storage.set('profile', JSON.stringify(profile));
-        this.user = profile;
-        console.log(this.user);
+
+        // Solo gurdamos la informacion que utilizamos
+        this.user = {
+          name : profile.name,
+          picture : profile.picture,
+          picture_large : profile.picture_large,
+          user_metadata : profile.user_metadata
+        }
+
+        // Guardamos el perfil del usuario
+        this.storage.set('profile', JSON.stringify(this.user));
       });
 
       // Ocultamos las opciones de login
@@ -104,7 +112,16 @@ export class LoginService {
       // Actualizamos los datos del usuario
       this.zoneImpl.run(
         () =>  {
-          this.user = resultadoAuth.profile;
+
+          if(resultadoAuth.profile) {
+            // Solo gurdamos la informacion que utilizamos
+            this.user = {
+              name : resultadoAuth.profile.name,
+              picture : resultadoAuth.profile.picture,
+              picture_large : resultadoAuth.profile.picture_large,
+              user_metadata : resultadoAuth.profile.user_metadata
+            }
+          }
           this.eventCtrl.publish('login:usuario');
       });
       
@@ -116,7 +133,18 @@ export class LoginService {
   public cargarInformacionUsuario(): Promise<boolean> {
     return Promise.all([this.storage.get('profile'), this.storage.get('id_token')])
                   .then((resultados) => {
-                    this.user = JSON.parse(resultados[0]);
+                    let datosPerfil = JSON.parse(resultados[0]);
+
+                    if(datosPerfil) {
+                      // Solo gurdamos la informacion que utilizamos
+                      this.user = {
+                        name : datosPerfil.name,
+                        picture : datosPerfil.picture,
+                        picture_large : datosPerfil.picture_large,
+                        user_metadata : datosPerfil.user_metadata
+                      }
+                    }
+                    
                     this.idToken = resultados[1];
                   })
                   .catch(error => { 
@@ -171,7 +199,6 @@ export class LoginService {
       });
      
     this.renovarSubscripcion = source.subscribe(() => {
-      debugger;
       this.getNewJwt();
     });
   }
@@ -200,7 +227,6 @@ export class LoginService {
        // Una vez que se cumple el tiempo previsto, obtenemos un nuevo
        // token y programamos su renovacion
        source.subscribe(() => {
-         debugger;
          this.getNewJwt();
          this.programarRenovacionToken();
        });
