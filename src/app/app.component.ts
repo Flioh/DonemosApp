@@ -8,7 +8,7 @@ import { StatusBar, Splashscreen } from 'ionic-native';
 // Paginas
 import { ListaSolicitudesPage } from '../components/solicitudes/lista-solicitudes/lista-solicitudes.component';
 import { MisSolicitudesPage } from '../components/solicitudes/mis-solicitudes/mis-solicitudes.component';
-import { ListaBancosSangrePage } from '../components/donaciones/bancos-sangre/lista-bancos-sangre.component';
+import { ListaBancosSangrePage } from '../components/bancos-sangre/lista-bancos-sangre/lista-bancos-sangre.component';
 import { EditarPreferenciasPage } from '../components/preferencias-usuario/editar-preferencias/editar-preferencias.component';
 import { RequisitosPage } from '../components/donaciones/requisitos/requisitos.component';
 import { SobreNosotrosPage } from '../components/flioh/sobre-nosotros/sobre-nosotros.component';

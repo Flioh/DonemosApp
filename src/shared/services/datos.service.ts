@@ -12,12 +12,20 @@ import 'rxjs/add/operator/map';
 
 // Modelos a usar
 import { SolicitudModel } from '../../components/solicitudes/solicitud.model';
+import { BancoSangreModel } from '../../components/bancos-sangre/banco-sangre.model';
+
 import { FactorSanguineoEnum, GrupoSanguineoEnum, DonacionesService } from './donaciones.service';
 import { LocalidadModel } from '../../shared/models/localidad.model';
 import { ProvinciaModel } from '../../shared/models/provincia.model';
 
 // Objeto de configuracion
 import { AppConfig } from '../../shared/app-config';
+
+export class RespuestaBancosSangre {
+  public error: string;
+  public bancos: Array<any>;
+}
+
 
 @Injectable()
 export class DatosService {
@@ -35,6 +43,7 @@ export class DatosService {
   private apiEndPointProvincias : string;
   private apiEndPointLocalidades: string;
   private apiEndPointSolicitudes: string;
+  private apiEndPointBancosSangre: string;
 
   constructor(public http: Http, 
               public donacionesService: DonacionesService,
@@ -46,6 +55,7 @@ export class DatosService {
     this.apiEndPointLocalidades = config.apiEndPointLocalidades;
     this.apiEndPointProvincias = config.apiEndPointProvincias;
     this.apiEndPointSolicitudes = config.apiEndPointSolicitudes;
+    this.apiEndPointBancosSangre = config.apiEndPointBancosSangre;
 
     // Reseteamos los listados
     this.listaProvincias = [];    
@@ -196,5 +206,38 @@ export class DatosService {
         }
         return this.listaLocalidades;
       });
+  }
+
+  // Obtiene el listado de bancos de sangre en base a una provincia
+  public getListaBancosSangrePorProvincia(provinciaID: string): Observable<Array<BancoSangreModel>> {
+    return this.http.get(`${this.apiEndPointBancosSangre}/${provinciaID}`)
+    .map(res => res.json())
+    .map(bancosSangre => {
+      let listaBancosSangre = [];
+
+      for(let i=0; i<bancosSangre.length; i++) {
+        listaBancosSangre.push(new BancoSangreModel(bancosSangre[i]));
+      }
+
+      return listaBancosSangre;
+    });
+  }
+
+  // Obtiene el listado de bancos de sangre en base a la ubicacion del usuario
+  public getListaBancosSangrePorUbicacion(lat: number, lon: number, distancia: number): Observable<Array<BancoSangreModel>> {
+    return this.http.get(`${this.apiEndPointBancosSangre}/${lat}/${lon}/${distancia}`)
+    .map(res => res.json())
+    .map(resultadoObj => {
+
+      let listadoBancosSangre = Array<BancoSangreModel>();
+
+      if(resultadoObj.bancos) {
+        for(let i=0; i<resultadoObj.bancos.length; i++) {
+          listadoBancosSangre.push(new BancoSangreModel(resultadoObj.bancos[i]));      
+        }
+      }
+
+      return listadoBancosSangre;
+    });
   }
 }

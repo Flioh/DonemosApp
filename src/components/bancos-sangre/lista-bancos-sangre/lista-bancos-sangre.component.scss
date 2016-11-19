@@ -1,0 +1,23 @@
+lista-bancos-sangre-page {
+
+	.label-md[stacked], 
+	.label-md[floating] {
+		color: #999;
+	}
+
+	
+
+	ion-item-divider.item-md {
+		background-color: $principal;
+		color: $blanco;
+	}
+
+	.filtros-busqueda {
+		border-top: .55px solid #c8c7cc;
+		border-bottom: .55px solid #c8c7cc;
+
+		button.button-md-principal {
+			margin-bottom: 20px;
+		}
+	}
+}

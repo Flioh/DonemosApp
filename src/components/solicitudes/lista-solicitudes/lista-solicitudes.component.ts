@@ -18,7 +18,7 @@ import { ProvinciaModel } from '../../../shared/models/provincia.model';
 // Paginas y componente base
 import { DetallesSolicitudPage } from '../detalles-solicitud/detalles-solicitud.component';
 import { NuevaSolicitudPage } from '../nueva-solicitud/nueva-solicitud.component';
-import { ListaBancosSangrePage } from '../../donaciones/bancos-sangre/lista-bancos-sangre.component';
+import { ListaBancosSangrePage } from '../../bancos-sangre/lista-bancos-sangre/lista-bancos-sangre.component';
 import { DropdownPage } from '../../../shared/components/dropdown/dropdown.component';
 
 @Component({
@@ -129,7 +129,7 @@ export class ListaSolicitudesPage {
       content: 'Cargando solicitudes'
     });
 
-    // Muestra el mensaje de cargando localidades
+    // Muestra el mensaje de cargando solicitudes
     loadingPopup.present();
 
     this.datosService.getPreferenciasUsuario().then((preferenciasUsuario) => {

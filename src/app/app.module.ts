@@ -29,7 +29,8 @@ import { DetallesSolicitudPage } from '../components/solicitudes/detalles-solici
 import { NuevaSolicitudPage } from '../components/solicitudes/nueva-solicitud/nueva-solicitud.component';
 import { ResumenSolicitudComponent } from '../components/solicitudes/resumen-solicitud/resumen-solicitud.component';
 import { EditarPreferenciasPage } from '../components/preferencias-usuario/editar-preferencias/editar-preferencias.component';
-import { ListaBancosSangrePage } from '../components/donaciones/bancos-sangre/lista-bancos-sangre.component';
+import { ListaBancosSangrePage } from '../components/bancos-sangre/lista-bancos-sangre/lista-bancos-sangre.component';
+import { DetallesBancoSangrePage } from '../components/bancos-sangre/detalles-banco-sangre/detalles-banco-sangre.component';
 import { RequisitosPage } from '../components/donaciones/requisitos/requisitos.component';
 import { SobreNosotrosPage } from '../components/flioh/sobre-nosotros/sobre-nosotros.component';
 import { ErrorPage } from '../shared/components/error/error.component';
@@ -66,6 +67,7 @@ export function getAuthHttp(http) {
     NuevaSolicitudPage,
     EditarPreferenciasPage,
     ListaBancosSangrePage,
+    DetallesBancoSangrePage,
     RequisitosPage,
     SobreNosotrosPage,
     TutorialPage,
@@ -94,6 +96,7 @@ export function getAuthHttp(http) {
     NuevaSolicitudPage,
     ListaBancosSangrePage,
     EditarPreferenciasPage,
+    DetallesBancoSangrePage,
     RequisitosPage,
     SobreNosotrosPage,
     TutorialPage,

@@ -1,0 +1,77 @@
+<ion-header>
+	<ion-navbar color="negro">
+		<ion-title>{{ bancoSeleccionado.nombre }}</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content>    
+    <ion-list no-lines class="detail-list">
+
+
+      <ion-item class="header">
+        
+        <h3> 
+          <span>
+            Texto 1
+          </span>
+        </h3>        
+        
+        <h2>{{ bancoSeleccionado.nombre }}</h2>
+        
+        <span class="fecha">
+          Texto Secundario
+        </span>
+      </ion-item>      
+
+
+
+      <ion-item class="detail-item">
+        <ion-avatar item-left>
+          <ion-icon color="principal" name="pin" item-left></ion-icon>
+        </ion-avatar>
+        <h2>Dirección</h2>
+        <p>{{ bancoSeleccionado.direccion }}</p>
+        <p>{{ bancoSeleccionado.nombreCiudad }}, {{ bancoSeleccionado.nombreProvincia }}</p>
+        <a color="principal" class="ver-detalles" (click)="mostrarRuta()">¿Cómo llego?  <ion-icon name="arrow-forward"></ion-icon></a>
+      </ion-item>
+
+
+      <!-- Mapa estatico mostrando la ubicacion de la institucion -->
+      <img mapaEstatico [coordenadas]='coordenadas' [content]="content">
+      
+
+
+      <ion-item *ngIf="bancoSeleccionado.telefono" class="detail-item">
+        <ion-avatar item-left>
+          <ion-icon color="principal" name="call" item-left></ion-icon>
+        </ion-avatar>
+        <h2>Teléfono</h2>
+        <p>{{ bancoSeleccionado.telefono }}</p>
+      </ion-item>
+
+
+
+      <ion-item *ngIf="bancoSeleccionado.horario" class="detail-item">
+        <ion-avatar item-left>
+          <ion-icon color="principal" name="clock" item-left></ion-icon>
+        </ion-avatar>
+        <h2>Horario</h2>
+        <p>{{ bancoSeleccionado.horario }}</p>
+      </ion-item>
+
+
+
+      <ion-item>
+        <button ion-button full color="principal" (click)="verRequisitos()">Ver requisitos para donar</button>
+      </ion-item>
+
+      <ion-item text-wrap class="informacion">
+        <h2>¡Ayudanos a mejorar!</h2>
+        <p>
+          ¿Ves algún dato que no es correcto? ¿Conocés algún banco de sangre que no aparece en el listado? Envianos un mail a <a href="mailto:donemos@flioh.com">donemos@flioh.com</a> así lo podemos corregir de inmediato. <strong>¡Ayudemos a ayudar!</strong>
+        </p>
+      </ion-item>
+
+
+    </ion-list>
+</ion-content>

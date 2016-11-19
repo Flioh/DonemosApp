@@ -10,6 +10,7 @@ import { AppConfig } from '../app-config';
     selector: '[mapaEstatico]' 
 })
 export class MapaEstaticoDirective implements OnInit {
+    @Input() coordenadas: string;
     @Input() direccion: string;
     @Input() content: Content;
 
@@ -20,7 +21,10 @@ export class MapaEstaticoDirective implements OnInit {
         // Obtenemos el tamanio del mapa en base al ancho del dispositivo
         let tamanio = this.content ? this.content.getDimensions().width : this.config.staticMapTamanio;
 
+        // Usamos las coordenadas si estan disponibles, sino la direccion completa
+        let ubicacionMarcador = this.coordenadas || this.direccion.replace(/ /g, '+');
+
         // Obtenemos la URL del mapa en base a la direccion
-        this.element.nativeElement.src = `${ this.config.staticMapUrl }?zoom=${ this.config.staticMapZoom }&size=${ tamanio }x${ tamanio }&markers=color:red%7C${ this.direccion.replace(/ /g, '+') }&key=${ this.config.staticMapKey }`;
+        this.element.nativeElement.src = `${ this.config.staticMapUrl }?zoom=${ this.config.staticMapZoom }&size=${ tamanio }x${ tamanio }&markers=color:red%7C${ ubicacionMarcador }&key=${ this.config.staticMapKey }`;
     }
 }

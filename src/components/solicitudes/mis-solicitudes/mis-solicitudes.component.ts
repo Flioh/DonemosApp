@@ -10,7 +10,7 @@ import { DatosService } from '../../../shared/services/datos.service';
 
 // Modelos
 import { SolicitudModel } from '../solicitud.model';
-import { EncabezadoSolicitudModel } from '../encabezado-solicitud.model';
+import { ResumenMiSolicitudModel } from '../resumen-mi-solicitud.model';
 
 // Paginas y componente base
 import { DetallesSolicitudPage } from '../detalles-solicitud/detalles-solicitud.component';
@@ -26,7 +26,7 @@ import { AppConfig } from '../../../shared/app-config';
 export class MisSolicitudesPage {
   @ViewChild(List) list: List;
 
-  public solicitudes: Array<EncabezadoSolicitudModel>;
+  public solicitudes: Array<ResumenMiSolicitudModel>;
 
   constructor(private platform: Platform,
               private navCtrl: NavController, 
@@ -69,7 +69,7 @@ export class MisSolicitudesPage {
         for(let i = 0; i < solicitudesObj.length; i++) {
             let solicitud = new SolicitudModel(solicitudesObj[i]);
             let estaActiva = this.estaActiva(solicitud);
-            this.solicitudes.push(new EncabezadoSolicitudModel(solicitud, estaActiva));
+            this.solicitudes.push(new ResumenMiSolicitudModel(solicitud, estaActiva));
         }
 
         // Oculta el mensaje de espera

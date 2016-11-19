@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 import { SolicitudModel } from './solicitud.model';
 
 @Injectable()
-export class EncabezadoSolicitudModel {
+export class ResumenMiSolicitudModel {
 
   constructor(public solicitud: SolicitudModel,
               public estaActiva: boolean) { }

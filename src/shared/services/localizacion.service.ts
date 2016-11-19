@@ -4,6 +4,9 @@ import { Injectable } from '@angular/core';
 // Referencias de Ionic
 import { Platform } from 'ionic-angular';
 
+// Plugins de Ionic Native
+import { Geolocation } from 'ionic-native';
+
 // Declaracion para evitar warnings de Typescript
 declare var google: any;
 
@@ -64,5 +67,10 @@ export class LocalizacionService {
       // Mostramos el lugar en la aplicacion que corresponda
       this.abrirAplicacionDeMapas(coordenadas, nombreInstitucion);
     });
+  }
+
+  // Método que debuelve las coordenadas actuales del usuario
+  public obtenerCoordenadasUsuario(): Promise<any> {
+     return Geolocation.getCurrentPosition();
   }
 }
