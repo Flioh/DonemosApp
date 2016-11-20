@@ -1,8 +1,8 @@
 // Referencias de Angular
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 
 // Referencias de Ionic
-import { NavController, AlertController } from 'ionic-angular';
+import { NavController, AlertController, Slides } from 'ionic-angular';
 
 // Paginas
 import { ListaSolicitudesPage } from '../../../components/solicitudes/lista-solicitudes/lista-solicitudes.component';
@@ -16,6 +16,7 @@ import { DatosService } from '../../services/datos.service';
   templateUrl: 'tutorial.component.html',
 })
 export class TutorialPage {
+    @ViewChild('tutorialSlider') slider: Slides;
 
     public opcionesSlider: any;
     public mostrarBotonesConfiguracion: boolean;
@@ -69,6 +70,11 @@ export class TutorialPage {
       popupAdvertencia.present();
 
         
+    }
+
+    // Método que selecciona el slider cuyo indice se pasa como parametro
+    public mostrarSlider(indice: number) {
+      this.slider.slideTo(indice, 500);
     }
 
     // Método que muestra la pantalla de preferencias

@@ -1,12 +1,23 @@
-<ion-slides [options]="opcionesSlider">
+<ion-slides #tutorialSlider [options]="opcionesSlider">
   <ion-slide>
     <img src="assets/images/slide1.png">
+    <div class="button-container">
+      <button (click)="mostrarSlider(1)" color="blanco" ion-button>Siguiente</button>
+    </div>
   </ion-slide>
   <ion-slide>
     <img src="assets/images/slide2.png">
+    <div class="button-container">
+      <button (click)="mostrarSlider(0)" color="principal" ion-button>Anterior</button>
+      <button (click)="mostrarSlider(2)" color="blanco" ion-button>Siguiente</button>
+    </div>
   </ion-slide>
   <ion-slide>
     <img src="assets/images/slide3.png">
+    <div class="button-container">
+      <button (click)="mostrarSlider(1)" color="principal" ion-button>Anterior</button>
+      <button (click)="mostrarSlider(3)" color="blanco" ion-button>Siguiente</button>
+    </div>
   </ion-slide>
   <ion-slide>
     <img src="assets/images/slide4.png">
@@ -14,7 +25,7 @@
       <button *ngIf="mostrarBotonesConfiguracion" (click)="verListaSolicitudes()" color="principal" ion-button>Omitir</button>
       <button *ngIf="mostrarBotonesConfiguracion" (click)="inicializarPreferencias()" color="blanco" ion-button>Configurar</button>
 
-      <button *ngIf="!mostrarBotonesConfiguracion" (click)="volver()" color="blanco" ion-button>Volver</button>
+      <button *ngIf="!mostrarBotonesConfiguracion" (click)="volver()" color="blanco" ion-button>Ok, entendí todo</button>
     </div>
   </ion-slide>
 </ion-slides>
