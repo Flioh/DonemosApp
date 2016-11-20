@@ -16,7 +16,7 @@
 			<ion-segment-button value="solicitudes">
 				Solicitudes
 			</ion-segment-button>
-			<ion-segment-button value="filtros" (ionSelect)="inicializarFiltros()">
+			<ion-segment-button value="filtros">
 				Filtros
 			</ion-segment-button>
 		</ion-segment>
@@ -63,9 +63,6 @@
 				</ion-card-content>
 			</ion-card>
 
-
-
-
 			<!-- Creamos una lista de solicitudes usando el componente solicitud-item -->
 			<resumen-solicitud *ngFor="let solicitudItemModel of solicitudes" 
 				[solicitudItemModel]="solicitudItemModel"
@@ -76,14 +73,32 @@
 				<button ion-fab class="floating-btn" color="principal" fab (click)="nuevaSolicitud()"><ion-icon name="add"></ion-icon></button>
 			</ion-fab>
 
-			<button *ngIf="hayMasSolicitudes" class="submit" color="principal" full (click)="buscarSolicitudes()">
+			<button ion-button *ngIf="hayMasSolicitudes" color="principal" full (click)="buscarSolicitudes()">
 				Ver mas solicitudes
 			</button>
-		</div>
+
+			<ion-list no-lines>
+				<ion-item *ngIf="!hayMasSolicitudes" text-wrap class="sin-resultados">
+					<h2>{{ noHaySolicitudesMensaje }}</h2>
+					<p>
+						{{ noHaySolicitudesMensaje }} que cumplan con los filtros especificados. Recuerda que igual podés ayudar concurriendo a un <strong (click)="mostrarListaBancosSangre()">Banco de Sangre</strong>
+					</p>
+				</ion-item>
+			</ion-list>
 			
+		</div>
+
 		<!-- Seccion de filtros de busqueda -->
 		<ion-list *ngSwitchCase="'filtros'">
 			<form #filtros="ngForm">
+
+
+
+				<!-- Toggle para usar datos personales como filtro -->
+				<ion-item text-wrap *ngIf="datosUsuarioObj">
+					<ion-label>Completar filtros con mis preferencias</ion-label>
+					<ion-toggle color="negro" [(ngModel)]="usarDatosPersonales" (ionChange)="cambiarUsarPreferenciasUsuarioComoFiltro()" name="usarDatosPersonales"></ion-toggle>
+				</ion-item>
 
 
 
@@ -106,7 +121,7 @@
 				<!-- Grupo sanguineo  -->
 				<ion-item>
 					<ion-label floating>Tu grupo sanguineo</ion-label>
-					<ion-select [(ngModel)]="grupoSanguineoSeleccionado" okText="Aceptar" cancelText="Cancelar" name="grupo" #grupo="ngModel">
+					<ion-select [(ngModel)]="grupoSanguineoSeleccionado" (ionChange)="filtrosModificados();" okText="Aceptar" cancelText="Cancelar" name="grupo" #grupo="ngModel">
 						<ion-option *ngFor="let grupo of listaGruposSanguineos" [value]="grupo.id">
 							{{grupo.nombre}}
 						</ion-option>
@@ -118,7 +133,7 @@
 				<!-- Factor sanguineo  -->
 				<ion-item>
 					<ion-label floating>Tu factor sanguineo</ion-label>
-					<ion-select [(ngModel)]="factorSanguineoSeleccionado" okText="Aceptar" cancelText="Cancelar" name="factor" #factor="ngModel">
+					<ion-select [(ngModel)]="factorSanguineoSeleccionado" (ionChange)="filtrosModificados();" okText="Aceptar" cancelText="Cancelar" name="factor" #factor="ngModel">
 						<ion-option *ngFor="let factor of listaFactoresSanguineos" [value]="factor.id">
 							{{factor.nombre}}
 						</ion-option>
@@ -126,15 +141,12 @@
 				</ion-item>
 
 
-
-				<!-- Toggle para usar datos personales como filtro -->
-				<ion-item *ngIf="datosUsuarioObj">
-				    <ion-label>Usar mis preferencias</ion-label>
-				    <ion-toggle color="negro" [(ngModel)]="usarDatosPersonales" (ionChange)="usarDatosUsuario()" name="usarDatosPersonales"></ion-toggle>
-				</ion-item>
+				
 				<ion-item text-wrap *ngIf="!datosUsuarioObj">
 					<p>Si desea puede configurar sus preferencias en <strong>Configurar preferencias</strong> para luego poder utilizarlas automáticamente como filtro de búsqueda.</p>
-				</ion-item>				
+				</ion-item>
+
+
 
 			</form>
 
@@ -142,11 +154,22 @@
 				Borrar
 			</button>
 
-			<button ion-button class="btn-inline btn-primary" (click)="buscarSolicitudes()" color="principal" full>
+			<button ion-button class="btn-inline btn-primary" (click)="realizarNuevaBusquedaSolicitudes()" color="principal" full>
 				Buscar Solicitudes
 			</button>
-				
+
+			<ion-item text-wrap class="informacion">
+					<h2>¿Soy compatible?</h2>
+					<p>
+						No importa cuáles sean los filtros de búsqueda que selecciones, siempre mostraremos en <strong color="principal">color rojo</strong> las solicitudes que sean compatibles con el grupo y el factor elegido en la página de preferencias.
+						Aquellas que <strong>no sean compatibles</strong> con el grupo y el factor sanguíneo elegido en las preferencias, se mostrarán en <strong>color negro</strong>.
+					</p>
+				</ion-item>	
+
 		</ion-list>
+
+
+
 	</div>
 
 </ion-content>

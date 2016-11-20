@@ -151,21 +151,24 @@ export class DatosService {
   }
 
   // Obtiene el listado de solicitudes
-  public getSolicitudes(): Observable<Array<SolicitudModel>> {
-    return this.http.get(this.config.apiEndPointSolicitudes)
-      .map(res => res.json());
+  public getSolicitudes(numeroPagina: number, 
+                        provinciaId: string, 
+                        localidadId: string, 
+                        grupoSanguineoId: number, 
+                        factorSanguineoId: number): Observable<Array<SolicitudModel>> {
+
+    // Armamos la url en base a los filtros
+    let url = `${this.config.apiEndPointSolicitudes}/${numeroPagina}/filtrar/${provinciaId}/${localidadId}/${grupoSanguineoId}/${factorSanguineoId}`;
+
+    return this.http.get(url).map(res => res.json());
   }
 
   // Método que guarda una solicitud en la base de datos
   public guardarSolicitud(unaSolicitud: SolicitudModel, solicitudId?: number) {
     if (solicitudId) {
-      return this.authHttp.put(`${this.apiEndPointSolicitudes}/${solicitudId}`,
-        JSON.stringify(unaSolicitud))
-        .map(res => res.json());
+      return this.authHttp.put(`${this.apiEndPointSolicitudes}/${solicitudId}`, JSON.stringify(unaSolicitud)).map(res => res.json());
     } else {
-      return this.authHttp.post(this.apiEndPointSolicitudes,
-        JSON.stringify(unaSolicitud))
-        .map(res => res.json());
+      return this.authHttp.post(this.apiEndPointSolicitudes, JSON.stringify(unaSolicitud)).map(res => res.json());
     }
   }
   
@@ -177,8 +180,7 @@ export class DatosService {
 
   // Obtiene el listado de provincias
   public getListaProvincias(): Observable<Array<ProvinciaModel>>{
-    return this.http.get(this.apiEndPointProvincias)
-      .map(res => res.json())
+    return this.http.get(this.apiEndPointProvincias).map(res => res.json())
       .map(listadoProvincias => {
         this.listaProvincias = [];
 
@@ -193,12 +195,11 @@ export class DatosService {
 
   // Obtiene el listado de localidades de la provincia pasada como parametro
   public getListaLocalidadesPorProvincia(provinciaID: string): Observable<Array<LocalidadModel>>{
-
-    this.listaLocalidades = [];
-
     return this.http.get(`${this.apiEndPointLocalidades}/${provinciaID}`)
       .map(res => res.json().filter(unaLocalidad => unaLocalidad.provincia == provinciaID))
       .map(listadoLocalidades => {
+
+        this.listaLocalidades = [];
 
         // Creamos el listado de localidades usando el modelo LocalidadModel
         for(let i=0; i<listadoLocalidades.length; i++) {
@@ -210,8 +211,7 @@ export class DatosService {
 
   // Obtiene el listado de bancos de sangre en base a una provincia
   public getListaBancosSangrePorProvincia(provinciaID: string): Observable<Array<BancoSangreModel>> {
-    return this.http.get(`${this.apiEndPointBancosSangre}/${provinciaID}`)
-    .map(res => res.json())
+    return this.http.get(`${this.apiEndPointBancosSangre}/${provinciaID}`).map(res => res.json())
     .map(bancosSangre => {
       let listaBancosSangre = [];
 
@@ -225,8 +225,7 @@ export class DatosService {
 
   // Obtiene el listado de bancos de sangre en base a la ubicacion del usuario
   public getListaBancosSangrePorUbicacion(lat: number, lon: number, distancia: number): Observable<Array<BancoSangreModel>> {
-    return this.http.get(`${this.apiEndPointBancosSangre}/${lat}/${lon}/${distancia}`)
-    .map(res => res.json())
+    return this.http.get(`${this.apiEndPointBancosSangre}/${lat}/${lon}/${distancia}`).map(res => res.json())
     .map(resultadoObj => {
 
       let listadoBancosSangre = Array<BancoSangreModel>();

@@ -1,6 +1,6 @@
 <ion-header>
 	<ion-navbar color="negro">
-		<ion-title>{{ bancoSeleccionado.nombre }}</ion-title>
+		<ion-title>Detalles Banco de Sangre</ion-title>
 	</ion-navbar>
 </ion-header>
 
@@ -9,18 +9,7 @@
 
 
       <ion-item class="header">
-        
-        <h3> 
-          <span>
-            Texto 1
-          </span>
-        </h3>        
-        
         <h2>{{ bancoSeleccionado.nombre }}</h2>
-        
-        <span class="fecha">
-          Texto Secundario
-        </span>
       </ion-item>      
 
 
@@ -41,22 +30,22 @@
       
 
 
-      <ion-item *ngIf="bancoSeleccionado.telefono" class="detail-item">
+      <ion-item class="detail-item">
         <ion-avatar item-left>
           <ion-icon color="principal" name="call" item-left></ion-icon>
         </ion-avatar>
         <h2>Teléfono</h2>
-        <p>{{ bancoSeleccionado.telefono }}</p>
+        <p>{{ bancoSeleccionado.telefono || 'No disponible.' }}</p>
       </ion-item>
 
 
 
-      <ion-item *ngIf="bancoSeleccionado.horario" class="detail-item">
+      <ion-item class="detail-item">
         <ion-avatar item-left>
           <ion-icon color="principal" name="clock" item-left></ion-icon>
         </ion-avatar>
         <h2>Horario</h2>
-        <p>{{ bancoSeleccionado.horario }}</p>
+        <p>{{ bancoSeleccionado.horario || 'No disponible.' }}</p>
       </ion-item>
 
 

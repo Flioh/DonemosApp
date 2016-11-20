@@ -116,5 +116,29 @@ lista-solicitudes-page {
 		}
 	}
 
+	ion-item.informacion,
+	ion-item.sin-resultados {
+		color: $gris;
+	}
+
+	ion-item.sin-resultados {
+		background-color: $principalFondo;
+		margin-top: 0.75rem;
+		margin-bottom: 60px;
+	}
+
+	ion-item.informacion {
+		background-color: $grisMuyClaro;
+		margin-top: 3rem;
+	}
+
+	ion-item.informacion,
+	ion-item.sin-resultados {
+		display: block;
+	    padding: 0 1.5rem;
+	}
+
+
+
 }
     

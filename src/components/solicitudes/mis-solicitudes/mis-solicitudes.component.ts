@@ -62,10 +62,10 @@ export class MisSolicitudesPage {
     });
 
     // Muestra el mensaje de cargando ciudades
-    loadingPopup.present();
+    //loadingPopup.present();
 
     // Obtenemos las solicitudes del servidor
-    this.datosService.getSolicitudes().subscribe((solicitudesObj) => { 
+    /*this.datosService.getSolicitudes().subscribe((solicitudesObj) => { 
         for(let i = 0; i < solicitudesObj.length; i++) {
             let solicitud = new SolicitudModel(solicitudesObj[i]);
             let estaActiva = this.estaActiva(solicitud);
@@ -74,7 +74,7 @@ export class MisSolicitudesPage {
 
         // Oculta el mensaje de espera
         loadingPopup.dismiss();
-    });
+    });*/
   }
 
   // Método que obtiene la informacion de los tipos sanguineos buscados, resaltando el del usuario

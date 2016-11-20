@@ -233,7 +233,7 @@ export class DonemosApp {
 
     this.paginasMenu.push(new ItemMenuModel('list-box', 'Lista de solicitudes', ListaSolicitudesPage, true, false));
 
-    this.paginasMenu.push(new ItemMenuModel('heart', 'Bancos de Sangre', ListaBancosSangrePage, true, false));
+    this.paginasMenu.push(new ItemMenuModel('heart', 'Bancos de Sangre', ListaBancosSangrePage, false, false));
 
     if(this.hayConexion && this.estaLogueado)
       this.paginasMenu.push(new ItemMenuModel('bookmarks', 'Mis solicitudes', MisSolicitudesPage, false, true));
