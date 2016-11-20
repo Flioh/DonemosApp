@@ -26,12 +26,12 @@
 
 </ion-header>
 
-<ion-content [class.fondo-oscuro]="seccion === 'solicitudes'" padding>
+<ion-content [class.fondo-oscuro]="seccion === 'solicitudes'">
 
 	<div [ngSwitch]="seccion">
 
 		<!-- Seccion de solicitudes -->
-		<div *ngSwitchCase="'solicitudes'">
+		<div padding *ngSwitchCase="'solicitudes'">
 
 
 			<!-- Bancos de sangre -->
@@ -65,38 +65,38 @@
 
 			<!-- Creamos una lista de solicitudes usando el componente solicitud-item -->
 			<resumen-solicitud *ngFor="let solicitudItemModel of solicitudes" 
-				[solicitudItemModel]="solicitudItemModel"
-				(seleccionarSolicitud)="abrirDetalles($event)">		
-			</resumen-solicitud>
+			[solicitudItemModel]="solicitudItemModel"
+			(seleccionarSolicitud)="abrirDetalles($event)">		
+		</resumen-solicitud>
 
-			<ion-fab *ngIf="!isIos">
-				<button ion-fab class="floating-btn" color="principal" fab (click)="nuevaSolicitud()"><ion-icon name="add"></ion-icon></button>
-			</ion-fab>
+		<ion-fab *ngIf="!isIos">
+			<button ion-fab class="floating-btn" color="principal" fab (click)="nuevaSolicitud()"><ion-icon name="add"></ion-icon></button>
+		</ion-fab>
 
-			<button ion-button *ngIf="hayMasSolicitudes" color="principal" full (click)="buscarSolicitudes()">
-				Ver mas solicitudes
-			</button>
+		<button ion-button *ngIf="hayMasSolicitudes" color="principal" full (click)="buscarSolicitudes()">
+			Ver mas solicitudes
+		</button>
 
-			<ion-list no-lines>
-				<ion-item *ngIf="!hayMasSolicitudes" text-wrap class="sin-resultados">
-					<h2>{{ noHaySolicitudesMensaje }}</h2>
-					<p>
-						{{ noHaySolicitudesMensaje }} que cumplan con los filtros especificados. Recuerda que igual podés ayudar concurriendo a un <strong (click)="mostrarListaBancosSangre()">Banco de Sangre</strong>
-					</p>
-				</ion-item>
-			</ion-list>
-			
-		</div>
+		<ion-list no-lines>
+			<ion-item *ngIf="!hayMasSolicitudes" text-wrap class="sin-resultados">
+				<h2>{{ noHaySolicitudesMensaje }}</h2>
+				<p>
+					{{ noHaySolicitudesMensaje }} que cumplan con los filtros especificados. Recuerda que igual podés ayudar concurriendo a un <strong (click)="mostrarListaBancosSangre()">Banco de Sangre</strong>
+				</p>
+			</ion-item>
+		</ion-list>
 
-		<!-- Seccion de filtros de busqueda -->
-		<ion-list *ngSwitchCase="'filtros'">
+	</div>
+
+	<!-- Seccion de filtros de busqueda -->
+	<div *ngSwitchCase="'filtros'">
+
+		<ion-list padding>
 			<form #filtros="ngForm">
-
-
 
 				<!-- Toggle para usar datos personales como filtro -->
 				<ion-item text-wrap *ngIf="datosUsuarioObj">
-					<ion-label>Completar filtros con mis preferencias</ion-label>
+					<ion-label>Completar con mis preferencias</ion-label>
 					<ion-toggle color="negro" [(ngModel)]="usarDatosPersonales" (ionChange)="cambiarUsarPreferenciasUsuarioComoFiltro()" name="usarDatosPersonales"></ion-toggle>
 				</ion-item>
 
@@ -158,18 +158,21 @@
 				Buscar Solicitudes
 			</button>
 
-			<ion-item text-wrap class="informacion">
-					<h2>¿Soy compatible?</h2>
-					<p>
-						No importa cuáles sean los filtros de búsqueda que selecciones, siempre mostraremos en <strong color="principal">color rojo</strong> las solicitudes que sean compatibles con el grupo y el factor elegido en la página de preferencias.
-						Aquellas que <strong>no sean compatibles</strong> con el grupo y el factor sanguíneo elegido en las preferencias, se mostrarán en <strong>color negro</strong>.
-					</p>
-				</ion-item>	
-
 		</ion-list>
 
-
+		<ion-item padding text-wrap class="informacion">
+			<h2>¿Soy compatible?</h2>
+			<p>
+				No importa cuáles sean los filtros de búsqueda que selecciones, siempre mostraremos en <strong color="principal">color rojo</strong> las solicitudes que sean compatibles con el grupo y el factor elegido en la página de preferencias.
+				Aquellas que <strong>no sean compatibles</strong> con el grupo y el factor sanguíneo elegido en las preferencias, se mostrarán en <strong>color negro</strong>.
+			</p>
+		</ion-item>
 
 	</div>
+
+
+
+
+</div>
 
 </ion-content>
