@@ -6,7 +6,7 @@
 			<ion-icon name="menu"></ion-icon>
 		</button>
 
-		<ion-buttons *ngIf="isIos" end>
+		<ion-buttons *ngIf="isIos && mostrarOpcionCrearSolicitud" end>
 			<button ion-button (click)="nuevaSolicitud()"><ion-icon name="add"></ion-icon></button>
 		</ion-buttons>
 	</ion-navbar>
@@ -69,7 +69,7 @@
 			(seleccionarSolicitud)="abrirDetalles($event)">		
 		</resumen-solicitud>
 
-		<ion-fab *ngIf="!isIos">
+		<ion-fab *ngIf="!isIos && mostrarOpcionCrearSolicitud">
 			<button ion-fab class="floating-btn" color="principal" fab (click)="nuevaSolicitud()"><ion-icon name="add"></ion-icon></button>
 		</ion-fab>
 

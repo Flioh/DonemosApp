@@ -8,6 +8,7 @@ import { AlertController, LoadingController, NavController, Platform, MenuContro
 import { DonacionesService } from '../../../shared/services/donaciones.service';
 import { DatosService } from '../../../shared/services/datos.service';
 import { ConectividadService } from '../../../shared/services/conectividad.service';
+import { LoginService } from '../../../shared/services/login.service'
 
 // Modelos
 import { SolicitudModel } from '../solicitud.model';
@@ -49,6 +50,8 @@ export class ListaSolicitudesPage {
   private usarDatosPersonales: boolean;
   private datosUsuarioObj: any;
 
+  public mostrarOpcionCrearSolicitud: boolean;
+
   public isIos: boolean;
 
   private tipoSanguineoUsuario: string;
@@ -67,13 +70,15 @@ export class ListaSolicitudesPage {
     private ngZoneCtrl: NgZone,
     private eventsCtrl: Events,
     private conectividadService: ConectividadService,
+    private loginService: LoginService,
     private donacionesService: DonacionesService) 
   {    
     // Determinamos si es ios o no para ocultar/mostrar el boton flotante
     this.isIos = this.platform.is('ios');
 
-    // Inicializamos eventos de la conexion
-    this.inicializarEventosConexion()
+    // Inicializamos eventos
+    this.inicializarEventosConexion();
+    this.inicializarEventosLogin();
 
     // Por defecto no usa los datos personales
     this.usarDatosPersonales = true;
@@ -115,10 +120,29 @@ export class ListaSolicitudesPage {
     });
   }
 
+  // Método que inicializa los eventos relacionados al login
+  public inicializarEventosLogin() {
+
+    this.mostrarOpcionCrearSolicitud = this.loginService.estaLogueado() && this.conectividadService.hayConexion();    
+
+    this.eventsCtrl.subscribe('login:usuario', () => {
+      this.mostrarOpcionCrearSolicitud = this.loginService.estaLogueado() && this.conectividadService.hayConexion();    
+    });
+
+    this.eventsCtrl.subscribe('logout:usuario', () => {
+      this.mostrarOpcionCrearSolicitud = this.loginService.estaLogueado() && this.conectividadService.hayConexion();    
+    });
+  }
+
   // Método que se ejecutan al haber cambios en el estado de la conexion
   public inicializarEventosConexion() {
     this.eventsCtrl.subscribe('conexion:conectado', () => {
       this.buscarSolicitudesUsandoPreferenciasUsuario();
+      this.mostrarOpcionCrearSolicitud = this.loginService.estaLogueado() && this.conectividadService.hayConexion();    
+    });
+
+    this.eventsCtrl.subscribe('conexion:desconectado', () => {
+      this.mostrarOpcionCrearSolicitud = this.loginService.estaLogueado() && this.conectividadService.hayConexion();    
     });
   }
 
