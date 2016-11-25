@@ -30,7 +30,7 @@
 
 			<!-- Grupo sanguineo  -->
 			<ion-item>
-				<ion-label floating>Tu grupo sanguineo</ion-label>
+				<ion-label floating>Grupo sanguineo</ion-label>
 				<ion-select [(ngModel)]="preferenciasUsuario.grupoSanguineo" okText="Aceptar" cancelText="Cancelar" name="grupo" #grupo="ngModel">
 					<ion-option *ngFor="let grupo of listaGruposSanguineos" [value]="grupo.id">
 						{{grupo.nombre}}
@@ -42,7 +42,7 @@
 
 			<!-- Factor sanguineo  -->
 			<ion-item>
-				<ion-label floating>Tu factor sanguineo</ion-label>
+				<ion-label floating>Factor sanguineo</ion-label>
 				<ion-select [(ngModel)]="preferenciasUsuario.factorSanguineo" okText="Aceptar" cancelText="Cancelar" name="factor" #factor="ngModel">
 					<ion-option *ngFor="let factor of listaFactoresSanguineos" [value]="factor.id">
 						{{factor.nombre}}
@@ -53,7 +53,7 @@
 			
 
 			<ion-item>
-				<p>Sus datos se guardarán de forma local en su móvil y <strong>nunca serán enviados</strong> a nuestros servidores ni compartidos de niguna forma.</p>
+				<p>Estos datos se guardarán de forma local en tu móvil y <strong>nunca serán enviados</strong> a nuestros servidores ni compartidos de niguna forma.</p>
 			</ion-item>
 			
 
