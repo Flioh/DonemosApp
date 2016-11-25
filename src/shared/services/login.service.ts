@@ -18,6 +18,7 @@ export interface PerfilUsuarioModel {
     picture_large: string;
     name: string;
     user_metadata: any;
+    user_id: any;
 }
 
 // Avoid name not found warnings
@@ -96,7 +97,8 @@ export class LoginService {
           name : profile.name,
           picture : profile.picture,
           picture_large : profile.picture_large,
-          user_metadata : profile.user_metadata
+          user_metadata : profile.user_metadata,
+          user_id: profile.user_id
         }
 
         // Guardamos el perfil del usuario
@@ -119,7 +121,8 @@ export class LoginService {
               name : resultadoAuth.profile.name,
               picture : resultadoAuth.profile.picture,
               picture_large : resultadoAuth.profile.picture_large,
-              user_metadata : resultadoAuth.profile.user_metadata
+              user_metadata : resultadoAuth.profile.user_metadata,
+              user_id : resultadoAuth.profile.user_id
             }
           }
           this.eventCtrl.publish('login:usuario');
@@ -141,7 +144,8 @@ export class LoginService {
                         name : datosPerfil.name,
                         picture : datosPerfil.picture,
                         picture_large : datosPerfil.picture_large,
-                        user_metadata : datosPerfil.user_metadata
+                        user_metadata : datosPerfil.user_metadata,
+                        user_id : datosPerfil.user_id
                       }
                     }
                     

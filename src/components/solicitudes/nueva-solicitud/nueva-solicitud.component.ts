@@ -8,6 +8,7 @@ import { AlertController, LoadingController, NavController, Platform, MenuContro
 // Servicios
 import { DatosService } from '../../../shared/services/datos.service';
 import { DonacionesService } from '../../../shared/services/donaciones.service';
+import { LoginService } from '../../../shared/services/login.service';
 
 // Modelos
 import { SolicitudModel } from '../solicitud.model';
@@ -48,6 +49,7 @@ export class NuevaSolicitudPage {
 
 	constructor(private datosService: DatosService,
 		private donacionesService: DonacionesService,
+		private loginService: LoginService,
 		private platform: Platform,
 		private menuCtrl: MenuController,
 		private modalCtrl: ModalController,
@@ -66,6 +68,17 @@ export class NuevaSolicitudPage {
 		// Obtenemos la solicitud existente pasada como parametro o creamos una nueva insatancia
 		this.nuevaSolicitud = solicitudRecibida || new SolicitudModel();
 		
+		if(!this.modoEdicion) {
+			
+			if(this.loginService.user && this.loginService.user.user_id) {
+				// Si es una nueva solicitud, asignamos el ID del usuario
+				this.nuevaSolicitud.usuarioID = this.loginService.user.user_id;
+			} else {
+				// TODO: manejar error de usuario sin ID
+				// ...
+			}
+		}
+
 		this.mostrarErrorLocalidad = false;
 		this.mostrarErrorProvincia = false;
 
@@ -80,7 +93,7 @@ export class NuevaSolicitudPage {
 		// En la primer fila se muestran todos los positivos, en la segunda todos los negativos
 		this.tiposSanguineos = new Array(2);
 		for(let i=0; i<this.tiposSanguineos.length; i++) {
-	
+
 			// En cada columna se muestra un grupo sanguineo: 0 A B AB			
 			this.tiposSanguineos[i] = new Array(4);
 			for(let j=0; j<this.tiposSanguineos[i].length; j++) {
@@ -97,9 +110,9 @@ export class NuevaSolicitudPage {
 				let grupoSanguineoId = this.nuevaSolicitud.tiposSanguineos[i].grupoSanguineo;
 				let factorSanguineoId = this.nuevaSolicitud.tiposSanguineos[i].factorSanguineo;
 				this.tiposSanguineos[factorSanguineoId][grupoSanguineoId] = {
-						nombre : this.donacionesService.getDescripcionCompleta(grupoSanguineoId, factorSanguineoId),
-						seleccionado : true
-					};
+					nombre : this.donacionesService.getDescripcionCompleta(grupoSanguineoId, factorSanguineoId),
+					seleccionado : true
+				};
 			}
 		}
 
@@ -168,19 +181,19 @@ export class NuevaSolicitudPage {
 				title: 'Salir',
 				message: '¿Está seguro que desea salir? Los cambios que haya hecho se perderán.',
 				buttons: [{
-						text: 'Salir',
-						handler: () => {
-							popupAdvertencia.dismiss().then(() => {
-								this.volverAtras();
-							});			
-						}
-					},
-					{
-						text: 'Permanecer',
-						handler: () => {
-												
-						}
-					}]
+					text: 'Salir',
+					handler: () => {
+						popupAdvertencia.dismiss().then(() => {
+							this.volverAtras();
+						});			
+					}
+				},
+				{
+					text: 'Permanecer',
+					handler: () => {
+
+					}
+				}]
 			});
 
 			// Mostramos el popup
@@ -189,7 +202,7 @@ export class NuevaSolicitudPage {
 			// Devolvemos false para evitar que se cierre la pagina
 			return false;
 		}
-  	}
+	}
 
 	// Método que vuelve a la pantalla anterior
 	private volverAtras() {
@@ -229,10 +242,10 @@ export class NuevaSolicitudPage {
 					this.inicializarLocalidadesDeLaProvincia(this.nuevaSolicitud.localidad.nombre);
 				}
 			} else {
-					// TODO: manejar errores en las llamadas al servidor
-					// -------------------------------------------------
-				}
-			});
+				// TODO: manejar errores en las llamadas al servidor
+				// -------------------------------------------------
+			}
+		});
 	}
 
 	// Método que inicializa el listado de localidades de una provincia
@@ -248,31 +261,31 @@ export class NuevaSolicitudPage {
 		this.datosService.getListaLocalidadesPorProvincia(provinciaId).subscribe(result => {
 			if(result && result.length){
 				this.listaLocalidades = result;
-					if(nombreLocalidad) {
-						// Si recibimos el nombre de la localidad (autocomplete), seleccionamos esa localidad
-						this.actualizarLocalidad(nombreLocalidad);
-					} else {
-						// TODO: usar geolocalizacion para cargar por defecto la provincia del usuario
-						// ---------------------------------------------------------------------------
+				if(nombreLocalidad) {
+					// Si recibimos el nombre de la localidad (autocomplete), seleccionamos esa localidad
+					this.actualizarLocalidad(nombreLocalidad);
+				} else {
+					// TODO: usar geolocalizacion para cargar por defecto la provincia del usuario
+					// ---------------------------------------------------------------------------
 
-						// Setea la localidad en base a su ID
-						//this.nuevaSolicitud.localidad = this.listaLocalidades[0];	
-					}
-
-					// Oculta el mensaje de espera
-					loadingPopup.dismiss();
+					// Setea la localidad en base a su ID
+					//this.nuevaSolicitud.localidad = this.listaLocalidades[0];	
 				}
-				// TODO: manejar errores en las llamadas al servidor
-				// -------------------------------------------------			
-			});
+
+				// Oculta el mensaje de espera
+				loadingPopup.dismiss();
+			}
+			// TODO: manejar errores en las llamadas al servidor
+			// -------------------------------------------------			
+		});
 	}
 
 	// Método que obtiene el indice del elemento cuyo id es el pasado como parametro
 	public getIndicePorID(listado: Array<any>, id: string): number {
 
 		for(let i=0; i<listado.length; i++) {
-		if(id === listado[i].id)
-			return i;
+			if(id === listado[i].id)
+				return i;
 		}
 
 		return -1;
@@ -290,7 +303,7 @@ export class NuevaSolicitudPage {
 
 		// Las filas representan los factores sanguineos
 		for(let i=0; i<this.tiposSanguineos.length; i++) {
-	
+
 			// Las columnas representan los grupos sanguineos
 			for(let j=0; j<this.tiposSanguineos[i].length; j++) {
 
@@ -306,9 +319,9 @@ export class NuevaSolicitudPage {
 		let solicitudId = this.modoEdicion ? this.nuevaSolicitud.solicitudID : null;
 
 		this.datosService.guardarSolicitud(this.nuevaSolicitud, solicitudId)
-			.subscribe(
-          		data => { console.log('saved'); },
-          		err => { debugger; });
+		.subscribe(
+			data => { console.log('saved'); },
+			err => { debugger; });
 	}
 
 	// Método usado para debug, muestra el contenido del form en tiempo real
