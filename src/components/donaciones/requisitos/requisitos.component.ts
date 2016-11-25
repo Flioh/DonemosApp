@@ -9,5 +9,10 @@ import { NavController } from 'ionic-angular';
   templateUrl: 'requisitos.component.html',
 })
 export class RequisitosPage {
-  constructor(public nav: NavController) {}
+
+	public seccion: string;
+
+  	constructor(public nav: NavController) {
+  		this.seccion = "requisitos";
+  	}
 }
