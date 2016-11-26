@@ -6,7 +6,7 @@
 			<ion-icon name="menu"></ion-icon>
 		</button>
 
-		<ion-buttons *ngIf="isIos && mostrarOpcionCrearSolicitud" end>
+		<ion-buttons *ngIf="isIos" end>
 			<button ion-button (click)="nuevaSolicitud()"><ion-icon name="add"></ion-icon></button>
 		</ion-buttons>
 	</ion-navbar>
@@ -50,7 +50,7 @@
 				<ion-card-content class="detalle-solicitud">
 					<ion-row>
 						<ion-col>
-							Si sólo <strong>1 de cada 20 argentinos</strong> donasen voluntariamente, se cubriría toda la demanda necesaria.
+							Si sólo <strong>1 de cada 25 argentinos</strong> donasen voluntariamente, se cubriría toda la demanda necesaria.
 						</ion-col>			
 					</ion-row>
 					<ion-row>
@@ -69,7 +69,7 @@
 			(seleccionarSolicitud)="abrirDetalles($event)">		
 		</resumen-solicitud>
 
-		<ion-fab *ngIf="!isIos && mostrarOpcionCrearSolicitud">
+		<ion-fab *ngIf="!isIos">
 			<button ion-fab class="floating-btn" color="principal" fab (click)="nuevaSolicitud()"><ion-icon name="add"></ion-icon></button>
 		</ion-fab>
 
@@ -77,8 +77,8 @@
 			Ver mas solicitudes
 		</button>
 
-		<ion-list no-lines>
-			<ion-item *ngIf="!hayMasSolicitudes" text-wrap class="sin-resultados">
+		<ion-list *ngIf="!hayMasSolicitudes && noHaySolicitudesMensaje" no-lines>
+			<ion-item text-wrap class="sin-resultados">
 				<h2>{{ noHaySolicitudesMensaje }}</h2>
 				<p>
 					{{ noHaySolicitudesMensaje }} que cumplan con los filtros especificados. Recuerda que igual podés ayudar concurriendo a un <strong (click)="mostrarListaBancosSangre()">Banco de Sangre</strong>
