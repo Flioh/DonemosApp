@@ -15,10 +15,10 @@ export class LocalizacionService {
 
   private geocoder: any;
 
-	constructor(private platform: Platform) {
+  constructor(private platform: Platform) {
     // Usamos el servicio de geolocalizacion de google si esta disponible
     this.geocoder = google && google.maps ? new google.maps.Geocoder() : null;
-	}
+  }
 
   // Método que permite setear otro servicio de geolocalizacion
   public setServicioGeolocalizacion(servicioGeolocalizacion: any) {
@@ -39,7 +39,7 @@ export class LocalizacionService {
             }
             // Resolvemos la promesa con las coordenadas
             resolve(coordenadas);  
-          
+
           } else {
             resolve(coordenadas);
           }
@@ -60,7 +60,7 @@ export class LocalizacionService {
     }
   }
 
-	// Método que abre la aplicacion de GPS por defecto del usuario para guiarlo hacia la institucion
+  // Método que abre la aplicacion de GPS por defecto del usuario para guiarlo hacia la institucion
   public mostrarRuta(direccion: string, nombreInstitucion: string) {            
     // Primero obtenemos las coordenadas
     return this.obtenerCoordenadas(direccion, nombreInstitucion).then((coordenadas) => {
@@ -69,8 +69,15 @@ export class LocalizacionService {
     });
   }
 
+  // Método que abre la aplicacion de GPS por defecto del usuario para guiarlo hacia la institucion
+  public mostrarRutaHaciaCoordenadas(coordenadas: string, nombreInstitucion: string) {            
+    
+    // Mostramos el lugar en la aplicacion que corresponda
+    this.abrirAplicacionDeMapas(coordenadas, nombreInstitucion);
+  }
+
   // Método que debuelve las coordenadas actuales del usuario
   public obtenerCoordenadasUsuario(): Promise<any> {
-     return Geolocation.getCurrentPosition();
+    return Geolocation.getCurrentPosition();
   }
 }
