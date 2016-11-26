@@ -1,5 +1,5 @@
 // Referencias de Angular
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { Http } from '@angular/http';
 
 // Referencias de Ionic
@@ -17,10 +17,11 @@ import { DatosService } from '../shared/services/datos.service';
 import { DonacionesService } from '../shared/services/donaciones.service';
 import { LocalizacionService } from '../shared/services/localizacion.service';
 import { ConectividadService } from '../shared/services/conectividad.service';
-
 import { LoginService } from '../shared/services/login.service';
 
+// Varios
 import { AppConfig } from '../shared/app-config';
+import { CustomErrorHandler } from '../shared/custom-error-handler';
 
 // Paginas y componentes
 import { ListaSolicitudesPage } from '../components/solicitudes/lista-solicitudes/lista-solicitudes.component';
@@ -110,10 +111,8 @@ export function getAuthHttp(http) {
                 Storage, 
                 AppConfig,
                 LoginService,
-                {
-                    provide: AuthHttp,
-                    useFactory: getAuthHttp,
-                    deps: [Http]
-                } ]
+                { provide: AuthHttp, useFactory: getAuthHttp, deps: [Http] },
+                { provide: ErrorHandler, useClass: CustomErrorHandler } 
+             ]
 })
 export class AppModule {}

@@ -37,7 +37,7 @@ export class DropdownPage {
 
     // Método que vuelve a mostrar todas las opciones disponibles
     private inicializarOpciones(){
-        this.listaOpciones = this.paramsCtrl.get('listaOpciones');
+        this.listaOpciones = this.paramsCtrl.get('listaOpciones') || [];
         this.opcionSeleccionada = null;
         this.content.resize();
     }

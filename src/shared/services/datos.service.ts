@@ -46,10 +46,10 @@ export class DatosService {
   private apiEndPointBancosSangre: string;
 
   constructor(public http: Http, 
-              public donacionesService: DonacionesService,
-              public storage: Storage,
-              public authHttp: AuthHttp,
-              public config: AppConfig) {
+    public donacionesService: DonacionesService,
+    public storage: Storage,
+    public authHttp: AuthHttp,
+    public config: AppConfig) {
 
     // Obtenemos las API desde el archivo de configuracion
     this.apiEndPointLocalidades = config.apiEndPointLocalidades;
@@ -67,35 +67,42 @@ export class DatosService {
     // Inicializamos el observable
     this.datosUsuarioObserver = null;
     this.preferenciasUsuario = Observable.create(observer => {
-        this.datosUsuarioObserver = observer;
+      this.datosUsuarioObserver = observer;
     });
   }
 
   // Método que obtiene los datos del usuario
-	public getPreferenciasUsuario(): Promise<any> {
-		return this.storage.get('datosUsuarioObj').then((preferenciasUsuario) => {
-					if(!preferenciasUsuario) {
-			          // No hay datos guardados, por lo que seteamos la variable en false
-			          this.datosUsuarioObj = false;       
-			      } else {
-			          // Inicializamos los listados con la informacion del usuario
-			          this.datosUsuarioObj = JSON.parse(preferenciasUsuario);	                 
-			      }
-            return this.datosUsuarioObj;
+  public getPreferenciasUsuario(): Promise<any> {
+    return this.storage.get('datosUsuarioObj').then(
+      (preferenciasUsuario) => {
+        if(!preferenciasUsuario) {
+          // No hay datos guardados, por lo que seteamos la variable en false
+          this.datosUsuarioObj = false;       
+        } else {
+          // Inicializamos los listados con la informacion del usuario
+          this.datosUsuarioObj = JSON.parse(preferenciasUsuario);	                 
+        }
+        return this.datosUsuarioObj;
+      },
+      (error) => {
+        Bugsnag.notifyException(error, this.config.excepcionPreferenciasUsuario, { 'metodo': 'getPreferenciasUsuario', 'pagina': DatosService, 'descripcion': 'Error al obtener las preferencias del usuario' }, 'error');
       });
-	}
+  }
 
   // Guarda las preferencias del usuario
-	public setPreferenciasUsuario(preferenciasUsuario: any): Promise<any> {
-		return this.storage.set('datosUsuarioObj', JSON.stringify(preferenciasUsuario))
-				.then(() => { 
-					this.datosUsuarioObj = preferenciasUsuario;
+  public setPreferenciasUsuario(preferenciasUsuario: any): Promise<any> {
+    return this.storage.set('datosUsuarioObj', JSON.stringify(preferenciasUsuario))
+    .then(() => { 
+      this.datosUsuarioObj = preferenciasUsuario;
 
-          // Avisamos a los subscriptores que los datos fueron actualizados
-					if(this.datosUsuarioObserver)
-            this.datosUsuarioObserver.next(preferenciasUsuario);
-				});
-	}
+      // Avisamos a los subscriptores que los datos fueron actualizados
+      if(this.datosUsuarioObserver)
+        this.datosUsuarioObserver.next(preferenciasUsuario);
+    },
+    (error) => {
+      Bugsnag.notifyException(error, this.config.excepcionGuardarPreferenciasUsuario, { 'metodo': 'setPreferenciasUsuario', 'pagina': DatosService, 'descripcion': `Error al guardar las preferencias del usuario:`}, 'error');
+    });
+  }
 
   // Método que devuelve true si el usuario vio la introduccion
   public getMostrarIntro() {
@@ -114,8 +121,8 @@ export class DatosService {
     let listaFactoresSanguineos = [];
 
     listaFactoresSanguineos.push({ 
-        id: FactorSanguineoEnum.RhPositivo, 
-        nombre : this.donacionesService.getDescripcionFactorSanguineo(FactorSanguineoEnum.RhPositivo) 
+      id: FactorSanguineoEnum.RhPositivo, 
+      nombre : this.donacionesService.getDescripcionFactorSanguineo(FactorSanguineoEnum.RhPositivo) 
     });
 
     listaFactoresSanguineos.push({
@@ -141,7 +148,7 @@ export class DatosService {
     listaGruposSanguineos.push({ 
       id: GrupoSanguineoEnum.AB,
       nombre: this.donacionesService.getDescripcionGrupoSanguineo(GrupoSanguineoEnum.AB) 
-     });
+    });
     listaGruposSanguineos.push({ 
       id: GrupoSanguineoEnum.B, 
       nombre: this.donacionesService.getDescripcionGrupoSanguineo(GrupoSanguineoEnum.B) 
@@ -150,17 +157,22 @@ export class DatosService {
     return listaGruposSanguineos;
   }
 
-  // Obtiene el listado de solicitudes
+  // Obtiene el listado de solicitudes en base a los filtros pasados como parametro
   public getSolicitudes(numeroPagina: number, 
-                        provinciaId: string, 
-                        localidadId: string, 
-                        grupoSanguineoId: number, 
-                        factorSanguineoId: number): Observable<Array<SolicitudModel>> {
+    provinciaId: string, 
+    localidadId: string, 
+    grupoSanguineoId: number, 
+    factorSanguineoId: number): Observable<Array<SolicitudModel>> {
 
     // Armamos la url en base a los filtros
     let url = `${this.config.apiEndPointSolicitudes}/${numeroPagina}/filtrar/${provinciaId}/${localidadId}/${grupoSanguineoId}/${factorSanguineoId}`;
 
     return this.http.get(url).map(res => res.json());
+  }
+
+  // Método que obtiene las solicitudes cargadas por el usuario
+  public getSolicitudesUsuario(usuarioId: any) {
+    return this.http.get(`${this.config.apiEndPointSolicitudes}/usuario/${usuarioId}`).map(res => res.json());
   }
 
   // Método que guarda una solicitud en la base de datos
@@ -175,38 +187,37 @@ export class DatosService {
   // Método que elimina una solicitud en la base de datos
   public eliminarSolicitud(unaSolicitud: SolicitudModel) {
     return this.authHttp.delete(`${this.apiEndPointSolicitudes}/${unaSolicitud.solicitudID}`);
-    
   }
 
   // Obtiene el listado de provincias
   public getListaProvincias(): Observable<Array<ProvinciaModel>>{
     return this.http.get(this.apiEndPointProvincias).map(res => res.json())
-      .map(listadoProvincias => {
-        this.listaProvincias = [];
+    .map(listadoProvincias => {
+      this.listaProvincias = [];
 
-        // Creamos el listado de provincias usando el modelo ProvinciaModel
-        for(let i=0; i<listadoProvincias.length; i++) {
-          this.listaProvincias.push(new ProvinciaModel(listadoProvincias[i].id, listadoProvincias[i].nombre));
-        }
+      // Creamos el listado de provincias usando el modelo ProvinciaModel
+      for(let i=0; i<listadoProvincias.length; i++) {
+        this.listaProvincias.push(new ProvinciaModel(listadoProvincias[i].id, listadoProvincias[i].nombre));
+      }
 
-        return this.listaProvincias;
-      });
+      return this.listaProvincias;
+    });
   }
 
   // Obtiene el listado de localidades de la provincia pasada como parametro
   public getListaLocalidadesPorProvincia(provinciaID: string): Observable<Array<LocalidadModel>>{
     return this.http.get(`${this.apiEndPointLocalidades}/${provinciaID}`)
-      .map(res => res.json().filter(unaLocalidad => unaLocalidad.provincia == provinciaID))
-      .map(listadoLocalidades => {
+    .map(res => res.json().filter(unaLocalidad => unaLocalidad.provincia == provinciaID))
+    .map(listadoLocalidades => {
 
-        this.listaLocalidades = [];
+      this.listaLocalidades = [];
 
-        // Creamos el listado de localidades usando el modelo LocalidadModel
-        for(let i=0; i<listadoLocalidades.length; i++) {
-          this.listaLocalidades.push(new LocalidadModel(listadoLocalidades[i].id, listadoLocalidades[i].nombre));
-        }
-        return this.listaLocalidades;
-      });
+      // Creamos el listado de localidades usando el modelo LocalidadModel
+      for(let i=0; i<listadoLocalidades.length; i++) {
+        this.listaLocalidades.push(new LocalidadModel(listadoLocalidades[i].id, listadoLocalidades[i].nombre));
+      }
+      return this.listaLocalidades;
+    });
   }
 
   // Obtiene el listado de bancos de sangre en base a una provincia

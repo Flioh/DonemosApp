@@ -17,7 +17,7 @@
 	  <ion-item (click)="seleccionarOpcion(opcion)" *ngFor="let opcion of listaOpciones | slice:0:24; trackBy:identificarOpcion">
 	    {{ opcion.nombre }}
 	  </ion-item>
-	  <ion-item class="info" text-wrap *ngIf="listaOpciones.length > 25">
+	  <ion-item class="info" text-wrap *ngIf="listaOpciones && listaOpciones.length > 25">
 	  	Sólo se muestran los primeros 25 resultados. Continúe ingresando el nombre para refinar la búsqueda.
 	  </ion-item>	
 	</ion-list>

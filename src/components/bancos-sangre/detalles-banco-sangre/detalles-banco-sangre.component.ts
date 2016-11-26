@@ -40,7 +40,7 @@ export class DetallesBancoSangrePage {
     public mostrarRuta():void {   
 
       // Invocamos al servicio usando la direccion y el nombre de la institucion 
-      //this.localizacionService.mostrarRuta(this.direccionCompleta, this.bancoSeleccionado.institucion);
+      this.localizacionService.mostrarRutaHaciaCoordenadas(this.coordenadas, this.bancoSeleccionado.nombre);
     }
 
     // Método que muestra los requisitos para poder donar

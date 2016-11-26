@@ -16,13 +16,15 @@ import { LocalidadModel } from '../../../shared/models/localidad.model';
 import { ProvinciaModel } from '../../../shared/models/provincia.model';
 
 // Paginas y comonentes
+import { MisSolicitudesPage } from '../mis-solicitudes/mis-solicitudes.component';
+import { BasePage } from '../../../shared/components/base/base.component';
 import { DropdownPage } from '../../../shared/components/dropdown/dropdown.component';
 
 @Component({
 	selector: 'nueva-solicitud-page',
 	templateUrl: 'nueva-solicitud.component.html'
 })
-export class NuevaSolicitudPage {
+export class NuevaSolicitudPage extends BasePage{
 
 	// Listados usados en la pagina
 	public listaProvincias: Array<ProvinciaModel> = [];
@@ -60,6 +62,8 @@ export class NuevaSolicitudPage {
 		private alertCtrl : AlertController,
 		private paramsCtrl: NavParams) {
 
+		super();
+
 		let solicitudRecibida = this.paramsCtrl.get('unaSolicitud');
 
 		// Establecemos el modo de la pantalla
@@ -74,8 +78,8 @@ export class NuevaSolicitudPage {
 				// Si es una nueva solicitud, asignamos el ID del usuario
 				this.nuevaSolicitud.usuarioID = this.loginService.user.user_id;
 			} else {
-				// TODO: manejar error de usuario sin ID
-				// ...
+				this.procesarError(this.config.excepcionEditarSolicitud, 'constructor', 'NuevaSolicitudPage', 'error', `El usuario no posee id pero accedio a editar la solicitud ${JSON.stringify(this.nuevaSolicitud)}.`, null);
+				this.mostrarMensajeError('Error', this.config.errorEditarSolicitud);
 			}
 		}
 
@@ -220,32 +224,35 @@ export class NuevaSolicitudPage {
 		this.listaFactoresSanguineos = this.datosService.getFactoresSanguineos();
 
 		// Obtenemos el listado de provincias del servidor
-		this.datosService.getListaProvincias().subscribe(result => {
-			if(result && result.length) {
-				
-				// Inicializamos el listado de provincias
-				this.listaProvincias = result;
+		this.datosService.getListaProvincias().subscribe(
+			(result) => {
+				if(result && result.length) {
 
-				// TODO: usar geolocalizacion para cargar por defecto la provincia del usuario
-				// ---------------------------------------------------------------------------				
-				let indiceProvincia;
+					// Inicializamos el listado de provincias
+					this.listaProvincias = result;
 
-				if(this.nuevaSolicitud.provincia.id) {
-					indiceProvincia = this.getIndicePorID(this.listaProvincias, this.nuevaSolicitud.provincia.id);
+					let indiceProvincia;
+
+					if(this.nuevaSolicitud.provincia.id) {
+						indiceProvincia = this.getIndicePorID(this.listaProvincias, this.nuevaSolicitud.provincia.id);
+					}
+
+					if(indiceProvincia){
+						// Asignamos el objeto del listado para que se muestre correctamente
+						this.nuevaSolicitud.provincia = this.listaProvincias[indiceProvincia];
+
+						// Carga las localidades de la provincia seleccionada
+						this.inicializarLocalidadesDeLaProvincia(this.nuevaSolicitud.localidad.nombre);
+					}
+				} else {
+					this.procesarError(this.config.excepcionListaProvincias, 'inicializarListado', 'NuevaSolicitudPage', 'error', 'Error al obtener el listado de provincias.', result);
+					this.mostrarMensajeError('Error', this.config.errorProvincias);
 				}
-
-				if(indiceProvincia){
-					// Asignamos el objeto del listado para que se muestre correctamente
-					this.nuevaSolicitud.provincia = this.listaProvincias[indiceProvincia];
-
-					// Carga las localidades de la provincia seleccionada
-					this.inicializarLocalidadesDeLaProvincia(this.nuevaSolicitud.localidad.nombre);
-				}
-			} else {
-				// TODO: manejar errores en las llamadas al servidor
-				// -------------------------------------------------
-			}
-		});
+			},
+			(error) => {
+				this.procesarError(this.config.excepcionListaProvincias, 'inicializarListado', 'NuevaSolicitudPage', 'error', 'Error al obtener el listado de provincias.', error);
+				this.mostrarMensajeError('Error', this.config.errorProvincias);
+			});
 	}
 
 	// Método que inicializa el listado de localidades de una provincia
@@ -258,26 +265,31 @@ export class NuevaSolicitudPage {
 
 		// Muestra el mensaje de cargando localidades
 		loadingPopup.present();
-		this.datosService.getListaLocalidadesPorProvincia(provinciaId).subscribe(result => {
-			if(result && result.length){
-				this.listaLocalidades = result;
-				if(nombreLocalidad) {
-					// Si recibimos el nombre de la localidad (autocomplete), seleccionamos esa localidad
-					this.actualizarLocalidad(nombreLocalidad);
+
+		this.datosService.getListaLocalidadesPorProvincia(provinciaId).subscribe(
+			(result) => {
+				if(result && result.length){
+					this.listaLocalidades = result;
+
+					if(nombreLocalidad) {
+						// Si recibimos el nombre de la localidad (autocomplete), seleccionamos esa localidad
+						this.actualizarLocalidad(nombreLocalidad);
+					} else {
+
+						// Setea la localidad en base a su ID
+						//this.nuevaSolicitud.localidad = this.listaLocalidades[0];	
+					}
+
+					// Oculta el mensaje de espera
+					loadingPopup.dismiss();
 				} else {
-					// TODO: usar geolocalizacion para cargar por defecto la provincia del usuario
-					// ---------------------------------------------------------------------------
-
-					// Setea la localidad en base a su ID
-					//this.nuevaSolicitud.localidad = this.listaLocalidades[0];	
-				}
-
-				// Oculta el mensaje de espera
-				loadingPopup.dismiss();
-			}
-			// TODO: manejar errores en las llamadas al servidor
-			// -------------------------------------------------			
-		});
+					this.procesarError(this.config.excepcionListaLocalidades, 'inicializarLocalidadesDeLaProvincia', 'NuevaSolicitudPage', 'error', `Error al obtener el listado de localidades de la provincia ${provinciaId}.`, result);
+					this.mostrarMensajeError('Error', this.config.errorLocalidades);
+				}				
+			}, (error) => {
+				this.procesarError(this.config.excepcionListaLocalidades, 'inicializarLocalidadesDeLaProvincia', 'NuevaSolicitudPage', 'error', `Error al obtener el listado de localidades de la provincia ${provinciaId}.`, error);
+				this.mostrarMensajeError('Error', this.config.errorLocalidades);
+			});
 	}
 
 	// Método que obtiene el indice del elemento cuyo id es el pasado como parametro
@@ -293,7 +305,16 @@ export class NuevaSolicitudPage {
 
 	// Método que crea la nueva solicitud con la información ingresada en el formulario
 	public guardarCambios(): void {
+
+		let loadingPopup = this.loadingCtrl.create({
+			content: 'Guardando solicitud'
+		});
+
+		loadingPopup.present();
+
 		this.submitted = true;
+
+		this.mostrarAdvertenciaAlSalir = false;
 
 		// Nos aseguramos que la cantidad sea un numero
 		this.nuevaSolicitud.cantidadDadores = +this.nuevaSolicitud.cantidadDadores;
@@ -320,9 +341,32 @@ export class NuevaSolicitudPage {
 
 		this.datosService.guardarSolicitud(this.nuevaSolicitud, solicitudId)
 		.subscribe(
-			data => { console.log('saved'); },
-			err => { debugger; });
+			(result) => { 
+
+				// Ocultamos el mensaje de espera
+				loadingPopup.dismiss().then(() => {
+
+					// Mostramos el listado de solicitudes cargadas por el usuario
+					this.navCtrl.push(MisSolicitudesPage);
+				});
+
+			},
+			(error) => { 
+
+				// Ocultamos el mensaje de espera
+				loadingPopup.dismiss();
+
+				if(!this.modoEdicion) {
+					this.procesarError(this.config.excepcionCrearSolicitud, 'guardarCambios', 'NuevaSolicitudPage', 'error', `Error al crear la solicitud ${JSON.stringify(this.nuevaSolicitud)}.`, error);
+					this.mostrarMensajeError('Error', this.config.errorCrearSolicitud);
+				} else {
+					this.procesarError(this.config.excepcionEditarSolicitud, 'guardarCambios', 'NuevaSolicitudPage', 'error', `Error al editar la solicitud ${JSON.stringify(this.nuevaSolicitud)}.`, error);
+					this.mostrarMensajeError('Error', this.config.errorEditarSolicitud);
+				}
+				
+			});
 	}
+
 
 	// Método usado para debug, muestra el contenido del form en tiempo real
 	get contenidoDelFormulario(): string {
@@ -395,5 +439,24 @@ export class NuevaSolicitudPage {
 
 		// Mostramos el modal
 		localidadesModal.present();
+	}
+
+	// Método muestra un mensaje de error al usuario
+	private mostrarMensajeError(titulo: string, mensajeUsuario: string, callback?: () => void) {
+		let popupError = this.alertCtrl.create({
+			title: titulo,
+			message: mensajeUsuario,
+			buttons: [
+			{
+				text: 'Ok',
+				handler: () => {
+					if(callback) {
+						callback();
+					}
+				}
+			}]
+		});
+
+		popupError.present();
 	}
 }

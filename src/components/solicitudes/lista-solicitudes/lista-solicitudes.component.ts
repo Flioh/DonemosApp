@@ -1,212 +1,244 @@
-// Referencias de Angular
-import { Component, NgZone } from '@angular/core';
+  // Referencias de Angular
+  import { Component, NgZone } from '@angular/core';
 
-// Referencias de Ionic
-import { AlertController, LoadingController, NavController, Platform, MenuController, Events, ModalController } from 'ionic-angular';
+  // Referencias de Ionic
+  import { AlertController, LoadingController, NavController, Platform, MenuController, Events, ModalController } from 'ionic-angular';
 
-// Servicios
-import { DonacionesService } from '../../../shared/services/donaciones.service';
-import { DatosService } from '../../../shared/services/datos.service';
-import { ConectividadService } from '../../../shared/services/conectividad.service';
-import { LoginService } from '../../../shared/services/login.service'
+  // Servicios
+  import { DonacionesService } from '../../../shared/services/donaciones.service';
+  import { DatosService } from '../../../shared/services/datos.service';
+  import { ConectividadService } from '../../../shared/services/conectividad.service';
+  import { LoginService } from '../../../shared/services/login.service'
 
-// Modelos
-import { SolicitudModel } from '../solicitud.model';
-import { ResumenSolicitudModel } from '../resumen-solicitud.model';
-import { LocalidadModel } from '../../../shared/models/localidad.model';
-import { ProvinciaModel } from '../../../shared/models/provincia.model';
+  // Modelos
+  import { SolicitudModel } from '../solicitud.model';
+  import { ResumenSolicitudModel } from '../resumen-solicitud.model';
+  import { LocalidadModel } from '../../../shared/models/localidad.model';
+  import { ProvinciaModel } from '../../../shared/models/provincia.model';
 
-// Paginas y componente base
-import { DetallesSolicitudPage } from '../detalles-solicitud/detalles-solicitud.component';
-import { NuevaSolicitudPage } from '../nueva-solicitud/nueva-solicitud.component';
-import { ListaBancosSangrePage } from '../../bancos-sangre/lista-bancos-sangre/lista-bancos-sangre.component';
-import { DropdownPage } from '../../../shared/components/dropdown/dropdown.component';
+  // Paginas y componente base
+  import { BasePage } from '../../../shared/components/base/base.component';
+  import { DetallesSolicitudPage } from '../detalles-solicitud/detalles-solicitud.component';
+  import { NuevaSolicitudPage } from '../nueva-solicitud/nueva-solicitud.component';
+  import { ListaBancosSangrePage } from '../../bancos-sangre/lista-bancos-sangre/lista-bancos-sangre.component';
+  import { DropdownPage } from '../../../shared/components/dropdown/dropdown.component';
 
-@Component({
-  selector: 'lista-solicitudes-page',
-  templateUrl: 'lista-solicitudes.component.html'
-})
-export class ListaSolicitudesPage {
+  @Component({
+    selector: 'lista-solicitudes-page',
+    templateUrl: 'lista-solicitudes.component.html'
+  })
+  export class ListaSolicitudesPage extends BasePage {
 
-  private solicitudes: Array<ResumenSolicitudModel>;
+    private solicitudes: Array<ResumenSolicitudModel>;
 
-  // Filtros de busqueda
-  private grupoSanguineoSeleccionado: number;
-  private factorSanguineoSeleccionado: number;
-  private provinciaSeleccionada: ProvinciaModel;
-  private localidadSeleccionada: LocalidadModel;
+    // Filtros de busqueda
+    private grupoSanguineoSeleccionado: number;
+    private factorSanguineoSeleccionado: number;
+    private provinciaSeleccionada: ProvinciaModel;
+    private localidadSeleccionada: LocalidadModel;
 
-  private listaGruposSanguineos: Array<{ id: number, nombre: string }>;
-  private listaFactoresSanguineos: Array<{ id: number, nombre: string }>;
-  private listaProvincias: Array<ProvinciaModel>;
-  private listaLocalidades: Array<LocalidadModel>;
+    private listaGruposSanguineos: Array<{ id: number, nombre: string }>;
+    private listaFactoresSanguineos: Array<{ id: number, nombre: string }>;
+    private listaProvincias: Array<ProvinciaModel>;
+    private listaLocalidades: Array<LocalidadModel>;
 
-  // Id de la provincia cuyas localidades fueron cargadas. Esta propiedad se utiliza para evitar
-  // volver a cargas localidades si ya fueron cargadas previamente
-  private localidadesCargadasProvinciaId: string;
+    // Id de la provincia cuyas localidades fueron cargadas. Esta propiedad se utiliza para evitar
+    // volver a cargas localidades si ya fueron cargadas previamente
+    private localidadesCargadasProvinciaId: string;
 
-  public seccion: string = 'solicitudes';
+    public seccion: string = 'solicitudes';
 
-  private usarDatosPersonales: boolean;
-  private datosUsuarioObj: any;
+    private usarDatosPersonales: boolean;
+    private datosUsuarioObj: any;
 
-  public mostrarOpcionCrearSolicitud: boolean;
+    public isIos: boolean;
 
-  public isIos: boolean;
+    private tipoSanguineoUsuario: string;
 
-  private tipoSanguineoUsuario: string;
+    private proximaPagina: number;
+    public hayMasSolicitudes: boolean;
+    public noHaySolicitudesMensaje: string = "";
 
-  private proximaPagina: number;
-  public hayMasSolicitudes: boolean;
-  public noHaySolicitudesMensaje: string = "";
+    constructor(private platform: Platform,
+      private nav: NavController, 
+      private menuCtrl: MenuController,
+      private loadingCtrl: LoadingController,
+      private alertCtrl: AlertController,
+      private modalCtrl: ModalController,
+      private datosService: DatosService,
+      private ngZoneCtrl: NgZone,
+      private eventsCtrl: Events,
+      private conectividadService: ConectividadService,
+      private loginService: LoginService,
+      private donacionesService: DonacionesService) 
+    {    
+      // llamamos al constructor de la pagina base
+      super();
 
-  constructor(private platform: Platform,
-    private nav: NavController, 
-    private menuCtrl: MenuController,
-    private loadingCtrl: LoadingController,
-    private alertCtrl: AlertController,
-    private modalCtrl: ModalController,
-    private datosService: DatosService,
-    private ngZoneCtrl: NgZone,
-    private eventsCtrl: Events,
-    private conectividadService: ConectividadService,
-    private loginService: LoginService,
-    private donacionesService: DonacionesService) 
-  {    
-    // Determinamos si es ios o no para ocultar/mostrar el boton flotante
-    this.isIos = this.platform.is('ios');
+      // Determinamos si es ios o no para ocultar/mostrar el boton flotante
+      this.isIos = this.platform.is('ios');
 
-    // Inicializamos eventos
-    this.inicializarEventosConexion();
-    this.inicializarEventosLogin();
+      // Inicializamos eventos
+      this.inicializarEventosConexion();
+      this.inicializarEventosLogin();
 
-    // Por defecto no usa los datos personales
-    this.usarDatosPersonales = true;
-    this.datosUsuarioObj = null;
-    this.tipoSanguineoUsuario = '';
+      // Por defecto no usa los datos personales
+      this.usarDatosPersonales = true;
+      this.datosUsuarioObj = null;
+      this.tipoSanguineoUsuario = '';
 
-    this.hayMasSolicitudes = false;
-    this.proximaPagina = 1;
+      this.hayMasSolicitudes = false;
+      this.proximaPagina = 1;
 
-    // Inicializa los filtros de busqueda
-    this.grupoSanguineoSeleccionado = null;
-    this.factorSanguineoSeleccionado = null;
-    this.localidadSeleccionada = null;
-    this.provinciaSeleccionada = null;
-    this.localidadesCargadasProvinciaId = null;
+      // Inicializa los filtros de busqueda
+      this.grupoSanguineoSeleccionado = null;
+      this.factorSanguineoSeleccionado = null;
+      this.localidadSeleccionada = null;
+      this.provinciaSeleccionada = null;
+      this.localidadesCargadasProvinciaId = null;
 
-    this.localidadesCargadasProvinciaId = null;
+      this.localidadesCargadasProvinciaId = null;
 
-    // Cuando cambien los datos del usuario, refrescamos el listado de solicitudes para
-    // resaltar el nuevo tipo sanguineo y no el anterior
-    this.datosService.preferenciasUsuario.subscribe((preferenciasUsuario) => {
+      // Cuando cambien los datos del usuario, refrescamos el listado de solicitudes para
+      // resaltar el nuevo tipo sanguineo y no el anterior
+      this.datosService.preferenciasUsuario.subscribe(
+        (preferenciasUsuario) => {
 
-      // Actualizamos la informacion del usuario
-      this.datosUsuarioObj = preferenciasUsuario;
+          // Actualizamos la informacion del usuario
+          this.datosUsuarioObj = preferenciasUsuario;
 
-      // Actualizamos la descripcion que se muestra en cada solicitud del listado
-      this.actualizarDescripcionTiposSanguineos();
-    });
+          // Actualizamos la descripcion que se muestra en cada solicitud del listado
+          this.actualizarDescripcionTiposSanguineos();
+        },
+        (error) => {
+          this.procesarError(this.config.excepcionPreferenciasUsuario, 'constructor', 'ListaSolicitudesPage', 'error', 'Error al obtener las preferencias del usuario', error);
+          this.mostrarMensajeError('Error', this.config.errorPreferenciasUsuario);
+        });
 
-    // Buscamos las preferencias del usuario y luego obtenemos el listado de solicitudes en base a dichas preferencias
-    this.datosService.getPreferenciasUsuario().then((preferenciasUsuario) => {
-      this.datosUsuarioObj = preferenciasUsuario;
+      // Buscamos las preferencias del usuario y luego obtenemos el listado de solicitudes en base a dichas preferencias
+      this.datosService.getPreferenciasUsuario().then(
+        (preferenciasUsuario) => {
 
-      if(this.conectividadService.hayConexion()) {
-        this.buscarSolicitudesUsandoPreferenciasUsuario();
-      } else {
-        this.mostrarErrorSinConexion();
-      }
-    });
-  }
+          this.datosUsuarioObj = preferenciasUsuario;          
+          this.buscarSolicitudesUsandoPreferenciasUsuario();
 
-  // Método que inicializa los eventos relacionados al login
-  public inicializarEventosLogin() {
+        },
+        (error) => {
+          this.procesarError(this.config.excepcionPreferenciasUsuario, 'constructor', 'ListaSolicitudesPage', 'error', 'Error al obtener las preferencias del usuario', error);
+          this.mostrarMensajeError('Error', this.config.errorPreferenciasUsuario);
+        });
+    }
 
-    this.mostrarOpcionCrearSolicitud = this.loginService.estaLogueado() && this.conectividadService.hayConexion();    
+    // Método que inicializa los eventos relacionados al login
+    public inicializarEventosLogin() {
 
-    this.eventsCtrl.subscribe('login:usuario', () => {
-      this.mostrarOpcionCrearSolicitud = this.loginService.estaLogueado() && this.conectividadService.hayConexion();    
-    });
-
-    this.eventsCtrl.subscribe('logout:usuario', () => {
-      this.mostrarOpcionCrearSolicitud = this.loginService.estaLogueado() && this.conectividadService.hayConexion();    
-    });
-  }
-
-  // Método que se ejecutan al haber cambios en el estado de la conexion
-  public inicializarEventosConexion() {
-    this.eventsCtrl.subscribe('conexion:conectado', () => {
-      this.buscarSolicitudesUsandoPreferenciasUsuario();
-      this.mostrarOpcionCrearSolicitud = this.loginService.estaLogueado() && this.conectividadService.hayConexion();    
-    });
-
-    this.eventsCtrl.subscribe('conexion:desconectado', () => {
-      this.mostrarOpcionCrearSolicitud = this.loginService.estaLogueado() && this.conectividadService.hayConexion();    
-    });
-  }
-
-  public realizarNuevaBusquedaSolicitudes() {
-
-    // Inicializamos el listado de solicitudes
-    this.solicitudes = [];
-
-    // Reseteamos la proxima pagina para que sea nuevamente la primera
-    this.hayMasSolicitudes = false;
-    this.proximaPagina = 1;
-
-    // Buscamos las solicitudes
-    return this.buscarSolicitudes();
-  }
-
-  // Método que obtiene las solicitudes del servidor
-  public buscarSolicitudes(): void {
-
-    // Mostramos las solicitudes
-    this.seccion = 'solicitudes';
-
-    let loadingPopup = this.loadingCtrl.create({
-      content: 'Cargando solicitudes'
-    });
-
-    // Muestra el mensaje de cargando solicitudes
-    loadingPopup.present();
-
-    // Obtenemos las solicitudes del servidor
-    this.datosService.getSolicitudes(this.proximaPagina,
-      this.provinciaSeleccionada  ? this.provinciaSeleccionada.id : null,
-      this.localidadSeleccionada ? this.localidadSeleccionada.id : null,
-      this.grupoSanguineoSeleccionado,
-      this.factorSanguineoSeleccionado).subscribe((solicitudesObj) => {
-
-        if(solicitudesObj.length) {
-          for(let i = 0; i < solicitudesObj.length; i++) {
-            let solicitud = new SolicitudModel(solicitudesObj[i]);
-            let descripcionTiposSanguineos = this.obtenerInformacionTiposSanguineos(solicitud);
-            let esCompatible = this.esCompatibleConUsuario(solicitud);
-
-            // Creamos una instancia del modelo que posee tanto la solicitud como su encabezado
-            this.solicitudes.push(new ResumenSolicitudModel(solicitud, descripcionTiposSanguineos, esCompatible));
-          }
-
-          // Mostramos el boton para buscar mas solicitudes
-          this.hayMasSolicitudes = true;
-          this.proximaPagina++;
-        } else {
-          this.hayMasSolicitudes = false;
-
-          if(this.proximaPagina === 1) {
-            // Esta es la primera busqueda
-            this.noHaySolicitudesMensaje = "Aún no hay solicitudes";
-          } else {
-            // Hubo busquedas anteriores
-            this.noHaySolicitudesMensaje = "No hay más solicitudes";
-          }
-        }
-
-        // Oculta el mensaje de espera
-        loadingPopup.dismiss();
+      this.eventsCtrl.subscribe('login:usuario', () => {
       });
+
+      this.eventsCtrl.subscribe('logout:usuario', () => {
+      });
+    }
+
+    // Método que se ejecutan al haber cambios en el estado de la conexion
+    public inicializarEventosConexion() {
+      this.eventsCtrl.subscribe('conexion:conectado', () => {
+        this.habilitarOpcionesOnLine();
+      });
+
+      this.eventsCtrl.subscribe('conexion:desconectado', () => {
+        this.deshabilitarOpcionesOnLine();
+      });
+    }
+
+    // Método que habilita todos los botones y opciones que requieren internet
+    public habilitarOpcionesOnLine() {
+      this.buscarSolicitudesUsandoPreferenciasUsuario();
+    }
+
+    // Método que deshabilita todos los botones y opciones que requieren internet
+    public deshabilitarOpcionesOnLine() {
+      this.solicitudes = [];
+    }
+
+    // Método que inicializa los filtros y realiza una nueva busqueda de solicitudes
+    public realizarNuevaBusquedaSolicitudes() {
+
+      // Inicializamos el listado de solicitudes
+      this.solicitudes = [];
+
+      // Reseteamos la proxima pagina para que sea nuevamente la primera
+      this.hayMasSolicitudes = false;
+      this.proximaPagina = 1;
+
+      // Buscamos las solicitudes
+      return this.buscarSolicitudes();
+    }
+
+    // Método que obtiene las solicitudes del servidor
+    public buscarSolicitudes(): void {
+
+      // Mostramos las solicitudes
+      this.seccion = 'solicitudes';
+
+      let loadingPopup = this.loadingCtrl.create({
+        content: 'Cargando solicitudes'
+      });
+
+      // Muestra el mensaje de cargando solicitudes
+      loadingPopup.present();
+
+      // Obtenemos las solicitudes del servidor
+      this.datosService.getSolicitudes(this.proximaPagina,
+        this.provinciaSeleccionada  ? this.provinciaSeleccionada.id : null,
+        this.localidadSeleccionada ? this.localidadSeleccionada.id : null,
+        this.grupoSanguineoSeleccionado,
+        this.factorSanguineoSeleccionado).subscribe(
+
+        (solicitudesObj) => {
+
+          if(solicitudesObj.length) {
+            for(let i = 0; i < solicitudesObj.length; i++) {
+              let solicitud = new SolicitudModel(solicitudesObj[i]);
+              let descripcionTiposSanguineos = this.obtenerInformacionTiposSanguineos(solicitud);
+              let esCompatible = this.esCompatibleConUsuario(solicitud);
+
+              // Creamos una instancia del modelo que posee tanto la solicitud como su encabezado
+              this.solicitudes.push(new ResumenSolicitudModel(solicitud, descripcionTiposSanguineos, esCompatible));
+            }
+
+            // Mostramos el boton para buscar mas solicitudes
+            this.hayMasSolicitudes = true;
+            this.proximaPagina++;
+          } else {
+            this.hayMasSolicitudes = false;
+
+            if(this.proximaPagina === 1) {
+              // Esta es la primera busqueda
+              this.noHaySolicitudesMensaje = "Aún no hay solicitudes";
+            } else {
+              // Hubo busquedas anteriores
+              this.noHaySolicitudesMensaje = "No hay más solicitudes";
+            }
+          }
+
+        },
+
+        (error) => {
+
+          this.hayMasSolicitudes = false;
+          this.noHaySolicitudesMensaje = null;
+
+          this.procesarError(this.config.excepcionListaSolicitudes, 'buscarSolicitudes', 'ListaSolicitudesPage' ,'error', 'Error al obtener solicitudes', error);
+          this.mostrarMensajeError('Error', this.config.errorSolicitudes);
+
+        },
+
+        () => {
+
+          // Oculta el mensaje de espera
+          loadingPopup.dismiss();
+
+        });
     }
 
     // Metodo que actualiza la descripcion de los tipos sanguineos del listado de solicitudes
@@ -220,7 +252,7 @@ export class ListaSolicitudesPage {
       }
     }
 
-    // 
+    // Método que busca nuevas solicitudes usando los filtros de busqueda
     public buscarSolicitudesUsandoPreferenciasUsuario(): void {
 
       let loadingPopup = this.loadingCtrl.create({
@@ -248,7 +280,7 @@ export class ListaSolicitudesPage {
 
         // Actualizamos el Id de la provincia cuyas localidades fueron cargadas para evitar cargarlas nuevamente en el futuro
         this.localidadesCargadasProvinciaId = this.datosUsuarioObj.provinciaID;
-        
+
         seCarganLocalidades = true;
       } 
 
@@ -322,13 +354,24 @@ export class ListaSolicitudesPage {
           loadingPopup.dismiss();
 
         }, 
+
         (error) => {
-          // TODO: manejar error al obtener listados del servidor
+
+          // Ocultamos el mensaje de espera
+          loadingPopup.dismiss();
+
+          this.hayMasSolicitudes = false;
+          this.noHaySolicitudesMensaje = null;
+
+          this.procesarError(this.config.excepcionListaSolicitudes, 'buscarSolicitudesUsandoPreferenciasUsuario', 'ListaSolicitudesPage', 'error', 'Error al buscar listados y solicitudes', error);
+          this.mostrarMensajeError('Error', this.config.errorSolicitudes);
+
         });
     }
 
     // Método que obtiene los listados necesarios y luego inicializa los filtros de busqueda con las preferencias del usuario
     public inicializarFiltrosUsandoPreferenciasUsuario(): void {
+
       var datosNecesarios = [];
 
       if(!this.listaProvincias) {
@@ -377,12 +420,22 @@ export class ListaSolicitudesPage {
 
           }, 
           (error) => {
-            // TODO: manejar error al obtener listados del servidor
+
+            // Ocultamos el mensaje de espera
+            loadingPopup.dismiss();
+
+            this.hayMasSolicitudes = false;
+            this.noHaySolicitudesMensaje = null;
+
+            this.procesarError('ErrorSolicitudes', 'inicializarFiltrosUsandoPreferenciasUsuario', 'ListaSolicitudesPage', 'error', 'Error al obtener listados de provincias y localidades', error);
+            this.mostrarMensajeError('Error', this.config.errorSolicitudes);
+
           });
+
       } else {
         // Los listados estan cargados, por lo que simplemente los inicializamos con las preferencias del usuario
         this.inicializarDatosUsuario();
-      }
+      } 
     }
 
     // Método que se ejecuta al cambiar el estado del radio sobre usar preferencias personales como filtro o no
@@ -495,16 +548,25 @@ export class ListaSolicitudesPage {
       loadingPopup.present();
 
       this.datosService.getListaLocalidadesPorProvincia(this.provinciaSeleccionada.id)
-      .subscribe(result => {
-        if(result && result.length){
-          this.listaLocalidades = result;
+      .subscribe(
+        (result) => {
+          if(result && result.length){
+            this.listaLocalidades = result;
+
+            // Oculta el mensaje de espera
+            loadingPopup.dismiss();
+          }
+        },
+        (error) => {
 
           // Oculta el mensaje de espera
           loadingPopup.dismiss();
-        }
-        // TODO: manejar errores en las llamadas al servidor
-        // -------------------------------------------------      
-      });
+
+          let provinciaId = this.provinciaSeleccionada ? this.provinciaSeleccionada.id : null;
+
+          this.procesarError(this.config.excepcionListaLocalidades, 'inicializarLocalidadesDeLaProvincia', 'ListaSolicitudesPage', 'error', `Error al obtener las localidades de la provincia ${provinciaId}`, error);
+          this.mostrarMensajeError('Error', this.config.errorLocalidades);
+        });
     }
 
     // Método que muestra los detalles de la solicitud seleccionada
@@ -517,7 +579,26 @@ export class ListaSolicitudesPage {
 
     // Método que lleva a la pantalla de creación de solicitudes
     public nuevaSolicitud(): void {
-      this.nav.push(NuevaSolicitudPage, {}, { animate: true, direction: 'forward' });
+
+      if(this.loginService.estaLogueado()) {
+        this.nav.push(NuevaSolicitudPage, {}, { animate: true, direction: 'forward' });
+      } else {
+
+        let sesionPopup = this.alertCtrl.create({
+          title: 'Iniciá sesión',
+          message: 'En el menu lateral podrás encontrar los botones de Google y Facebook para iniciar sesión con tu cuenta.',
+          buttons: [
+          {
+            text: 'Ok',
+            handler: () => {
+              this.menuCtrl.toggle();
+            }
+          }]
+        });
+
+        // Mostramos el mensaje
+        sesionPopup.present();
+      }
     }
 
     // Método que muestra el listado de bancos de sangre
@@ -586,26 +667,28 @@ export class ListaSolicitudesPage {
       localidadesModal.present();
     }
 
-    // Método que muestra un error al intentar inicializar la pagina sin tener conexion
-    public mostrarErrorSinConexion() {
-      let popupSinConexion = this.alertCtrl.create({
-        title: 'Error',
-        message: 'Se requiere acceso a internet para poder obtener las solicitudes. Comprueba tu conexión a internet y vuelve a intentarlo nuevamente.',
-        buttons: [
-        {
-          text: 'Ok',
-          handler: () => {}
-        }]
-      });
-
-      // Mostramos el popup
-      popupSinConexion.present();
-    }
-
     // Método que actualiza el toggle mostrado en los filtros
     public filtrosModificados() {
       // Cambiamos el estado del toggle ya que los datos inicializados cambiaron
       this.usarDatosPersonales = false;
     }
 
-  }
+    // Método muestra un mensaje de error al usuario
+    private mostrarMensajeError(titulo: string, mensajeUsuario: string, callback?: () => void) {
+      let popupError = this.alertCtrl.create({
+        title: titulo,
+        message: mensajeUsuario,
+        buttons: [
+        {
+          text: 'Ok',
+          handler: () => {
+            if(callback) {
+              callback();
+            }
+          }
+        }]
+      });
+
+      popupError.present();
+    }
+}
