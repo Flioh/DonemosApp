@@ -91,6 +91,8 @@ $alert-ios-button-background-color-activated: $principalOscuro;
 $card-ios-background-color: $blanco;
 $card-ios-border-radius: 5px;
 
+$picker-ios-button-text-color: $principal;
+$picker-ios-option-selected-color: $principalClaro;
 
 // App Material Design Variables
 // --------------------------------------------------
@@ -103,6 +105,9 @@ $card-md-background-color: $blanco;
 $card-md-border-radius: 5px;
 
 $item-md-detail-push-show: true;
+
+$picker-md-button-text-color: $principal;
+$picker-md-option-selected-color: $principalClaro;
 
 // App Windows Variables
 // --------------------------------------------------
