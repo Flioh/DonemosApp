@@ -158,6 +158,7 @@
     // Método que deshabilita todos los botones y opciones que requieren internet
     public deshabilitarOpcionesOnLine() {
       this.solicitudes = [];
+      this.hayMasSolicitudes = false;
     }
 
     // Método que inicializa los filtros y realiza una nueva busqueda de solicitudes
