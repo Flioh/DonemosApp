@@ -64,6 +64,11 @@ export class DonemosApp {
       StatusBar.backgroundColorByName('black');
       Splashscreen.hide();
 
+      // Anulamos el boton fisico para volver atras debido a varios issues de Ionic2
+      this.platform.registerBackButtonAction(() => {
+        return;
+      });
+
       // Variables que usamos para no mostrar varios mensajes al cambiar el estado de la conexion
       this.mostrarNotificacionConexion = false;
       this.mostrarNotificacionSinConexion = true;
