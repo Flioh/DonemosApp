@@ -7,12 +7,4 @@ mis-solicitudes-page {
     ion-avatar ion-icon {
         font-size: 4rem;
     }
-
-    ion-item.solicitud-activa ion-icon {
-        color: $principal;
-    }
-
-    ion-item:not(.solicitud-activa) ion-icon {
-        color: $grisClaro;
-    }
 }

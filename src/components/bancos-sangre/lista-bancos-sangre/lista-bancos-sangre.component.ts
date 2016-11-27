@@ -65,10 +65,18 @@ export class ListaBancosSangrePage extends BasePage {
 					// Ocultamos el mensaje de espera
 					loadingPopup.dismiss();
 				} else {
+
+					// Ocultamos el mensaje de espera
+					loadingPopup.dismiss();
+
 					this.procesarError(this.config.excepcionListaProvincias, 'cargarProvincias', 'ListaBancosSangrePage', 'error', 'Error al obtener el listado de provincias.', result);
 					this.mostrarMensajeError('Error', this.config.errorProvincias);
 				}
 			}, (error) => {
+
+				// Ocultamos el mensaje de espera
+				loadingPopup.dismiss();
+
 				this.procesarError(this.config.excepcionListaProvincias, 'cargarProvincias', 'ListaBancosSangrePage', 'error', 'Error al obtener el listado de provincias.', error);
 				this.mostrarMensajeError('Error', this.config.errorProvincias);
 			});
@@ -128,7 +136,12 @@ export class ListaBancosSangrePage extends BasePage {
 
 				// Ocultamos el mensaje de espera
 				loadingPopup.dismiss();
+
 			}, (error) => {
+
+				// Oculta el mensaje de espera
+          		loadingPopup.dismiss();
+
 				this.procesarError(this.config.excepcionListaBancosSangre, 'buscarBancosPorProvincia', 'ListaBancosSangrePage', 'error', `Error al obtener el listado de bancos de sangre para la provincia ${this.provinciaSeleccionada.id}`, error);
 				this.mostrarMensajeError('Error', this.config.errorBancosSangre);
 			});
@@ -159,11 +172,20 @@ export class ListaBancosSangrePage extends BasePage {
 
 						// Ocultamos el mensaje de espera
 						loadingPopup.dismiss();
+
 					}, (error) => {
+
+						// Oculta el mensaje de espera
+          				loadingPopup.dismiss();
+
 						this.procesarError(this.config.excepcionListaBancosSangre, 'buscarBancosCercanos', 'ListaBancosSangrePage', 'error', `Error al obtener el listado de bancos de sangre para las coordenadas ${latitud}, ${longitud}`, error);
 						this.mostrarMensajeError('Error', this.config.errorBancosSangre);
 					});
 			}, (error) => {
+
+				// Oculta el mensaje de espera
+          		loadingPopup.dismiss();
+
 				// Error al obtener las coordenadas del usuario
 				this.procesarError(this.config.excepcionListaBancosSangre, 'buscarBancosCercanos', 'ListaBancosSangrePage', 'error', `Error al obtener las coordenadas del usuario.`, error);
 				this.mostrarMensajeError('Error', this.config.errorBancosSangre);

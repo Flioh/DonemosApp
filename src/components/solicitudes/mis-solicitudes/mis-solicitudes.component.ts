@@ -11,15 +11,11 @@ import { LoginService } from '../../../shared/services/login.service';
 
 // Modelos
 import { SolicitudModel } from '../solicitud.model';
-import { ResumenMiSolicitudModel } from '../resumen-mi-solicitud.model';
 
 // Paginas y componente base
 import { BasePage } from '../../../shared/components/base/base.component';
 import { DetallesSolicitudPage } from '../detalles-solicitud/detalles-solicitud.component';
 import { NuevaSolicitudPage } from '../nueva-solicitud/nueva-solicitud.component';
-
-// Objeto de configuracion
-import { AppConfig } from '../../../shared/app-config';
 
 @Component({
   selector: 'mis-solicitudes-page',
@@ -28,7 +24,7 @@ import { AppConfig } from '../../../shared/app-config';
 export class MisSolicitudesPage extends BasePage {
   @ViewChild(List) list: List;
 
-  public solicitudes: Array<ResumenMiSolicitudModel>;
+  public solicitudes: Array<SolicitudModel>;
 
   constructor(private platform: Platform,
     private navCtrl: NavController, 
@@ -40,9 +36,6 @@ export class MisSolicitudesPage extends BasePage {
     private donacionesService: DonacionesService) 
   {    
     super();
-
-    // Inicializa la lista de solicitudes
-    this.solicitudes = [];
 
     // Cargamos las ultimas solicitudes
     this.buscarSolicitudes();
@@ -78,8 +71,7 @@ export class MisSolicitudesPage extends BasePage {
         (solicitudesObj) => { 
           for(let i = 0; i < solicitudesObj.length; i++) {
             let solicitud = new SolicitudModel(solicitudesObj[i]);
-            let estaActiva = this.estaActiva(solicitud);
-            this.solicitudes.push(new ResumenMiSolicitudModel(solicitud, estaActiva));
+            this.solicitudes.push(solicitud);
           }
 
           // Oculta el mensaje de espera
@@ -115,24 +107,6 @@ export class MisSolicitudesPage extends BasePage {
     return tiposSanguineosBuscados.join(' ');
   }
 
-  // Método que determina si una solicitud esta activa o no segun su fecha de creación
-  public estaActiva(solicitud: SolicitudModel): boolean {
-
-    // Obtenemos la fecha de creacion de la solicitud
-    let fechaSolicitud = typeof solicitud.fechaCreacion == 'string' 
-    ? new Date(solicitud.fechaCreacion) 
-    : solicitud.fechaCreacion;
-
-    let fechaHoy = new Date();
-
-    // Obtenemos los meses de cada una de las fechas
-    let mesesSolicitud = fechaSolicitud.getFullYear() + fechaSolicitud.getMonth();
-    let mesesDiaHoy = fechaHoy.getFullYear() + fechaHoy.getMonth();
-
-    // Retornamos true si pasaron menos de los meses establecidos en la configuracion
-    return mesesDiaHoy - mesesSolicitud < this.config.mesesParaOcultarSolicitud;
-  } 
-
   // Método que abre la pagina de edicion de la solicitud
   public editarSolicitud(unaSolicitud: SolicitudModel): void {
 
@@ -152,34 +126,47 @@ export class MisSolicitudesPage extends BasePage {
     
     let confirmacionPopup = this.alertCtrl.create({
       title: 'Confirmar',
-      message: '',
+      message: `¿Estás seguro que querés borrar la solicitud de ${unaSolicitud.nombrePaciente}?`,
       buttons: [
       {
         text: 'Cancelar',
         role: 'cancel'
       },
       {
-        text: 'Borrar Solicitud',
+        text: 'Borrar',
         handler: () => {
           
           this.datosService.eliminarSolicitud(unaSolicitud).subscribe(
             (res) => {
               if (res.ok) {
-                // TODO: Confirm, remove from displayed list
+                
+                // Cargamos las ultimas solicitudes
+                this.buscarSolicitudes();
+
               } else {
+
+                // Ocultamos el mensaje
+                confirmacionPopup.dismiss();
+
                 this.procesarError(this.config.excepcionEliminarSolicitud, 'eliminarSolicitud', 'MisSolicitudesPage', 'error', `Error al eliminar la solicitud ${unaSolicitud.solicitudID}`, res);
                 this.mostrarMensajeError('Error', this.config.errorEliminarSolicitud);
               }
             }, 
 
             (error) => {
+
+              // Ocultamos el mensaje
+              confirmacionPopup.dismiss();
+                
               this.procesarError(this.config.excepcionEliminarSolicitud, 'eliminarSolicitud', 'MisSolicitudesPage', 'error', `Error al eliminar la solicitud ${unaSolicitud.solicitudID}`, error);
               this.mostrarMensajeError('Error', this.config.errorEliminarSolicitud);
             });
           
         }
       }]
-    });    
+    });
+
+    confirmacionPopup.present();
   }
 
   // Método que abre la pagina de detalles de la solicitud
@@ -220,9 +207,7 @@ export class MisSolicitudesPage extends BasePage {
     let alert = this.alertCtrl.create({
       title: 'Mis Solicitudes',
       message: `A continuación se muestran las solicitudes que creaste. Para editar o ver los detalles detalles
-      desliza la solicitud hacia la izquierda. Las solicitudes que poseen el ícono en gris es porque
-      ya no estan activas (debido a que fueron creadas hace más de un mes). Puedes activarlas nuevamente
-      deslizando la solicitud y presionando <strong>Editar</strong>`,
+      desliza la solicitud hacia la izquierda. Las solicitudes que hayan sido creadas hace más de un mes, dejan de mostrarse. En caso de que se sigan necesitando donantes, podés crear nuevamente una solicitud con dicha información.`,
       buttons: ['Ok']
     });
 

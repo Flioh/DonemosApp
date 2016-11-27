@@ -85,11 +85,19 @@
 							});
 						});    		
 					} else {
+
+						// Oculta el mensaje de espera
+          				loadingPopup.dismiss();
+
 						this.procesarError(this.config.excepcionListaProvincias, 'cargarListados', 'EditarPreferenciasPage', 'error', 'Error al obtener el listado de provincias.', result);
 						this.mostrarMensajeError('Error', this.config.errorProvincias);
 					}
 				}, 
 				(error) => {
+
+					// Oculta el mensaje de espera
+					loadingPopup.dismiss();
+
 					this.procesarError(this.config.excepcionListaProvincias, 'cargarListados', 'EditarPreferenciasPage', 'error', 'Error al obtener el listado de provincias.', error);
 					this.mostrarMensajeError('Error', this.config.errorProvincias);
 				});
@@ -167,11 +175,19 @@
 						// Oculta el mensaje de espera
 						loadingPopup.dismiss();
 					} else {
+
+						// Oculta el mensaje de espera
+						loadingPopup.dismiss();
+
 						this.procesarError(this.config.excepcionListaLocalidades, 'inicializarLocalidadesDeLaProvincia', 'EditarPreferenciasPage', 'error', `Error al obtener el listado de localidades de la provincia ${this.preferenciasUsuario.provincia.id}.`, result);
 						this.mostrarMensajeError('Error', this.config.errorLocalidades);
 					}
 				}, 
 				(error) => {
+
+					// Oculta el mensaje de espera
+					loadingPopup.dismiss();
+
 					this.procesarError(this.config.excepcionListaLocalidades, 'inicializarLocalidadesDeLaProvincia', 'EditarPreferenciasPage', 'error', `Error al obtener el listado de localidades de la provincia ${this.preferenciasUsuario.provincia.id}.`, error);
 					this.mostrarMensajeError('Error', this.config.errorLocalidades);
 				});

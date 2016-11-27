@@ -1,38 +1,42 @@
 <ion-header>
 	<ion-navbar color="negro">
 		<ion-title>Mis Solicitudes</ion-title>
-        
+
         <ion-buttons end>
             <button ion-button icon-only (click)="mostrarAyuda()"><ion-icon name="help-circle"></ion-icon></button>
         </ion-buttons>
 
-	</ion-navbar>
+    </ion-navbar>
 
 </ion-header>
 
 <ion-content padding>
 
     <ion-list>
-        <ion-item-sliding *ngFor="let tituloSolicitud of solicitudes">
-            <ion-item text-wrap [class.solicitud-activa]="tituloSolicitud.estaActiva">
+        <ion-item-sliding *ngFor="let solicitud of solicitudes">
+            <ion-item text-wrap>
                 <ion-avatar item-left>
-                    <ion-icon name="water"></ion-icon>
+                <ion-icon color="principal" name="water"></ion-icon>
                 </ion-avatar>
-                <h2>{{ tituloSolicitud.solicitud.nombrePaciente }}</h2>
-                <h3>{{ tituloSolicitud.solicitud.institucion  }}</h3>
-                <p>{{ tituloSolicitud.solicitud.fechaCreacion | formatearFecha }}</p>
+                <h2>{{ solicitud.nombrePaciente }}</h2>
+                <h3>{{ solicitud.institucion  }}</h3>
+                <p>{{ solicitud.fechaCreacion | formatearFecha }}</p>
             </ion-item>
             <ion-item-options side="right">
-								<button (click)="eliminarSolicitud(tituloSolicitud.solicitud)" ion-button color="danger">
-									Eliminar
-								</button>
-                <button (click)="editarSolicitud(tituloSolicitud.solicitud)" ion-button color="grisClaro">
-                    Editar
-                </button>
-                <button (click)="verDetalles(tituloSolicitud.solicitud)" ion-button color="principal">
-                    Ver
-                </button>
-            </ion-item-options>
-        </ion-item-sliding>
-    </ion-list>
+                <button (click)="eliminarSolicitud(solicitud)" ion-button color="danger">
+                   Eliminar
+               </button>
+               <button (click)="editarSolicitud(solicitud)" ion-button color="grisClaro">
+                Editar
+            </button>
+            <button (click)="verDetalles(solicitud)" ion-button color="principal">
+                Ver
+            </button>
+        </ion-item-options>
+    </ion-item-sliding>
+    
+    <span *ngIf="!solicitudes.length">
+        Aún no creaste ninguna solicitud o si las creaste ya no están activas. 
+    </span>
+</ion-list>
 </ion-content>

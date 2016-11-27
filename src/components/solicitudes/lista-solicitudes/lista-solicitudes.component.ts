@@ -221,22 +221,21 @@
             }
           }
 
+          // Oculta el mensaje de espera
+          loadingPopup.dismiss();
+
         },
 
         (error) => {
+
+          // Oculta el mensaje de espera
+          loadingPopup.dismiss();
 
           this.hayMasSolicitudes = false;
           this.noHaySolicitudesMensaje = null;
 
           this.procesarError(this.config.excepcionListaSolicitudes, 'buscarSolicitudes', 'ListaSolicitudesPage' ,'error', 'Error al obtener solicitudes', error);
           this.mostrarMensajeError('Error', this.config.errorSolicitudes);
-
-        },
-
-        () => {
-
-          // Oculta el mensaje de espera
-          loadingPopup.dismiss();
 
         });
     }

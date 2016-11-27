@@ -16,7 +16,7 @@ import { LocalidadModel } from '../../../shared/models/localidad.model';
 import { ProvinciaModel } from '../../../shared/models/provincia.model';
 
 // Paginas y comonentes
-import { MisSolicitudesPage } from '../mis-solicitudes/mis-solicitudes.component';
+import { ListaSolicitudesPage } from '../lista-solicitudes/lista-solicitudes.component';
 import { BasePage } from '../../../shared/components/base/base.component';
 import { DropdownPage } from '../../../shared/components/dropdown/dropdown.component';
 
@@ -274,19 +274,23 @@ export class NuevaSolicitudPage extends BasePage{
 					if(nombreLocalidad) {
 						// Si recibimos el nombre de la localidad (autocomplete), seleccionamos esa localidad
 						this.actualizarLocalidad(nombreLocalidad);
-					} else {
-
-						// Setea la localidad en base a su ID
-						//this.nuevaSolicitud.localidad = this.listaLocalidades[0];	
 					}
 
 					// Oculta el mensaje de espera
 					loadingPopup.dismiss();
 				} else {
+
+					// Oculta el mensaje de espera
+					loadingPopup.dismiss();
+
 					this.procesarError(this.config.excepcionListaLocalidades, 'inicializarLocalidadesDeLaProvincia', 'NuevaSolicitudPage', 'error', `Error al obtener el listado de localidades de la provincia ${provinciaId}.`, result);
 					this.mostrarMensajeError('Error', this.config.errorLocalidades);
 				}				
 			}, (error) => {
+
+				// Oculta el mensaje de espera
+				loadingPopup.dismiss();
+
 				this.procesarError(this.config.excepcionListaLocalidades, 'inicializarLocalidadesDeLaProvincia', 'NuevaSolicitudPage', 'error', `Error al obtener el listado de localidades de la provincia ${provinciaId}.`, error);
 				this.mostrarMensajeError('Error', this.config.errorLocalidades);
 			});
@@ -347,7 +351,7 @@ export class NuevaSolicitudPage extends BasePage{
 				loadingPopup.dismiss().then(() => {
 
 					// Mostramos el listado de solicitudes cargadas por el usuario
-					this.navCtrl.push(MisSolicitudesPage);
+					this.navCtrl.setRoot(ListaSolicitudesPage);
 				});
 
 			},
