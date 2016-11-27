@@ -69,6 +69,9 @@ export class DonemosApp {
         return;
       });
 
+      // Evitamos que el menu se abra solo al presionar el botón y no deslizándolo
+      this.menuCtrl.swipeEnable(false, 'principal');
+
       // Variables que usamos para no mostrar varios mensajes al cambiar el estado de la conexion
       this.mostrarNotificacionConexion = false;
       this.mostrarNotificacionSinConexion = true;
