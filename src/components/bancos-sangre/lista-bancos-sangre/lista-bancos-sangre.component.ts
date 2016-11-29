@@ -164,7 +164,7 @@ export class ListaBancosSangrePage extends BasePage {
 				let latitud = posicion.coords.latitude;
 				let longitud = posicion.coords.longitude;
 
-				this.datosService.getListaBancosSangrePorUbicacion(-31.609597, -60.668146, this.distancia * 1000).subscribe(
+				this.datosService.getListaBancosSangrePorUbicacion(latitud, longitud, this.distancia * 1000).subscribe(
 					(bancosSangre) => {
 
 						// TODO: manejar error o listado vacio
@@ -226,6 +226,17 @@ export class ListaBancosSangrePage extends BasePage {
 
 		popupError.present();
 	}
+
+	// Método que muestra ayuda sobre las funciones de la página
+    public mostrarAyuda() {
+      let alert = this.alertCtrl.create({
+        title: 'Bancos de Sangre',
+        message: `No hay que esperar a la emergencia. Podés acercarte a cualquier banco de sangre a donar de forma voluntaria y altruista. Buscá los más cercanos en base a tu ubicación actual, o según tu provincia.`,
+        buttons: ['Ok']
+      });
+
+      alert.present();
+    }
 }
 
 
