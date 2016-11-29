@@ -23,6 +23,9 @@ import { LoginService } from '../shared/services/login.service';
 import { DatosService } from '../shared/services/datos.service';
 import { ConectividadService } from '../shared/services/conectividad.service';
 
+// Objeto de configuracion
+import { AppConfig } from '../shared/app-config';
+
 @Component({
   templateUrl: 'app.html'
 })
@@ -46,7 +49,8 @@ export class DonemosApp {
 
   public estaLogueado: boolean;
 
-  constructor(public platform: Platform, 
+  constructor(public platform: Platform,
+              public config: AppConfig,
               public menuCtrl: MenuController,
               public loginService: LoginService,
               public datosService: DatosService,
@@ -68,6 +72,10 @@ export class DonemosApp {
       this.platform.registerBackButtonAction(() => {
         return;
       });
+
+      if(Bugsnag) {
+        Bugsnag.apiKey = this.config.bugSnagApiKey;
+      }
 
       // Evitamos que el menu se abra solo al presionar el botón y no deslizándolo
       this.menuCtrl.swipeEnable(false, 'principal');
