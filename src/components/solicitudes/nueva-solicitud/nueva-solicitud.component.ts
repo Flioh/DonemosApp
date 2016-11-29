@@ -183,7 +183,7 @@ export class NuevaSolicitudPage extends BasePage{
 		if(this.mostrarAdvertenciaAlSalir) {
 			let popupAdvertencia = this.alertCtrl.create({
 				title: 'Salir',
-				message: '¿Está seguro que desea salir? Los cambios que haya hecho se perderán.',
+				message: '¿Estás seguro que deseas salir? Se perderán los cambios no guardados.',
 				buttons: [{
 					text: 'Salir',
 					handler: () => {

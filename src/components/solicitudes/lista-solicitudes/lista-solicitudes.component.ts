@@ -79,8 +79,7 @@
       this.isIos = this.platform.is('ios');
 
       // Inicializamos eventos
-      this.inicializarEventosConexion();
-      this.inicializarEventosLogin();
+      this.inicializarEventos();
 
       // Por defecto no usa los datos personales
       this.usarDatosPersonales = true;
@@ -129,24 +128,39 @@
         });
     }
 
-    // Método que inicializa los eventos relacionados al login
-    public inicializarEventosLogin() {
+    // Método que inicializa los eventos de la pagina
+    public inicializarEventos() {
 
       this.eventsCtrl.subscribe('login:usuario', () => {
       });
 
       this.eventsCtrl.subscribe('logout:usuario', () => {
       });
-    }
 
-    // Método que se ejecutan al haber cambios en el estado de la conexion
-    public inicializarEventosConexion() {
       this.eventsCtrl.subscribe('conexion:conectado', () => {
         this.habilitarOpcionesOnLine();
       });
 
       this.eventsCtrl.subscribe('conexion:desconectado', () => {
         this.deshabilitarOpcionesOnLine();
+      });
+
+      this.eventsCtrl.subscribe('solicitudes:actualizar', () => {
+
+        // Buscamos las preferencias del usuario y luego obtenemos el 
+        // listado de solicitudes en base a dichas preferencias
+        this.datosService.getPreferenciasUsuario().then(
+          (preferenciasUsuario) => {
+
+            this.datosUsuarioObj = preferenciasUsuario;          
+            this.buscarSolicitudesUsandoPreferenciasUsuario();
+
+          },
+          (error) => {
+            this.procesarError(this.config.excepcionPreferenciasUsuario, 'constructor', 'ListaSolicitudesPage', 'error', 'Error al obtener las preferencias del usuario', error);
+            this.mostrarMensajeError('Error', this.config.errorPreferenciasUsuario);
+          });
+
       });
     }
 
@@ -690,5 +704,25 @@
       });
 
       popupError.present();
+    }
+
+    // Método que muestra ayuda sobre las funciones de la página
+    public mostrarAyuda() {
+
+      let mensaje;
+
+      if(this.seccion === 'solicitudes') {
+        mensaje = `Se muestran las solicitudes cargadas por los usuarios. Aquellas que coincidan con tus preferencias se muestran en color rojo, mientras que si no cargaste tus preferencias o éstas no coinciden con el tipo sanguíneo que se busca en la solicitud, se mostrarán en negro.`;
+      } else {
+        mensaje = `Podés cambiar los filtros de búsqueda para consultar solicitudes compatibles con otro tipo sanguíneo o en otra ciudad.`;
+      }
+
+      let alert = this.alertCtrl.create({
+        title: 'Lista de Solicitudes',
+        message: mensaje,
+        buttons: ['Ok']
+      });
+
+      alert.present();
     }
 }

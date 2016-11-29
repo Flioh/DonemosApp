@@ -1,6 +1,9 @@
 <ion-header>
 	<ion-navbar color="negro">
 		<ion-title>Bancos de Sangre</ion-title>
+		<ion-buttons end>
+			<button ion-button icon-only (click)="mostrarAyuda()"><ion-icon name="help-circle"></ion-icon></button>
+		</ion-buttons>
 	</ion-navbar>
 	<ion-toolbar>
 		<ion-segment color="blanco" [(ngModel)]="seccion">
@@ -54,7 +57,7 @@
 					</ion-range>
 				</ion-item>
 				<ion-item no-lines text-wrap>
-					Presioná <strong>buscar bancos</strong> para buscar los bancos de sangre ubicados hasta a <strong>{{ distancia }}</strong> kilómetros de tu ubicación actual.
+					Presioná <strong>buscar bancos</strong> para buscar los bancos de sangre ubicados hasta a <strong>{{ distancia }} kilómetros</strong> de tu ubicación actual.
 				</ion-item>
 				<button (click)="buscarBancosCercanos()" ion-button full color="principal">Buscar bancos</button>
 			</ion-list>

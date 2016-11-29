@@ -306,4 +306,15 @@
 			popupError.present();
 		}
 
+		// Método que muestra ayuda sobre las funciones de la página
+		public mostrarAyuda() {
+			let alert = this.alertCtrl.create({
+				title: 'Preferencias',
+				message: `Configurá tu ubicación como así también un grupo y factor sanguíneo para poder utilizarlo como filtro de búsqueda por defecto.`,
+				buttons: ['Ok']
+			});
+
+			alert.present();
+		}
+
 	}

@@ -13,7 +13,7 @@
 
 			<!-- Institucion  -->
 			<ion-item>
-				<ion-label stacked>Nombre de institución</ion-label>
+				<ion-label stacked>Nombre de institución (*)</ion-label>
 				<ion-input [(ngModel)]="nuevaSolicitud.institucion" name="institucion" #institucion="ngModel" required type="text" placeholder="Ejemplo: Hospital Cullen"></ion-input>
 			</ion-item>
 			<span [hidden]="institucion.valid || institucion.untouched" class="mensaje-error">
@@ -24,7 +24,7 @@
 
 			<!-- Dirección  -->
 			<ion-item>
-				<ion-label stacked>Direccion</ion-label>
+				<ion-label stacked>Direccion (*)</ion-label>
 				<ion-input [(ngModel)]="nuevaSolicitud.direccion" name="direccion" #direccion="ngModel" required type="text" placeholder="Ejemplo: San Martín 2345"></ion-input>
 			</ion-item>
 			<span [hidden]="direccion.valid || direccion.untouched" class="mensaje-error">
@@ -35,7 +35,7 @@
 
 			<!-- Provincia  -->
 			<ion-item (click)="abrirModalProvincias()">
-				<ion-label stacked>Provincia</ion-label>
+				<ion-label stacked>Provincia (*)</ion-label>
 				<ion-input disabled [value]="nuevaSolicitud.provincia?.nombre"> </ion-input>	
 			</ion-item>
 			<span [hidden]="!mostrarErrorProvincia" class="mensaje-error">
@@ -46,7 +46,7 @@
 
 			<!-- Localidad  -->
 			<ion-item (click)="abrirModalLocalidades()">
-				<ion-label stacked>Localidad</ion-label>
+				<ion-label stacked>Localidad (*)</ion-label>
 				<ion-input disabled [value]="nuevaSolicitud.localidad?.nombre"> </ion-input>	
 			</ion-item>
 			<span [hidden]="!mostrarErrorLocalidad" class="mensaje-error">
@@ -57,7 +57,7 @@
 
 			<!-- Hora desde -->
 			<ion-item [class.ng-touched]="horaDesde.touched">
-				<ion-label>Desde las</ion-label>
+				<ion-label>Desde las (*)</ion-label>
 				<ion-datetime displayFormat="HH:mm" [(ngModel)]="nuevaSolicitud.horaDesde" required name="horaDesde" #horaDesde="ngModel" minuteValues="0,15,30,45" doneText="Aceptar" cancelText="Cancelar">
 				</ion-datetime>
 			</ion-item>
@@ -69,7 +69,7 @@
 
 			<!-- Hora hasta -->
 			<ion-item [class.ng-touched]="horaHasta.touched">
-				<ion-label>Hasta las</ion-label>
+				<ion-label>Hasta las (*)</ion-label>
 				<ion-datetime displayFormat="HH:mm" [(ngModel)]="nuevaSolicitud.horaHasta" required name="horaHasta" #horaHasta="ngModel" minuteValues="0,15,30,45" doneText="Aceptar" cancelText="Cancelar">
 				</ion-datetime>
 			</ion-item>
@@ -81,7 +81,7 @@
 
 			<!-- Nombre del paciente  -->
 			<ion-item>
-				<ion-label stacked>Nombre del paciente</ion-label>
+				<ion-label stacked>Nombre del paciente (*)</ion-label>
 				<ion-input [(ngModel)]="nuevaSolicitud.nombrePaciente" name="nombrePaciente" #nombrePaciente="ngModel" required type="text" placeholder="Ejemplo: Juan Perez"></ion-input>
 			</ion-item>
 			<span [hidden]="nombrePaciente.valid || nombrePaciente.untouched" class="mensaje-error">
@@ -91,7 +91,7 @@
 
 			<!-- Tipo sanguineo  -->
 			<ion-item class="tipo-sanguineo-label">
-				<ion-label stacked>Tipos Sanguineos que se necesitan</ion-label>
+				<ion-label stacked>Tipos Sanguineos que se necesitan (*)</ion-label>
 			</ion-item>
 			<ion-item class="tipo-sanguineo-detalle primera-fila">
 				
@@ -121,7 +121,7 @@
 			<!-- Datos adicionales  -->
 			<ion-item>
 				<ion-label stacked>Datos adicionales</ion-label>
-				<ion-textarea rows="6" [(ngModel)]="nuevaSolicitud.datosAdicionales" name="datosAdicionales" placeholder="Aquí puedes agregar cualquier dato que consideres importante..."></ion-textarea>
+				<ion-textarea rows="6" [(ngModel)]="nuevaSolicitud.datosAdicionales" name="datosAdicionales"></ion-textarea>
 			</ion-item>
 
 

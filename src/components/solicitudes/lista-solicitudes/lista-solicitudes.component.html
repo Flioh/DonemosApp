@@ -6,8 +6,9 @@
 			<ion-icon name="menu"></ion-icon>
 		</button>
 
-		<ion-buttons *ngIf="isIos" end>
-			<button ion-button (click)="nuevaSolicitud()"><ion-icon name="add"></ion-icon></button>
+		<ion-buttons end>
+			<button ion-button icon-only (click)="mostrarAyuda()"><ion-icon name="help-circle"></ion-icon></button>
+			<button *ngIf="isIos" ion-button (click)="nuevaSolicitud()"><ion-icon name="add"></ion-icon></button>
 		</ion-buttons>
 	</ion-navbar>
 
@@ -81,7 +82,7 @@
 			<ion-item text-wrap class="sin-resultados">
 				<h2>{{ noHaySolicitudesMensaje }}</h2>
 				<p>
-					{{ noHaySolicitudesMensaje }} que cumplan con los filtros especificados. Recuerda que igual podés ayudar concurriendo a un <strong (click)="mostrarListaBancosSangre()">Banco de Sangre</strong>
+					{{ noHaySolicitudesMensaje }} que cumplan con los filtros especificados. Recordá que igual podés ayudar concurriendo a un <strong (click)="mostrarListaBancosSangre()">Banco de Sangre</strong>
 				</p>
 			</ion-item>
 		</ion-list>
