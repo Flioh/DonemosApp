@@ -20,7 +20,7 @@
         </ion-avatar>
         <h2>Dirección</h2>
         <p>{{ bancoSeleccionado.direccion }}</p>
-        <p>{{ bancoSeleccionado.nombreCiudad }}, {{ bancoSeleccionado.nombreProvincia }}</p>
+        <p>{{ bancoSeleccionado.nombreCiudad }}, {{ bancoSeleccionado.provincia?.nombre }}</p>
         <a color="principal" class="ver-detalles" (click)="mostrarRuta()">¿Cómo llego?  <ion-icon name="arrow-forward"></ion-icon></a>
       </ion-item>
 

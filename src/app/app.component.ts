@@ -12,7 +12,6 @@ import { ListaBancosSangrePage } from '../components/bancos-sangre/lista-bancos-
 import { EditarPreferenciasPage } from '../components/preferencias-usuario/editar-preferencias/editar-preferencias.component';
 import { RequisitosPage } from '../components/donaciones/requisitos/requisitos.component';
 import { SobreNosotrosPage } from '../components/flioh/sobre-nosotros/sobre-nosotros.component';
-import { ErrorPage } from '../shared/components/error/error.component';
 import { TutorialPage } from '../shared/components/tutorial/tutorial.component';
 
 // Modelos
