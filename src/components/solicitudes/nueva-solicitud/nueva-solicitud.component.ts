@@ -43,6 +43,8 @@ export class NuevaSolicitudPage extends BasePage{
 	public mostrarErrorProvincia: boolean;
 	public mostrarErrorLocalidad: boolean;
 
+	public mostrarErrorTipoSanguineo: boolean;
+
 	private submitted: boolean = false;
 
 	// Propiedad que permite determinar si estamos creando una nueva solicitud
@@ -86,6 +88,8 @@ export class NuevaSolicitudPage extends BasePage{
 		this.mostrarErrorLocalidad = false;
 		this.mostrarErrorProvincia = false;
 
+		this.mostrarErrorTipoSanguineo = false;
+
 		// Inicializa los listados de la pagina
 		this.inicializarListado();
 		this.inicializarTiposSanguineos();
@@ -125,6 +129,20 @@ export class NuevaSolicitudPage extends BasePage{
 	// Método que cambia el estado al presionar el boton correspondiente a un tipo sanguineo
 	public toggleTipoSanguineo(tipoSanguineo: {nombre: string, seleccionado: boolean}): void {
 		tipoSanguineo.seleccionado = !tipoSanguineo.seleccionado;
+
+		// Si no quedo ningun tipo sanguineo seleccionado, mostramos un error
+		this.mostrarErrorTipoSanguineo = this.seleccionoAlgunTipoSanguineo() ? false : true;
+	}
+
+	// Método que devuelve verdadero si hay algun tipo sanguineo seleccionado
+	private seleccionoAlgunTipoSanguineo(): boolean {
+		for(let i=0; i<2; i++) {
+			for(let j=0; j<4; j++) {
+				if(this.tiposSanguineos[i][j].seleccionado)
+					return true;
+			}
+		}
+		return false;
 	}
 
 	// Método que recibe la dirección del autocomplete y la ingresa en el formulario

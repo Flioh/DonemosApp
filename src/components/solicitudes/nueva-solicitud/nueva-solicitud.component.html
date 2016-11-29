@@ -17,7 +17,7 @@
 				<ion-input [(ngModel)]="nuevaSolicitud.institucion" name="institucion" #institucion="ngModel" required type="text" placeholder="Ejemplo: Hospital Cullen"></ion-input>
 			</ion-item>
 			<span [hidden]="institucion.valid || institucion.untouched" class="mensaje-error">
-				Ingrese el nombre de la institución.
+				Ingresa el nombre de la institución.
 			</span>
 
 
@@ -28,7 +28,7 @@
 				<ion-input [(ngModel)]="nuevaSolicitud.direccion" name="direccion" #direccion="ngModel" required type="text" placeholder="Ejemplo: San Martín 2345"></ion-input>
 			</ion-item>
 			<span [hidden]="direccion.valid || direccion.untouched" class="mensaje-error">
-				Ingrese la dirección.
+				Ingresa la dirección.
 			</span>
 
 
@@ -39,7 +39,7 @@
 				<ion-input disabled [value]="nuevaSolicitud.provincia?.nombre"> </ion-input>	
 			</ion-item>
 			<span [hidden]="!mostrarErrorProvincia" class="mensaje-error">
-				Seleccione una provincia.
+				Selecciona una provincia.
 			</span>
 
 
@@ -50,7 +50,7 @@
 				<ion-input disabled [value]="nuevaSolicitud.localidad?.nombre"> </ion-input>	
 			</ion-item>
 			<span [hidden]="!mostrarErrorLocalidad" class="mensaje-error">
-				Seleccione una localidad.
+				Selecciona una localidad.
 			</span>
 
 
@@ -62,7 +62,7 @@
 				</ion-datetime>
 			</ion-item>
 			<span [hidden]="horaDesde.valid || horaDesde.untouched" class="mensaje-error">
-				Ingrese la hora de inicio.
+				Ingresa la hora de inicio.
 			</span>
 
 
@@ -74,7 +74,7 @@
 				</ion-datetime>
 			</ion-item>
 			<span [hidden]="horaHasta.valid || horaHasta.untouched" class="mensaje-error">
-				Ingrese la hora de fin.
+				Ingresa la hora de fin.
 			</span>
 
 
@@ -85,7 +85,7 @@
 				<ion-input [(ngModel)]="nuevaSolicitud.nombrePaciente" name="nombrePaciente" #nombrePaciente="ngModel" required type="text" placeholder="Ejemplo: Juan Perez"></ion-input>
 			</ion-item>
 			<span [hidden]="nombrePaciente.valid || nombrePaciente.untouched" class="mensaje-error">
-				Ingrese la el nombre del paciente.
+				Ingresa el nombre del paciente.
 			</span>
 
 
@@ -107,6 +107,9 @@
 				</template>
 				
 			</ion-item>
+			<span [hidden]="!mostrarErrorTipoSanguineo" class="mensaje-error">
+				Selecciona los tipos sanguíneos que se necesitan
+			</span>
 
 
 
@@ -125,9 +128,7 @@
 			</ion-item>
 
 
-
-
-			<button ion-button [disabled]="!nuevaSolicitudForm.form.valid" type="submit" color="principal" full>
+			<button ion-button [disabled]="!nuevaSolicitudForm.form.valid || !seleccionoAlgunTipoSanguineo()" type="submit" color="principal" full>
 				{{ modoEdicion ? 'Guardar cambios' : 'Crear solicitud' }}
 			</button>
 
