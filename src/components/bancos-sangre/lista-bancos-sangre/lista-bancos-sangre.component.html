@@ -38,7 +38,7 @@
 			<ion-item-group class="resultados" *ngFor="let key of mapBancosSangre.keys()">
 				<ion-item-divider color="grisClaro">{{ key }}</ion-item-divider>
 				<ion-item (click)="abrirDetallesBancoSangre(banco)" detail-push text-wrap *ngFor="let banco of mapBancosSangre.get(key)">
-					<h3>{{ banco.nombre }}</h3>
+					<h3>{{ banco.institucion }}</h3>
 					<p>{{ banco.direccion }}</p>
 				</ion-item>
 			</ion-item-group>	

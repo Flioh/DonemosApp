@@ -7,7 +7,7 @@ import { ProvinciaModel } from '../../shared/models/provincia.model';
 @Injectable()
 export class BancoSangreModel {
 
-  public nombre: string;
+  public institucion: string;
   public nombreCiudad: string;
   public provincia: ProvinciaModel;
   public direccion: string;
@@ -16,7 +16,7 @@ export class BancoSangreModel {
   public coordenadas: {lat: number, lon: number};
 
   constructor(obj?) {
-      this.nombre = obj && obj.nombre ? obj.nombre : null;
+      this.institucion = obj && obj.institucion ? obj.institucion : null;
       this.nombreCiudad = obj && obj.ciudad ? obj.ciudad : null;
       this.provincia = obj && obj.provincia ? new ProvinciaModel(obj.provincia.id, obj.provincia.nombre) : new ProvinciaModel();
       this.direccion = obj && obj.direccion ? obj.direccion : null;
