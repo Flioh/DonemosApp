@@ -221,9 +221,15 @@
               this.solicitudes.push(new ResumenSolicitudModel(solicitud, descripcionTiposSanguineos, esCompatible));
             }
 
-            // Mostramos el boton para buscar mas solicitudes
-            this.hayMasSolicitudes = true;
-            this.proximaPagina++;
+            // Si hay menos solicitudes que el tamaño de pagina, es porque no hay mas solicitudes en el servidor
+            if(solicitudesObj.length < 8) {
+              this.hayMasSolicitudes = false;
+              this.noHaySolicitudesMensaje = "No hay más solicitudes";
+            } else {
+              // Mostramos el boton para buscar mas solicitudes
+              this.hayMasSolicitudes = true;
+              this.proximaPagina++;
+            }
           } else {
             this.hayMasSolicitudes = false;
 
@@ -349,9 +355,15 @@
               this.solicitudes.push(new ResumenSolicitudModel(solicitud, descripcionTiposSanguineos, esCompatible));
             }
 
-            // Mostramos el boton para buscar mas solicitudes
-            this.hayMasSolicitudes = true;
-            this.proximaPagina++;
+             // Si hay menos solicitudes que el tamaño de pagina, es porque no hay mas solicitudes en el servidor
+            if(listaSolicitudes.length < 8) {
+              this.hayMasSolicitudes = false;
+              this.noHaySolicitudesMensaje = "No hay más solicitudes";
+            } else {
+              // Mostramos el boton para buscar mas solicitudes
+              this.hayMasSolicitudes = true;
+              this.proximaPagina++;
+            }
 
           } else {
             this.hayMasSolicitudes = false;
