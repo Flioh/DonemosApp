@@ -86,7 +86,7 @@ export class LocalizacionService {
       navigator.geolocation.getCurrentPosition(
         (posicion) => { resolve(posicion); }, 
         (error) => { resolve(null); },
-        { timeout: 2000 });
+        { timeout: 5000 });
     },);
   }
 }
