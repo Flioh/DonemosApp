@@ -206,7 +206,7 @@ export class MisSolicitudesPage extends BasePage {
   public mostrarAyuda() {
     let alert = this.alertCtrl.create({
       title: 'Mis Solicitudes',
-      message: `Se muestran las solicitudes que creaste. Para editar o ver los detalles detalles desliza la solicitud hacia la izquierda. Las solicitudes que hayan sido creadas hace más de un mes, dejan de mostrarse.`,
+      message: `Se muestran las solicitudes que creaste. Para editar o ver los detalles, deslizá la solicitud hacia la izquierda. Las solicitudes que hayan sido creadas hace más de un mes dejan de mostrarse.`,
       buttons: ['Ok']
     });
 
