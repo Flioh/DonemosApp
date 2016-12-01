@@ -64,8 +64,8 @@
 
 			<!-- Resultados agrupados por localidad -->
 			<ion-list class="resultados">
-				<ion-item (click)="abrirDetallesBancoSangre(banco)" detail-push no-lines *ngFor="let banco of listaBancosSangre">
-					<h3>{{ banco.nombre }}</h3>
+				<ion-item text-wrap (click)="abrirDetallesBancoSangre(banco)" detail-push no-lines *ngFor="let banco of listaBancosSangre">
+					<h3>{{ banco.institucion }}</h3>
 					<p>{{ banco.direccion }}</p>
 				</ion-item>
 			</ion-list>
