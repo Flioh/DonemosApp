@@ -135,7 +135,7 @@ export class NuevaSolicitudPage extends BasePage{
 	}
 
 	// Método que devuelve verdadero si hay algun tipo sanguineo seleccionado
-	private seleccionoAlgunTipoSanguineo(): boolean {
+	public seleccionoAlgunTipoSanguineo(): boolean {
 		for(let i=0; i<2; i++) {
 			for(let j=0; j<4; j++) {
 				if(this.tiposSanguineos[i][j].seleccionado)
