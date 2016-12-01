@@ -39,7 +39,7 @@
 			<ion-card class="resumen-banco-sangre">
 
 				<!-- Layout para cuando es compatible -->
-				<ion-item text-wrap class="encabezado">
+				<ion-item text-wrap class="encabezado" (click)="mostrarListaBancosSangre()">
 					<h2> 
 						<strong>Siempre</strong>
 						<span> se necesitan dadores</span>
@@ -66,9 +66,9 @@
 
 			<!-- Creamos una lista de solicitudes usando el componente solicitud-item -->
 			<resumen-solicitud *ngFor="let solicitudItemModel of solicitudes" 
-			[solicitudItemModel]="solicitudItemModel"
-			(seleccionarSolicitud)="abrirDetalles($event)">		
-		</resumen-solicitud>
+				[solicitudItemModel]="solicitudItemModel"
+				(seleccionarSolicitud)="abrirDetalles($event)">		
+			</resumen-solicitud>
 
 		<ion-fab *ngIf="!isIos">
 			<button ion-fab class="floating-btn" color="principal" fab (click)="nuevaSolicitud()"><ion-icon name="add"></ion-icon></button>

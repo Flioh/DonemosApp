@@ -1,7 +1,7 @@
 <ion-card>
 
 	<!-- Layout para cuando es compatible -->
-	<ion-item [class.compatible]="solicitudItemModel.esCompatibleConUsuario" class="encabezado">
+	<ion-item [class.compatible]="solicitudItemModel.esCompatibleConUsuario" class="encabezado" (click)="verDetalles()">
 		<h2> 
           <span>{{ solicitudItemModel.solicitud.cantidadDadores === 1 ? 'Se necesita ' : 'Se necesitan ' }}</span>
           <strong *ngIf="solicitudItemModel.solicitud.cantidadDadores">
