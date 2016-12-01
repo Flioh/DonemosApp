@@ -80,4 +80,13 @@ export class LocalizacionService {
   public obtenerCoordenadasUsuario(): Promise<any> {
     return Geolocation.getCurrentPosition();
   }
+
+  public obtenerCoordenadasUsuarioCordovaPlugin(): Promise<any> {
+    return new Promise(resolve => {
+      navigator.geolocation.getCurrentPosition(
+        (posicion) => { resolve(posicion); }, 
+        (error) => { resolve(null); },
+        { timeout: 2000 });
+    },);
+  }
 }

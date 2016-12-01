@@ -142,7 +142,9 @@ export class ListaBancosSangrePage extends BasePage {
 				// Oculta el mensaje de espera
           		loadingPopup.dismiss();
 
+          		// Enviamos el error a Bugsnag
 				this.procesarError(this.config.excepcionListaBancosSangre, 'buscarBancosPorProvincia', 'ListaBancosSangrePage', 'error', `Error al obtener el listado de bancos de sangre para la provincia ${this.provinciaSeleccionada.id}`, error);
+				
 				this.mostrarMensajeError('Error', this.config.errorBancosSangre);
 			});
 	}
@@ -158,8 +160,25 @@ export class ListaBancosSangrePage extends BasePage {
 
 		this.listaBancosSangre = null;
 
-		this.localizacionService.obtenerCoordenadasUsuario().then(
+		this.localizacionService.obtenerCoordenadasUsuarioCordovaPlugin().then(
 			(posicion) => {
+
+				if(!posicion) {
+					// Oculta el mensaje de espera
+          			loadingPopup.dismiss();
+
+          			let mensajeError = this.alertCtrl.create({
+				        title: 'Error',
+				        message: `Ha ocurrido un error al obtener tu ubicación actual. Comprobá que el GPS esté activado, que la aplicación tenga permisos para usarlo y volvé a intentarlo nuevamente.`,
+				        buttons: ['Ok']
+				      });
+
+				      mensajeError.present();
+
+				      // Enviamos el error a Bugsnag
+				      this.procesarError(this.config.excepcionListaBancosSangre, 'buscarBancosCercanos', 'ListaBancosSangrePage', 'warning', `Error al obtener la ubicación actual del usuario`, {});
+					return;
+				}
 
 				let latitud = posicion.coords.latitude;
 				let longitud = posicion.coords.longitude;
