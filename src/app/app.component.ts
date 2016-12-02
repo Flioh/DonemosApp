@@ -2,17 +2,23 @@
 import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
 
 // Referencias de Ionic
-import { Events, MenuController, Nav, Platform, ToastController } from 'ionic-angular';
+import { Events, MenuController, Nav, Platform, ToastController, IonicApp } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 
 // Paginas
 import { ListaSolicitudesPage } from '../components/solicitudes/lista-solicitudes/lista-solicitudes.component';
 import { MisSolicitudesPage } from '../components/solicitudes/mis-solicitudes/mis-solicitudes.component';
-import { ListaBancosSangrePage } from '../components/bancos-sangre/lista-bancos-sangre/lista-bancos-sangre.component';
+import { DetallesSolicitudPage } from '../components/solicitudes/detalles-solicitud/detalles-solicitud.component';
+import { NuevaSolicitudPage } from '../components/solicitudes/nueva-solicitud/nueva-solicitud.component';
+import { ResumenSolicitudComponent } from '../components/solicitudes/resumen-solicitud/resumen-solicitud.component';
 import { EditarPreferenciasPage } from '../components/preferencias-usuario/editar-preferencias/editar-preferencias.component';
+import { ListaBancosSangrePage } from '../components/bancos-sangre/lista-bancos-sangre/lista-bancos-sangre.component';
+import { DetallesBancoSangrePage } from '../components/bancos-sangre/detalles-banco-sangre/detalles-banco-sangre.component';
 import { RequisitosPage } from '../components/donaciones/requisitos/requisitos.component';
 import { SobreNosotrosPage } from '../components/flioh/sobre-nosotros/sobre-nosotros.component';
+import { ErrorPage } from '../shared/components/error/error.component';
 import { TutorialPage } from '../shared/components/tutorial/tutorial.component';
+import { DropdownPage } from '../shared/components/dropdown/dropdown.component';
 
 // Modelos
 import { ItemMenuModel } from '../shared/models/item-menu.model';
@@ -51,6 +57,7 @@ export class DonemosApp {
   constructor(public platform: Platform,
               public config: AppConfig,
               public menuCtrl: MenuController,
+              public ionicApp: IonicApp,
               public loginService: LoginService,
               public datosService: DatosService,
               public conectividadService: ConectividadService,
@@ -67,9 +74,19 @@ export class DonemosApp {
       StatusBar.backgroundColorByName('black');
       Splashscreen.hide();
 
+      try {
+        setTimeout(() => {
+          // Fix horrible para cambiar el color del encabezado cuando se minimiza la app
+          let headerColor = window['plugins']['headerColor'];
+          headerColor.tint("#222222");
+        }, 1000);
+      } catch(e) {
+        console.log(e);
+      }
+
       // Anulamos el boton fisico para volver atras debido a varios issues de Ionic2
       this.platform.registerBackButtonAction(() => {
-        return;
+        this.manejarEventoBotonFisicoSegunPagina();
       });
 
       if(Bugsnag) {
@@ -92,6 +109,41 @@ export class DonemosApp {
         this.cargarPantallaPrincipal();
       });
     });
+  }
+
+  // Método que decide que hacer cuando se presiona el boton fisico de volver atrás en base a la página activa
+  public manejarEventoBotonFisicoSegunPagina() {
+
+    let modal = this.ionicApp._loadingPortal.getActive() 
+                      || this.ionicApp._modalPortal.getActive() 
+                      || this.ionicApp._toastPortal.getActive() 
+                      || this.ionicApp._overlayPortal.getActive();
+
+    if (modal) {
+      // Si es un modal,lo cerramos
+      modal.dismiss();
+      return;
+    }
+
+    if (this.menuCtrl.isOpen()) {
+      // Si el menú esta abierto, lo cerramos
+      this.menuCtrl.close();
+      return;
+    }
+
+    let vista = this.nav.getActive();
+    let pagina = vista ? this.nav.getActive().instance : null;
+
+    if (pagina && pagina instanceof ListaSolicitudesPage) {
+      // Si estamos en el menú principal, salimos de la app
+      this.platform.exitApp();
+    }
+    else if (this.nav.canGoBack() || vista && vista.isOverlay) {
+      this.nav.pop();
+  } else { 
+    // Cancelamos el evento por defecto
+    return;
+    }
   }
 
   // Método que carga la pantalla principal segun se deba mostrar la introduccion o no
