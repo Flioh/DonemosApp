@@ -92,7 +92,7 @@ export class LocalizacionService {
         (error) => { 
           resolve(false); 
         },
-        { timeout: 5000 });
+        { timeout: 10000 });
     },);
   }
 
