@@ -119,8 +119,11 @@ export class DonemosApp {
 
   private cambiarEstilosEncabezado(): void {
     StatusBar.backgroundColorByName('black');
-    let headerColor = window['plugins']['headerColor'];
-    headerColor.tint("#222222");
+    
+    if(window['plugins'] && window['plugins']['headerColor']) {
+      let headerColor = window['plugins']['headerColor'];
+      headerColor.tint("#222222");
+    }
   }
 
   // Método que decide que hacer cuando se presiona el boton fisico de volver atrás en base a la página activa
