@@ -8,17 +8,11 @@ import { StatusBar, Splashscreen } from 'ionic-native';
 // Paginas
 import { ListaSolicitudesPage } from '../components/solicitudes/lista-solicitudes/lista-solicitudes.component';
 import { MisSolicitudesPage } from '../components/solicitudes/mis-solicitudes/mis-solicitudes.component';
-import { DetallesSolicitudPage } from '../components/solicitudes/detalles-solicitud/detalles-solicitud.component';
-import { NuevaSolicitudPage } from '../components/solicitudes/nueva-solicitud/nueva-solicitud.component';
-import { ResumenSolicitudComponent } from '../components/solicitudes/resumen-solicitud/resumen-solicitud.component';
 import { EditarPreferenciasPage } from '../components/preferencias-usuario/editar-preferencias/editar-preferencias.component';
 import { ListaBancosSangrePage } from '../components/bancos-sangre/lista-bancos-sangre/lista-bancos-sangre.component';
-import { DetallesBancoSangrePage } from '../components/bancos-sangre/detalles-banco-sangre/detalles-banco-sangre.component';
 import { RequisitosPage } from '../components/donaciones/requisitos/requisitos.component';
 import { SobreNosotrosPage } from '../components/flioh/sobre-nosotros/sobre-nosotros.component';
-import { ErrorPage } from '../shared/components/error/error.component';
 import { TutorialPage } from '../shared/components/tutorial/tutorial.component';
-import { DropdownPage } from '../shared/components/dropdown/dropdown.component';
 
 // Modelos
 import { ItemMenuModel } from '../shared/models/item-menu.model';
@@ -77,8 +71,7 @@ export class DonemosApp {
       try {
         setTimeout(() => {
           // Fix horrible para cambiar el color del encabezado cuando se minimiza la app
-          let headerColor = window['plugins']['headerColor'];
-          headerColor.tint("#222222");
+          this.cambiarEstilosEncabezado();
         }, 1000);
       } catch(e) {
         console.log(e);
@@ -88,6 +81,19 @@ export class DonemosApp {
       this.platform.registerBackButtonAction(() => {
         this.manejarEventoBotonFisicoSegunPagina();
       });
+
+      // Evento que se ejecuta cuando la app se suspende y se vuelve a abrir
+      this.platform.resume.subscribe(e => {
+        // Fix horrible para cambiar el color del encabezado cuando se minimiza la app
+        this.cambiarEstilosEncabezado();
+      });
+
+      // Evento que se ejecuta cuando la app se pone en pausa
+      this.platform.pause.subscribe(e => {
+        // Fix horrible para cambiar el color del encabezado cuando se minimiza la app
+        this.cambiarEstilosEncabezado();
+      });
+
 
       if(Bugsnag) {
         Bugsnag.apiKey = this.config.bugSnagApiKey;
@@ -109,6 +115,12 @@ export class DonemosApp {
         this.cargarPantallaPrincipal();
       });
     });
+  }
+
+  private cambiarEstilosEncabezado(): void {
+    StatusBar.backgroundColorByName('black');
+    let headerColor = window['plugins']['headerColor'];
+    headerColor.tint("#222222");
   }
 
   // Método que decide que hacer cuando se presiona el boton fisico de volver atrás en base a la página activa
@@ -137,12 +149,11 @@ export class DonemosApp {
     if (pagina && pagina instanceof ListaSolicitudesPage) {
       // Si estamos en el menú principal, salimos de la app
       this.platform.exitApp();
-    }
-    else if (this.nav.canGoBack() || vista && vista.isOverlay) {
+    } else if (this.nav.canGoBack() || vista && vista.isOverlay) {
       this.nav.pop();
-  } else { 
-    // Cancelamos el evento por defecto
-    return;
+    } else { 
+      // Cancelamos el evento por defecto
+      return;
     }
   }
 
