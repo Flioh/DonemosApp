@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.flioh.donemosapp" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.flioh.donemosapp" version="0.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>Donemos</name>
-  <description>An awesome Ionic/Cordova app.</description>
-  <author email="sebastian@flioh.com" href="http://www.flioh.com/">Flioh!</author>
+  <description>Una plataforma sin fines de lucro que ayuda a conectar a quienes necesitan donantes y quienes puedan colaborar (sin ser necesariamente familiares o amigos).</description>
+  <author email="juan@flioh.com" href="https://www.flioh.com/">Flioh!</author>
   <content src="index.html"/>
   <access origin="*"/>
   <allow-intent href="http://*/*"/>
@@ -64,6 +64,9 @@
     <splash src="resources/ios/splash/Default@2x~iphone.png" width="640" height="960"/>
     <splash src="resources/ios/splash/Default~iphone.png" width="320" height="480"/>
   </platform>
+  <preference name="orientation" value="portrait" />
+  <preference name="StatusBarBackgroundColor" value="0x000000"/>
+  <preference name="HeaderColor" value="#222222" />
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
   <preference name="DisallowOverscroll" value="true"/>
@@ -99,4 +102,5 @@
   </plugin>
   <icon src="resources/android/icon/drawable-xhdpi-icon.png"/>
   <allow-navigation href="http://192.168.1.5:8100"/>
+  <allow-navigation href="http://192.168.1.33:8100"/>
 </widget>
