@@ -160,26 +160,56 @@ export class ListaBancosSangrePage extends BasePage {
 
 		this.listaBancosSangre = null;
 
-		this.localizacionService.obtenerCoordenadasUsuarioCordovaPlugin().then(
-			(posicion) => {
+		this.localizacionService.habilitarGps().then(gpsActivado => {
+
+			if(!gpsActivado) {
+				// Oculta el mensaje de espera
+				loadingPopup.dismiss();
+
+				let mensajeError = this.alertCtrl.create({
+					title: 'Error',
+					message: `Ha ocurrido un error al intentar activar el servicio de ubicación. ¿Querés ir a la pantalla de Configuración para activarlo manualmente?`,
+					buttons: [
+					{
+						text: 'Cancelar'
+					},
+					{
+						text: 'Aceptar',
+						handler: () => {
+							this.localizacionService.mostrarPantallaOpcionesLocalizacion();
+						}
+					}
+					]
+				});
+
+				mensajeError.present();
+
+				// Enviamos el error a Bugsnag
+				this.procesarError(this.config.excepcionListaBancosSangre, 'buscarBancosCercanos', 'ListaBancosSangrePage', 'warning', `Servicio de ubicación no disponible. Se muestra la pantalla de configuración.`, {});
+				return;
+			}
+
+			// El GPS esta activado, procedemos a buscar la ubicacion del usuario
+			this.localizacionService.obtenerCoordenadasCordovaGeolocationPlugin().then(posicion => {
 
 				if(!posicion) {
-					// Oculta el mensaje de espera
-          			loadingPopup.dismiss();
+					// No ha sido posible encontrar la ubicación actual del usuario				
+					loadingPopup.dismiss();
 
-          			let mensajeError = this.alertCtrl.create({
-				        title: 'Error',
-				        message: `Ha ocurrido un error al obtener tu ubicación actual. Comprobá que el GPS esté activado, que la aplicación tenga permisos para usarlo y volvé a intentarlo nuevamente.`,
-				        buttons: ['Ok']
-				      });
+					let mensajeError = this.alertCtrl.create({
+						title: 'Error',
+						message: `Ha ocurrido un error al intentar obtener tu ubicación actual. Por favor vuelve a intentarlo más tarde.`,
+						buttons: ['Aceptar']
+					});
 
-				      mensajeError.present();
+					mensajeError.present();
 
-				      // Enviamos el error a Bugsnag
-				      this.procesarError(this.config.excepcionListaBancosSangre, 'buscarBancosCercanos', 'ListaBancosSangrePage', 'warning', `Error al obtener la ubicación actual del usuario`, {});
+					// Enviamos el error a Bugsnag
+					this.procesarError(this.config.excepcionListaBancosSangre, 'buscarBancosCercanos', 'ListaBancosSangrePage', 'warning', `Error al obtener la ubicación actual del usuario.`, {});
 					return;
 				}
 
+				// Tenemos la ubicación del usuario, ahora buscamos los bancos cercanos
 				let latitud = posicion.coords.latitude;
 				let longitud = posicion.coords.longitude;
 
@@ -195,20 +225,14 @@ export class ListaBancosSangrePage extends BasePage {
 					}, (error) => {
 
 						// Oculta el mensaje de espera
-          				loadingPopup.dismiss();
+						loadingPopup.dismiss();
 
 						this.procesarError(this.config.excepcionListaBancosSangre, 'buscarBancosCercanos', 'ListaBancosSangrePage', 'error', `Error al obtener el listado de bancos de sangre para las coordenadas ${latitud}, ${longitud}`, error);
 						this.mostrarMensajeError('Error', this.config.errorBancosSangre);
 					});
-			}, (error) => {
-
-				// Oculta el mensaje de espera
-          		loadingPopup.dismiss();
-
-				// Error al obtener las coordenadas del usuario
-				this.procesarError(this.config.excepcionListaBancosSangre, 'buscarBancosCercanos', 'ListaBancosSangrePage', 'error', `Error al obtener las coordenadas del usuario.`, error);
-				this.mostrarMensajeError('Error', this.config.errorBancosSangre);
 			});
+
+		});
 	}
 
 	// Método que se ejecuta al cambiar la seccion seleccionada

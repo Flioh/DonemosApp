@@ -9,6 +9,7 @@ import { Geolocation } from 'ionic-native';
 
 // Declaracion para evitar warnings de Typescript
 declare var google: any;
+declare var cordova:any;
 
 @Injectable()
 export class LocalizacionService {
@@ -81,12 +82,36 @@ export class LocalizacionService {
     return Geolocation.getCurrentPosition();
   }
 
-  public obtenerCoordenadasUsuarioCordovaPlugin(): Promise<any> {
+  // Método que utiliza el plugin de ubicacion de Cordova para devolver las coordenadas actuales del usuario
+  public obtenerCoordenadasCordovaGeolocationPlugin(): Promise<any> {
     return new Promise(resolve => {
       navigator.geolocation.getCurrentPosition(
-        (posicion) => { resolve(posicion); }, 
-        (error) => { resolve(null); },
+        (posicion) => { 
+          resolve(posicion); 
+        }, 
+        (error) => { 
+          resolve(false); 
+        },
         { timeout: 5000 });
     },);
+  }
+
+  // Método que conprueba el estado del servicio de ubicación
+  public habilitarGps(): Promise<any> {
+
+    return new Promise(resolve => {
+      cordova.plugins.locationAccuracy.request(
+        (exito) => {
+          resolve(true);
+        }, 
+        (error) => {
+          resolve(false);
+        }, 
+        cordova.plugins.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY);
+    });
+  }
+
+  public mostrarPantallaOpcionesLocalizacion() {
+    cordova.plugins.diagnostic.switchToLocationSettings();
   }
 }
