@@ -12,4 +12,30 @@ tutorial-page {
     .button-container button {
         display: inline-block;
     }
+
+    .slide-zoom {
+        height: 100%;
+        background: #ff595c;
+    }
+
+    .swiper-slide img {
+        max-height: 90vh;
+    }
+
+    .button-container{
+        display: none;
+    }
+
+    @media screen and (min-height: 400px){
+        .button-container{
+            display: block;
+        }
+    }
+    
+    @media screen and (min-height: 550px){
+        .swiper-slide img {
+            max-height: 100%;
+        }
+    }
 }
+
