@@ -32,6 +32,9 @@ export class ListaBancosSangrePage extends BasePage {
 	public distancia: number = 10;
 	public seccion: string = 'busquedaUbicacion';
 
+	public mostrarMensajeResultadosVaciosPorCercania: boolean;
+	public mostrarMensajeResultadosVaciosPorProvincia: boolean;
+
 	constructor(public navCtrl: NavController,
 		private loadingCtrl: LoadingController,
 		private modalCtrl: ModalController,
@@ -43,6 +46,12 @@ export class ListaBancosSangrePage extends BasePage {
 
 		this.mapBancosSangre = new Map();
 		this.provinciaSeleccionada = null;
+
+		this.listaBancosSangre = [];
+
+		// Evitamos mostrar el mensaje si el usuario no realizó ninguna busqueda
+		this.mostrarMensajeResultadosVaciosPorCercania = false;
+		this.mostrarMensajeResultadosVaciosPorProvincia = false;
 
 		// Cargamos el listado de provincias
 		this.cargarProvincias();
@@ -132,12 +141,20 @@ export class ListaBancosSangrePage extends BasePage {
 		this.datosService.getListaBancosSangrePorProvincia(this.provinciaSeleccionada.id).subscribe(
 			(bancosSangre) => {
 				this.listaBancosSangre = bancosSangre;
-				this.agruparBancosPorCiudad();
+
+				if(this.listaBancosSangre.length) {
+					this.mostrarMensajeResultadosVaciosPorProvincia = false;
+					this.agruparBancosPorCiudad();
+				} else {
+					this.mostrarMensajeResultadosVaciosPorProvincia = true;
+				}
 
 				// Ocultamos el mensaje de espera
 				loadingPopup.dismiss();
 
 			}, (error) => {
+
+				this.mostrarMensajeResultadosVaciosPorProvincia = false;
 
 				// Oculta el mensaje de espera
           		loadingPopup.dismiss();
@@ -216,13 +233,16 @@ export class ListaBancosSangrePage extends BasePage {
 				this.datosService.getListaBancosSangrePorUbicacion(latitud, longitud, this.distancia * 1000).subscribe(
 					(bancosSangre) => {
 
-						// TODO: manejar error o listado vacio
 						this.listaBancosSangre = bancosSangre;
+
+						this.mostrarMensajeResultadosVaciosPorCercania = this.listaBancosSangre.length === 0 ? true : false; 
 
 						// Ocultamos el mensaje de espera
 						loadingPopup.dismiss();
 
 					}, (error) => {
+
+						this.mostrarMensajeResultadosVaciosPorCercania = false;
 
 						// Oculta el mensaje de espera
 						loadingPopup.dismiss();
@@ -279,6 +299,10 @@ export class ListaBancosSangrePage extends BasePage {
       });
 
       alert.present();
+    }
+
+    public ocultarMensajeResultadoVacioPorCercania(): void {
+    	this.mostrarMensajeResultadosVaciosPorCercania = false;
     }
 }
 

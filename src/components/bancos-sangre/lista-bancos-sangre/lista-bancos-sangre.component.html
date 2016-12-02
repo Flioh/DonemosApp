@@ -42,6 +42,15 @@
 					<p>{{ banco.direccion }}</p>
 				</ion-item>
 			</ion-item-group>
+
+			<ion-list *ngIf="mostrarMensajeResultadosVaciosPorProvincia" no-lines>
+				<ion-item text-wrap class="sin-resultados">
+					<h2>No encontramos resultados.</h2>
+					<p>
+						 No hemos encontramos bancos de sangre en la provincia de <strong>{{ provinciaSeleccionada?.nombre }}</strong>. Si sabés de un banco de sangre que debería mostrarse, envianos un mail a <a href="mailto:donemos@flioh.com">donemos@flioh.com</a>. <strong>¡Ayudemos a ayudar!</strong>
+					</p>
+				</ion-item>
+			</ion-list>
 		</div>
 
 		<!-- Busqueda por ubicacion -->
@@ -50,9 +59,9 @@
 			<ion-list class="filtros-busqueda">
 				<ion-item no-lines>
 					<ion-label stacked>Usar mi ubicación</ion-label>
-					<ion-range min="10" max="100"  pin="true" step="10" color="principal" [(ngModel)]="distancia">
-						<ion-label range-left>10 Km</ion-label>
-						<ion-label range-right>100 Km</ion-label>
+					<ion-range min="5" max="50"  pin="true" step="5" color="principal" [(ngModel)]="distancia" (ionChange)="ocultarMensajeResultadoVacioPorCercania()">
+						<ion-label range-left>5 Km</ion-label>
+						<ion-label range-right>50 Km</ion-label>
 					</ion-range>
 				</ion-item>
 				<ion-item no-lines text-wrap>
@@ -62,12 +71,22 @@
 			</ion-list>
 
 			<!-- Resultados agrupados por localidad -->
-			<ion-list class="resultados">
+			<ion-list *ngIf="listaBancosSangre?.length" class="resultados">
 				<ion-item text-wrap (click)="abrirDetallesBancoSangre(banco)" detail-push no-lines *ngFor="let banco of listaBancosSangre">
 					<h3>{{ banco.institucion }}</h3>
 					<p>{{ banco.direccion }}</p>
 				</ion-item>
 			</ion-list>
+
+			<ion-list *ngIf="mostrarMensajeResultadosVaciosPorCercania" no-lines>
+				<ion-item text-wrap class="sin-resultados">
+					<h2>No encontramos resultados.</h2>
+					<p>
+						 No hemos encontramos bancos de sangre en un radio de <strong>{{ distancia }} kilómetros</strong> con respecto a tu ubicación actual. Si sabés de un banco de sangre que debería mostrarse, envianos un mail a <a href="mailto:donemos@flioh.com">donemos@flioh.com</a>. <strong>¡Ayudemos a ayudar!</strong>
+					</p>
+				</ion-item>
+			</ion-list>
+
 		</div>
 	</div>
 
