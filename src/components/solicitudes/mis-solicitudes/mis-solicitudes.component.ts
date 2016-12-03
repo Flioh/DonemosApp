@@ -26,6 +26,10 @@ export class MisSolicitudesPage extends BasePage {
 
   public solicitudes: Array<SolicitudModel>;
 
+  public isIos: boolean;
+
+  public mostrarMensajeResultadoVacio: boolean;
+
   constructor(private platform: Platform,
     private navCtrl: NavController, 
     private loadingCtrl: LoadingController,
@@ -36,6 +40,12 @@ export class MisSolicitudesPage extends BasePage {
     private donacionesService: DonacionesService) 
   {    
     super();
+
+    // Determinamos si es ios o no para ocultar/mostrar el boton flotante
+    this.isIos = this.platform.is('ios');
+
+    // Ocultamos el mensaje por defecto
+    this.mostrarMensajeResultadoVacio = false;
 
     // Cargamos las ultimas solicitudes
     this.buscarSolicitudes();
@@ -69,10 +79,13 @@ export class MisSolicitudesPage extends BasePage {
       // Obtenemos las solicitudes del servidor
       this.datosService.getSolicitudesUsuario(usuarioId).subscribe(
         (solicitudesObj) => { 
+
           for(let i = 0; i < solicitudesObj.length; i++) {
             let solicitud = new SolicitudModel(solicitudesObj[i]);
             this.solicitudes.push(solicitud);
           }
+
+          this.mostrarMensajeResultadoVacio = solicitudesObj.length === 0 ? true : false; 
 
           // Oculta el mensaje de espera
           loadingPopup.dismiss();
@@ -181,6 +194,11 @@ export class MisSolicitudesPage extends BasePage {
       // Volvemos todos los items a su posicion original
       this.list.closeSlidingItems();
     });;
+  }
+
+  // Método que lleva a la pantalla de creación de solicitudes
+  public nuevaSolicitud(): void {
+    this.navCtrl.push(NuevaSolicitudPage, {}, { animate: true, direction: 'forward' });
   }
 
   // Método muestra un mensaje de error al usuario

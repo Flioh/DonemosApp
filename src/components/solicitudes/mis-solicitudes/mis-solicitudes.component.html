@@ -4,6 +4,7 @@
 
         <ion-buttons end>
             <button ion-button icon-only (click)="mostrarAyuda()"><ion-icon name="help-circle"></ion-icon></button>
+            <button *ngIf="isIos" ion-button (click)="nuevaSolicitud()"><ion-icon name="add"></ion-icon></button>
         </ion-buttons>
 
     </ion-navbar>
@@ -12,11 +13,11 @@
 
 <ion-content padding>
 
-    <ion-list>
+    <ion-list *ngIf="solicitudes.length">
         <ion-item-sliding *ngFor="let solicitud of solicitudes">
             <ion-item text-wrap>
                 <ion-avatar item-left>
-                <ion-icon color="principal" name="water"></ion-icon>
+                    <ion-icon color="principal" name="water"></ion-icon>
                 </ion-avatar>
                 <h2>{{ solicitud.nombrePaciente }}</h2>
                 <h3>{{ solicitud.institucion  }}</h3>
@@ -24,19 +25,29 @@
             </ion-item>
             <ion-item-options side="right">
                 <button (click)="eliminarSolicitud(solicitud)" ion-button color="danger">
-                   Eliminar
-               </button>
-               <button (click)="editarSolicitud(solicitud)" ion-button color="grisClaro">
-                Editar
-            </button>
-            <button (click)="verDetalles(solicitud)" ion-button color="principal">
-                Ver
-            </button>
-        </ion-item-options>
-    </ion-item-sliding>
-    
-    <span *ngIf="!solicitudes.length">
-        Aún no creaste ninguna solicitud o si las creaste ya no están activas. 
-    </span>
-</ion-list>
+                     Eliminar
+                 </button>
+                 <button (click)="editarSolicitud(solicitud)" ion-button color="grisClaro">
+                    Editar
+                </button>
+                <button (click)="verDetalles(solicitud)" ion-button color="principal">
+                    Ver
+                </button>
+            </ion-item-options>
+        </ion-item-sliding>
+    </ion-list>
+
+    <ion-list *ngIf="mostrarMensajeResultadoVacio" no-lines>
+        <ion-item text-wrap class="sin-resultados">
+            <h2>No tienes solicitudes activas</h2>
+            <p>
+             Aún no has cargado ninguna solicitud, o tus solicitudes ya no están activas. Recordá que las solicitudes <strong>permanecen activas durante un mes</strong> y luego se borran.
+            </p>
+       </ion-item>
+   </ion-list>
+
+   <ion-fab *ngIf="!isIos">
+        <button ion-fab class="floating-btn" color="principal" fab (click)="nuevaSolicitud()"><ion-icon name="add"></ion-icon></button>
+    </ion-fab>
+
 </ion-content>
