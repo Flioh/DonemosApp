@@ -214,8 +214,8 @@ export class ListaBancosSangrePage extends BasePage {
 					loadingPopup.dismiss();
 
 					let mensajeError = this.alertCtrl.create({
-						title: 'Error',
-						message: `Ha ocurrido un error al intentar obtener tu ubicación actual. Por favor vuelve a intentarlo más tarde.`,
+						title: ':(',
+						message: `No hemos podido obtener tu ubicación actual. No te preocupes, es algo común. Por favor volvé a intentarlo más tarde o buscá bancos de sangre por provincia.`,
 						buttons: ['Aceptar']
 					});
 
