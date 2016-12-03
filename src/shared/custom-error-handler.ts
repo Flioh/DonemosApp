@@ -4,9 +4,6 @@ import { Injectable, ErrorHandler } from '@angular/core';
 // Referencias de Ionic
 import { App} from 'ionic-angular';
 
-// Paginas y componentes
-import { ErrorPage } from './components/error/error.component';
-
 @Injectable()
 export class CustomErrorHandler implements ErrorHandler {
 
@@ -18,7 +15,7 @@ export class CustomErrorHandler implements ErrorHandler {
 		// Enviamos el error a nuestra dashboard usando Bugsnag
 		Bugsnag.notifyException(error);
 
-		let navCtrl = this.app && this.app.getActiveNav();
+		// let navCtrl = this.app && this.app.getActiveNav();
 
 		/*
 			if(navCtrl) {

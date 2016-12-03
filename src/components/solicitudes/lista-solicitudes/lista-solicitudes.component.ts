@@ -1,8 +1,8 @@
   // Referencias de Angular
-  import { Component, NgZone } from '@angular/core';
+  import { Component, NgZone, ViewChild } from '@angular/core';
 
   // Referencias de Ionic
-  import { AlertController, LoadingController, NavController, Platform, MenuController, Events, ModalController } from 'ionic-angular';
+  import { AlertController, LoadingController, NavController, Platform, MenuController, Events, ModalController, Content } from 'ionic-angular';
 
   // Servicios
   import { DonacionesService } from '../../../shared/services/donaciones.service';
@@ -28,6 +28,7 @@
     templateUrl: 'lista-solicitudes.component.html'
   })
   export class ListaSolicitudesPage extends BasePage {
+    @ViewChild(Content) content: Content;
 
     private solicitudes: Array<ResumenSolicitudModel>;
 
@@ -166,7 +167,7 @@
 
     // Método que habilita todos los botones y opciones que requieren internet
     public habilitarOpcionesOnLine() {
-      this.buscarSolicitudesUsandoPreferenciasUsuario();
+      this.nav.setRoot(ListaSolicitudesPage);
     }
 
     // Método que deshabilita todos los botones y opciones que requieren internet
@@ -485,7 +486,7 @@
 
     // Método que obtiene la informacion de los tipos sanguineos buscados, resaltando el del usuario
     public obtenerInformacionTiposSanguineos(unaSolicitud: SolicitudModel): string {
-      let result = '', tiposSanguineosBuscados = [];
+      let tiposSanguineosBuscados = [];
 
       for(let i=0; i<unaSolicitud.tiposSanguineos.length; i++) {
         let grupoSanguineo = unaSolicitud.tiposSanguineos[i].grupoSanguineo;
@@ -695,6 +696,11 @@
     public filtrosModificados() {
       // Cambiamos el estado del toggle ya que los datos inicializados cambiaron
       this.usarDatosPersonales = false;
+    }
+
+    // Método que lleva al usuario a la parte superior de la pantalla
+    public llevarAlInicio() {
+      this.content.scrollToTop();
     }
 
     // Método muestra un mensaje de error al usuario

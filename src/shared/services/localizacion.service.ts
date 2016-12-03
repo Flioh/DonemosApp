@@ -106,7 +106,8 @@ export class LocalizacionService {
         }, 
         (error) => {
           resolve(false);
-        });
+        }, 
+        cordova.plugins.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY);
     });
   }
 

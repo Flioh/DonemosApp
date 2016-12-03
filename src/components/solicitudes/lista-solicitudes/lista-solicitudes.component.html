@@ -17,7 +17,7 @@
 			<ion-segment-button value="solicitudes">
 				Solicitudes
 			</ion-segment-button>
-			<ion-segment-button value="filtros">
+			<ion-segment-button value="filtros" (ionSelect)="llevarAlInicio()">
 				Filtros
 			</ion-segment-button>
 		</ion-segment>
@@ -51,7 +51,7 @@
 				<ion-card-content class="detalle-solicitud">
 					<ion-row>
 						<ion-col>
-							Si sólo <strong>1 de cada 25 argentinos</strong> donasen voluntariamente, se cubriría toda la demanda necesaria.
+							Si sólo <strong>1 de cada 25 argentinos</strong> donaran voluntariamente, se cubriría toda la demanda necesaria.
 						</ion-col>			
 					</ion-row>
 					<ion-row>
