@@ -490,20 +490,18 @@
       for(let i=0; i<unaSolicitud.tiposSanguineos.length; i++) {
         let grupoSanguineo = unaSolicitud.tiposSanguineos[i].grupoSanguineo;
         let factorSanguineo = unaSolicitud.tiposSanguineos[i].factorSanguineo;
-        tiposSanguineosBuscados.push(this.donacionesService.getDescripcionCompleta(grupoSanguineo, factorSanguineo));
+
+        let descripcionTipoSanguineo = this.donacionesService.getDescripcionCompleta(grupoSanguineo, factorSanguineo);
+
+        if(this.datosUsuarioObj && this.datosUsuarioObj.grupoSanguineoID === grupoSanguineo && this.datosUsuarioObj.factorSanguineoID === factorSanguineo) {
+          tiposSanguineosBuscados.push('<span class="marked">' + descripcionTipoSanguineo + '</span>')
+        } else {
+          tiposSanguineosBuscados.push(descripcionTipoSanguineo);
+        }
       }
 
       // Obtenems un string con todos los tipos sanguineos buscados
-      result = tiposSanguineosBuscados.join(' ');
-
-      if(this.datosUsuarioObj) {
-        // Obtenemos el tipo sanguineo del usuario
-        this.tipoSanguineoUsuario = this.donacionesService.getDescripcionCompleta(this.datosUsuarioObj.grupoSanguineoID, this.datosUsuarioObj.factorSanguineoID);
-
-        // Resaltamos el tipo sanguineo del usuario
-        result = result.replace(' ' + this.tipoSanguineoUsuario + ' ', ' <span class="marked">' + this.tipoSanguineoUsuario + '</span> ');
-      }
-      return result;
+      return tiposSanguineosBuscados.join(' ');
     }
 
     // Método que determina si el usuario es compatible con una solicitud dada

@@ -66,15 +66,41 @@ button.alert-button {
 	justify-content: center;
 }
 
+.alert-md .alert-button:first-child {
+    background-color: $grisOscuro;
+}
+
+.alert-md .alert-button:last-child {
+    background-color: $principal;
+}
+
+.item-md p,
+.item-ios p  {
+	font-size: 1.5rem;
+}
+
+.label-md[stacked],
+.label-md[floating],
+.label-ios[stacked],
+.label-ios[floating] {
+	font-size: 1.4rem;
+}
+
+ion-content p,
+[text-wrap] .label-md,
+[text-wrap] .label-ios {
+    font-size: 1.5rem;
+}
 
 // 02 - Forms
 // --------------------------------------------------
 
 span.mensaje-error {
 	color: $form_colorTextoValidacion;
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     padding: 10px 16px;
     display: block;
+    color: $principalOscuro;
 }
 
 p {
@@ -153,6 +179,7 @@ ion-app.md form {
 	/* Fix para bug en el label al poner el foco en el campo */
 	ion-label[floating],
 	ion-label[stacked] {
+		font-size: 1.4rem;
 		color: $form_colorTexto !important;
 	}
 

@@ -121,7 +121,7 @@
 
 				<!-- Grupo sanguineo  -->
 				<ion-item>
-					<ion-label floating>Grupo sanguineo que se necesita</ion-label>
+					<ion-label stacked>Grupo sanguineo que se necesita</ion-label>
 					<ion-select [(ngModel)]="grupoSanguineoSeleccionado" (ionChange)="filtrosModificados();" okText="Aceptar" cancelText="Cancelar" name="grupo" #grupo="ngModel">
 						<ion-option *ngFor="let grupo of listaGruposSanguineos" [value]="grupo.id">
 							{{grupo.nombre}}
@@ -133,7 +133,7 @@
 
 				<!-- Factor sanguineo  -->
 				<ion-item>
-					<ion-label floating>Factor sanguineo que se necesita</ion-label>
+					<ion-label stacked>Factor sanguineo que se necesita</ion-label>
 					<ion-select [(ngModel)]="factorSanguineoSeleccionado" (ionChange)="filtrosModificados();" okText="Aceptar" cancelText="Cancelar" name="factor" #factor="ngModel">
 						<ion-option *ngFor="let factor of listaFactoresSanguineos" [value]="factor.id">
 							{{factor.nombre}}

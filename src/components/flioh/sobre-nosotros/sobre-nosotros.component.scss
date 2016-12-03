@@ -15,11 +15,13 @@ sobre-nosotros-page {
 	    }
 	}
 
-	ion-item.informacion {
-		color: $gris;
+	ion-list.list-md,
+	ion-list.list-ios {
+		margin: 0;
 	}
 
 	ion-item.informacion {
+		color: $gris;
 		display: block;
 	    padding: 1.5rem;
 	    background-color: $grisMuyClaro;
