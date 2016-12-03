@@ -77,7 +77,7 @@ export class DonemosApp {
         console.log(e);
       }
 
-      // Anulamos el boton fisico para volver atras debido a varios issues de Ionic2
+      // Manejamos nosostros el boton fisico para volver atras debido a varios issues de Ionic2
       this.platform.registerBackButtonAction(() => {
         this.manejarEventoBotonFisicoSegunPagina();
       });
@@ -103,7 +103,7 @@ export class DonemosApp {
       this.menuCtrl.swipeEnable(false, 'principal');
 
       // Variables que usamos para no mostrar varios mensajes al cambiar el estado de la conexion
-      this.mostrarNotificacionConexion = false;
+      this.mostrarNotificacionConexion = true;
       this.mostrarNotificacionSinConexion = true;
       
       // Cargamos la informacion del usuario primero
@@ -167,7 +167,7 @@ export class DonemosApp {
       if(mostrarTutorial) {
         this.rootPage = TutorialPage;
       } else {
-        this.rootPage = ListaSolicitudesPage;
+        this.rootPage = ListaSolicitudesPage 
       }
     })
   }
@@ -232,7 +232,7 @@ export class DonemosApp {
   // Método que muestra un mensaje cuando el usuario se queda sin conexion
   public mostrarMensajeSinConexion(){
     let toast = this.toastCtrl.create({
-      message: 'No hay conexion a internet. Solo podrás acceder a contenido estático como los requisitos para donar o los bancos de sangre.',
+      message: 'No hay conexion a internet. Solo podrás acceder a contenido estático como los requisitos para donar y las prevenciones a tener en cuenta.',
       showCloseButton: true,
       closeButtonText: 'Ok',
       position: 'bottom'
