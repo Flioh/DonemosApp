@@ -7,14 +7,14 @@
 
 
 <ion-content padding class="nueva-solicitud">
-	<ion-item-group>
+	<ion-item-group *ngIf="nuevaSolicitud">
 		<form (ngSubmit)="guardarCambios()" #nuevaSolicitudForm="ngForm" >
 
 
 			<!-- Institucion  -->
 			<ion-item>
 				<ion-label stacked>Nombre de institución (*)</ion-label>
-				<ion-input [(ngModel)]="nuevaSolicitud.institucion" name="institucion" #institucion="ngModel" required type="text" placeholder="Ejemplo: Hospital Cullen"></ion-input>
+				<ion-input [(ngModel)]="nuevaSolicitud.institucion" name="institucion" #institucion="ngModel" required type="text" placeholder=""></ion-input>
 			</ion-item>
 			<span [hidden]="institucion.valid || institucion.untouched" class="mensaje-error">
 				Ingresa el nombre de la institución.
@@ -25,7 +25,7 @@
 			<!-- Dirección  -->
 			<ion-item>
 				<ion-label stacked>Direccion (*)</ion-label>
-				<ion-input [(ngModel)]="nuevaSolicitud.direccion" name="direccion" #direccion="ngModel" required type="text" placeholder="Ejemplo: San Martín 2345"></ion-input>
+				<ion-input [(ngModel)]="nuevaSolicitud.direccion" name="direccion" #direccion="ngModel" required type="text" placeholder=""></ion-input>
 			</ion-item>
 			<span [hidden]="direccion.valid || direccion.untouched" class="mensaje-error">
 				Ingresa la dirección.
@@ -82,7 +82,7 @@
 			<!-- Nombre del paciente  -->
 			<ion-item>
 				<ion-label stacked>Nombre del paciente (*)</ion-label>
-				<ion-input [(ngModel)]="nuevaSolicitud.nombrePaciente" name="nombrePaciente" #nombrePaciente="ngModel" required type="text" placeholder="Ejemplo: Juan Perez"></ion-input>
+				<ion-input [(ngModel)]="nuevaSolicitud.nombrePaciente" name="nombrePaciente" #nombrePaciente="ngModel" required type="text" placeholder=""></ion-input>
 			</ion-item>
 			<span [hidden]="nombrePaciente.valid || nombrePaciente.untouched" class="mensaje-error">
 				Ingresa el nombre del paciente.
@@ -116,7 +116,7 @@
 			<!-- Cantidad  -->
 			<ion-item>
 				<ion-label stacked>Cantidad</ion-label>
-				<ion-input [(ngModel)]="nuevaSolicitud.cantidadDadores" name="cantidad" type="number" placeholder="Ejemplo: 5"></ion-input>
+				<ion-input [(ngModel)]="nuevaSolicitud.cantidadDadores" name="cantidad" type="number" placeholder=""></ion-input>
 			</ion-item>
 
 

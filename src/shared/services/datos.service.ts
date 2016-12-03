@@ -100,8 +100,28 @@ export class DatosService {
         this.datosUsuarioObserver.next(preferenciasUsuario);
     },
     (error) => {
-      Bugsnag.notifyException(error, this.config.excepcionGuardarPreferenciasUsuario, { 'metodo': 'setPreferenciasUsuario', 'pagina': DatosService, 'descripcion': `Error al guardar las preferencias del usuario:`}, 'error');
+      Bugsnag.notifyException(error, this.config.excepcionGuardarPreferenciasUsuario, { 'metodo': 'setPreferenciasUsuario', 'pagina': DatosService, 'descripcion': `Error al guardar las preferencias del usuario.`}, 'error');
     });
+  }
+
+  // Método que obtiene los datos de la solicitud que el usuario empezó a crear pero no guardó
+  public getBorradorNuevaSolicitud(): Promise<SolicitudModel> {
+    return this.storage.get('borradorSolicitud').then(
+      (datosSolicitud) => {
+        return datosSolicitud ? new SolicitudModel(JSON.parse(datosSolicitud)) : new SolicitudModel();
+      },
+      (error) => {
+        Bugsnag.notifyException(error, this.config.excepcionPreferenciasUsuario, { 'metodo': 'getBorradorNuevaSolicitud', 'pagina': DatosService, 'descripcion': 'Error al obtener el borrador de la solicitud.' }, 'error');
+      });
+  }
+
+  // Método que guarda los datos de la solicitud cuando el usuario sale sin guardar
+  public setBorradorNuevaSolicitud(solicitud: SolicitudModel): Promise<boolean> {
+    return this.storage.set('borradorSolicitud', JSON.stringify(solicitud)).then(
+      () => { },
+      (error) => {
+        Bugsnag.notifyException(error, this.config.excepcionGuardarPreferenciasUsuario, { 'metodo': 'setBorradorNuevaSolicitud', 'pagina': DatosService, 'descripcion': `Error al guardar el borrador de la solicitud.`}, 'error');
+      });
   }
 
   // Método que devuelve true si el usuario vio la introduccion

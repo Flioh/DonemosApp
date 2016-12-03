@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.flioh.donemosapp" version="0.0.3" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.flioh.donemosapp" version="0.0.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>Donemos</name>
   <description>Una plataforma sin fines de lucro que ayuda a conectar a quienes necesitan donantes y quienes puedan colaborar (sin ser necesariamente familiares o amigos).</description>
   <author email="juan@flioh.com" href="https://www.flioh.com/">Flioh!</author>

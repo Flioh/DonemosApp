@@ -117,6 +117,7 @@ export class DonemosApp {
     });
   }
 
+  // Método que utiliza un plugin de cordova para cambiar el color del encabezado de la aplicacion
   private cambiarEstilosEncabezado(): void {
     StatusBar.backgroundColorByName('black');
     
@@ -127,7 +128,7 @@ export class DonemosApp {
   }
 
   // Método que decide que hacer cuando se presiona el boton fisico de volver atrás en base a la página activa
-  public manejarEventoBotonFisicoSegunPagina() {
+  private manejarEventoBotonFisicoSegunPagina() {
 
     let modal = this.ionicApp._loadingPortal.getActive() 
                       || this.ionicApp._modalPortal.getActive() 

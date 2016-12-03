@@ -35,15 +35,14 @@ export class NuevaSolicitudPage extends BasePage{
 	// Modelo a utilizar en el formulario
 	public nuevaSolicitud: SolicitudModel;
 
-	private mostrarAdvertenciaAlSalir: boolean;
-
 	// Matriz con los tipos sanguineos solicitados
 	public tiposSanguineos: Array<Array<{ nombre: string, seleccionado: boolean }>>;
 
 	public mostrarErrorProvincia: boolean;
 	public mostrarErrorLocalidad: boolean;
-
 	public mostrarErrorTipoSanguineo: boolean;
+
+	private guardarBorrador: boolean;
 
 	private submitted: boolean = false;
 
@@ -71,28 +70,36 @@ export class NuevaSolicitudPage extends BasePage{
 		// Establecemos el modo de la pantalla
 		this.modoEdicion = solicitudRecibida ? true : false;
 
-		// Obtenemos la solicitud existente pasada como parametro o creamos una nueva insatancia
-		this.nuevaSolicitud = solicitudRecibida || new SolicitudModel();
-		
-		if(!this.modoEdicion) {
-			
-			if(this.loginService.user && this.loginService.user.user_id) {
-				// Si es una nueva solicitud, asignamos el ID del usuario
-				this.nuevaSolicitud.usuarioID = this.loginService.user.user_id;
-			} else {
-				this.procesarError(this.config.excepcionEditarSolicitud, 'constructor', 'NuevaSolicitudPage', 'error', `El usuario no posee id pero accedio a editar la solicitud ${JSON.stringify(this.nuevaSolicitud)}.`, null);
-				this.mostrarMensajeError('Error', this.config.errorEditarSolicitud);
+		this.datosService.getBorradorNuevaSolicitud().then((borradorSolicitud) => { 
+
+			// Obtenemos la solicitud existente pasada como parametro o utilizamos los datos que el usuario haya comenzado a cargar previamente
+			this.nuevaSolicitud = solicitudRecibida ||  borradorSolicitud;
+
+			if(!this.modoEdicion) {
+
+				// Reseteamos el ID del usuario por si lo creo estando logueado con otra cuenta
+				this.nuevaSolicitud.usuarioID = null;
+
+				if(this.loginService.user && this.loginService.user.user_id) {
+					// Si es una nueva solicitud, asignamos el ID del usuario
+					this.nuevaSolicitud.usuarioID = this.loginService.user.user_id;
+				} else {
+					this.procesarError(this.config.excepcionEditarSolicitud, 'constructor', 'NuevaSolicitudPage', 'error', `El usuario no posee id pero accedio a editar la solicitud ${JSON.stringify(this.nuevaSolicitud)}.`, null);
+					this.mostrarMensajeError('Error', this.config.errorEditarSolicitud);
+				}
 			}
-		}
 
-		this.mostrarErrorLocalidad = false;
-		this.mostrarErrorProvincia = false;
+			this.mostrarErrorLocalidad = false;
+			this.mostrarErrorProvincia = false;
+			this.mostrarErrorTipoSanguineo = false;
 
-		this.mostrarErrorTipoSanguineo = false;
+			// Por defecto, guardamos los datos de la solicitud si el usuario sale sin guardar los cambiod
+			this.guardarBorrador = true;
 
-		// Inicializa los listados de la pagina
-		this.inicializarListado();
-		this.inicializarTiposSanguineos();
+			// Inicializa los listados de la pagina
+			this.inicializarListado();
+			this.inicializarTiposSanguineos();
+		});
 	}
 
 	// Método que inicializa el estado de los botones de tipos sanguineos
@@ -130,6 +137,9 @@ export class NuevaSolicitudPage extends BasePage{
 	public toggleTipoSanguineo(tipoSanguineo: {nombre: string, seleccionado: boolean}): void {
 		tipoSanguineo.seleccionado = !tipoSanguineo.seleccionado;
 
+		// Reflejamos los cambios en la solicitud
+		this.actualizarTiposSanguineosSeleccionados();
+
 		// Si no quedo ningun tipo sanguineo seleccionado, mostramos un error
 		this.mostrarErrorTipoSanguineo = this.seleccionoAlgunTipoSanguineo() ? false : true;
 	}
@@ -143,6 +153,27 @@ export class NuevaSolicitudPage extends BasePage{
 			}
 		}
 		return false;
+	}
+
+	// Método que actualiza los tipos seleccionados en la nueva solicitud
+	private actualizarTiposSanguineosSeleccionados() {
+
+		this.nuevaSolicitud.tiposSanguineos = []; 
+
+		// Las filas representan los factores sanguineos
+		for(let i=0; i<this.tiposSanguineos.length; i++) {
+
+			// Las columnas representan los grupos sanguineos
+			for(let j=0; j<this.tiposSanguineos[i].length; j++) {
+
+				if(this.tiposSanguineos[i][j].seleccionado) {
+					this.nuevaSolicitud.tiposSanguineos.push({
+						grupoSanguineo: j,
+						factorSanguineo: i
+					});
+				}
+			}
+		}
 	}
 
 	// Método que recibe la dirección del autocomplete y la ingresa en el formulario
@@ -191,45 +222,12 @@ export class NuevaSolicitudPage extends BasePage{
 		this.nuevaSolicitud.localidad = this.listaLocalidades[indiceLocalidad];
 	}
 
-	// Método que se ejecuta antes de que el usuario ingrese a la página
-	ionViewDidEnter() {
-		this.mostrarAdvertenciaAlSalir = true;
-	}
-
 	// Método que se ejecuta antes de que el usuario salga de la página
-	ionViewCanLeave() {
-		if(this.mostrarAdvertenciaAlSalir) {
-			let popupAdvertencia = this.alertCtrl.create({
-				title: 'Salir',
-				message: '¿Estás seguro que deseas salir? Se perderán los cambios no guardados.',
-				buttons: [{
-					text: 'Salir',
-					handler: () => {
-						popupAdvertencia.dismiss().then(() => {
-							this.volverAtras();
-						});			
-					}
-				},
-				{
-					text: 'Permanecer',
-					handler: () => {
-
-					}
-				}]
-			});
-
-			// Mostramos el popup
-			popupAdvertencia.present();
-
-			// Devolvemos false para evitar que se cierre la pagina
-			return false;
+	ionViewWillLeave() {
+		if(!this.modoEdicion && this.guardarBorrador) {
+			// Si estabamos creando una nueva solicitud, guardamos el borrador
+			this.datosService.setBorradorNuevaSolicitud(this.nuevaSolicitud);
 		}
-	}
-
-	// Método que vuelve a la pantalla anterior
-	private volverAtras() {
-		this.mostrarAdvertenciaAlSalir = false;
-		this.navCtrl.pop();
 	}
 
 	// Método que inicializa los listados de la página
@@ -336,10 +334,11 @@ export class NuevaSolicitudPage extends BasePage{
 
 		this.submitted = true;
 
-		this.mostrarAdvertenciaAlSalir = false;
-
 		// Nos aseguramos que la cantidad sea un numero
 		this.nuevaSolicitud.cantidadDadores = +this.nuevaSolicitud.cantidadDadores;
+
+		// Actualizamos la hora de creación
+		this.nuevaSolicitud.fechaCreacion = new Date();
 
 		// Seteamos los tipos sanguineos solicitados en la solicitud
 		this.nuevaSolicitud.tiposSanguineos = [];
@@ -361,12 +360,15 @@ export class NuevaSolicitudPage extends BasePage{
 
 		let solicitudId = this.modoEdicion ? this.nuevaSolicitud.solicitudID : null;
 
-		this.datosService.guardarSolicitud(this.nuevaSolicitud, solicitudId)
-		.subscribe(
+		this.datosService.guardarSolicitud(this.nuevaSolicitud, solicitudId).subscribe(
 			(result) => { 
 
 				// Ocultamos el mensaje de espera
 				loadingPopup.dismiss().then(() => {
+
+					// Se resetea el borrador de la solicitud ya que la misma fue creada
+					this.datosService.setBorradorNuevaSolicitud(null);
+					this.guardarBorrador = false;
 
 					// Mostramos el listado de solicitudes cargadas por el usuario
 					this.navCtrl.setRoot(ListaSolicitudesPage);
