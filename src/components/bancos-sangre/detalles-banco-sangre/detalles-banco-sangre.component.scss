@@ -1,0 +1,103 @@
+detalles-banco-sangre-page {
+
+	ion-item.header > div.item-inner {
+		padding: 0;
+	}
+
+	ion-item.header ion-label {
+		margin: 0;
+	}
+
+	.item-md .item-button,
+	.item-ios .item-button {
+		height: 3.6rem;
+	}
+
+	ion-item.header {
+    	display: inline-block;
+	    background-color: $principalClaro;
+	    color: $blanco;
+	    margin: 0 0 20px;
+	    padding: 5px 10px 20px;
+	    width: 100%;
+	    text-align: center;
+	    border: none;
+	}
+
+	ion-item.header  h2 {
+	    font-size: 2em;
+	    max-width: 90%;
+    	white-space: pre-line;
+	    margin: 20px auto 10px;
+
+		span.marked {
+	    	color: $blanco;
+		}
+	}
+
+	ion-icon[item-left] {
+		font-size: 2em;
+	    margin-left: 0;
+	    position: absolute;
+	    top: 0;
+	    left: 30px;
+    }
+
+    ion-list.detail-list {
+    	margin-bottom: 0;
+    }
+
+	ion-item.detail-item.item h2 {
+	    font-size: 1.1em;
+	    font-weight: 600;
+	    color: $negro;
+	}
+
+	ion-item.detail-item.item p {
+	    font-size: 1.1em;
+	    white-space: pre-line;
+	    margin-right: 20px;
+	}
+
+	ion-item.detail-item.item span {
+	    color: $verde;
+	    font-weight: 400;
+	}
+
+	ion-item.detail-item.item a {
+	    text-decoration: none;
+	    font-size: 1.2em;
+	    font-weight: 600;
+	}
+
+	div.map-container {
+		position: relative;
+		display: inline-block;
+	    height: 300px;
+	    width: 100%;
+	    margin: 20px 0;
+	}
+
+	div#overlay {
+		height: 300px;
+	    width: 100%;
+	    position: absolute;
+	    bottom: 0;
+	    z-index: 9999;
+	}
+
+	p.nota {
+		color: $gris;
+	}
+
+	ion-item.informacion {
+		color: $gris;
+	}
+
+	ion-item.informacion {
+		display: block;
+	    padding: 1.5rem;
+	    background-color: $grisMuyClaro;
+	    margin-top: 0.75rem;
+	}
+}

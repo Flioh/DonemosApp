@@ -1,0 +1,125 @@
+<ion-header>
+	<ion-navbar color="negro">
+		<ion-title>Detalles de la Solicitud</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content>    
+    <ion-list no-lines class="detail-list">
+
+
+      <ion-item class="header">
+        
+        <h3> 
+          <span>
+            {{ solicitudSeleccionada.cantidadDadores === 1 ? 'Se necesita ' : 'Se necesitan ' }}
+          </span>
+          <span *ngIf="solicitudSeleccionada.cantidadDadores" class="marked">
+            {{ solicitudSeleccionada.cantidadDadores }}
+          </span>
+          <span>
+            {{ solicitudSeleccionada.cantidadDadores === 1 ? ' dador' : ' dadores' }}
+          </span>
+        </h3>        
+        
+        <h2 [innerHTML]="tiposSanguineosSolicitud"></h2>
+        
+        <span class="fecha">
+          {{ solicitudSeleccionada.fechaCreacion | formatearFecha }}
+        </span>
+      </ion-item>
+
+
+
+      <ion-item class="detail-item">
+        <ion-avatar item-left>
+          <ion-icon color="principal" name="water" item-left></ion-icon>
+        </ion-avatar>
+        <h2>Puede recibir de</h2>
+        <p [innerHTML]="tiposSanguineosSolicitud"></p>
+        <span *ngIf="compatibleConUsuario"><ion-icon name="checkmark-circle-outline"></ion-icon> Podés donar</span>
+      </ion-item>
+
+
+
+      <ion-item class="detail-item">
+        <ion-avatar item-left>
+          <ion-icon color="principal" name="pin" item-left></ion-icon>
+        </ion-avatar>
+        <h2>Localidad</h2>
+        <p>{{ solicitudSeleccionada.localidad.nombre }}, {{ solicitudSeleccionada.provincia.nombre }}</p>
+      </ion-item>
+
+
+
+      <ion-item class="detail-item">
+        <ion-avatar item-left>
+          <ion-icon color="principal" name="home" item-left></ion-icon>
+        </ion-avatar>
+        <h2>Lugar y dirección</h2>
+        <p>{{ solicitudSeleccionada.institucion }}</p>
+        <p>{{ solicitudSeleccionada.direccion }}</p>
+        <a color="principal" class="ver-detalles" (click)="mostrarRuta()">¿Cómo llego?  <ion-icon name="arrow-forward"></ion-icon></a>
+      </ion-item>
+
+
+      <!-- Mapa estatico mostrando la ubicacion de la institucion -->
+      <img mapaEstatico [direccion]='direccionCompleta' [content]="content">
+      
+
+
+      <ion-item class="detail-item">
+        <ion-avatar item-left>
+          <ion-icon color="principal" name="time" item-left></ion-icon>
+        </ion-avatar>
+        <h2>Horario de Donación</h2>
+        <p>{{ solicitudSeleccionada.horaDesde }} - {{ solicitudSeleccionada.horaHasta }}</p>
+      </ion-item>
+
+
+
+      <ion-item class="detail-item">
+        <ion-avatar item-left>
+          <ion-icon color="principal" name="person" item-left></ion-icon>
+        </ion-avatar>
+        <h2>Nombre del Paciente</h2>
+        <p *ngIf="mostrarNombrePaciente">{{ solicitudSeleccionada.nombrePaciente }}</p>
+        <a *ngIf="!mostrarNombrePaciente" color="principal" class="ver-detalles" (click)="mostrarDatos()">Mostrar nombre <ion-icon name="arrow-forward"></ion-icon></a>
+        <p class="nota">Es necesario que recuerdes el nombre porque te lo pedirán cuando acudas a donar.</p>
+      </ion-item>
+
+
+
+      <ion-item *ngIf="solicitudSeleccionada.cantidadDadores" class="detail-item">
+        <ion-avatar item-left>
+          <ion-icon color="principal" name="people" item-left></ion-icon>
+        </ion-avatar>
+        <h2>Dadores necesitados</h2>
+        <p>{{ solicitudSeleccionada.cantidadDadores }}</p>
+      </ion-item>
+
+
+
+      <ion-item *ngIf="solicitudSeleccionada.datosAdicionales" class="detail-item">
+        <ion-avatar item-left>
+          <ion-icon color="principal" name="information-circle" item-left></ion-icon>
+        </ion-avatar>
+        <h2>Datos adicionales</h2>
+        <p>{{ solicitudSeleccionada.datosAdicionales }}</p>
+      </ion-item>
+
+
+      <ion-item>
+        <button ion-button full color="principal" (click)="verRequisitos()">Ver requisitos para donar</button>
+      </ion-item>
+
+      <ion-item text-wrap class="informacion">
+        <h2>¡Doná medula, lo llevas en la sangre!</h2>
+        <p>
+          ¿Sabías que con la misma donación te podés dar de alta en el Registro Nacional de Donantes de CPH? Tus células madre podrían salvarle la vida a alguien en cualquier parte del mundo. <strong>Pedí más información cuando vayas a donar.</strong>
+        </p>
+      </ion-item>
+
+
+    </ion-list>
+</ion-content>

@@ -1,0 +1,39 @@
+<ion-menu [content]="content" id="principal" side="right" persistent="true" >
+  <ion-content>
+
+    <ion-row [hidden]="ocultarLogin">
+      <ion-col id="hiw-login-container" width-100>
+      </ion-col>
+    </ion-row>
+
+    <ion-row [hidden]="ocultarPerfil" [class.profile]="loginService.user?.picture_large || loginService.user?.picture">
+      <ion-col width-100>
+        <img [src]="loginService.user?.picture_large || loginService.user?.picture || 'assets/images/logo_blanco.png'">
+        <h3>{{ loginService.user?.name }}</h3>
+      </ion-col>
+    </ion-row>
+
+    <ion-row [hidden]="ocultarLogo" class="menu-logo" [hidden]="hayConexion">
+      <ion-col width-100>
+        <img src="assets/images/logo_blanco.png">
+        <h3>Donemos</h3>
+      </ion-col>
+    </ion-row>
+
+    <!-- Main navigation links-->
+    <ion-list no-lines class="main-menu">
+      <template ngFor let-pagina [ngForOf]="paginasMenu">
+
+        <button menuClose ion-item detail-none (click)="abrirPagina(pagina)">
+          <ion-icon color="principal" ios="{{pagina.getIconoIosOutline()}}" md="{{pagina.getIconoAndroid()}}" item-left></ion-icon>
+          {{ pagina.titulo }}
+        </button>
+
+      </template>
+
+    </ion-list>
+
+  </ion-content>
+</ion-menu>
+
+<ion-nav id="nav" [root]="rootPage" #content swipe-back-enabled="false"></ion-nav>

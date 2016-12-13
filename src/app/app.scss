@@ -1,0 +1,339 @@
+// Hoja de Estilos
+// 01 - Generales
+// 02 - Forms
+// 03 - Iconos
+// 04 - Login 
+
+// 01 - Generales
+// --------------------------------------------------
+
+ion-app.md {
+	font-family: "Hind", "Roboto", "Helvetica Neue", sans-serif;
+	font-weight: 400;
+
+	h1, 
+	h2, 
+	h3, 
+	button.ion-button,
+	.button-inner,
+	ion-segment-button.segment-button,
+	ion-col.ver-detalles {
+		font-family: "Montserrat", "Roboto", "Helvetica Neue", sans-serif;
+		font-weight: 700;
+	} 
+
+	h2, h3 {
+		font-weight: 400;
+	} 
+}
+
+ion-app.ios {
+	font-family: "Hind", -apple-system, "Helvetica Neue", "Roboto", sans-serif;
+	font-weight: 400;
+
+	h1, 
+	h2, 
+	h3, 
+	button.ion-button,
+	.button-inner,
+	ion-segment-button.segment-button,
+	ion-col.ver-detalles {
+		font-family: "Montserrat", -apple-system, "Helvetica Neue", "Roboto", sans-serif;
+		font-weight: 700;
+	}
+
+	h2, h3 {
+		font-weight: 400;
+	} 
+}
+ 
+ion-title.title-md img.logo {
+    max-width: 180px;
+    vertical-align: middle;
+}
+
+ion-title.title-ios img.logo {
+    max-width: 150px;
+	vertical-align: middle;
+}
+
+button.alert-button {
+	min-width: 80px;
+}
+
+.alert-md .alert-button .button-inner,
+.alert-ios .alert-button .button-inner, {
+	justify-content: center;
+}
+
+.alert-md .alert-button:first-child {
+    background-color: $grisOscuro;
+}
+
+.alert-md .alert-button:last-child {
+    background-color: $principal;
+}
+
+.item-md p,
+.item-ios p  {
+	font-size: 1.5rem;
+}
+
+.label-md[stacked],
+.label-md[floating],
+.label-ios[stacked],
+.label-ios[floating] {
+	font-size: 1.4rem;
+}
+
+ion-content p,
+[text-wrap] .label-md,
+[text-wrap] .label-ios {
+    font-size: 1.5rem;
+}
+
+// 02 - Forms
+// --------------------------------------------------
+
+span.mensaje-error {
+	color: $form_colorTextoValidacion;
+    font-size: 1.4rem;
+    padding: 10px 16px;
+    display: block;
+    color: $principalOscuro;
+}
+
+p {
+	white-space: pre-line;
+}
+
+button[type='submit'],
+button.submit {
+	margin-top: 50px;
+
+}
+
+ion-item.half-size {
+	max-width: 49%;
+	display: inline-block;
+}
+
+button.alert-radio-button[aria-checked="true"] {
+	background-color: $principal;
+}
+
+button .button-inner > div {
+    font-weight: 400;
+}
+
+/* Estilos para los forms en iOS*/
+ion-app.ios form {
+
+	ion-item .item-inner {
+	    border-bottom: none;
+	}
+
+	ion-label {
+	    margin-left: 10px;
+	}
+
+	ion-input, 
+	ion-textarea,
+	ion-select,
+	ion-item.item-datetime .input-wrapper {
+		background-color: ios_colorFondoCampo
+	}
+
+	ion-input, 
+	ion-textarea {	    
+	    padding: 0px 10px;
+	} 
+
+	ion-select {
+		padding: 8px 10px;
+	}
+
+	/* Fix para el componente datetime */
+	ion-item.item-datetime .input-wrapper {
+    	margin-top: 25px;
+	}
+
+	ion-item.ng-invalid.ng-touched ion-input,
+	ion-select.ng-invalid.ng-touched,
+	ion-item.ng-invalid.ng-touched ion-textarea
+	ion-item.ng-touched.item-datetime.input-has-value .input-wrapper {
+        background-color: $ios-colorMensajeError;
+	}
+
+	ion-item.ng-touched.ng-valid ion-input,
+	ion-item ion-select.ng-touched.ng-valid,
+	ion-item.ng-touched.ng-valid ion-textarea,
+	ion-item.ng-touched.item-datetime.input-has-value .input-wrapper {
+        background-color: $ios-colorMensajeExito;
+	}
+}
+
+/* Estilos para los forms en Android */
+ion-app.md form {
+
+	/* Fix para bug en el label al poner el foco en el campo */
+	ion-label[floating],
+	ion-label[stacked] {
+		font-size: 1.4rem;
+		color: $form_colorTexto !important;
+	}
+
+	/* Fix para mostrar la validacion en azul cuando el input tiene el cursor */
+	ion-item.submitted.input-has-focus .item-inner,
+	ion-item:not(.submitted).input-has-focus .item-inner {
+		border-bottom: 1px solid $android_colorFocus !important;
+	}
+
+	ion-item.tipo-sanguineo-label .item-inner,
+	ion-item.tipo-sanguineo-detalle.primera-fila .item-inner, {
+	    border-bottom: 0 !important;
+	}
+
+	ion-item.tipo-sanguineo-detalle.segunda-fila ion-label.label-md {
+	    margin-top: 0;
+	}
+
+	ion-item.tipo-sanguineo-detalle.primera-fila ion-label.label-md {
+	    margin-top: 0;
+	    margin-bottom: 0;
+	}
+
+	ion-item.tipo-sanguineo-detalle button {
+	    width: 20%;
+	}
+
+}
+
+// 03 - Iconos
+// --------------------------------------------------
+
+ion-icon.ion-logo-facebook.menu-icon {
+    background-color: $color_facebook;
+    color: $blanco;
+    border-radius: 50%;
+    height: 60px;
+    width: 60px;
+    padding: 10px;
+    font-size: 3em;
+}
+
+ion-icon.ion-logo-twitter.menu-icon {
+    background-color: $color_twitter;
+    color: $blanco;
+    border-radius: 50%;
+    height: 60px;
+    width: 60px;
+    padding: 10px;
+    font-size: 3em;
+}
+
+ion-icon.ion-logo-googleplus.menu-icon {
+    background-color: $color_googlePlus;
+    color: $blanco;
+    border-radius: 50%;
+    height: 60px;
+    width: 60px;
+    padding: 10px;
+    font-size: 3em;
+}
+
+// 03 - Login
+// --------------------------------------------------
+
+div.social-container {
+	padding: 20px 0;
+}
+
+.social-title {
+	text-align: center;	
+
+	h4 {
+		margin-top: 0;
+	}
+}
+.social-links {
+	margin: 0px;
+	padding: 0 10px;
+	text-align: center;
+
+}
+
+ion-list.main-menu {
+	margin-top: 20px;
+}
+
+ion-row.profile img {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    margin-top: 20px;
+}
+
+ion-row.profile {
+	background-color: $principal;
+	color: $blanco;
+    text-align: center;
+}
+
+// Menu cuando no hay conexion
+ion-row.menu-logo {
+    text-align: center;
+	color: $blanco;
+    background-color: #f3595c;
+}
+
+ion-row.menu-logo img {
+    max-width: 100px;
+    margin-top: 25px;
+}
+// Fin Menu cuando no hay conexion
+
+// Estilos de Auth0
+.auth0-lock.auth0-lock .auth0-lock-widget {
+    width: 100%;
+}
+
+.auth0-lock.auth0-lock .auth0-lock-content {
+	padding: 20px 10px;
+}
+
+ion-col#hiw-login-container {
+    padding: 0;
+}
+
+.auth0-lock.auth0-lock .auth0-lock-header-bg .auth0-lock-header-bg-solid {
+	opacity: 0;
+}
+
+.auth0-lock.auth0-lock .auth0-lock-header {
+	padding: 24px 14px 0px 14px;
+	border-radius: 0;
+}
+
+.auth0-lock.auth0-lock .auth0-lock-header,
+.auth0-lock-view-content {
+	background-color: $principal;
+}
+
+.auth0-lock-name {
+	color: $blanco;
+	font-weight: 500;
+}
+
+.auth0-lock.auth0-lock .auth0-lock-social-button:not(.auth0-lock-social-big-button) {
+	width: 55px;
+	height: 55px;
+	border-radius: 50%;
+	margin: 0 10px;
+}
+
+.auth0-lock.auth0-lock .auth0-lock-social-button:not(.auth0-lock-social-big-button) .auth0-lock-social-button-icon {
+	width: 55px;
+	height: 55px;
+}
+// Fin Estilos de Auth0

@@ -1,0 +1,93 @@
+<ion-header>
+	<ion-navbar color="negro">
+		<ion-title>Bancos de Sangre</ion-title>
+		<ion-buttons end>
+			<button ion-button icon-only (click)="mostrarAyuda()"><ion-icon name="help-circle"></ion-icon></button>
+		</ion-buttons>
+	</ion-navbar>
+	<ion-toolbar>
+		<ion-segment color="blanco" [(ngModel)]="seccion">
+			<ion-segment-button value="busquedaUbicacion" (ionSelect)="resetearDatos()">
+				Cercanos a mí
+			</ion-segment-button>
+			<ion-segment-button value="busquedaProvincias" (ionSelect)="resetearDatos()">
+				Por Provincia
+			</ion-segment-button>
+		</ion-segment>
+	</ion-toolbar>
+</ion-header>
+
+
+<ion-content padding>
+
+
+	<div [ngSwitch]="seccion">
+
+		<!-- Busqueda por provincias -->
+		<div *ngSwitchCase="'busquedaProvincias'">
+
+			<ion-list class="filtros-busqueda">
+				<!-- Provincia  -->
+				<ion-item no-lines (click)="abrirModalProvincias()">
+					<ion-label stacked>Provincia</ion-label>
+					<ion-input disabled [value]="provinciaSeleccionada?.nombre || 'Selecciona una provincia'"> </ion-input>	
+				</ion-item>
+			</ion-list>
+
+			<!-- Resultados agrupados por localidad -->
+			<ion-item-group class="resultados" *ngFor="let key of mapBancosSangre.keys()">
+				<ion-item-divider color="grisClaro">{{ key }}</ion-item-divider>
+				<ion-item (click)="abrirDetallesBancoSangre(banco)" detail-push text-wrap *ngFor="let banco of mapBancosSangre.get(key)">
+					<h3>{{ banco.institucion }}</h3>
+					<p>{{ banco.direccion }}</p>
+				</ion-item>
+			</ion-item-group>
+
+			<ion-list *ngIf="mostrarMensajeResultadosVaciosPorProvincia" no-lines>
+				<ion-item text-wrap class="sin-resultados">
+					<h2>No encontramos resultados.</h2>
+					<p>
+						 No hemos encontramos bancos de sangre en la provincia de <strong>{{ provinciaSeleccionada?.nombre }}</strong>. Si sabés de un banco de sangre que debería mostrarse, envianos un mail a <a href="mailto:donemos@flioh.com">donemos@flioh.com</a>. <strong>¡Ayudemos a ayudar!</strong>
+					</p>
+				</ion-item>
+			</ion-list>
+		</div>
+
+		<!-- Busqueda por ubicacion -->
+		<div *ngSwitchCase="'busquedaUbicacion'">
+
+			<ion-list class="filtros-busqueda">
+				<ion-item no-lines>
+					<ion-label stacked>Usar mi ubicación</ion-label>
+					<ion-range min="5" max="50"  pin="true" step="5" color="principal" [(ngModel)]="distancia" (ionChange)="ocultarMensajeResultadoVacioPorCercania()">
+						<ion-label range-left>5 Km</ion-label>
+						<ion-label range-right>50 Km</ion-label>
+					</ion-range>
+				</ion-item>
+				<ion-item no-lines text-wrap>
+					Presioná <strong>buscar bancos</strong> para buscar los bancos de sangre ubicados hasta a <strong>{{ distancia }} kilómetros</strong> de tu ubicación actual.
+				</ion-item>
+				<button (click)="buscarBancosCercanos()" ion-button full color="principal">Buscar bancos</button>
+			</ion-list>
+
+			<!-- Resultados agrupados por localidad -->
+			<ion-list *ngIf="listaBancosSangre?.length" class="resultados">
+				<ion-item text-wrap (click)="abrirDetallesBancoSangre(banco)" detail-push no-lines *ngFor="let banco of listaBancosSangre">
+					<h3>{{ banco.institucion }}</h3>
+					<p>{{ banco.direccion }}</p>
+				</ion-item>
+			</ion-list>
+
+			<ion-list *ngIf="mostrarMensajeResultadosVaciosPorCercania" no-lines>
+				<ion-item text-wrap class="sin-resultados">
+					<h2>No encontramos resultados.</h2>
+					<p>
+						 No hemos encontramos bancos de sangre en un radio de <strong>{{ distancia }} kilómetros</strong> con respecto a tu ubicación actual. Si sabés de un banco de sangre que debería mostrarse, envianos un mail a <a href="mailto:donemos@flioh.com">donemos@flioh.com</a>. <strong>¡Ayudemos a ayudar!</strong>
+					</p>
+				</ion-item>
+			</ion-list>
+
+		</div>
+	</div>
+
+</ion-content>

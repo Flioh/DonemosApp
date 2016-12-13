@@ -1,0 +1,143 @@
+<ion-header no-shadow>
+	<ion-navbar color="negro">
+		<ion-title>{{ modoEdicion ? 'Editar Solicitud' : 'Nueva Solicitud' }}</ion-title>
+	</ion-navbar>
+</ion-header>
+
+
+
+<ion-content padding class="nueva-solicitud">
+	<ion-item-group *ngIf="nuevaSolicitud">
+		<form (ngSubmit)="guardarCambios()" #nuevaSolicitudForm="ngForm" >
+
+
+			<!-- Institucion  -->
+			<ion-item>
+				<ion-label stacked>Nombre de institución (*)</ion-label>
+				<ion-input [(ngModel)]="nuevaSolicitud.institucion" name="institucion" #institucion="ngModel" required type="text" placeholder=""></ion-input>
+			</ion-item>
+			<span [hidden]="institucion.valid || institucion.untouched" class="mensaje-error">
+				Ingresa el nombre de la institución.
+			</span>
+
+
+
+			<!-- Dirección  -->
+			<ion-item>
+				<ion-label stacked>Direccion (*)</ion-label>
+				<ion-input [(ngModel)]="nuevaSolicitud.direccion" name="direccion" #direccion="ngModel" required type="text" placeholder=""></ion-input>
+			</ion-item>
+			<span [hidden]="direccion.valid || direccion.untouched" class="mensaje-error">
+				Ingresa la dirección.
+			</span>
+
+
+
+			<!-- Provincia  -->
+			<ion-item (click)="abrirModalProvincias()">
+				<ion-label stacked>Provincia (*)</ion-label>
+				<ion-input disabled [value]="nuevaSolicitud.provincia?.nombre"> </ion-input>	
+			</ion-item>
+			<span [hidden]="!mostrarErrorProvincia" class="mensaje-error">
+				Selecciona una provincia.
+			</span>
+
+
+
+			<!-- Localidad  -->
+			<ion-item (click)="abrirModalLocalidades()">
+				<ion-label stacked>Localidad (*)</ion-label>
+				<ion-input disabled [value]="nuevaSolicitud.localidad?.nombre"> </ion-input>	
+			</ion-item>
+			<span [hidden]="!mostrarErrorLocalidad" class="mensaje-error">
+				Selecciona una localidad.
+			</span>
+
+
+
+			<!-- Hora desde -->
+			<ion-item [class.ng-touched]="horaDesde.touched">
+				<ion-label>Desde las (*)</ion-label>
+				<ion-datetime displayFormat="HH:mm" [(ngModel)]="nuevaSolicitud.horaDesde" required name="horaDesde" #horaDesde="ngModel" minuteValues="0,15,30,45" doneText="Aceptar" cancelText="Cancelar">
+				</ion-datetime>
+			</ion-item>
+			<span [hidden]="horaDesde.valid || horaDesde.untouched" class="mensaje-error">
+				Ingresa la hora de inicio.
+			</span>
+
+
+
+			<!-- Hora hasta -->
+			<ion-item [class.ng-touched]="horaHasta.touched">
+				<ion-label>Hasta las (*)</ion-label>
+				<ion-datetime displayFormat="HH:mm" [(ngModel)]="nuevaSolicitud.horaHasta" required name="horaHasta" #horaHasta="ngModel" minuteValues="0,15,30,45" doneText="Aceptar" cancelText="Cancelar">
+				</ion-datetime>
+			</ion-item>
+			<span [hidden]="horaHasta.valid || horaHasta.untouched" class="mensaje-error">
+				Ingresa la hora de fin.
+			</span>
+
+
+
+			<!-- Nombre del paciente  -->
+			<ion-item>
+				<ion-label stacked>Nombre del paciente (*)</ion-label>
+				<ion-input [(ngModel)]="nuevaSolicitud.nombrePaciente" name="nombrePaciente" #nombrePaciente="ngModel" required type="text" placeholder=""></ion-input>
+			</ion-item>
+			<span [hidden]="nombrePaciente.valid || nombrePaciente.untouched" class="mensaje-error">
+				Ingresa el nombre del paciente.
+			</span>
+
+
+			<!-- Tipo sanguineo  -->
+			<ion-item class="tipo-sanguineo-label">
+				<ion-label stacked>Tipos Sanguineos que se necesitan (*)</ion-label>
+			</ion-item>
+			<ion-item class="tipo-sanguineo-detalle primera-fila">
+				
+				<template ngFor let-tipoSanguineo [ngForOf]="tiposSanguineos[0]">
+					<button type="button" ion-button [color]="tipoSanguineo.seleccionado ? 'principal' : 'grisClaro'" (click)="toggleTipoSanguineo(tipoSanguineo)">{{ tipoSanguineo.nombre }}</button>
+				</template>
+
+			</ion-item>
+			<ion-item class="tipo-sanguineo-detalle segunda-fila">
+				
+				<template ngFor let-tipoSanguineo [ngForOf]="tiposSanguineos[1]">
+					<button type="button" ion-button [color]="tipoSanguineo.seleccionado ? 'principal' : 'grisClaro'" (click)="toggleTipoSanguineo(tipoSanguineo)">{{ tipoSanguineo.nombre }}</button>
+				</template>
+				
+			</ion-item>
+			<span [hidden]="!mostrarErrorTipoSanguineo" class="mensaje-error">
+				Selecciona los tipos sanguíneos que se necesitan
+			</span>
+
+
+
+			<!-- Cantidad  -->
+			<ion-item>
+				<ion-label stacked>Cantidad</ion-label>
+				<ion-input [(ngModel)]="nuevaSolicitud.cantidadDadores" name="cantidad" type="number" placeholder=""></ion-input>
+			</ion-item>
+
+
+
+			<!-- Datos adicionales  -->
+			<ion-item>
+				<ion-label stacked>Datos adicionales</ion-label>
+				<ion-textarea rows="6" [(ngModel)]="nuevaSolicitud.datosAdicionales" name="datosAdicionales"></ion-textarea>
+			</ion-item>
+
+
+			<button ion-button [disabled]="!nuevaSolicitudForm.form.valid || !seleccionoAlgunTipoSanguineo()" type="submit" color="principal" full>
+				{{ modoEdicion ? 'Guardar cambios' : 'Crear solicitud' }}
+			</button>
+
+
+
+		</form>
+
+	</ion-item-group>
+
+</ion-content>
+
+

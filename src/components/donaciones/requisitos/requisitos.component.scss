@@ -1,0 +1,13 @@
+requisitos-page {
+    h3 {
+        font-weight: 700;
+    }
+
+    .mensaje-importante {
+        display: block;
+        padding: 1.5rem;
+        background-color: $principalClaro;
+        color: $blanco;
+        margin-top: 0.75rem;
+    }
+}

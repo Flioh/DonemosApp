@@ -1,0 +1,41 @@
+tutorial-page {
+
+    .button-container {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 55px;
+        min-width: 120px;
+        margin: auto;
+    }
+
+    .button-container button {
+        display: inline-block;
+    }
+
+    .slide-zoom {
+        height: 100%;
+        background: #ff595c;
+    }
+
+    .swiper-slide img {
+        max-height: 90vh;
+    }
+
+    .button-container{
+        display: none;
+    }
+
+    @media screen and (min-height: 400px){
+        .button-container{
+            display: block;
+        }
+    }
+    
+    @media screen and (min-height: 550px){
+        .swiper-slide img {
+            max-height: 100%;
+        }
+    }
+}
+

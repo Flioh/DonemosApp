@@ -1,0 +1,139 @@
+// Ionic Variables and Theming. For more info, please see:
+// http://ionicframework.com/docs/v2/theming/
+@import "ionic.globals";
+
+
+// Shared Variables
+// --------------------------------------------------
+// To customize the look and feel of this app, you can override
+// the Sass variables found in Ionic's source scss files.
+// To view all the possible Ionic variables, see:
+// http://ionicframework.com/docs/v2/theming/overriding-ionic-variables/
+
+// Colores principales de la aplicacion
+$principal : 	          #f3595c;
+$principalOscuro :      #b64446;
+
+// Revisar si se usa
+$principalClaro:	      #f4484b;
+
+$principalFondo:        #ececec;
+$blanco: 	              #ffffff;
+$verde:		              #7ad596;
+
+$negro:                 #222222;
+$grisOscuro:            #2d2d2d;
+$gris:                  #777777;
+$grisClaro:             #b2b2b2;
+
+$grisMuyClaro:          #efefef;
+
+
+// Colores a usar en los formularios
+$form_colorTexto:            $gris;
+$form_colorTextoValidacion:  #7f7f7f;
+
+$ios-colorTexto:        #d2d2d2;
+$ios_colorFondoCampo:   #f2f2f2;
+$ios-colorMensajeError: rgba(245, 61, 61, 0.25);
+$ios-colorMensajeExito: rgba(50, 219, 100, 0.25);
+
+$android_colorFocus 	: #387ef5;
+
+$color_facebook:        #3b5998;
+$color_twitter:         #53a3ff;
+$color_googlePlus:      #d34836;
+
+
+// Named Color Variables
+// --------------------------------------------------
+// Named colors makes it easy to reuse colors on various components.
+// It's highly recommended to change the default colors
+// to match your app's branding. Ionic uses a Sass map of
+// colors so you can add, rename and remove colors as needed.
+// The "primary" color is the only required color in the map.
+
+$colors: (
+  // Colores por defecto de Ionic
+  primary:    #387ef5,
+  secondary:  #32db64,
+  danger:     #f53d3d,
+  light:      #f4f4f4,
+  dark:       #222,
+  favorite:   #69BB7B,
+  
+  // Colores personalizados
+  principal:        $principal,
+  principalClaro:   $principalClaro,
+  principalOscuro:  $principalOscuro,
+  principalFondo:   $principalFondo,
+  blanco:           $blanco,
+  verde:            $verde,
+  grisMuyClaro:     $grisMuyClaro,
+  grisClaro:        $grisClaro,
+  gris:             $gris,
+  grisOscuro:       $grisOscuro,
+  negro:            $negro
+);
+
+// Variables generales
+//$background-color:        $principalFondo;
+$toolbar-background:      $grisOscuro;
+$toolbar-inactive-color:  $grisClaro;
+
+// App iOS Variables
+// --------------------------------------------------
+// iOS only Sass variables can go here
+
+$alert-ios-button-text-color: $blanco;
+$alert-ios-button-background-color: $principal;
+$alert-ios-button-background-color-activated: $principalOscuro;
+$card-ios-background-color: $blanco;
+$card-ios-border-radius: 5px;
+
+$picker-ios-button-text-color: $principal;
+$picker-ios-option-selected-color: $principalClaro;
+
+// App Material Design Variables
+// --------------------------------------------------
+// Material Design only Sass variables can go here
+
+$alert-md-button-text-color: $blanco;
+$alert-md-button-background-color: $principal;
+$alert-md-button-background-color-activated: $principalOscuro;
+$card-md-background-color: $blanco;
+$card-md-border-radius: 5px;
+
+$item-md-detail-push-show: true;
+
+$picker-md-button-text-color: $principal;
+$picker-md-option-selected-color: $principalClaro;
+
+// App Windows Variables
+// --------------------------------------------------
+// Windows only Sass variables can go here
+
+$alert-wp-button-text-color: $blanco;
+$alert-wp-button-background-color: $principal;
+$alert-wp-button-background-color-activated: $principalOscuro;
+$card-wp-background-color: $blanco;
+$card-wp-border-radius: 5px;
+
+
+// App Theme
+// --------------------------------------------------
+// Ionic apps can have different themes applied, which can
+// then be future customized. This import comes last
+// so that the above variables are used and Ionic's
+// default are overridden.
+
+@import "ionic.theme.default";
+
+
+// Ionicons
+// --------------------------------------------------
+// The premium icon font for Ionic. For more info, please see:
+// http://ionicframework.com/docs/v2/ionicons/
+
+$ionicons-font-path: "../assets/fonts";
+@import "ionicons";

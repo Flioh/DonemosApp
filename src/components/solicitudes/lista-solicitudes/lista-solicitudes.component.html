@@ -1,0 +1,179 @@
+<ion-header no-shadow>
+	<ion-navbar color="negro">
+		<ion-title><img class="logo" src="assets/images/logo_principal.png" alt=""></ion-title>
+		
+		<button ion-button menuToggle="right" end>
+			<ion-icon name="menu"></ion-icon>
+		</button>
+
+		<ion-buttons end>
+			<button ion-button icon-only (click)="mostrarAyuda()"><ion-icon name="help-circle"></ion-icon></button>
+			<button *ngIf="isIos" ion-button (click)="nuevaSolicitud()"><ion-icon name="add"></ion-icon></button>
+		</ion-buttons>
+	</ion-navbar>
+
+	<ion-toolbar>
+		<ion-segment color="blanco" [(ngModel)]="seccion">
+			<ion-segment-button value="solicitudes">
+				Solicitudes
+			</ion-segment-button>
+			<ion-segment-button value="filtros" (ionSelect)="llevarAlInicio()">
+				Filtros
+			</ion-segment-button>
+		</ion-segment>
+	</ion-toolbar>
+
+	
+
+</ion-header>
+
+<ion-content [class.fondo-oscuro]="seccion === 'solicitudes'">
+
+	<div [ngSwitch]="seccion">
+
+		<!-- Seccion de solicitudes -->
+		<div padding *ngSwitchCase="'solicitudes'">
+
+
+			<!-- Bancos de sangre -->
+			<ion-card class="resumen-banco-sangre">
+
+				<!-- Layout para cuando es compatible -->
+				<ion-item text-wrap class="encabezado" (click)="mostrarListaBancosSangre()">
+					<h2> 
+						<strong>Siempre</strong>
+						<span> se necesitan dadores</span>
+					</h2>
+					<h3 class="desc-tipos-sanguineos">De todo tipo.</h3>
+					<ion-icon  class="icono-compatibilidad" name="checkmark-circle-outline" color="principalOscuro"></ion-icon>
+				</ion-item>
+
+				<ion-card-content class="detalle-solicitud">
+					<ion-row>
+						<ion-col>
+							Si sólo <strong>1 de cada 25 argentinos</strong> donaran voluntariamente, se cubriría toda la demanda necesaria.
+						</ion-col>			
+					</ion-row>
+					<ion-row>
+						<ion-col width-25>
+						</ion-col>
+						<ion-col class="ver-detalles" tappable width-75 (click)="mostrarListaBancosSangre()">
+							VER DONDE DONAR <ion-icon name="arrow-forward"></ion-icon>
+						</ion-col>
+					</ion-row>
+				</ion-card-content>
+			</ion-card>
+
+			<!-- Creamos una lista de solicitudes usando el componente solicitud-item -->
+			<resumen-solicitud *ngFor="let solicitudItemModel of solicitudes" 
+				[solicitudItemModel]="solicitudItemModel"
+				(seleccionarSolicitud)="abrirDetalles($event)">		
+			</resumen-solicitud>
+
+		<ion-fab *ngIf="!isIos">
+			<button ion-fab class="floating-btn" color="principal" fab (click)="nuevaSolicitud()"><ion-icon name="add"></ion-icon></button>
+		</ion-fab>
+
+		<button ion-button *ngIf="hayMasSolicitudes" color="principal" full (click)="buscarSolicitudes()">
+			Ver mas solicitudes
+		</button>
+
+		<ion-list *ngIf="!hayMasSolicitudes && noHaySolicitudesMensaje" no-lines>
+			<ion-item text-wrap class="sin-resultados">
+				<h2>{{ noHaySolicitudesMensaje }}</h2>
+				<p>
+					{{ noHaySolicitudesMensaje }} que cumplan con los filtros especificados. Recordá que igual podés ayudar concurriendo a un <strong (click)="mostrarListaBancosSangre()">Banco de Sangre</strong>
+				</p>
+			</ion-item>
+		</ion-list>
+
+	</div>
+
+	<!-- Seccion de filtros de busqueda -->
+	<div *ngSwitchCase="'filtros'">
+
+		<ion-list padding>
+			<form #filtros="ngForm">
+
+				<!-- Toggle para usar datos personales como filtro -->
+				<ion-item text-wrap *ngIf="datosUsuarioObj">
+					<ion-label>Completar con mis preferencias</ion-label>
+					<ion-toggle color="principal" [(ngModel)]="usarDatosPersonales" (ionChange)="cambiarUsarPreferenciasUsuarioComoFiltro()" name="usarDatosPersonales"></ion-toggle>
+				</ion-item>
+
+
+
+				<!-- Provincia  -->
+				<ion-item (click)="abrirModalProvincias()">
+					<ion-label stacked>Provincia</ion-label>
+					<ion-input disabled [value]="provinciaSeleccionada?.nombre"> </ion-input>	
+				</ion-item>
+
+
+
+				<!-- Localidad  -->
+				<ion-item (click)="abrirModalLocalidades()">
+					<ion-label stacked>Localidad</ion-label>
+					<ion-input disabled [value]="localidadSeleccionada?.nombre"> </ion-input>	
+				</ion-item>
+
+
+
+				<!-- Grupo sanguineo  -->
+				<ion-item>
+					<ion-label stacked>Grupo sanguineo que se necesita</ion-label>
+					<ion-select [(ngModel)]="grupoSanguineoSeleccionado" (ionChange)="filtrosModificados();" okText="Aceptar" cancelText="Cancelar" name="grupo" #grupo="ngModel">
+						<ion-option *ngFor="let grupo of listaGruposSanguineos" [value]="grupo.id">
+							{{grupo.nombre}}
+						</ion-option>
+					</ion-select>
+				</ion-item>
+
+
+
+				<!-- Factor sanguineo  -->
+				<ion-item>
+					<ion-label stacked>Factor sanguineo que se necesita</ion-label>
+					<ion-select [(ngModel)]="factorSanguineoSeleccionado" (ionChange)="filtrosModificados();" okText="Aceptar" cancelText="Cancelar" name="factor" #factor="ngModel">
+						<ion-option *ngFor="let factor of listaFactoresSanguineos" [value]="factor.id">
+							{{factor.nombre}}
+						</ion-option>
+					</ion-select>
+				</ion-item>
+
+
+				
+				<ion-item text-wrap *ngIf="!datosUsuarioObj">
+					<p>Si desea puede configurar sus preferencias de búsqueda en <strong>Configurar preferencias</strong> para luego poder utilizarlas automáticamente como filtro de búsqueda.</p>
+				</ion-item>
+
+
+
+			</form>
+
+			<button ion-button class="btn-inline btn-secondary reset" color="grisOscuro" full (click)="borrarFiltros()">
+				Borrar
+			</button>
+
+			<button ion-button class="btn-inline btn-primary" (click)="realizarNuevaBusquedaSolicitudes()" color="principal" full>
+				Buscar Solicitudes
+			</button>
+
+		</ion-list>
+
+		<ion-item padding text-wrap class="informacion">
+			<h2>¿Soy compatible?</h2>
+			<p>
+				No importa cuáles sean los filtros de búsqueda que selecciones, siempre mostraremos en <strong color="principal">color rojo</strong> las solicitudes que sean compatibles con el grupo y el factor elegido en la página de preferencias.
+				Aquellas que <strong>no sean compatibles</strong> con el grupo y el factor sanguíneo elegido en las preferencias, se mostrarán en <strong>color negro</strong>.
+			</p>
+		</ion-item>
+
+	</div>
+
+
+
+
+</div>
+
+</ion-content>

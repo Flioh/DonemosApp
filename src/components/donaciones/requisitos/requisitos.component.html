@@ -1,0 +1,123 @@
+<ion-header>
+	<ion-navbar color="negro">
+		<ion-title>Requisitos para Donar</ion-title>
+	</ion-navbar>
+
+    <ion-toolbar>
+        <ion-segment color="blanco" [(ngModel)]="seccion">
+        <ion-segment-button value="requisitos">
+                Requisitos
+            </ion-segment-button>
+            <ion-segment-button value="prevenciones">
+                Prevenciones
+            </ion-segment-button>
+        </ion-segment>
+    </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+    <div [ngSwitch]="seccion">
+
+        <div *ngSwitchCase="'requisitos'">
+
+            <h3>Requisitos básicos</h3>
+
+            <ion-list text-wrap>
+                <ion-item>
+                    <ion-icon color="grisClaro" name="checkmark-circle-outline" item-left></ion-icon>
+                    Gozar de buen estado de salud.
+                </ion-item>
+                <ion-item>
+                    <ion-icon color="grisClaro" name="checkmark-circle-outline" item-left></ion-icon>
+                    Tener entre 18 y 65 años de edad. 
+                </ion-item>
+                <ion-item>
+                    <ion-icon color="grisClaro" name="checkmark-circle-outline" item-left></ion-icon>
+                    Pesar más de 50 kilos.
+                </ion-item>
+                <ion-item>
+                    <ion-icon color="grisClaro" name="checkmark-circle-outline" item-left></ion-icon>
+                    Tener valores de presión arterial dentro de los límites adecuados.
+                </ion-item>
+                <ion-item>
+                    <ion-icon color="grisClaro" name="checkmark-circle-outline" item-left></ion-icon>
+                    No haber padecido alguna enfermedad en los últimos 7 días.
+                </ion-item>
+            </ion-list>
+
+            <h3>El día de la donación.</h3>
+
+            <ion-list text-wrap>
+                <ion-item>
+                    <ion-icon color="grisClaro" name="checkmark-circle-outline" item-left></ion-icon>
+                    No concurrir en ayunas. Desayune lo habitual, evitando lácteos y productos grasos.
+                </ion-item>
+                <ion-item>
+                    <ion-icon color="grisClaro" name="checkmark-circle-outline" item-left></ion-icon>
+                    Recuerde llevar su DNI.
+                </ion-item>
+                <ion-item>
+                    <ion-icon color="grisClaro" name="checkmark-circle-outline" item-left></ion-icon>
+                    Es recomendable haber descansado al menos 6 horas la noche anterior. 
+                </ion-item>
+                <ion-item>
+                    <ion-icon color="grisClaro" name="checkmark-circle-outline" item-left></ion-icon>
+                    Concurrir con anteojos, si los utiliza para lectura.
+                </ion-item>
+            </ion-list>
+
+        </div>
+        <div *ngSwitchCase="'prevenciones'">
+
+            <h3>Situaciones de riesgo.</h3>
+
+            <ion-list text-wrap>
+                <ion-item>
+                    Es importante conocer que, a pesar de que se realizan los análisis de
+                    laboratorio para detectar enfermedades transmisibles por transfusión
+                    a todas las unidades de sangre donadas, existe el llamado período de
+                    ventana, que es el tiempo que transcurre desde que ingresa en el
+                    organismo un agente capaz de transmitir una enfermedad hasta que
+                    puede ser detectado por las pruebas de laboratorio. 
+
+                    <span class="mensaje-importante">
+                        Si una persona dona sangre estando en ese período de ventana, <strong>no podrá ser
+                        detectado en el laboratorio</strong>. Por esto, se insiste tanto en la sinceridad
+                        para contestar las preguntas de los cuestionarios.
+                    </span>
+                </ion-item>
+                <ion-item>
+                    <ion-icon color="grisClaro" name="close-circle" item-left></ion-icon>
+                    El uso de drogas intravenosas.
+                </ion-item>
+                <ion-item>
+                    <ion-icon color="grisClaro" name="close-circle" item-left></ion-icon>
+                    La actividad sexual con parejas ocasionales (no estables), aún con protección en el útimo año.
+                </ion-item>
+                <ion-item>
+                    <ion-icon color="grisClaro" name="close-circle" item-left></ion-icon>
+                    Los tatuajes, perforaciones en cualquier parte del cuerpo y acupuntura, en el último año.
+                </ion-item>
+                <ion-item>
+                    <ion-icon color="grisClaro" name="close-circle" item-left></ion-icon>
+                    No haber sido sometido a una cirugía mayor en el último año.
+                </ion-item>
+                <ion-item>
+                    <ion-icon color="grisClaro" name="close-circle" item-left></ion-icon>
+                    El uso de objetos cortantes no esterilizados.
+                </ion-item>
+                <ion-item>
+                    <ion-icon color="grisClaro" name="close-circle" item-left></ion-icon>
+                    Haber tenido hepatitis de cualquier tipo después de los 10 años de vida.
+                </ion-item>
+
+            </ion-list>
+
+        </div>
+
+    </div>
+
+</ion-content>

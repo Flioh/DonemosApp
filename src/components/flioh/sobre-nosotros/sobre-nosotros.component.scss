@@ -1,0 +1,30 @@
+sobre-nosotros-page {
+
+	h2.titulo-principal {
+		font-weight: 700;
+	    padding-bottom: 20px;
+	    border-bottom: 1px solid $grisClaro;
+	    margin-bottom: 20px;
+
+	    span > img {
+	    	display: inline-block;
+		    max-width: 65px;
+		    position: relative;
+		    top: 5px;
+		    vertical-align: text-bottom;
+	    }
+	}
+
+	ion-list.list-md,
+	ion-list.list-ios {
+		margin: 0;
+	}
+
+	ion-item.informacion {
+		color: $gris;
+		display: block;
+	    padding: 1.5rem;
+	    background-color: $grisMuyClaro;
+	    margin-top: 0.75rem;
+	}
+}

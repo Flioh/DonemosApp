@@ -1,0 +1,24 @@
+<ion-header>
+	<ion-navbar color="negro">
+		<ion-title>{{ titulo }}</ion-title>
+		<ion-buttons end>
+	      <button ion-button icon-only (click)="volver()">
+	        <ion-icon name="close"></ion-icon>
+	      </button>
+	    </ion-buttons>
+	</ion-navbar>
+	<ion-toolbar color="grisOscuro">
+		<ion-searchbar #searchbar [debounce]="0" [placeholder]="'Escriba el nombre'" (ionInput)="filtrarOpciones($event)"></ion-searchbar>		
+	</ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+	<ion-list>
+	  <ion-item (click)="seleccionarOpcion(opcion)" *ngFor="let opcion of listaOpciones | slice:0:24; trackBy:identificarOpcion">
+	    {{ opcion.nombre }}
+	  </ion-item>
+	  <ion-item class="info" text-wrap *ngIf="listaOpciones && listaOpciones.length > 25">
+	  	Sólo se muestran los primeros 25 resultados. Continúe ingresando el nombre para refinar la búsqueda.
+	  </ion-item>	
+	</ion-list>
+</ion-content>
