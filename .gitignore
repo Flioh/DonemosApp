@@ -38,3 +38,7 @@ src/shared/app-config.ts
 src/index.html
 
 www/index.html
+
+src/shared/prod-keys.ts
+
+src/shared/dev-keys.ts
