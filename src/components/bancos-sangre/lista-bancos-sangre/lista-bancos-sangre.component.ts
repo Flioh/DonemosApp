@@ -11,9 +11,9 @@ import { BancoSangreModel } from '../banco-sangre.model';
 // Servicios
 import { LocalizacionService } from '../../../shared/services/localizacion.service'
 import { DatosService } from '../../../shared/services/datos.service';
+import { ExcepcionesService } from '../../../shared/services/excepciones.service';
 
 // Paginas y componente base
-import { BasePage } from '../../../shared/components/base/base.component';
 import { DropdownPage } from '../../../shared/components/dropdown/dropdown.component';
 import { DetallesBancoSangrePage } from '../detalles-banco-sangre/detalles-banco-sangre.component';
 
@@ -21,7 +21,7 @@ import { DetallesBancoSangrePage } from '../detalles-banco-sangre/detalles-banco
 	selector:'lista-bancos-sangre-page',
 	templateUrl: 'lista-bancos-sangre.component.html',
 })
-export class ListaBancosSangrePage extends BasePage {
+export class ListaBancosSangrePage {
 
 	public listaBancosSangre: Array<BancoSangreModel>;
 	public mapBancosSangre: Map<string, Array<BancoSangreModel>>;
@@ -40,9 +40,8 @@ export class ListaBancosSangrePage extends BasePage {
 		private modalCtrl: ModalController,
 		private alertCtrl: AlertController,
 		private localizacionService: LocalizacionService,
+		private excepcionesService: ExcepcionesService,
 		private datosService: DatosService) {
-
-		super();
 
 		this.mapBancosSangre = new Map();
 		this.provinciaSeleccionada = null;
@@ -77,17 +76,16 @@ export class ListaBancosSangrePage extends BasePage {
 
 					// Ocultamos el mensaje de espera
 					loadingPopup.dismiss();
-
-					this.procesarError(this.config.excepcionListaProvincias, 'cargarProvincias', 'ListaBancosSangrePage', 'error', 'Error al obtener el listado de provincias.', result);
-					this.mostrarMensajeError('Error', this.config.errorProvincias);
+					this.excepcionesService.notificarExcepcion(null, this.excepcionesService.obtenerListaProvincias, ListaBancosSangrePage, 'cargarProvincias');
+					this.mostrarMensajeError('Error', this.excepcionesService.obtenerListaProvincias.mensajeUsuario);
 				}
 			}, (error) => {
 
 				// Ocultamos el mensaje de espera
 				loadingPopup.dismiss();
 
-				this.procesarError(this.config.excepcionListaProvincias, 'cargarProvincias', 'ListaBancosSangrePage', 'error', 'Error al obtener el listado de provincias.', error);
-				this.mostrarMensajeError('Error', this.config.errorProvincias);
+				this.excepcionesService.notificarExcepcion(null, this.excepcionesService.obtenerListaProvincias, ListaBancosSangrePage, 'cargarProvincias');
+				this.mostrarMensajeError('Error', this.excepcionesService.obtenerListaProvincias.mensajeUsuario);
 			});
 	}
 
@@ -160,9 +158,8 @@ export class ListaBancosSangrePage extends BasePage {
           		loadingPopup.dismiss();
 
           		// Enviamos el error a Bugsnag
-				this.procesarError(this.config.excepcionListaBancosSangre, 'buscarBancosPorProvincia', 'ListaBancosSangrePage', 'error', `Error al obtener el listado de bancos de sangre para la provincia ${this.provinciaSeleccionada.id}`, error);
-				
-				this.mostrarMensajeError('Error', this.config.errorBancosSangre);
+  				this.excepcionesService.notificarExcepcion(error, this.excepcionesService.obtenerListaBancosSangre, ListaBancosSangrePage, 'buscarBancosPorProvincia', this.provinciaSeleccionada.id.toString());
+				this.mostrarMensajeError('Error', this.excepcionesService.obtenerListaBancosSangre.mensajeUsuario);
 			});
 	}
 
@@ -200,9 +197,6 @@ export class ListaBancosSangrePage extends BasePage {
 				});
 
 				mensajeError.present();
-
-				// Enviamos el error a Bugsnag
-				this.procesarError(this.config.excepcionListaBancosSangre, 'buscarBancosCercanos', 'ListaBancosSangrePage', 'warning', `Servicio de ubicación no disponible. Se muestra la pantalla de configuración.`, {});
 				return;
 			}
 
@@ -210,19 +204,20 @@ export class ListaBancosSangrePage extends BasePage {
 			this.localizacionService.obtenerCoordenadasCordovaGeolocationPlugin().then(posicion => {
 
 				if(!posicion) {
+
+					// Enviamos el error a Bugsnag
+					this.excepcionesService.notificarExcepcion(null, this.excepcionesService.coordenadasUsuario, ListaBancosSangrePage, 'buscarBancosCercanos');
+
 					// No ha sido posible encontrar la ubicación actual del usuario				
 					loadingPopup.dismiss();
 
 					let mensajeError = this.alertCtrl.create({
 						title: ':(',
-						message: `No hemos podido obtener tu ubicación actual. No te preocupes, es algo común. Por favor volvé a intentarlo más tarde o buscá bancos de sangre por provincia.`,
+						message: this.excepcionesService.coordenadasUsuario.mensajeUsuario,
 						buttons: ['Aceptar']
 					});
 
 					mensajeError.present();
-
-					// Enviamos el error a Bugsnag
-					this.procesarError(this.config.excepcionListaBancosSangre, 'buscarBancosCercanos', 'ListaBancosSangrePage', 'warning', `Error al obtener la ubicación actual del usuario.`, {});
 					return;
 				}
 
@@ -241,17 +236,14 @@ export class ListaBancosSangrePage extends BasePage {
 						loadingPopup.dismiss();
 
 					}, (error) => {
-
 						this.mostrarMensajeResultadosVaciosPorCercania = false;
 
 						// Oculta el mensaje de espera
 						loadingPopup.dismiss();
-
-						this.procesarError(this.config.excepcionListaBancosSangre, 'buscarBancosCercanos', 'ListaBancosSangrePage', 'error', `Error al obtener el listado de bancos de sangre para las coordenadas ${latitud}, ${longitud}`, error);
-						this.mostrarMensajeError('Error', this.config.errorBancosSangre);
+						this.excepcionesService.notificarExcepcion(error, this.excepcionesService.obtenerListaBancosSangreCoordenadas, ListaBancosSangrePage, 'buscarBancosCercanos', `${latitud}, ${longitud}`);
+						this.mostrarMensajeError('Error', this.excepcionesService.obtenerListaBancosSangreCoordenadas.mensajeUsuario);
 					});
 			});
-
 		});
 	}
 

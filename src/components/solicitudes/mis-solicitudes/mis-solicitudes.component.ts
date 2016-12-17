@@ -8,12 +8,12 @@ import { AlertController, LoadingController, NavController, Events, Platform, Li
 import { DonacionesService } from '../../../shared/services/donaciones.service';
 import { DatosService } from '../../../shared/services/datos.service';
 import { LoginService } from '../../../shared/services/login.service';
+import { ExcepcionesService } from '../../../shared/services/excepciones.service';
 
 // Modelos
 import { SolicitudModel } from '../solicitud.model';
 
 // Paginas y componente base
-import { BasePage } from '../../../shared/components/base/base.component';
 import { DetallesSolicitudPage } from '../detalles-solicitud/detalles-solicitud.component';
 import { NuevaSolicitudPage } from '../nueva-solicitud/nueva-solicitud.component';
 
@@ -21,26 +21,22 @@ import { NuevaSolicitudPage } from '../nueva-solicitud/nueva-solicitud.component
   selector: 'mis-solicitudes-page',
   templateUrl: 'mis-solicitudes.component.html'
 })
-export class MisSolicitudesPage extends BasePage {
+export class MisSolicitudesPage {
   @ViewChild(List) list: List;
 
   public solicitudes: Array<SolicitudModel>;
-
   public isIos: boolean;
-
   public mostrarMensajeResultadoVacio: boolean;
 
   constructor(private platform: Platform,
-    private navCtrl: NavController, 
-    private loadingCtrl: LoadingController,
-    private alertCtrl: AlertController,
-    private eventsCtrl: Events,           
-    private datosService: DatosService,
-    private loginService: LoginService,
-    private donacionesService: DonacionesService) 
-  {    
-    super();
-
+              private navCtrl: NavController, 
+              private loadingCtrl: LoadingController,
+              private alertCtrl: AlertController,
+              private eventsCtrl: Events,           
+              private datosService: DatosService,
+              private excepcionesService: ExcepcionesService,
+              private loginService: LoginService,
+              private donacionesService: DonacionesService) {    
     // Determinamos si es ios o no para ocultar/mostrar el boton flotante
     this.isIos = this.platform.is('ios');
 
@@ -95,14 +91,13 @@ export class MisSolicitudesPage extends BasePage {
           // Oculta el mensaje de espera
           loadingPopup.dismiss();
 
-          this.procesarError(this.config.excepcionListaSolicitudesUsuario, 'buscarSolicitudes', 'MisSolicitudesPage', 'error', `Error al buscar solicitudes del usuario ${usuarioId}.`, error);
-          this.mostrarMensajeError('Error', this.config.errorMisSolicitudes);
-
+          this.excepcionesService.notificarExcepcion(error, this.excepcionesService.obtenerListaSolicitudesUsuario, MisSolicitudesPage, 'buscarSolicitudes', usuarioId.toString());
+          this.mostrarMensajeError('Error', this.excepcionesService.obtenerListaSolicitudesUsuario.mensajeUsuario);
         });
 
     } else {
-      this.procesarError(this.config.excepcionListaSolicitudesUsuario, 'buscarSolicitudes', 'MisSolicitudesPage', 'error', `El usuario no posee id pero accedio al listado de mis solicitudes.`, null);
-      this.mostrarMensajeError('Error', this.config.errorMisSolicitudes);
+      this.excepcionesService.notificarExcepcion(null, this.excepcionesService.obtenerSolicitudesUsuarioSinId, MisSolicitudesPage, 'buscarSolicitudes');
+      this.mostrarMensajeError('Error', this.excepcionesService.obtenerSolicitudesUsuarioSinId.mensajeUsuario);
     }
   }
 
@@ -150,29 +145,25 @@ export class MisSolicitudesPage extends BasePage {
         handler: () => {
           
           this.datosService.eliminarSolicitud(unaSolicitud).subscribe(
-            (res) => {
-              if (res.ok) {
+            (resultado) => {
+              if (resultado.ok) {
                 
                 // Cargamos las ultimas solicitudes
                 this.buscarSolicitudes();
 
               } else {
-
                 // Ocultamos el mensaje
                 confirmacionPopup.dismiss();
-
-                this.procesarError(this.config.excepcionEliminarSolicitud, 'eliminarSolicitud', 'MisSolicitudesPage', 'error', `Error al eliminar la solicitud ${unaSolicitud.solicitudID}`, res);
-                this.mostrarMensajeError('Error', this.config.errorEliminarSolicitud);
+                this.excepcionesService.notificarExcepcion(null, this.excepcionesService.eliminarSolicitud, MisSolicitudesPage, 'eliminarSolicitud', unaSolicitud.solicitudID.toString());
+                this.mostrarMensajeError('Error', this.excepcionesService.eliminarSolicitud.mensajeUsuario);
               }
             }, 
 
             (error) => {
-
               // Ocultamos el mensaje
               confirmacionPopup.dismiss();
-                
-              this.procesarError(this.config.excepcionEliminarSolicitud, 'eliminarSolicitud', 'MisSolicitudesPage', 'error', `Error al eliminar la solicitud ${unaSolicitud.solicitudID}`, error);
-              this.mostrarMensajeError('Error', this.config.errorEliminarSolicitud);
+              this.excepcionesService.notificarExcepcion(null, this.excepcionesService.eliminarSolicitud, MisSolicitudesPage, 'eliminarSolicitud', unaSolicitud.solicitudID.toString());
+              this.mostrarMensajeError('Error', this.excepcionesService.eliminarSolicitud.mensajeUsuario);
             });
           
         }

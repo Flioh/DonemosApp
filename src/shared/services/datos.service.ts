@@ -14,9 +14,12 @@ import 'rxjs/add/operator/map';
 import { SolicitudModel } from '../../components/solicitudes/solicitud.model';
 import { BancoSangreModel } from '../../components/bancos-sangre/banco-sangre.model';
 
-import { FactorSanguineoEnum, GrupoSanguineoEnum, DonacionesService } from './donaciones.service';
+import { FactorSanguineoEnum, GrupoSanguineoEnum } from './donaciones.service';
 import { LocalidadModel } from '../../shared/models/localidad.model';
 import { ProvinciaModel } from '../../shared/models/provincia.model';
+
+// Servicios
+import { DonacionesService } from './donaciones.service';
 
 // Objeto de configuracion
 import { AppConfig } from '../../shared/app-config';
@@ -46,10 +49,10 @@ export class DatosService {
   private apiEndPointBancosSangre: string;
 
   constructor(public http: Http, 
-    public donacionesService: DonacionesService,
-    public storage: Storage,
-    public authHttp: AuthHttp,
-    public config: AppConfig) {
+              public donacionesService: DonacionesService,
+              public storage: Storage,
+              public authHttp: AuthHttp,
+              public config: AppConfig) {
 
     // Obtenemos las API desde el archivo de configuracion
     this.apiEndPointLocalidades = config.apiEndPointLocalidades;
@@ -83,9 +86,6 @@ export class DatosService {
           this.datosUsuarioObj = JSON.parse(preferenciasUsuario);	                 
         }
         return this.datosUsuarioObj;
-      },
-      (error) => {
-        Bugsnag.notifyException(error, this.config.excepcionPreferenciasUsuario, { 'metodo': 'getPreferenciasUsuario', 'pagina': DatosService, 'descripcion': 'Error al obtener las preferencias del usuario' }, 'error');
       });
   }
 
@@ -98,9 +98,6 @@ export class DatosService {
       // Avisamos a los subscriptores que los datos fueron actualizados
       if(this.datosUsuarioObserver)
         this.datosUsuarioObserver.next(preferenciasUsuario);
-    },
-    (error) => {
-      Bugsnag.notifyException(error, this.config.excepcionGuardarPreferenciasUsuario, { 'metodo': 'setPreferenciasUsuario', 'pagina': DatosService, 'descripcion': `Error al guardar las preferencias del usuario.`}, 'error');
     });
   }
 
@@ -109,19 +106,12 @@ export class DatosService {
     return this.storage.get('borradorSolicitud').then(
       (datosSolicitud) => {
         return datosSolicitud ? new SolicitudModel(JSON.parse(datosSolicitud)) : new SolicitudModel();
-      },
-      (error) => {
-        Bugsnag.notifyException(error, this.config.excepcionPreferenciasUsuario, { 'metodo': 'getBorradorNuevaSolicitud', 'pagina': DatosService, 'descripcion': 'Error al obtener el borrador de la solicitud.' }, 'error');
       });
   }
 
   // Método que guarda los datos de la solicitud cuando el usuario sale sin guardar
   public setBorradorNuevaSolicitud(solicitud: SolicitudModel): Promise<boolean> {
-    return this.storage.set('borradorSolicitud', JSON.stringify(solicitud)).then(
-      () => { },
-      (error) => {
-        Bugsnag.notifyException(error, this.config.excepcionGuardarPreferenciasUsuario, { 'metodo': 'setBorradorNuevaSolicitud', 'pagina': DatosService, 'descripcion': `Error al guardar el borrador de la solicitud.`}, 'error');
-      });
+    return this.storage.set('borradorSolicitud', JSON.stringify(solicitud));
   }
 
   // Método que devuelve true si el usuario vio la introduccion
@@ -178,15 +168,9 @@ export class DatosService {
   }
 
   // Obtiene el listado de solicitudes en base a los filtros pasados como parametro
-  public getSolicitudes(numeroPagina: number, 
-    provinciaId: string, 
-    localidadId: string, 
-    grupoSanguineoId: number, 
-    factorSanguineoId: number): Observable<Array<SolicitudModel>> {
-
+  public getSolicitudes(numeroPagina: number, provinciaId: string, localidadId: string, grupoSanguineoId: number, factorSanguineoId: number): Observable<Array<SolicitudModel>> {
     // Armamos la url en base a los filtros
     let url = `${this.config.apiEndPointSolicitudes}/${numeroPagina}/filtrar/${provinciaId}/${localidadId}/${grupoSanguineoId}/${factorSanguineoId}`;
-
     return this.http.get(url).map(res => res.json());
   }
 

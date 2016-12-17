@@ -18,6 +18,7 @@ import { DonacionesService } from '../shared/services/donaciones.service';
 import { LocalizacionService } from '../shared/services/localizacion.service';
 import { ConectividadService } from '../shared/services/conectividad.service';
 import { LoginService } from '../shared/services/login.service';
+import { ExcepcionesService } from '../shared/services/excepciones.service';
 
 // Varios
 import { AppConfig } from '../shared/app-config';
@@ -104,7 +105,8 @@ export function getAuthHttp(http) {
     DropdownPage,
     ErrorPage
   ],
-  providers: [  DatosService, 
+  providers: [  DatosService,
+                ExcepcionesService,
                 DonacionesService, 
                 LocalizacionService, 
                 ConectividadService, 

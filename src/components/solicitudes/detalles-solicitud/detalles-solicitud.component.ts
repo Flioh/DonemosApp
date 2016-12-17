@@ -9,9 +9,9 @@ import { Storage } from '@ionic/storage';
 import { LocalizacionService } from '../../../shared/services/localizacion.service';
 import { DatosService } from '../../../shared/services/datos.service';
 import { DonacionesService } from '../../../shared/services/donaciones.service';
+import { ExcepcionesService, DatosExcepcion } from '../../../shared/services/excepciones.service';
 
 // Paginas y componente base
-import { BasePage } from '../../../shared/components/base/base.component';
 import { RequisitosPage } from '../../donaciones/requisitos/requisitos.component';
 
 // Modelos
@@ -21,7 +21,7 @@ import { SolicitudModel } from '../../solicitudes/solicitud.model';
   selector: 'detalles-solicitud-page',
   templateUrl: 'detalles-solicitud.component.html'
 })
-export class DetallesSolicitudPage extends BasePage{
+export class DetallesSolicitudPage {
   @ViewChild(Content) content: Content;
 
   // Variables de la clase
@@ -33,17 +33,16 @@ export class DetallesSolicitudPage extends BasePage{
   public mostrarNombrePaciente: boolean;
 
   constructor(private platform: Platform,
-    private nav: NavController, 
-    private navParams: NavParams, 
-    private loadingCtrl: LoadingController, 
-    private datosService: DatosService,
-    private localizacionService: LocalizacionService,
-    private donacionesService: DonacionesService,
-    private eventsCtrl: Events,
-    private alertCtrl: AlertController,
-    private storage: Storage) {
-
-    super();
+              private nav: NavController, 
+              private navParams: NavParams, 
+              private loadingCtrl: LoadingController, 
+              private datosService: DatosService,
+              private excepcionesService: ExcepcionesService,
+              private localizacionService: LocalizacionService,
+              private donacionesService: DonacionesService,
+              private eventsCtrl: Events,
+              private alertCtrl: AlertController,
+              private storage: Storage) {
 
     // Obtenemos la solicitud seleccionada a traves de navParams
     this.solicitudSeleccionada = navParams.get('unaSolicitud');
@@ -83,8 +82,7 @@ export class DetallesSolicitudPage extends BasePage{
     this.compatibleConUsuario = false;
 
     // Obtenemos los datos del servicio de datos del usuario
-    this.datosService.getPreferenciasUsuario().then(
-      (preferenciasUsuario) => {
+    this.datosService.getPreferenciasUsuario().then((preferenciasUsuario) => {
         if(preferenciasUsuario) {
           let tipoSanguineoUsuario = this.donacionesService.getDescripcionCompleta(preferenciasUsuario.grupoSanguineoID, preferenciasUsuario.factorSanguineoID);
 
@@ -94,11 +92,6 @@ export class DetallesSolicitudPage extends BasePage{
           // Resaltamos el tipo sanguineo del usuario
           this.tiposSanguineosSolicitud = this.tiposSanguineosSolicitud.replace(tipoSanguineoUsuario, '<span class="marked">' + tipoSanguineoUsuario + '</span> ');
         }
-      }, 
-
-      (error) => {
-        this.procesarError(this.config.excepcionPreferenciasUsuario, 'obtenerDatosUsuario', 'DetallesSolicitudPage', 'error', 'Error al obtener las preferencias del usuario', error);
-        this.mostrarMensajeError('Error', this.config.errorPreferenciasUsuario);
       });
   }
 

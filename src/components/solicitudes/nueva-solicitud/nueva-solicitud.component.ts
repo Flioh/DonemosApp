@@ -9,6 +9,7 @@ import { AlertController, LoadingController, NavController, Platform, MenuContro
 import { DatosService } from '../../../shared/services/datos.service';
 import { DonacionesService } from '../../../shared/services/donaciones.service';
 import { LoginService } from '../../../shared/services/login.service';
+import { ExcepcionesService } from '../../../shared/services/excepciones.service';
 
 // Modelos
 import { SolicitudModel } from '../solicitud.model';
@@ -17,14 +18,13 @@ import { ProvinciaModel } from '../../../shared/models/provincia.model';
 
 // Paginas y comonentes
 import { ListaSolicitudesPage } from '../lista-solicitudes/lista-solicitudes.component';
-import { BasePage } from '../../../shared/components/base/base.component';
 import { DropdownPage } from '../../../shared/components/dropdown/dropdown.component';
 
 @Component({
 	selector: 'nueva-solicitud-page',
 	templateUrl: 'nueva-solicitud.component.html'
 })
-export class NuevaSolicitudPage extends BasePage{
+export class NuevaSolicitudPage {
 
 	// Listados usados en la pagina
 	public listaProvincias: Array<ProvinciaModel> = [];
@@ -51,19 +51,18 @@ export class NuevaSolicitudPage extends BasePage{
 	public modoEdicion: boolean;
 
 	constructor(private datosService: DatosService,
-		private donacionesService: DonacionesService,
-		private loginService: LoginService,
-		private platform: Platform,
-		private menuCtrl: MenuController,
-		private modalCtrl: ModalController,
-		private navCtrl: NavController,
-		private formBuilder : FormBuilder, 
-		private ngZone : NgZone,
-		private loadingCtrl : LoadingController,
-		private alertCtrl : AlertController,
-		private paramsCtrl: NavParams) {
-
-		super();
+				private donacionesService: DonacionesService,
+				private loginService: LoginService,
+				private excepcionesService: ExcepcionesService,
+				private platform: Platform,
+				private menuCtrl: MenuController,
+				private modalCtrl: ModalController,
+				private navCtrl: NavController,
+				private formBuilder : FormBuilder, 
+				private ngZone : NgZone,
+				private loadingCtrl : LoadingController,
+				private alertCtrl : AlertController,
+				private paramsCtrl: NavParams) {
 
 		let solicitudRecibida = this.paramsCtrl.get('unaSolicitud');
 
@@ -84,8 +83,8 @@ export class NuevaSolicitudPage extends BasePage{
 					// Si es una nueva solicitud, asignamos el ID del usuario
 					this.nuevaSolicitud.usuarioID = this.loginService.user.user_id;
 				} else {
-					this.procesarError(this.config.excepcionEditarSolicitud, 'constructor', 'NuevaSolicitudPage', 'error', `El usuario no posee id pero accedio a editar la solicitud ${JSON.stringify(this.nuevaSolicitud)}.`, null);
-					this.mostrarMensajeError('Error', this.config.errorEditarSolicitud);
+					this.excepcionesService.notificarExcepcion(null, this.excepcionesService.editarSolicitudSinId, NuevaSolicitudPage, 'constructor', JSON.stringify(this.nuevaSolicitud));
+					this.mostrarMensajeError('Error', this.excepcionesService.editarSolicitudSinId.mensajeUsuario);
 				}
 			}
 
@@ -261,13 +260,13 @@ export class NuevaSolicitudPage extends BasePage{
 						this.inicializarLocalidadesDeLaProvincia(this.nuevaSolicitud.localidad.nombre);
 					}
 				} else {
-					this.procesarError(this.config.excepcionListaProvincias, 'inicializarListado', 'NuevaSolicitudPage', 'error', 'Error al obtener el listado de provincias.', result);
-					this.mostrarMensajeError('Error', this.config.errorProvincias);
+					this.excepcionesService.notificarExcepcion(null, this.excepcionesService.obtenerListaProvincias, NuevaSolicitudPage, 'inicializarListado');
+					this.mostrarMensajeError('Error', this.excepcionesService.obtenerListaProvincias.mensajeUsuario);
 				}
 			},
 			(error) => {
-				this.procesarError(this.config.excepcionListaProvincias, 'inicializarListado', 'NuevaSolicitudPage', 'error', 'Error al obtener el listado de provincias.', error);
-				this.mostrarMensajeError('Error', this.config.errorProvincias);
+				this.excepcionesService.notificarExcepcion(error, this.excepcionesService.obtenerListaProvincias, NuevaSolicitudPage, 'inicializarListado');
+				this.mostrarMensajeError('Error', this.excepcionesService.obtenerListaProvincias.mensajeUsuario);
 			});
 	}
 
@@ -295,43 +294,35 @@ export class NuevaSolicitudPage extends BasePage{
 					// Oculta el mensaje de espera
 					loadingPopup.dismiss();
 				} else {
-
 					// Oculta el mensaje de espera
 					loadingPopup.dismiss();
-
-					this.procesarError(this.config.excepcionListaLocalidades, 'inicializarLocalidadesDeLaProvincia', 'NuevaSolicitudPage', 'error', `Error al obtener el listado de localidades de la provincia ${provinciaId}.`, result);
-					this.mostrarMensajeError('Error', this.config.errorLocalidades);
+					this.excepcionesService.notificarExcepcion(null, this.excepcionesService.obtenerListaLocalidades, NuevaSolicitudPage, 'inicializarLocalidadesDeLaProvincia', provinciaId.toString());
+					this.mostrarMensajeError('Error', this.excepcionesService.obtenerListaLocalidades.mensajeUsuario);
 				}				
 			}, (error) => {
-
 				// Oculta el mensaje de espera
 				loadingPopup.dismiss();
-
-				this.procesarError(this.config.excepcionListaLocalidades, 'inicializarLocalidadesDeLaProvincia', 'NuevaSolicitudPage', 'error', `Error al obtener el listado de localidades de la provincia ${provinciaId}.`, error);
-				this.mostrarMensajeError('Error', this.config.errorLocalidades);
+				this.excepcionesService.notificarExcepcion(error, this.excepcionesService.obtenerListaLocalidades, NuevaSolicitudPage, 'inicializarLocalidadesDeLaProvincia', provinciaId.toString());
+				this.mostrarMensajeError('Error', this.excepcionesService.obtenerListaLocalidades.mensajeUsuario);
 			});
 	}
 
 	// Método que obtiene el indice del elemento cuyo id es el pasado como parametro
 	public getIndicePorID(listado: Array<any>, id: string): number {
-
 		for(let i=0; i<listado.length; i++) {
 			if(id === listado[i].id)
 				return i;
 		}
-
 		return -1;
 	}
 
 	// Método que crea la nueva solicitud con la información ingresada en el formulario
 	public guardarCambios(): void {
-
 		let loadingPopup = this.loadingCtrl.create({
 			content: 'Guardando solicitud'
 		});
 
 		loadingPopup.present();
-
 		this.submitted = true;
 
 		// Nos aseguramos que la cantidad sea un numero
@@ -376,18 +367,16 @@ export class NuevaSolicitudPage extends BasePage{
 
 			},
 			(error) => { 
-
 				// Ocultamos el mensaje de espera
 				loadingPopup.dismiss();
 
 				if(!this.modoEdicion) {
-					this.procesarError(this.config.excepcionCrearSolicitud, 'guardarCambios', 'NuevaSolicitudPage', 'error', `Error al crear la solicitud ${JSON.stringify(this.nuevaSolicitud)}.`, error);
-					this.mostrarMensajeError('Error', this.config.errorCrearSolicitud);
+					this.excepcionesService.notificarExcepcion(error, this.excepcionesService.crearSolicitud, NuevaSolicitudPage, 'guardarCambios', JSON.stringify(this.nuevaSolicitud));
+					this.mostrarMensajeError('Error', this.excepcionesService.crearSolicitud.mensajeUsuario);
 				} else {
-					this.procesarError(this.config.excepcionEditarSolicitud, 'guardarCambios', 'NuevaSolicitudPage', 'error', `Error al editar la solicitud ${JSON.stringify(this.nuevaSolicitud)}.`, error);
-					this.mostrarMensajeError('Error', this.config.errorEditarSolicitud);
+					this.excepcionesService.notificarExcepcion(error, this.excepcionesService.editarSolicitud, NuevaSolicitudPage, 'guardarCambios', JSON.stringify(this.nuevaSolicitud));
+					this.mostrarMensajeError('Error', this.excepcionesService.editarSolicitud.mensajeUsuario);
 				}
-				
 			});
 	}
 

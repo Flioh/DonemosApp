@@ -13,9 +13,9 @@
 
 	// Servicios
 	import { DatosService } from '../../../shared/services/datos.service';
+	import { ExcepcionesService } from '../../../shared/services/excepciones.service';
 
 	// Paginas y componentes
-	import { BasePage } from '../../../shared/components/base/base.component';
 	import { ListaSolicitudesPage } from '../../solicitudes/lista-solicitudes/lista-solicitudes.component';
 	import { DropdownPage } from '../../../shared/components/dropdown/dropdown.component';
 
@@ -23,7 +23,7 @@
 		selector:'editar-preferencias-page',
 		templateUrl: 'editar-preferencias.component.html',
 	})
-	export class EditarPreferenciasPage extends BasePage{
+	export class EditarPreferenciasPage {
 
 		// Listados de la pagina
 		public listaGruposSanguineos: Array<{ id: number, nombre: string }>;
@@ -38,14 +38,13 @@
 		public esRoot: boolean;
 
 		constructor(private navCtrl: NavController,
-			private loadingCtrl: LoadingController,
-			private modalCtrl: ModalController,
-			private alertCtrl: AlertController,
-			private datosService: DatosService,
-			private paramsCtrl: NavParams,
-			private toastCtrl: ToastController) {
-
-			super();
+					private loadingCtrl: LoadingController,
+					private modalCtrl: ModalController,
+					private alertCtrl: AlertController,
+					private datosService: DatosService,
+					private excepcionService: ExcepcionesService,
+					private paramsCtrl: NavParams,
+					private toastCtrl: ToastController) {
 
 			// Identificamos si la pagina se abrio como root o mediante un push
 			this.esRoot = this.paramsCtrl.get('esRoot') || false;
@@ -89,8 +88,8 @@
 						// Oculta el mensaje de espera
           				loadingPopup.dismiss();
 
-						this.procesarError(this.config.excepcionListaProvincias, 'cargarListados', 'EditarPreferenciasPage', 'error', 'Error al obtener el listado de provincias.', result);
-						this.mostrarMensajeError('Error', this.config.errorProvincias);
+          				this.excepcionService.notificarExcepcion(null, this.excepcionService.obtenerListaProvincias, EditarPreferenciasPage, 'cargarListados');
+          				this.mostrarMensajeError('Error', this.excepcionService.obtenerListaProvincias.mensajeUsuario);
 					}
 				}, 
 				(error) => {
@@ -98,8 +97,8 @@
 					// Oculta el mensaje de espera
 					loadingPopup.dismiss();
 
-					this.procesarError(this.config.excepcionListaProvincias, 'cargarListados', 'EditarPreferenciasPage', 'error', 'Error al obtener el listado de provincias.', error);
-					this.mostrarMensajeError('Error', this.config.errorProvincias);
+					this.excepcionService.notificarExcepcion(error, this.excepcionService.obtenerListaProvincias, EditarPreferenciasPage, 'cargarListados');
+					this.mostrarMensajeError('Error', this.excepcionService.obtenerListaProvincias.mensajeUsuario);
 				});
 		}
 
@@ -134,13 +133,13 @@
 								// Resolvemos la promesa
 								resolve(true);
 							} else {
-								this.procesarError(this.config.excepcionListaLocalidades, 'inicializarDatosUsuario', 'EditarPreferenciasPage', 'error', `Error al obtener el listado de localidades de la provincia ${this.preferenciasUsuario.provincia.id}.`, result);
-								this.mostrarMensajeError('Error', this.config.errorLocalidades);
+								this.excepcionService.notificarExcepcion(null, this.excepcionService.obtenerListaLocalidades, EditarPreferenciasPage, 'inicializarDatosUsuario', this.preferenciasUsuario.provincia.id.toString());
+		          				this.mostrarMensajeError('Error', this.excepcionService.obtenerListaLocalidades.mensajeUsuario);
 							}
 
 						}, (error) => {
-							this.procesarError(this.config.excepcionListaLocalidades, 'inicializarDatosUsuario', 'EditarPreferenciasPage', 'error', `Error al obtener el listado de localidades de la provincia ${this.preferenciasUsuario.provincia.id}.`, error);
-							this.mostrarMensajeError('Error', this.config.errorLocalidades);
+							this.excepcionService.notificarExcepcion(error, this.excepcionService.obtenerListaLocalidades, EditarPreferenciasPage, 'inicializarDatosUsuario', this.preferenciasUsuario.provincia.id.toString());
+							this.mostrarMensajeError('Error', this.excepcionService.obtenerListaLocalidades.mensajeUsuario);
 						});
 				} else {
 					// No hay datos de la provincia guardados, por lo que resolvemos la promesa
@@ -179,17 +178,16 @@
 						// Oculta el mensaje de espera
 						loadingPopup.dismiss();
 
-						this.procesarError(this.config.excepcionListaLocalidades, 'inicializarLocalidadesDeLaProvincia', 'EditarPreferenciasPage', 'error', `Error al obtener el listado de localidades de la provincia ${this.preferenciasUsuario.provincia.id}.`, result);
-						this.mostrarMensajeError('Error', this.config.errorLocalidades);
+						this.excepcionService.notificarExcepcion(null, this.excepcionService.obtenerListaLocalidades, EditarPreferenciasPage, 'inicializarLocalidadesDeLaProvincia', this.preferenciasUsuario.provincia.id.toString());
+						this.mostrarMensajeError('Error', this.excepcionService.obtenerListaLocalidades.mensajeUsuario);
 					}
 				}, 
 				(error) => {
-
 					// Oculta el mensaje de espera
 					loadingPopup.dismiss();
 
-					this.procesarError(this.config.excepcionListaLocalidades, 'inicializarLocalidadesDeLaProvincia', 'EditarPreferenciasPage', 'error', `Error al obtener el listado de localidades de la provincia ${this.preferenciasUsuario.provincia.id}.`, error);
-					this.mostrarMensajeError('Error', this.config.errorLocalidades);
+					this.excepcionService.notificarExcepcion(error, this.excepcionService.obtenerListaLocalidades, EditarPreferenciasPage, 'inicializarLocalidadesDeLaProvincia', this.preferenciasUsuario.provincia.id.toString());
+					this.mostrarMensajeError('Error', this.excepcionService.obtenerListaLocalidades.mensajeUsuario);
 				});
 		}
 
@@ -203,8 +201,7 @@
 			};
 
 			// Guardamos los datos
-			this.datosService.setPreferenciasUsuario(nuevosDatosUsuarioObj)
-			.then(() => {
+			this.datosService.setPreferenciasUsuario(nuevosDatosUsuarioObj).then(() => {
 				if(this.esRoot) {
 					this.mostrarListado();
 				} else {
@@ -217,9 +214,6 @@
 					// Mostramos el mensaje al usuario
 					toast.present();
 				}
-			}, (error) => {
-				this.procesarError(this.config.excepcionGuardarPreferenciasUsuario, 'guardarCambios', 'EditarPreferenciasPage', 'error', `Error al guardar las preferencias ${JSON.stringify(nuevosDatosUsuarioObj)}`, error);
-				this.mostrarMensajeError('Error', this.config.errorGuardarPreferenciasUsuario);
 			});
 		}
 

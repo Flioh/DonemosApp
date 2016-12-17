@@ -9,6 +9,7 @@
   import { DatosService } from '../../../shared/services/datos.service';
   import { ConectividadService } from '../../../shared/services/conectividad.service';
   import { LoginService } from '../../../shared/services/login.service'
+  import { ExcepcionesService } from '../../../shared/services/excepciones.service'
 
   // Modelos
   import { SolicitudModel } from '../solicitud.model';
@@ -17,7 +18,6 @@
   import { ProvinciaModel } from '../../../shared/models/provincia.model';
 
   // Paginas y componente base
-  import { BasePage } from '../../../shared/components/base/base.component';
   import { DetallesSolicitudPage } from '../detalles-solicitud/detalles-solicitud.component';
   import { NuevaSolicitudPage } from '../nueva-solicitud/nueva-solicitud.component';
   import { ListaBancosSangrePage } from '../../bancos-sangre/lista-bancos-sangre/lista-bancos-sangre.component';
@@ -27,7 +27,7 @@
     selector: 'lista-solicitudes-page',
     templateUrl: 'lista-solicitudes.component.html'
   })
-  export class ListaSolicitudesPage extends BasePage {
+  export class ListaSolicitudesPage {
     @ViewChild(Content) content: Content;
 
     private solicitudes: Array<ResumenSolicitudModel>;
@@ -61,20 +61,18 @@
     public noHaySolicitudesMensaje: string = "";
 
     constructor(private platform: Platform,
-      private nav: NavController, 
-      private menuCtrl: MenuController,
-      private loadingCtrl: LoadingController,
-      private alertCtrl: AlertController,
-      private modalCtrl: ModalController,
-      private datosService: DatosService,
-      private ngZoneCtrl: NgZone,
-      private eventsCtrl: Events,
-      private conectividadService: ConectividadService,
-      private loginService: LoginService,
-      private donacionesService: DonacionesService) 
-    {    
-      // llamamos al constructor de la pagina base
-      super();
+                private nav: NavController, 
+                private menuCtrl: MenuController,
+                private loadingCtrl: LoadingController,
+                private alertCtrl: AlertController,
+                private modalCtrl: ModalController,
+                private datosService: DatosService,
+                private excepcionesService: ExcepcionesService,
+                private ngZoneCtrl: NgZone,
+                private eventsCtrl: Events,
+                private conectividadService: ConectividadService,
+                private loginService: LoginService,
+                private donacionesService: DonacionesService) {    
 
       // Determinamos si es ios o no para ocultar/mostrar el boton flotante
       this.isIos = this.platform.is('ios');
@@ -101,31 +99,19 @@
 
       // Cuando cambien los datos del usuario, refrescamos el listado de solicitudes para
       // resaltar el nuevo tipo sanguineo y no el anterior
-      this.datosService.preferenciasUsuario.subscribe(
-        (preferenciasUsuario) => {
+      this.datosService.preferenciasUsuario.subscribe((preferenciasUsuario) => {
 
           // Actualizamos la informacion del usuario
           this.datosUsuarioObj = preferenciasUsuario;
 
           // Actualizamos la descripcion que se muestra en cada solicitud del listado
           this.actualizarDescripcionTiposSanguineos();
-        },
-        (error) => {
-          this.procesarError(this.config.excepcionPreferenciasUsuario, 'constructor', 'ListaSolicitudesPage', 'error', 'Error al obtener las preferencias del usuario', error);
-          this.mostrarMensajeError('Error', this.config.errorPreferenciasUsuario);
         });
 
       // Buscamos las preferencias del usuario y luego obtenemos el listado de solicitudes en base a dichas preferencias
-      this.datosService.getPreferenciasUsuario().then(
-        (preferenciasUsuario) => {
-
+      this.datosService.getPreferenciasUsuario().then((preferenciasUsuario) => {
           this.datosUsuarioObj = preferenciasUsuario;          
           this.buscarSolicitudesUsandoPreferenciasUsuario();
-
-        },
-        (error) => {
-          this.procesarError(this.config.excepcionPreferenciasUsuario, 'constructor', 'ListaSolicitudesPage', 'error', 'Error al obtener las preferencias del usuario', error);
-          this.mostrarMensajeError('Error', this.config.errorPreferenciasUsuario);
         });
     }
 
@@ -150,18 +136,10 @@
 
         // Buscamos las preferencias del usuario y luego obtenemos el 
         // listado de solicitudes en base a dichas preferencias
-        this.datosService.getPreferenciasUsuario().then(
-          (preferenciasUsuario) => {
-
+        this.datosService.getPreferenciasUsuario().then((preferenciasUsuario) => {
             this.datosUsuarioObj = preferenciasUsuario;          
             this.buscarSolicitudesUsandoPreferenciasUsuario();
-
-          },
-          (error) => {
-            this.procesarError(this.config.excepcionPreferenciasUsuario, 'constructor', 'ListaSolicitudesPage', 'error', 'Error al obtener las preferencias del usuario', error);
-            this.mostrarMensajeError('Error', this.config.errorPreferenciasUsuario);
           });
-
       });
     }
 
@@ -256,9 +234,8 @@
           this.hayMasSolicitudes = false;
           this.noHaySolicitudesMensaje = null;
 
-          this.procesarError(this.config.excepcionListaSolicitudes, 'buscarSolicitudes', 'ListaSolicitudesPage' ,'error', 'Error al obtener solicitudes', error);
-          this.mostrarMensajeError('Error', this.config.errorSolicitudes);
-
+          this.excepcionesService.notificarExcepcion(error, this.excepcionesService.obtenerListaSolicitudes, ListaSolicitudesPage, 'buscarSolicitudes');
+          this.mostrarMensajeError('Error', this.excepcionesService.obtenerListaSolicitudes.mensajeUsuario);
         });
     }
 
@@ -390,9 +367,8 @@
           this.hayMasSolicitudes = false;
           this.noHaySolicitudesMensaje = null;
 
-          this.procesarError(this.config.excepcionListaSolicitudes, 'buscarSolicitudesUsandoPreferenciasUsuario', 'ListaSolicitudesPage', 'error', 'Error al buscar listados y solicitudes', error);
-          this.mostrarMensajeError('Error', this.config.errorSolicitudes);
-
+          this.excepcionesService.notificarExcepcion(error, this.excepcionesService.obtenerListaSolicitudes, ListaSolicitudesPage, 'buscarSolicitudesUsandoPreferenciasUsuario');
+          this.mostrarMensajeError('Error', this.excepcionesService.obtenerListaSolicitudes.mensajeUsuario);
         });
     }
 
@@ -454,9 +430,8 @@
             this.hayMasSolicitudes = false;
             this.noHaySolicitudesMensaje = null;
 
-            this.procesarError('ErrorSolicitudes', 'inicializarFiltrosUsandoPreferenciasUsuario', 'ListaSolicitudesPage', 'error', 'Error al obtener listados de provincias y localidades', error);
-            this.mostrarMensajeError('Error', this.config.errorSolicitudes);
-
+            this.excepcionesService.notificarExcepcion(error, this.excepcionesService.obtenerListaSolicitudes, ListaSolicitudesPage, 'inicializarFiltrosUsandoPreferenciasUsuario');
+            this.mostrarMensajeError('Error', this.excepcionesService.obtenerListaSolicitudes.mensajeUsuario);
           });
 
       } else {
@@ -588,9 +563,8 @@
           loadingPopup.dismiss();
 
           let provinciaId = this.provinciaSeleccionada ? this.provinciaSeleccionada.id : null;
-
-          this.procesarError(this.config.excepcionListaLocalidades, 'inicializarLocalidadesDeLaProvincia', 'ListaSolicitudesPage', 'error', `Error al obtener las localidades de la provincia ${provinciaId}`, error);
-          this.mostrarMensajeError('Error', this.config.errorLocalidades);
+          this.excepcionesService.notificarExcepcion(error, this.excepcionesService.obtenerListaLocalidades, ListaSolicitudesPage, 'inicializarLocalidadesDeLaProvincia', provinciaId.toString());
+          this.mostrarMensajeError('Error', this.excepcionesService.obtenerListaLocalidades.mensajeUsuario);
         });
     }
 
