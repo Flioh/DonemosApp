@@ -53,6 +53,16 @@ export class AppConfig {
         return this.modoDebug ? DevKeys.staticMapKey : ProdKeys.staticMapKey;
     }
 
+    // Auth0
+    // -----------------------------------
+    get authClientId(): string {
+        return this.modoDebug ? DevKeys.authClientId : ProdKeys.authClientId;
+    }
+
+    get authDomain(): string {
+        return this.modoDebug ? DevKeys.authDomain : ProdKeys.authDomain;
+    }
+
     // Bugsnag
     // -----------------------------------
     get bugSnagApiKey(): string {
