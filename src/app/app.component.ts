@@ -26,327 +26,352 @@ import { ConectividadService } from '../shared/services/conectividad.service';
 import { AppConfig } from '../shared/app-config';
 
 @Component({
-  templateUrl: 'app.html'
+    templateUrl: 'app.html'
 })
 export class DonemosApp {
-  @ViewChild(Nav) nav: Nav;
+    @ViewChild(Nav) nav: Nav;
 
-  // Iniciamos la app mostrando el listado de solicitudes
-  public rootPage: any;
+    // Iniciamos la app mostrando el listado de solicitudes
+    public rootPage: any;
 
-  public paginasMenu: Array<ItemMenuModel> = [];
+    public paginasMenu: Array<ItemMenuModel> = [];
 
-  // Variables usadas para determinar que mostrar en el menu principal de
-  // acuerdo a la conexion del usuario y si esta logueado o no
-  public ocultarLogin: boolean;
-  public ocultarPerfil: boolean;
-  public ocultarLogo: boolean;
+    // Variables usadas para determinar que mostrar en el menu principal de
+    // acuerdo a la conexion del usuario y si esta logueado o no
+    public ocultarLogin: boolean;
+    public ocultarPerfil: boolean;
+    public ocultarLogo: boolean;
 
-  public hayConexion: boolean;
-  private mostrarNotificacionConexion: boolean;
-  private mostrarNotificacionSinConexion: boolean;
+    public hayConexion: boolean;
+    private mostrarNotificacionConexion: boolean;
+    private mostrarNotificacionSinConexion: boolean;
 
-  public estaLogueado: boolean;
+    public estaLogueado: boolean;
 
-  constructor(public platform: Platform,
-              public config: AppConfig,
-              public menuCtrl: MenuController,
-              public ionicApp: IonicApp,
-              public loginService: LoginService,
-              public datosService: DatosService,
-              public conectividadService: ConectividadService,
-              public eventCtrl: Events,
-              private toastCtrl: ToastController,
-              public changeDetectorCtrl: ChangeDetectorRef) {
-    this.inicializarApp();
-  }
-
-  public inicializarApp() {
-    this.platform.ready().then(() => {
-      
-      // En este punto los plugins ya estan cargados y listos
-      StatusBar.backgroundColorByName('black');
-      Splashscreen.hide();
-
-      try {
-        setTimeout(() => {
-          // Fix horrible para cambiar el color del encabezado cuando se minimiza la app
-          this.cambiarEstilosEncabezado();
-        }, 1000);
-      } catch(e) {
-        console.log(e);
-      }
-
-      // Manejamos nosostros el boton fisico para volver atras debido a varios issues de Ionic2
-      this.platform.registerBackButtonAction(() => {
-        this.manejarEventoBotonFisicoSegunPagina();
-      });
-
-      // Evento que se ejecuta cuando la app se suspende y se vuelve a abrir
-      this.platform.resume.subscribe(e => {
-        // Fix horrible para cambiar el color del encabezado cuando se minimiza la app
-        this.cambiarEstilosEncabezado();
-      });
-
-      // Evento que se ejecuta cuando la app se pone en pausa
-      this.platform.pause.subscribe(e => {
-        // Fix horrible para cambiar el color del encabezado cuando se minimiza la app
-        this.cambiarEstilosEncabezado();
-      });
-
-
-      if(Bugsnag) {
-        Bugsnag.apiKey = this.config.bugSnagApiKey;
-      }
-
-      // Evitamos que el menu se abra solo al presionar el botón y no deslizándolo
-      this.menuCtrl.swipeEnable(false, 'principal');
-
-      // Variables que usamos para no mostrar varios mensajes al cambiar el estado de la conexion
-      this.mostrarNotificacionConexion = true;
-      this.mostrarNotificacionSinConexion = true;
-      
-      // Cargamos la informacion del usuario primero
-      this.loginService.cargarInformacionUsuario().then(() => {
-        this.inicializarEventosGlobalesConexion();
-        this.inicializarEventosParticularesConexion();
-        this.inicializarEventosLogin();
-        this.actualizarMenuPrincipal(); 
-        this.cargarPantallaPrincipal();
-      });
-    });
-  }
-
-  // Método que utiliza un plugin de cordova para cambiar el color del encabezado de la aplicacion
-  private cambiarEstilosEncabezado(): void {
-    StatusBar.backgroundColorByName('black');
-    
-    if(window['plugins'] && window['plugins']['headerColor']) {
-      let headerColor = window['plugins']['headerColor'];
-      headerColor.tint("#222222");
-    }
-  }
-
-  // Método que decide que hacer cuando se presiona el boton fisico de volver atrás en base a la página activa
-  private manejarEventoBotonFisicoSegunPagina() {
-
-    let modal = this.ionicApp._loadingPortal.getActive() 
-                      || this.ionicApp._modalPortal.getActive() 
-                      || this.ionicApp._toastPortal.getActive() 
-                      || this.ionicApp._overlayPortal.getActive();
-
-    if (modal) {
-      // Si es un modal,lo cerramos
-      modal.dismiss();
-      return;
+    constructor(public platform: Platform,
+                public config: AppConfig,
+                public menuCtrl: MenuController,
+                public ionicApp: IonicApp,
+                public loginService: LoginService,
+                public datosService: DatosService,
+                public conectividadService: ConectividadService,
+                public eventCtrl: Events,
+                private toastCtrl: ToastController,
+                public changeDetectorCtrl: ChangeDetectorRef) {
+        this.inicializarApp();
     }
 
-    if (this.menuCtrl.isOpen()) {
-      // Si el menú esta abierto, lo cerramos
-      this.menuCtrl.close();
-      return;
+    public inicializarApp() {
+        this.platform.ready().then(() => {
+
+            this.inicializarEstilosEncabezado();
+
+            // Manejamos nosostros el boton fisico para volver atras debido a varios issues de Ionic2
+            this.platform.registerBackButtonAction(() => {
+                this.manejarEventoBotonFisicoSegunPagina();
+            });
+
+            // Inicializa Bugsnag
+            this.inicializarBugsnag();
+
+            // Inicializar Google Maps
+            this.inicializarGoogleMaps();
+
+            // Evitamos que el menu se abra solo al presionar el botón y no deslizándolo
+            this.menuCtrl.swipeEnable(false, 'principal');
+
+            // Variables que usamos para no mostrar varios mensajes al cambiar el estado de la conexion
+            this.mostrarNotificacionConexion = true;
+            this.mostrarNotificacionSinConexion = true;
+
+            // Cargamos la informacion del usuario primero
+            this.loginService.cargarInformacionUsuario().then(() => {
+                this.inicializarEventosGlobalesConexion();
+                this.inicializarEventosParticularesConexion();
+                this.inicializarEventosLogin();
+                this.actualizarMenuPrincipal(); 
+                this.cargarPantallaPrincipal();
+            });
+        });
     }
 
-    let vista = this.nav.getActive();
-    let pagina = vista ? this.nav.getActive().instance : null;
+    // Método que maneja los cambios asociados al encabezado de la app
+    private inicializarEstilosEncabezado(): void {
+        // En este punto los plugins ya estan cargados y listos
+        StatusBar.backgroundColorByName('black');
+        Splashscreen.hide();
 
-    if (pagina && pagina instanceof ListaSolicitudesPage) {
-      // Si estamos en el menú principal, salimos de la app
-      this.platform.exitApp();
-    } else if (this.nav.canGoBack() || vista && vista.isOverlay) {
-      this.nav.pop();
-    } else { 
-      // Cancelamos el evento por defecto
-      return;
-    }
-  }
-
-  // Método que carga la pantalla principal segun se deba mostrar la introduccion o no
-  public cargarPantallaPrincipal() {
-    this.datosService.getMostrarIntro().then(mostrarTutorial => {
-      if(mostrarTutorial) {
-        this.rootPage = TutorialPage;
-      } else {
-        this.rootPage = ListaSolicitudesPage 
-      }
-    })
-  }
-
-  // Método que inicializa los eventos de conexion y desconexion a internet particulares del menu principal
-  public inicializarEventosParticularesConexion() {
-    // El usuario ahora tiene conexion a internet
-    this.eventCtrl.subscribe('conexion:conectado', () => {
-      this.hayConexion = this.conectividadService.hayConexion();
-      this.actualizarMenuPrincipal();
-    });
-
-    // El usuario no tiene conexion a internet
-    this.eventCtrl.subscribe('conexion:desconectado', () => {
-      this.hayConexion = this.conectividadService.hayConexion();
-      this.actualizarMenuPrincipal();
-    });
-  }
-
-  // Método que inicializa los eventos de conexion y desconexion a internet de toda la app
-  public inicializarEventosGlobalesConexion() {
-
-    // Chequeamos si hay conexion o no
-    this.hayConexion = this.conectividadService.hayConexion();    
-
-    // Método que se ejecuta al conectarse a internet
-    let onOnline = () => {
-      setTimeout(() => {
-        // Solo mostramos la notificacion de que volvio la conexion si se quedo sin conexion antes
-        if(this.mostrarNotificacionConexion) {
-          
-          // Evitamos mostrar notificaciones duplicadas
-          this.mostrarNotificacionConexion = false;
-
-          // Si se corta la conexion, mostraremos la notificacion
-          this.mostrarNotificacionSinConexion = true;
-
-          // Mostramos el mensaje al usuario
-          this.mostrarMensajeConConexion();
+        try {
+            setTimeout(() => {
+                // Fix horrible para cambiar el color del encabezado cuando se minimiza la app
+                this.cambiarEstilosEncabezado();
+            }, 1000);
+        } catch(e) {
+            console.log(e);
         }
-      }, 2000);
-    };
 
-    // Método que se ejecuta al desconectarse a internet
-    let onOffline = () => {
-      if(this.mostrarNotificacionSinConexion) {
-        // Si la conexion vuelve, mostramos un mensaje al usuario
-        this.mostrarNotificacionConexion = true;
+        // Evento que se ejecuta cuando la app se suspende y se vuelve a abrir
+        this.platform.resume.subscribe(e => {
+            // Fix horrible para cambiar el color del encabezado cuando se minimiza la app
+            this.cambiarEstilosEncabezado();
+        });
 
-        // Evitamos mostrar notificaciones duplicadas
-        this.mostrarNotificacionSinConexion = false;
-
-        // Monstramos el mensaje al usuario
-        this.mostrarMensajeSinConexion();
-      }
-    };
-
-    document.addEventListener('online', onOnline, false);
-    document.addEventListener('offline', onOffline, false);
-  }
-
-  // Método que muestra un mensaje cuando el usuario se queda sin conexion
-  public mostrarMensajeSinConexion(){
-    let toast = this.toastCtrl.create({
-      message: 'No hay conexion a internet. Solo podrás acceder a contenido estático como los requisitos para donar y las prevenciones a tener en cuenta.',
-      showCloseButton: true,
-      closeButtonText: 'Ok',
-      position: 'bottom'
-    });
-
-    toast.onDidDismiss(() => {
-      this.eventCtrl.publish('conexion:desconectado');
-    });
-
-    toast.present();
-  }
-
-  // Método que muestra un mensaje cuando el usuario se queda sin conexion
-  public mostrarMensajeConConexion(){
-    let toast = this.toastCtrl.create({
-      message: 'Tienes conexión nuevamente. Ahora si podrás acceder a todo el contenido de la aplicación.',
-      showCloseButton: true,
-      closeButtonText: 'Ok',
-      position: 'bottom'
-    });
-
-    toast.onDidDismiss(() => {
-      this.eventCtrl.publish('conexion:conectado');
-    });
-
-    toast.present();
-  }
-
-  // Método que inicializa los eventos relacionados al login
-  public inicializarEventosLogin() {
-
-    this.estaLogueado = this.loginService.estaLogueado();    
-    this.actualizarMenuPrincipal();
-
-    this.eventCtrl.subscribe('login:usuario', () => {
-      this.estaLogueado = this.loginService.estaLogueado();    
-      this.actualizarMenuPrincipal();
-    });
-
-    this.eventCtrl.subscribe('logout:usuario', () => {
-      this.estaLogueado = this.loginService.estaLogueado();
-      this.actualizarMenuPrincipal();
-    });
-  }
-
-  // Método que actualiza el menu principal segun si esta logueado o no el usuario
-  private actualizarMenuPrincipal(): void {
-    
-    // Cerramos el menu
-    this.menuCtrl.close();
-
-    if(!this.hayConexion) {
-      this.ocultarLogin = true;
-      this.ocultarPerfil = true;
-      this.ocultarLogo = false;
-    } else if(this.estaLogueado) {
-      this.ocultarLogin = true;
-      this.ocultarPerfil = false;
-      this.ocultarLogo = true;
-    } else {
-      this.ocultarLogin = false;
-      this.ocultarPerfil = true;
-      this.ocultarLogo = true;
-
-      // Muestra nuevamente las opciones del login
-      this.loginService.inicializarLogin();
+        // Evento que se ejecuta cuando la app se pone en pausa
+        this.platform.pause.subscribe(e => {
+            // Fix horrible para cambiar el color del encabezado cuando se minimiza la app
+            this.cambiarEstilosEncabezado();
+        });
     }
 
-    // Mostramos las opciones que correspondan
-    this.cargarOpcionesMenuPrincipal()
-
-    // Forzamos a Angular a que detecte los cambios en el menu
-    this.changeDetectorCtrl.detectChanges();
-  }
-
-  // Método que inicializa el menú principal
-  public cargarOpcionesMenuPrincipal(): void {    
-
-    this.paginasMenu = [];
-
-    this.paginasMenu.push(new ItemMenuModel('list-box', 'Lista de solicitudes', ListaSolicitudesPage, true, false));
-
-    this.paginasMenu.push(new ItemMenuModel('heart', 'Bancos de Sangre', ListaBancosSangrePage, false, false));
-
-    if(this.hayConexion && this.estaLogueado)
-      this.paginasMenu.push(new ItemMenuModel('bookmarks', 'Mis solicitudes', MisSolicitudesPage, false, true));
-    
-    this.paginasMenu.push(new ItemMenuModel('checkbox', 'Requisitos para donar', RequisitosPage, false, false));
-    
-    if(this.hayConexion)
-      this.paginasMenu.push(new ItemMenuModel('settings', 'Configurar preferencias', EditarPreferenciasPage, false, false));
-    
-    this.paginasMenu.push(new ItemMenuModel('bulb', 'Mostrar tutorial', TutorialPage, false, false));
-    
-    this.paginasMenu.push(new ItemMenuModel('information-circle', 'Sobre nosotros', SobreNosotrosPage, false, false));
-    
-    if(this.hayConexion && this.estaLogueado)
-      this.paginasMenu.push(new ItemMenuModel('exit', 'Salir', null, false, true));
-  }
-
-  // Método que abre la pagina pasada como parametro
-  public abrirPagina(pagina: ItemMenuModel) {
-
-    this.menuCtrl.close();
-
-    if(!pagina.componente) {
-      // Si no tiene un componente, entonces es la opcion de logout
-      this.loginService.logout();
-    } else {
-      if(pagina.esRoot) {
-        this.nav.setRoot(pagina.componente);
-      } else {
-        this.nav.push(pagina.componente);
-      }
+    // Método que inicializa Bugsnag usando la key del archivo de configuracion
+    private inicializarBugsnag(): void {
+        if(Bugsnag) {
+            Bugsnag.apiKey = this.config.bugSnagApiKey;
+        }
     }
-  }
+
+    // Método que inicializa google maps
+    private inicializarGoogleMaps(): void {
+        let script = document.createElement("script");
+        script.id = "googleMaps";
+
+        if(this.config.autocompleteKey){
+            script.src = 'http://maps.google.com/maps/api/js?key=' + this.config.autocompleteKey;
+        }
+
+        document.body.appendChild(script);  
+    }
+
+    // Método que utiliza un plugin de cordova para cambiar el color del encabezado de la aplicacion
+    private cambiarEstilosEncabezado(): void {
+        StatusBar.backgroundColorByName('black');
+
+        if(window['plugins'] && window['plugins']['headerColor']) {
+            let headerColor = window['plugins']['headerColor'];
+            headerColor.tint("#222222");
+        }
+    }
+
+    // Método que decide que hacer cuando se presiona el boton fisico de volver atrás en base a la página activa
+    private manejarEventoBotonFisicoSegunPagina() {
+
+        let modal = this.ionicApp._loadingPortal.getActive() 
+        || this.ionicApp._modalPortal.getActive() 
+        || this.ionicApp._toastPortal.getActive() 
+        || this.ionicApp._overlayPortal.getActive();
+
+        if (modal) {
+            // Si es un modal,lo cerramos
+            modal.dismiss();
+            return;
+        }
+
+        if (this.menuCtrl.isOpen()) {
+            // Si el menú esta abierto, lo cerramos
+            this.menuCtrl.close();
+            return;
+        }
+
+        let vista = this.nav.getActive();
+        let pagina = vista ? this.nav.getActive().instance : null;
+
+        if (pagina && pagina instanceof ListaSolicitudesPage) {
+            // Si estamos en el menú principal, salimos de la app
+            this.platform.exitApp();
+        } else if (this.nav.canGoBack() || vista && vista.isOverlay) {
+            this.nav.pop();
+        } else { 
+            // Cancelamos el evento por defecto
+            return;
+        }
+    }
+
+    // Método que carga la pantalla principal segun se deba mostrar la introduccion o no
+    public cargarPantallaPrincipal() {
+        this.datosService.getMostrarIntro().then(mostrarTutorial => {
+            if(mostrarTutorial) {
+                this.rootPage = TutorialPage;
+            } else {
+                this.rootPage = ListaSolicitudesPage 
+            }
+        })
+    }
+
+    // Método que inicializa los eventos de conexion y desconexion a internet particulares del menu principal
+    public inicializarEventosParticularesConexion() {
+        // El usuario ahora tiene conexion a internet
+        this.eventCtrl.subscribe('conexion:conectado', () => {
+            this.hayConexion = this.conectividadService.hayConexion();
+            this.actualizarMenuPrincipal();
+        });
+
+        // El usuario no tiene conexion a internet
+        this.eventCtrl.subscribe('conexion:desconectado', () => {
+            this.hayConexion = this.conectividadService.hayConexion();
+            this.actualizarMenuPrincipal();
+        });
+    }
+
+    // Método que inicializa los eventos de conexion y desconexion a internet de toda la app
+    public inicializarEventosGlobalesConexion() {
+
+        // Chequeamos si hay conexion o no
+        this.hayConexion = this.conectividadService.hayConexion();    
+
+        // Método que se ejecuta al conectarse a internet
+        let onOnline = () => {
+            setTimeout(() => {
+                // Solo mostramos la notificacion de que volvio la conexion si se quedo sin conexion antes
+                if(this.mostrarNotificacionConexion) {
+
+                    // Evitamos mostrar notificaciones duplicadas
+                    this.mostrarNotificacionConexion = false;
+
+                    // Si se corta la conexion, mostraremos la notificacion
+                    this.mostrarNotificacionSinConexion = true;
+
+                    // Mostramos el mensaje al usuario
+                    this.mostrarMensajeConConexion();
+                }
+            }, 2000);
+        };
+
+        // Método que se ejecuta al desconectarse a internet
+        let onOffline = () => {
+            if(this.mostrarNotificacionSinConexion) {
+                // Si la conexion vuelve, mostramos un mensaje al usuario
+                this.mostrarNotificacionConexion = true;
+
+                // Evitamos mostrar notificaciones duplicadas
+                this.mostrarNotificacionSinConexion = false;
+
+                // Monstramos el mensaje al usuario
+                this.mostrarMensajeSinConexion();
+            }
+        };
+
+        document.addEventListener('online', onOnline, false);
+        document.addEventListener('offline', onOffline, false);
+    }
+
+    // Método que muestra un mensaje cuando el usuario se queda sin conexion
+    public mostrarMensajeSinConexion(){
+        let toast = this.toastCtrl.create({
+            message: 'No hay conexion a internet. Solo podrás acceder a contenido estático como los requisitos para donar y las prevenciones a tener en cuenta.',
+            showCloseButton: true,
+            closeButtonText: 'Ok',
+            position: 'bottom'
+        });
+
+        toast.onDidDismiss(() => {
+            this.eventCtrl.publish('conexion:desconectado');
+        });
+
+        toast.present();
+    }
+
+    // Método que muestra un mensaje cuando el usuario se queda sin conexion
+    public mostrarMensajeConConexion(){
+        let toast = this.toastCtrl.create({
+            message: 'Tienes conexión nuevamente. Ahora si podrás acceder a todo el contenido de la aplicación.',
+            showCloseButton: true,
+            closeButtonText: 'Ok',
+            position: 'bottom'
+        });
+
+        toast.onDidDismiss(() => {
+            this.eventCtrl.publish('conexion:conectado');
+        });
+
+        toast.present();
+    }
+
+    // Método que inicializa los eventos relacionados al login
+    public inicializarEventosLogin() {
+
+        this.estaLogueado = this.loginService.estaLogueado();    
+        this.actualizarMenuPrincipal();
+
+        this.eventCtrl.subscribe('login:usuario', () => {
+            this.estaLogueado = this.loginService.estaLogueado();    
+            this.actualizarMenuPrincipal();
+        });
+
+        this.eventCtrl.subscribe('logout:usuario', () => {
+            this.estaLogueado = this.loginService.estaLogueado();
+            this.actualizarMenuPrincipal();
+        });
+    }
+
+    // Método que actualiza el menu principal segun si esta logueado o no el usuario
+    private actualizarMenuPrincipal(): void {
+
+        // Cerramos el menu
+        this.menuCtrl.close();
+
+        if(!this.hayConexion) {
+            this.ocultarLogin = true;
+            this.ocultarPerfil = true;
+            this.ocultarLogo = false;
+        } else if(this.estaLogueado) {
+            this.ocultarLogin = true;
+            this.ocultarPerfil = false;
+            this.ocultarLogo = true;
+        } else {
+            this.ocultarLogin = false;
+            this.ocultarPerfil = true;
+            this.ocultarLogo = true;
+
+            // Muestra nuevamente las opciones del login
+            this.loginService.inicializarLogin();
+        }
+
+        // Mostramos las opciones que correspondan
+        this.cargarOpcionesMenuPrincipal()
+
+        // Forzamos a Angular a que detecte los cambios en el menu
+        this.changeDetectorCtrl.detectChanges();
+    }
+
+    // Método que inicializa el menú principal
+    public cargarOpcionesMenuPrincipal(): void {    
+
+        this.paginasMenu = [];
+
+        this.paginasMenu.push(new ItemMenuModel('list-box', 'Lista de solicitudes', ListaSolicitudesPage, true, false));
+
+        this.paginasMenu.push(new ItemMenuModel('heart', 'Bancos de Sangre', ListaBancosSangrePage, false, false));
+
+        if(this.hayConexion && this.estaLogueado)
+            this.paginasMenu.push(new ItemMenuModel('bookmarks', 'Mis solicitudes', MisSolicitudesPage, false, true));
+
+        this.paginasMenu.push(new ItemMenuModel('checkbox', 'Requisitos para donar', RequisitosPage, false, false));
+
+        if(this.hayConexion)
+            this.paginasMenu.push(new ItemMenuModel('settings', 'Configurar preferencias', EditarPreferenciasPage, false, false));
+
+        this.paginasMenu.push(new ItemMenuModel('bulb', 'Mostrar tutorial', TutorialPage, false, false));
+
+        this.paginasMenu.push(new ItemMenuModel('information-circle', 'Sobre nosotros', SobreNosotrosPage, false, false));
+
+        if(this.hayConexion && this.estaLogueado)
+            this.paginasMenu.push(new ItemMenuModel('exit', 'Salir', null, false, true));
+    }
+
+    // Método que abre la pagina pasada como parametro
+    public abrirPagina(pagina: ItemMenuModel) {
+
+        this.menuCtrl.close();
+
+        if(!pagina.componente) {
+            // Si no tiene un componente, entonces es la opcion de logout
+            this.loginService.logout();
+        } else {
+            if(pagina.esRoot) {
+                this.nav.setRoot(pagina.componente);
+            } else {
+                this.nav.push(pagina.componente);
+            }
+        }
+    }
 }

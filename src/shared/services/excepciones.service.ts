@@ -75,12 +75,15 @@ export class ExcepcionesService {
 	public notificarExcepcion(errorObj: any, excepcion: DatosExcepcion, pagina: any, nombreMetodo: string, informacionAdicional?: string): void {
 		let descripcion = informacionAdicional ? `${excepcion.descripcion} ${informacionAdicional}` : excepcion.descripcion;
 		
+        // Obtenemos el nombre de la pagina para no enviar todo el objeto
+        let nombrePagina = pagina.toString().substr(9, pagina.toString().indexOf('(') - 9);
+
 		if(errorObj) {
 			Bugsnag.notifyException(errorObj, 
 									excepcion.nombre, 
 									{ 
 										'metodo': nombreMetodo, 
-										'pagina': pagina, 
+										'pagina': nombrePagina, 
 										'descripcion': descripcion 
 									}, 
 									excepcion.categoria);
@@ -89,36 +92,9 @@ export class ExcepcionesService {
 						   excepcion.descripcion, 
 						   { 
 						   		'metodo': nombreMetodo, 
-						   		'pagina': pagina
+						   		'pagina': nombrePagina
 						   	}, 
 						   excepcion.categoria);
 		}
-
-		
 	}
-
-
-
-	// Mensajes de error
-	// ---------------------------------------------------------------------------------------
-
-	// Listados
-	public errorSolicitudes: string =                   'Se ha producido un error al buscar solicitudes. Por favor vuelva a intentarlo nuevamente más tarde.';
-	public errorBancosSangre: string =                  'Se ha producido un error al buscar los bancos de sangre. Por favor vuelva a intentarlo nuevamente más tarde.';
-	public errorMisSolicitudes: string =                'Se ha producido un error al buscar tus solicitudes. Por favor vuelva a intentarlo nuevamente más tarde.';
-	public errorProvincias: string =                    'Se ha producido un error al buscar el listado de provincias. Por favor vuelva a intentarlo nuevamente más tarde.';
-	public errorLocalidades: string =                   'Se ha producido un error al buscar el listado de localidades. Por favor vuelva a intentarlo nuevamente más tarde.';
-	
-	// Conexion a internet
-	public errorSinConexion: string =                   'Se requiere acceso a internet para poder obtener las solicitudes. Comprueba tu conexión a internet y vuelve a intentarlo nuevamente.';
-	
-	// Listados
-	public errorEliminarSolicitud: string =             'Se ha producido un error al eliminar la solicitud. Por favor vuelva a intentarlo nuevamente más tarde.';
-	public errorCrearSolicitud: string =                'Se ha producido un error al crear la solicitud. Por favor vuelva a intentarlo nuevamente más tarde.';
-	public errorEditarSolicitud: string =               'Se ha producido un error al editar la solicitud. Por favor vuelva a intentarlo nuevamente más tarde.';
-	
-	// Preferencias del usuario
-	public errorPreferenciasUsuario: string =           'Se ha producido un error al obtener sus preferencias de usuario. Por favor vuelva a intentarlo nuevamente más tarde.';
-	public errorGuardarPreferenciasUsuario: string =    'Se ha producido un error al guardar sus preferencias de usuario. Por favor vuelva a intentarlo nuevamente más tarde.';
-
 }

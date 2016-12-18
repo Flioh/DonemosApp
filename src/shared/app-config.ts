@@ -17,7 +17,7 @@ export interface ApplicationConfig {
 @Injectable()
 export class AppConfig {
 
-    public modoDebug: boolean = true;    
+    public modoDebug: boolean = false;    
     private apiVersion: number = 1;
 
     // Google maps
@@ -28,19 +28,19 @@ export class AppConfig {
     // Endpoints
     // -----------------------------------
     get apiEndPointProvincias(): string {
-        return this.modoDebug ? `${DevKeys.apiUrl}/provincia` : `${ProdKeys.apiUrl}/${this.apiVersion}/provincia`;
+        return this.modoDebug ? `${DevKeys.apiUrl}/provincia` : `${ProdKeys.apiUrl}/v${this.apiVersion}/provincia`;
     }
 
     get apiEndPointLocalidades(): string {
-        return this.modoDebug ? `${DevKeys.apiUrl}/localidad` : `${ProdKeys.apiUrl}/${this.apiVersion}/localidad`;
+        return this.modoDebug ? `${DevKeys.apiUrl}/localidad` : `${ProdKeys.apiUrl}/v${this.apiVersion}/localidad`;
     }
 
     get apiEndPointSolicitudes(): string {
-        return this.modoDebug ? `${DevKeys.apiUrl}/solicitud` : `${ProdKeys.apiUrl}/${this.apiVersion}/solicitud`;
+        return this.modoDebug ? `${DevKeys.apiUrl}/solicitud` : `${ProdKeys.apiUrl}/v${this.apiVersion}/solicitud`;
     }
 
     get apiEndPointBancosSangre(): string {
-        return this.modoDebug ? `${DevKeys.apiUrl}/banco` : `${ProdKeys.apiUrl}/${this.apiVersion}/banco`;
+        return this.modoDebug ? `${DevKeys.apiUrl}/banco` : `${ProdKeys.apiUrl}/v${this.apiVersion}/banco`;
     }
 
     // Google maps
